@@ -829,7 +829,7 @@ syn match YellowColorb        "\<time_t\>"          contains=@NoSpell
 " int *ip; is intended as a mnemonic; it says that the expression *ip is an int.
 " placing the asterisk adjacent to the variable name (e.g., int *ptr;) is generally recommended in C. This is because when declaring multiple variables on a single line, the * explicitly indicates which variable is a pointer. int *p, q; declares p as a pointer to an integer and q as a regular integer, not a pointer.
 
-" The unary operators * and & bind more tightly than arithmetic operators such as + but not more tigthty than unary operators ++
+" The unary operators * and & bind more tightly than arithmetic operators such as + but not more tightly than unary operators ++
 "    y = *ip + 1
 "    ++*ip
 "    (*ip)++ // The parentheses are necessary; because unary operators associate right to left.

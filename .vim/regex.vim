@@ -27,7 +27,7 @@ if exists("b:comment_leader")
    else
       syn match   NoColor        "\(\S.*\)\@<=#"
    endif
-   "overrites linux paths, plus already set red in all_pre
+   "overwrites linux paths, plus already set red in all_pre
    "if b:comment_leader == '//'
    "   "syn match   RedColor       "\(\/\)\@<!\/\(\/\)\@!"
    "else

@@ -382,3 +382,13 @@ if exists("b:comment_leader")
 endif
 "-------------------------------------------------------------------
 
+
+" match each layer of matching parenthesis with different colors ((())) [[[]]] {{{}}}
+"-------------------------------------------------------------------
+" if exists("g:supports_regex") && g:supports_regex == 0 && g:performance_mode <= 0
+"    call Highlight_rainbow_round_parenthesis ()
+"    call Highlight_rainbow_square_parenthesis ()
+"    call Highlight_rainbow_bracket_parenthesis ()
+" endif
+"-------------------------------------------------------------------
+

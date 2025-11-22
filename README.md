@@ -1,4 +1,4 @@
 # vimrc
-My vimrc settings for gvim
+My vimrc settings
 
 TODO: test on windows!!

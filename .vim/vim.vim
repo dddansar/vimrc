@@ -1,5 +1,5 @@
 
-" this is needed when loadind multiple files, some .vim extension and others with spell enabled
+" this is needed when loading multiple files, some .vim extension and others with spell enabled
 setlocal nospell
 
 " override default coloring of the syn/syntax/ia/augroup commands and any following text

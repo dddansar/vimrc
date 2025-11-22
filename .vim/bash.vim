@@ -9,7 +9,7 @@ syn keyword DarkGreen2Colorb  in done
 " match .
 syn match   RedColor     "\." containedin=FileNames,PathLinksColor
 
-" un-match quotes
+" unmatch quotes
 syn match   RedColor          "'"
 syn match   RedColor          '"'
 

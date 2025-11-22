@@ -19,7 +19,7 @@ syn case ignore
 
 "----------------------------------------------------------------------
 " Unless special ("end loop", "end if", etc.), "end" marks the end of a
-" begin, package, task etc. Assiging it to adaEnd.
+" begin, package, task etc.
 syn match RedColor      "\<end\>"
 syn match RedColor      "\<if\>"
 syn match RedColor      "\<process\>"

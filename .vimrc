@@ -1,7 +1,7 @@
 "---------------------------------------------------------------------------------------------
 "---------------------------------------------------------------------------------------------
 "---------------------------------------------------------------------------------------------
-" Settings that get loaded by vim / gvim
+"                               Settings that get loaded by vim
 "---------------------------------------------------------------------------------------------
 "---------------------------------------------------------------------------------------------
 "---------------------------------------------------------------------------------------------
@@ -569,13 +569,6 @@ function! DefaultSettings()
       " autocorrect word to first match
       nnoremap gz z=1<cr><cr>
 
-      " load autocorrect files
-      if !exists("g:AutocorrectLoaded") && exists("g:use_autocorrect") && g:use_autocorrect
-         let g:AutocorrectLoaded=1
-         source $HOME/.vim/autocorrect/autocorrect.vim
-         " source $HOME/.vim/autocorrect/wordlist.vim
-      endif
-
       "----------------------------------------------------------------------
       " seach related mappings
       "----------------------------------------------------------------------
@@ -695,7 +688,7 @@ function! DefaultSettings()
 
 
       "----------------------------------------------------------------------
-      " switching/recentering window postioning mappings
+      " switching/recentering window positioning mappings
       "----------------------------------------------------------------------
 
       " faster map to quit all files in window
@@ -959,25 +952,15 @@ function! DefaultSettings()
    " ---------------------------------------------------------------------------------------------
    " Colors and Highlighting
    " ---------------------------------------------------------------------------------------------
-   if has("gui_running")
-
-      " NOTE moved all highlighting setting into it's own file
-      source $HOME/.vim/highlightings.vim
-
-      ""------------------------------------------------------------------------------
-      "source $VIMRUNTIME/macros/matchit.vim
-      " $VIMRUNTIME = /usr/share/vim/vim82/
-      ""------------------------------------------------------------------------------
-      source $VIMRUNTIME/macros/matchit.vim   " Make the % command work on verilog and system-verilog begin/end pairs.
-
-   else
-      " changes cursor shape in visual/insert mode
-      let &t_SI = "\e[6 q"
-      let &t_SR = "\e[4 q"
-      let &t_EI = "\e[2 q"
-      " Quickly time out on keycodes, but never time out on mappings
-      set notimeout ttimeout ttimeoutlen=100
-   endif "
+   " if has("gui_running")
+   " else
+   "    " changes cursor shape in visual/insert mode
+   "    let &t_SI = "\e[6 q"
+   "    let &t_SR = "\e[4 q"
+   "    let &t_EI = "\e[2 q"
+   "    " Quickly time out on keycodes, but never time out on mappings
+   "    set notimeout ttimeout ttimeoutlen=100
+   " endif "
 
 endfunction " function DefaultSettings()
 
@@ -988,7 +971,13 @@ function! SmallFile()
 
    if has("gui_running")
 
-      " the orginal copy of the files are located in /usr/share/vim/vim63/syntax/...
+      " load autocorrect files
+      if !exists("g:AutocorrectLoaded") && exists("g:use_autocorrect") && g:use_autocorrect
+         let g:AutocorrectLoaded=1
+         so $HOME/.vim/autocorrect/autocorrect.vim
+         " so $HOME/.vim/autocorrect/wordlist.vim
+      endif
+
       augroup syntax
 
          " If you want to clear a group, use autocmd!/au! inside the group
@@ -1016,21 +1005,27 @@ function! SmallFile()
             au BufNewFile,BufRead *.txt so $HOME/.vim/spell.vim
          endif
 
+         " load rainbow parenthesis functions
+         au BufNewFile,BufRead * so  $HOME/.vim/rainbow_parenthesis.vim
+
          "==================================================================
          "===================== Source syntax files ========================
          "==================================================================
 
          if g:performance_mode <= 3
-            "------------------------------------------------------------------
-            " NOTE: USING "syntax off" INSTEAD.
-            "au BufNewFile,BufRead * syntax clear
-            "------------------------------------------------------------------
 
             " NOTE THIS WILL ADD CUSTOM SYNTAX FOR ALL FILES BEFORE THE RESPECTIVE FILE SETTINGS ARE APPLIED!!!
             au BufNewFile,BufRead * so $HOME/.vim/all_pre.vim
 
+            " NOTE moved all highlighting setting into it's own file
+            au BufNewFile,BufRead * so  $HOME/.vim/highlightings.vim
+
+            " Make the % command work on match_words pairs.
+            " $VIMRUNTIME = /usr/share/vim/vim82/
+            au BufNewFile,BufRead * so  $VIMRUNTIME/macros/matchit.vim
+
             " Add custom syntax file for linux commands
-            au BufNewFile,BufRead */reference_files/*,.bash*,bash\w*,*.sh,.cshrc*,*.csh,.aliases,*.ps1 so $HOME/.vim/linux.vim
+            au BufNewFile,BufRead .bash*,bash\w*,*.sh,.cshrc*,*.csh,.aliases,*.ps1 so $HOME/.vim/linux.vim
 
             if g:performance_mode <= 1
                " Add custom syntax file for files that use unicode chars
@@ -1067,9 +1062,6 @@ function! SmallFile()
             " Add custom syntax file for .vba
             "au BufNewFile,BufRead *.vba so $HOME/.vim/vba.vim
 
-            " Add custom syntax file for VERILOG
-            "au BufNewFile,BufRead *.vt,*.vb,*.v,*.vlib,*.vh so $HOME/.vim/sv.vim
-
             " Add custom syntax file for TCL
             au BufNewFile,BufRead *.tcl,*.f so $HOME/.vim/tcl.vim
 
@@ -1080,13 +1072,10 @@ function! SmallFile()
             au BufNewFile,BufRead .bash*,bash\w*,*.sh,.cshrc*,*.csh,.aliases,*.ps1 so $HOME/.vim/bash.vim
 
             " Add custom syntax file for .log
-            au BufNewFile,BufRead *.log,*.log.*,transcript so $HOME/.vim/log.vim
+            au BufNewFile,BufRead *.log,*.log.* so $HOME/.vim/log.vim
 
             " Add custom syntax file for lean
             au BufNewFile,BufRead *lean.txt,*.lean so $HOME/.vim/lean.vim
-
-            " Add custom syntax file for testing vim setttings
-            au BufNewFile,BufRead test_vim_settings.txt so $HOME/.vim/test_vim_settings.vim
 
             " Add custom syntax file for files that use a custom math spellchecking
             " au BufNewFile,BufRead *.lean,*.txt so $HOME/.vim/math.vim
@@ -1099,7 +1088,7 @@ function! SmallFile()
                " different programs/editors/programming languages/OS can use regex slightly differently
                " and with different syntax)
                " this helps make regular expressions easier to read
-               au BufNewFile,BufRead *.pl,*.pm,*.vimrc*,*.vim,*/reference_files/* so $HOME/.vim/regex.vim
+               au BufNewFile,BufRead *.pl,*.pm,*.vimrc*,*.vim so $HOME/.vim/regex.vim
             endif
 
             " NOTE Add abbreviations to shorten common and repetitive text
