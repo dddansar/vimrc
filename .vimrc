@@ -63,7 +63,9 @@ function! DefaultSettings()
 
       " selects between windows and linux OS
       if g:using_windows
-         set guifont=Consolas:h13:cANSI  " use this font in windows
+         set guifont=Consolas:h13.5:cANSI  " use this font in windows
+         set lines=46          " height
+         set columns=140       " width
       else
          " select btw font styles
          set guifont=Monospace\ 12
@@ -260,7 +262,7 @@ function! DefaultSettings()
       " change the width/size/length/cursor of a range of characters!
       " setcellwidths() - moved to unicode.vim
 
-   endif
+   endif " has("gui_running")
 
 
    "-------------------------------------------------------------------------------------
@@ -299,7 +301,7 @@ function! DefaultSettings()
          nnoremap yy V"+y$
          vnoremap <s-p> py
          noremap p "+gp<a-bs>
-         vnoremap p "+gpgv"+yy
+         vnoremap p "+gpgv"+yy<esc>
          " copy entire word
          nnoremap <c-y> viw"+y
          " paste over entire word
@@ -348,7 +350,7 @@ function! DefaultSettings()
       " Set and unset line wrap
       nnoremap <silent><a-q> :set wrap!<cr>
 
-   "endif
+   "endif " has("gui_running")
 
    " NOTE: these mappings will apply to both vi and gvim
    "if has("gui_running")
@@ -383,7 +385,7 @@ function! DefaultSettings()
       inoremap ! !<c-g>u
       inoremap ? ?<c-g>u
 
-   "endif
+   "endif " has("gui_running")
 
    " NOTE: these mappings will apply to both vi and gvim
    "if has("gui_running")
@@ -532,9 +534,9 @@ function! DefaultSettings()
          vnoremap <a-k> :m '<-2<cr>gv=gv
       endif
 
-   "endif
+   "endif " has("gui_running")
 
-   if has("gui_running")
+   " if has("gui_running")
       "----------------------------------------------------------------------
       " Autocorrect related mappings
       "----------------------------------------------------------------------
@@ -588,24 +590,30 @@ function! DefaultSettings()
       vnoremap <s-leftmouse>  <esc><leftmouse>bve<esc>k$/\V\c<middlemouse><cr>
       vnoremap <s-rightmouse> <esc><leftmouse>bve<esc>/\<<middlemouse>\><cr>
 
+      " `< will go to the start of the previous visual selection
+      " /<up> will start search then pick previous search
+      " <a-backspace> will go to previous char even if on previous line
       if g:using_windows
-         " TODO: Need to fix these to match those below in else...
-         " " search for characters being selected
-         " vnoremap / "+y<a-backspace>/\V\c<middlemouse><cr>
-         " " search for word under the cursor
-         " vnoremap ? "+y<a-backspace>/\V\c<middlemouse><cr>
-         " nnoremap ? viw"+y<a-backspace>/\V\c<middlemouse><cr>
-         " " search for word under the cursor
-         " vnoremap * "+y<a-backspace>/\<<middlemouse>\><cr>
-         " nnoremap * viw"+y<a-backspace>/\<<middlemouse>\><cr>
+         " search for characters being selected (same as <c-/>)
+         vnoremap / "+y<esc>`<<a-backspace>/\V\c<middlemouse><cr>
 
-         " " add another word to the existing search!
-         " nnoremap <c-/> viw"+y<esc>/<up>\\|<middlemouse><cr>
+         " search for characters being selected
+         vnoremap <c-/> "+y<esc>`<<a-backspace>/\V\c<middlemouse><cr>
+         vnoremap <c-8> "+y<esc>`<<a-backspace>/\<<middlemouse>\><cr>
+
+         " add another word to the existing search!
+         vnoremap ? "+y<esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
+         vnoremap * "+y<esc>`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
+
+         " search for word under the cursor
+         nnoremap <c-/> viwo"+y<esc><a-backspace>/\V\c<middlemouse><cr>
+         nnoremap <c-8> viwo"+y<esc><a-backspace>/\<<middlemouse>\><cr>
+
+         " add another word to the existing search!
+         " NOTE: "?" was used to search backwards.
+         nnoremap ? viw"+y<esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
+         nnoremap * viw"+y<esc>`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
       else
-         " `< will go to the start of the previous visual selection
-         " /<up> will start search then pick previous search
-         " <a-backspace> will go to previous char even if on previous line
-
          " search for characters being selected (same as <c-/>)
          vnoremap / <esc>`<<a-backspace>/\V\c<middlemouse><cr>
 
@@ -928,7 +936,7 @@ function! DefaultSettings()
       " nnoremap <leader>sp  :setlocal spell<cr>:setlocal spellcapcheck=<cr>:setlocal spelllang+=linuxfull,math<cr>
       nnoremap <leader>nsp :setlocal nospell<cr>
 
-      " fix windows after a split screen
+      " fix window after opeing a split screen
       nnoremap <leader>ss :sp<cr><c-w><bar><c-w>_
       nnoremap <leader>su :sp<cr><c-w><bar><c-w>_
       nnoremap <leader>sv :vsp<cr><c-w><bar><c-w>_
@@ -942,11 +950,11 @@ function! DefaultSettings()
       " full right and full left (should never be used...)
       nnoremap <leader>sfr :topleft<space>vnew<cr><c-w><bar><c-w>_
       nnoremap <leader>sfl :botright<space>vnew<cr><c-w><bar><c-w>_
-      " fix windows after quitting
+      " fix window after closing a split screen
       nnoremap <leader>q :q<cr><c-w><bar><c-w>_
       nnoremap <leader>wq :wq<cr><c-w><bar><c-w>_
 
-   endif
+   " endif " has("gui_running")
 
 
    " ---------------------------------------------------------------------------------------------
@@ -960,7 +968,7 @@ function! DefaultSettings()
    "    let &t_EI = "\e[2 q"
    "    " Quickly time out on keycodes, but never time out on mappings
    "    set notimeout ttimeout ttimeoutlen=100
-   " endif "
+   " endif " has("gui_running")
 
 endfunction " function DefaultSettings()
 
@@ -969,14 +977,14 @@ function! SmallFile()
    let g:EnteredSmallFile = 1
    " autocmd VimEnter *  echo "The file is less than 100 MB"
 
-   if has("gui_running")
+   " load autocorrect files
+   if !exists("g:AutocorrectLoaded") && exists("g:use_autocorrect") && g:use_autocorrect
+      let g:AutocorrectLoaded=1
+      so $HOME/.vim/autocorrect/autocorrect.vim
+      " so $HOME/.vim/autocorrect/wordlist.vim
+   endif
 
-      " load autocorrect files
-      if !exists("g:AutocorrectLoaded") && exists("g:use_autocorrect") && g:use_autocorrect
-         let g:AutocorrectLoaded=1
-         so $HOME/.vim/autocorrect/autocorrect.vim
-         " so $HOME/.vim/autocorrect/wordlist.vim
-      endif
+   if has("gui_running")
 
       augroup syntax
 
@@ -1119,7 +1127,7 @@ function! SmallFile()
 
       augroup END
 
-   endif
+   endif " has("gui_running")
 
 endfunction
 
