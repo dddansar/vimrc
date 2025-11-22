@@ -1001,7 +1001,7 @@ function! SmallFile()
          au BufNewFile,BufRead *.conf,*.fstab,bash\w*,*.do          let b:comment_leader = '#'
          au BufNewFile,BufRead *.objdump,*.asm,*.masm,*.s,*.ini     let b:comment_leader = '#'
          au BufNewFile,BufRead *.vh,*.v,*.sv,*.svh,*.json,*.txt     let b:comment_leader = '//'
-         au BufNewFile,BufRead *.c,*.cpp,*.h,*.cpp,*.java,*.scala   let b:comment_leader = '//'
+         au BufNewFile,BufRead *.c,*.cpp,*.h,*.hpp,*.java,*.scala   let b:comment_leader = '//'
          au BufNewFile,BufRead *.tex                                let b:comment_leader = '%'
          au BufNewFile,BufRead *.mail                               let b:comment_leader = '>'
          au BufNewFile,BufRead *.vim,*.vimrc*                       let b:comment_leader = '"'
@@ -1056,7 +1056,7 @@ function! SmallFile()
             au BufNewFile,BufRead *.c,*.h,*.cpp so $HOME/.vim/c.vim
 
             " Add custom syntax file for java
-            "au BufNewFile,BufRead *.java so $HOME/.vim/java.vim
+            au BufNewFile,BufRead *.java so $HOME/.vim/java.vim
 
             " Add custom syntax file for perl
             au BufNewFile,BufRead *.pl,*.pm so $HOME/.vim/pl.vim
