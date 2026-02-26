@@ -1,13 +1,95 @@
+"==============================================================================
+" File: spell.vim
+"------------------------------------------------------------------------------
+" Description: This file adds spell checking settings for files that have
+"              spell checking enabled.
+"              Gets loaded by .vimrc when opening select files with a vim GUI.
+"------------------------------------------------------------------------------
+" Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" Copyright: MIT License
+"
+" Copyright (c) 2026 Danny Sarraf
+"
+" Permission is hereby granted, free of charge, to any person obtaining a copy
+" of this software and associated documentation files (the "Software"), to deal
+" in the Software without restriction, including without limitation the rights
+" to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+" copies of the Software, and to permit persons to whom the Software is
+" furnished to do so, subject to the following conditions:
+"
+" The above copyright notice and this permission notice shall be included in
+" all copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+" OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+" SOFTWARE.
+"==============================================================================
 
-
-" enable spell checking if g:spell_check_en is set
-"------------------------------------------------------------------
+" Enable spell checking if g:spell_check_en is set.
+"------------------------------------------------------------------------------
 let g:spell_check_en=1
 if exists("g:spell_check_en") && g:spell_check_en
    setlocal spell
    setlocal spelllang+=en_us
-   " ignore uppercase of first word.
+   " Ignore uppercase of first word.
    setlocal spellcapcheck=
+
+   " Need to disable rainbow_parenthesis with spell checking as there
+   " is a bug where it will not spell check inside of parenthesis or
+   " if matching parenthesis is not closed!!!!!!!
+   hi  link    SpellParen1 AllFilesSBrColor
+   hi  link    SpellParen2 AllFilesFuncColor
+   hi  link    SpellParen3 AllFilesCBrColor
+   syn match   SpellParen1     "[\[\]]"
+   syn match   SpellParen2     "[)(]"
+   syn match   SpellParen3     "[}{]"
+
+   " Since we enable spell checking that means we are writing text
+   " and in such cases, word'word should not match as part of a quote like
+   " 'word ... word'.
+   syn match SpellNoColor  "\%(\w\)\@<='\%(\w\)\@="
 endif
-"------------------------------------------------------------------
+"------------------------------------------------------------------------------
+
+
+"------------------------------------------------------------------------------
+" Setting up a custom dictionary !!!!
+"------------------------------------------------------------------------------
+" Vim's internal dictionary is not perfect and may not align with your writing
+" style. The dictionary can fortunately be overridden with a local dictionary.
+" A local dictionary is automatically created whenever a word is added or
+" ignored.
+
+" The location of this file is in ~/.vim/spell/, and is named based on the
+" defined language, e.g. ~/.vim/spell/en.utf-8.add.
+
+" A custom dictionary can be created and defined like so:
+" setlocal spell spelllang=custom_file.spl
+" Where custom_file.spl is the path to the custom dictionary.
+
+" Will highlight spelling mistakes, NOTE: spellcheck != autocorrect
+" 1)
+" if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
+"    setlocal spelllang+=custom_spell
+" endif
+
+" 2)
+" Create file ~/.vim/spell/custom_file.utf-8.add
+
+" 3) It should be noted that the *.spl extension is a compressed format. To
+"    generate a *.spl file, the mkspell command can be used like so:
+":mkspell! custom_file.utf-8.add
+
+" 4)
+" Can't find the file custom_file.utf-8.spl  (because it's called
+"                                             custom_file.utf-8.add.spl !!)
+" So create a link to it
+" cd ~/.vim/spell/
+" ln -s ~/.vim/spell/custom_file.utf-8.add.spl custom_file.utf-8.spl
+"------------------------------------------------------------------------------
 

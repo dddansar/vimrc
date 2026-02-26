@@ -1,45 +1,76 @@
+"==============================================================================
+" File: all_post.vim
+"------------------------------------------------------------------------------
+" Description: This file adds custom syntax highlighting for all file types
+"              AFTER the respective file settings have been applied.
+"              Gets loaded by .vimrc when opening any file with a vim GUI.
+"------------------------------------------------------------------------------
+" Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" Copyright: MIT License
+"
+" Copyright (c) 2026 Danny Sarraf
+"
+" Permission is hereby granted, free of charge, to any person obtaining a copy
+" of this software and associated documentation files (the "Software"), to deal
+" in the Software without restriction, including without limitation the rights
+" to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+" copies of the Software, and to permit persons to whom the Software is
+" furnished to do so, subject to the following conditions:
+"
+" The above copyright notice and this permission notice shall be included in
+" all copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+" OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+" SOFTWARE.
+"==============================================================================
 
-" Highligh VI words
-"-------------------------------------------------------------------
+" Highlight VI words.
+"------------------------------------------------------------------------------
 " syn case ignore
-" syn match   Orange2bg             "\<Do not\>"  contains=@NoSpell containedin=CommentColor
-syn match   Orange2bg             "\<DO NOT\>"  contains=@NoSpell containedin=CommentColor
-syn match   Orange2bg             "\<WARNING\>" contains=@NoSpell containedin=CommentColor
-syn match   LightOrangebg         "\<FIXME\>"   contains=@NoSpell containedin=CommentColor
-syn match   LightOrangebg         "\<HACK\>"    contains=@NoSpell containedin=CommentColor
-syn match   LightOrangebg         "\<TODO\>"    contains=@NoSpell containedin=CommentColor
-syn match   Yellow3bg             "\<VITODO\>"  contains=@NoSpell containedin=CommentColor
-syn match   Green0bg              "\<NOTE\>"    contains=@NoSpell containedin=CommentColor
-syn match   FluoGreen0bg          "\<VINOTE\>"  contains=@NoSpell containedin=CommentColor
-syn match   FluoGreen0bg          "\<VI\>"      contains=@NoSpell containedin=CommentColor
-syn match   Error                 "\<ERROR\>"   contains=@NoSpell containedin=CommentColor
-syn match   Error                 "\<WRONG\>"   contains=@NoSpell containedin=CommentColor
-" with space
-syn match   FluoGreen0bg          "\<\(VI \)\@<=NOTE\>" contains=@NoSpell containedin=CommentColor
-syn match   Yellow3bg             "\<\(VI \)\@<=TODO\>" contains=@NoSpell containedin=CommentColor
-syn match   Yellow3bg             "\<VI\( TODO\)\@=\>"  contains=@NoSpell containedin=CommentColor
-" non word characters
-syn match   LightOrangebg         "???*" containedin=CommentColor
-syn match   Yellow3bg             "?????*" containedin=CommentColor
-syn match   Green0bg              "!!!*" containedin=CommentColor
-syn match   FluoGreen0bg          "!!!!!*" containedin=CommentColor
-syn match   Orange2bg             "\(\<WARNING\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   Orange2bg             "\(\<DO NOT\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   Error                 "\(\<ERROR\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   Error                 "\(\<WRONG\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   LightOrangebg         "\(\<TODO\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   Yellow3bg             "\(\<VITODO\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   Green0bg              "\(\<NOTE\>.*\)\@<=!!!*" containedin=CommentColor
-syn match   FluoGreen0bg          "\(\<VINOTE\>.*\)\@<=!!!*" containedin=CommentColor
+syn match   HLOrangered1BgB      "\<DO NOT\>"  contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLOrangered1BgB      "\<WARNING\>" contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLOrangeBgB          "\<FIXME\>"   contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLOrangeBgB          "\<HACK\>"    contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLOrangeBgB          "\<TODO\>"    contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLYellow3BgB         "\<VITODO\>"  contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLGreen3BgB          "\<NOTE\>"    contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLGreen1BgB          "\<VINOTE\>"  contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLGreen1BgB          "\<VI\>"      contains=@NoSpell containedin=CommentColor,Comment2Color
+" syn match   HLRedBgB             "\<ERROR\>"   contains=@NoSpell containedin=CommentColor,Comment2Color
+" syn match   HLRedBgB             "\<WRONG\>"   contains=@NoSpell containedin=CommentColor,Comment2Color
+" With space.
+syn match   HLGreen1BgB          "\<\%(VI \)\@<=NOTE\>" contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLYellow3BgB         "\<\%(VI \)\@<=TODO\>" contains=@NoSpell containedin=CommentColor,Comment2Color
+syn match   HLYellow3BgB         "\<VI\%( TODO\)\@=\>"  contains=@NoSpell containedin=CommentColor,Comment2Color
+"------------------------------------------------------------------------------
+"------------------------------------------------------------------------------
+syn match   HLOrangeBgB          "???*" containedin=CommentColor,Comment2Color
+syn match   HLYellow3BgB         "?????*" containedin=CommentColor,Comment2Color
+syn match   HLGreen3BgB          "!!!*" containedin=CommentColor,Comment2Color
+syn match   HLGreen1BgB          "!!!!!*" containedin=CommentColor,Comment2Color
+syn match   HLOrangered1BgB      "\%(\<WARNING\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+syn match   HLOrangered1BgB      "\%(\<DO NOT\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+" syn match   HLRedBgB             "\%(\<ERROR\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+" syn match   HLRedBgB             "\%(\<WRONG\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+syn match   HLOrangeBgB          "\%(\<TODO\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+syn match   HLYellow3BgB         "\%(\<VITODO\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+syn match   HLGreen3BgB          "\%(\<NOTE\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
+syn match   HLGreen1BgB          "\%(\<VINOTE\>.*\)\@<=!!!*" containedin=CommentColor,Comment2Color
 " syn case match
-"-------------------------------------------------------------------
+"------------------------------------------------------------------------------
 
 
-" special linux command that needs to be highlighted separately
-"------------------------------------------------------------------
-syn match RedColorb  "\<sudo\>" contains=@NoSpell
-"-------------------------------------------------------------------
-
+" Special linux command that needs to be highlighted separately.
+"------------------------------------------------------------------------------
+hi  link  AllPostKeywords  AllFilesSpecialColorB
+syn match AllPostKeywords  "\<sudo\>" contains=@NoSpell
+"------------------------------------------------------------------------------
 
 
 " Matches titles:
@@ -47,29 +78,34 @@ syn match RedColorb  "\<sudo\>" contains=@NoSpell
 " 2.1. Some Title Example with " or # or // or -- comments
 " 2.1.1. Some Title Example with " or # or // or -- comments
 " 2.1.1.1. Some Title Example with " or # or // or -- comments
-"-------------------------------------------------------------------
-if g:performance_mode <= 0
-   syn match    BoldAndUnderlineOrange2   '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineYellow    '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineFluoGreen '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineBlue      '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlinePink      '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineOrange    '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlinePeach     '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineGreen     '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineCyan      '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   syn match    BoldAndUnderlineFuchsia   '\(^\s*\)\@<=\%(\/\/\+\|--\+\|\"\+\|#\+\|\)\s*[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
-   "syn match    BoldAndUnderlineLightBrown
-   "syn match    BoldAndUnderlineFluoYellowGreen
-   "syn match    BoldAndUnderlineGreen2
-   "syn match    BoldAndUnderlineTeal
-   "syn match    BoldAndUnderlinePink2
-endif
-"-------------------------------------------------------------------
+"------------------------------------------------------------------------------
+" if g:performance_mode <= 0
+"    hi  link  AllPostTitles1   HLDarkorange3BU
+"    syn match AllPostTitles1   '\%(^\s*\)\@<=[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles2   HLYellowBU
+"    syn match AllPostTitles2   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles3   HLGreenBU
+"    syn match AllPostTitles3   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles4   HLDodgerblueBU
+"    syn match AllPostTitles4   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles5   HLHotpinkBU
+"    syn match AllPostTitles5   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles6   HLDarkorangeBU
+"    syn match AllPostTitles6   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles7   HLIndianredBU
+"    syn match AllPostTitles7   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles8   HLForestgreenBU
+"    syn match AllPostTitles8   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles9   HLCyanBU
+"    syn match AllPostTitles9   '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+"    hi  link  AllPostTitles10  HLFuchsiaBU
+"    syn match AllPostTitles10  '\%(^\s*\)\@<=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\.\s.*'    contains=@NoSpell
+" endif
+"------------------------------------------------------------------------------
 
 
-" match first \ in new line
-syn match   BlueColor        '\(^\s*\)\@<=\\'
-" match last \ in line
-syn match   BlueColor        '\\\(\s*$\)\@='
+" Match last \ in line.
+hi  link    AllPostSlash   AllFilesSpecialColor2
+syn match   AllPostSlash   '\\\%(\s*$\)\@='
+
 

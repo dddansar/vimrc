@@ -1,78 +1,70 @@
+"==============================================================================
+" File: txt.vim
+"------------------------------------------------------------------------------
+" Description: This file adds custom syntax highlighting for all txt files.
+"              Gets loaded by .vimrc when opening select files with a vim GUI.
+"------------------------------------------------------------------------------
+" Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" Copyright: MIT License
+"
+" Copyright (c) 2026 Danny Sarraf
+"
+" Permission is hereby granted, free of charge, to any person obtaining a copy
+" of this software and associated documentation files (the "Software"), to deal
+" in the Software without restriction, including without limitation the rights
+" to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+" copies of the Software, and to permit persons to whom the Software is
+" furnished to do so, subject to the following conditions:
+"
+" The above copyright notice and this permission notice shall be included in
+" all copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+" OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+" SOFTWARE.
+"==============================================================================
 
-" Vim's internal dictionary is not perfect and may not align with your writing style. The dictionary can fortunately be overridden with a local dictionary. A local dictionary is automatically created whenever a word is added or ignored.
-
-" The location of this file is in ~/.vim/spell/, and is named based on the defined language, e.g. ~/.vim/spell/en.utf-8.add.
-
-"-------------------------------------------------------------------
-"Setting up a custom dictionary !!!!
-"-------------------------------------------------------------------
-
-" A custom dictionary can be created and defined like so:
-" setlocal spell spelllang=custom_file.spl
-" Where custom_file.spl is the path to the custom dictionary.
-
-" will highlight spelling mistakes, NOTE: spellcheck != autocorrect
-" 1)
-" if exists("g:spell_check_en")
-"    setlocal spelllang+=custom_file
-" endif
-
-" 2)
-" create file ~/.vim/spell/custom_file.utf-8.add
-
-" 3) It should be noted that the *.spl extension is a compressed format. To generate a *.spl file, the mkspell command can be used like so:
-":mkspell! custom_file.utf-8.add
-
-" 4)
-" can't find the file custom_file.utf-8.spl  (because it's called custom_file.utf-8.add.spl !!)
-" so create a link to it
-" cd ~/.vim/spell/
-" ln -s ~/.vim/spell/custom_file.utf-8.add.spl custom_file.utf-8.spl
-"-------------------------------------------------------------------
-
-" smartindent in Vim is an indentation option that provides automatic indentation when starting a new line
+" smartindent in Vim is an indentation option that provides automatic
+" indentation when starting a new line.
 setlocal nosmartindent
 
-" ---------------------------------------------------------------------------------------------
-" these will match special characters that are used as section delimiters or title underscores:
-" ---------------------------------------------------------------------------------------------
-syn region  OrangeColor       oneline  start=+―+    end=+― *$+
-syn region  FuchsiaColor      oneline  start=+–+    end=+– *$+
-syn region  TealColor         oneline  start=+‒+    end=+‒ *$+
-syn region  LightOrangeColor  oneline  start=+—+    end=+— *$+
-syn region  GreenColor        oneline  start=+‐+    end=+‐ *$+
-syn region  LightOliveColor   oneline  start=+‑+    end=+‑ *$+
-" ---------------------------------------------------------------------------------------------
+" Match (+) (-) (~)
+"------------------------------------------------------------------------------
+hi  link    TxtPlusParen      AllFilesSBrColor
+syn match   TxtPlusParen      "(+)"
+hi  link    TxtMinusParen     AllFilesFuncColor
+syn match   TxtMinusParen     "(-)"
+hi  link    TxtTildaParen     AllFilesCBrColor
+syn match   TxtTildaParen     "(\~)"
+"------------------------------------------------------------------------------
 
-syn match   OrangeColor      "(+)"
-syn match   LightOliveColor  "(-)"
-syn match   LightOrangeColor "(\~)"
+" Match 1) A) (2) (B)...
+"------------------------------------------------------------------------------
+" Start of line, one or more spaces followed by 0 or 1 "(" followed by
+" number/letter and ")".
+hi  link    TxtNumberParen    AllFilesArrowsColor
+hi  link    TxtLetterParen    AllFilesOpColor
+syn match   TxtNumberParen    "\%(^\s*-\?\s*\)\@<=(\?[0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "\%(^\s*-\?\s*\)\@<=(\?[A-Z])" contains=@NoSpell
+syn match   TxtNumberParen    "\%(\s\+\)\@<=([0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "\%(\s\+\)\@<=([A-Z])" contains=@NoSpell
+"------------------------------------------------------------------------------
 
-" quotes with `
-if exists("g:spell_check_en") && g:spell_check_en
-   syn region  CommentColor   oneline matchgroup=FluoGreen2Color start=+\(^\|\s\|[(\[{]\)\@<=`\(\s\)\@!+  matchgroup=FluoGreen2Color end=+\(\\\)\@<!`\(\s\|$\|[)\]}.!?,;:\-]\)\@=+   contains=@NoSpell contained containedin=CommentColor
-endif
-hi  link    QuotesSingle2     GreenColor
-syn region QuotesSingle2 oneline  start=/\v`/ end=/\v`/ contains=@NoSpell
-
-
-" quotes with *
-if exists("g:spell_check_en") && g:spell_check_en
-   syn region  CommentColor   oneline  matchgroup=FluoGreen2Color start=+\(^\|\s\|[(\[{]\)\@<=\*\(\s\)\@!+   matchgroup=FluoGreen2Color end=+\(\\\)\@<!\*\(\s\|$\|[)\]}.!?,;:\-]\)\@=+ contains=@NoSpell contained containedin=CommentColor
-endif
-hi  link    QuotesSingle3     LightOliveColor
-syn region  QuotesSingle3     oneline  start=+\(^\|\s\|[(\[{]\)\@<=\*\(\s\)\@!+  end=+\(\\\)\@<!\*\(\s\|$\|[)\]}.!?,;:\-]\)\@=+ contains=@NoSpell,QuotesSingle3
-
-syn match NoColor  "\(\w\)\@<='\(\w\)\@="
-
-
-" match 1) A) (2) (B)...
-"-------------------------------------------------------------------
-" start of line, one or more spaces followed by 0 or 1 "(" followed by number/letter and ")"
-syn match   PinkColor    "\(^\s*-\?\s*\)\@<=(\?[0-9]\+)" contains=@NoSpell
-syn match   OrangeColor  "\(^\s*-\?\s*\)\@<=(\?[A-Z])" contains=@NoSpell
-syn match   PinkColor    "\(\s\+\)\@<=([0-9]\+)" contains=@NoSpell
-syn match   OrangeColor  "\(\s\+\)\@<=([A-Z])" contains=@NoSpell
-"-------------------------------------------------------------------
-
+" Lowercase p1/p2/p3 (lower case could mean page numbers...).
+" P1/P2/P3 for Priorities
+syn match Whitebg             "\<P0\>" contains=@NoSpell
+syn match RedOrangebg         "\<P1\>" contains=@NoSpell
+syn match Orangebg            "\<P2\>" contains=@NoSpell
+syn match LightOrangebg       "\<P3\>" contains=@NoSpell
+syn match Yellowbg            "\<P4\>" contains=@NoSpell
+syn match FluoGreen0bg        "\<P5\>" contains=@NoSpell
+syn match FluoGreen2bg        "\<P6\>" contains=@NoSpell
+syn match Green2bg            "\<P7\>" contains=@NoSpell
+syn match Tealbg              "\<P8\>" contains=@NoSpell
+syn match Blue2bg             "\<P9\>" contains=@NoSpell
 
