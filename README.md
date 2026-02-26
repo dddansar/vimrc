@@ -13,6 +13,7 @@ My vimrc settings for GVim
 - Advanced autocorrect support
 
 .vim/
+```
 ├── abbrevlist.vim          # Abbreviations list for thesaurus lookup
 ├── abbrev.vim              # Text abbreviations and shortcuts
 ├── all_post.vim            # Global post-processing syntax highlighting
@@ -44,6 +45,7 @@ My vimrc settings for GVim
 ├── unicode.vim             # Unicode support and abbreviations
 ├── vhdl.vim                # VHDL syntax highlighting
 └── vim.vim                 # Vim syntax highlighting
+```
 
 To use, first install GVim on linux or windows, and then place the .vim files in the appropriate location.
 - For linux, place the .vimrc file and the .vim/ folder in ~/ (aka $HOME/ or /home/username/), and that's it, open any file with "gvim filename" in a terminal and the settings should all be loaded.
