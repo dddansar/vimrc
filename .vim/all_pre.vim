@@ -167,26 +167,26 @@ syn match   AllPreSpChars12   "<->"
 "------------------------------------------------------------------------------
 " only enabled if spellchecking is on
 " Ignore spell checking for the following matches.
-function! IgnoreSpellings()
-   " Ignore spell on words with 1 or more capital letters, or numbers or dashes
-   " or underscores or dots.
-   hi  link     AllPreSpellCommentColor   AllFilesCommentColor
-   syn match    AllPreSpellCommentColor   "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
-   syn match    AllPreSpellNoColor        "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell
-
-   " Ignore spell on functions () followed by () or arrays [] followed by [].
-   " No need to match dashes or numbers or capitals as that is covered above...
-   syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell contained containedin=.*Comment.*
-   syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell
-
-   " Ignore spell on functions( immediately followed by ( with no spaces.
-   " No need to match dashes or numbers or capitals as that is covered above...
-   syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell contained containedin=.*Comment.*
-   syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell
-endfunction
-if exists("g:spell_check_en") && g:spell_check_en && &spell
-   call IgnoreSpellings()
-endif
+" function! IgnoreSpellings()
+"    " Ignore spell on words with 1 or more capital letters, or numbers or dashes
+"    " or underscores or dots.
+"    hi  link     AllPreSpellCommentColor   AllFilesCommentColor
+"    syn match    AllPreSpellCommentColor   "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+"    syn match    AllPreSpellNoColor        "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell
+"
+"    " Ignore spell on functions () followed by () or arrays [] followed by [].
+"    " No need to match dashes or numbers or capitals as that is covered above...
+"    syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell contained containedin=.*Comment.*
+"    syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell
+"
+"    " Ignore spell on functions( immediately followed by ( with no spaces.
+"    " No need to match dashes or numbers or capitals as that is covered above...
+"    syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+"    syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell
+" endfunction
+" if exists("g:spell_check_en") && g:spell_check_en && &spell
+"    call IgnoreSpellings()
+" endif
 "------------------------------------------------------------------------------
 
 

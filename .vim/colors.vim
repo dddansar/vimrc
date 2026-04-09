@@ -1,9 +1,8 @@
 "==============================================================================
 " File: colors.vim
 "------------------------------------------------------------------------------
-" Description: This file will color the highlighting group names with the color
-"              they are mapped to and adds additional highlighting groups that
-"              get used throughout the .vim files.
+" Description: This file adds additional highlighting groups that get used
+"              throughout the .vim files.
 "              Gets loaded by .vimrc when opening select files with a vim GUI.
 " NOTE: See also highlightings.vim.
 "------------------------------------------------------------------------------

@@ -1,7 +1,8 @@
 "==============================================================================
 " File: custom_syntax.vim
 "------------------------------------------------------------------------------
-" Description: Loads the custom syntax highlighting groups based on filetype.
+" Description: Loads the custom syntax highlighting groups based on file
+"              extension.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------

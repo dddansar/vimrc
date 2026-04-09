@@ -123,9 +123,9 @@ endfunction
 " NOTE: Link neovim to vim's .vimrc and .vim/ in linux!
 " Link the .vimrc file in neovim.
 " ln -s ~/.vimrc ~/.config/nvim/init.vim
-" Link the .vim/ files in neovim.
+" Link the .vim/ folder in neovim.
 " ln -s ~/.vim ~/.config/nvim/.vim
-" Link the spell checking files in neovim.
+" Link the spell checking folder in neovim.
 " ln -s ~/.vim/spell ~/.config/nvim/spell
 " Link the custom colorschemen in neovim.
 " ln -s ~/.vim/colors ~/.config/nvim/colors
