@@ -29,106 +29,93 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:vhdl_loaded")
+  finish
+endif
+let g:vhdl_loaded = 1
+
+
 " VHDL keywords
-hi  link    VerKeywords1 AllFilesDefinesColor
-syn keyword VerKeywords1 alias assert label library use generate
+hi  link    VhdlKeywords1 AllFilesDefinesColor
+syn keyword VhdlKeywords1 alias assert label library use generate
 
-hi  link    VerKeywords2 AllFilesArrayColor
-syn keyword VerKeywords2 architecture array attribute package procedure process
+hi  link    VhdlKeywords2 AllFilesArrayColor
+syn keyword VhdlKeywords2 architecture array attribute package procedure process
 
-hi  link    VerKeywords3 AllFilesSystemColor3
-syn keyword VerKeywords3 component configuration constant register
-syn keyword VerKeywords3 select signal
+hi  link    VhdlKeywords3 AllFilesSystemColor3
+syn keyword VhdlKeywords3 component configuration constant register
+syn keyword VhdlKeywords3 select signal
 
-hi  link    VerKeywords4 AllFilesSystemColor
-syn keyword VerKeywords4 access after block body buffer bus disconnect
-syn keyword VerKeywords4 entity generic group guarded impure in downto file
-syn keyword VerKeywords4 inertial is linkage literal new next null of on
-syn keyword VerKeywords4 others out range postponed pure record reject report
-syn keyword VerKeywords4 severity shared subtype to transport type unaffected
-syn keyword VerKeywords4 wait when with note warning error failure units
+hi  link    VhdlKeywords4 AllFilesSystemColor
+syn keyword VhdlKeywords4 access after block body buffer bus disconnect
+syn keyword VhdlKeywords4 entity generic group guarded impure in downto file
+syn keyword VhdlKeywords4 inertial is linkage literal new next null of on
+syn keyword VhdlKeywords4 others out range postponed pure record reject report
+syn keyword VhdlKeywords4 severity shared subtype to transport type unaffected
+syn keyword VhdlKeywords4 wait with note warning failure units
 
-hi  link    VerKeywords5 AllFilesLoopCondColor
-syn keyword VerKeywords5 all elsi until use until elsif
+hi  link    VhdlKeywords5 AllFilesLoopCondColor
+syn keyword VhdlKeywords5 all until until elsif when
 
-hi  link  VerKeywords7 AllFilesSystemColor2
 " Predefined VHDL types, standard IEEE VHDL types, non standard VHDL types.
-syn keyword VerKeywords7 bit bit_vector character boolean integer real time
-syn keyword VerKeywords7 positive natural signed unsigned line text
-syn keyword VerKeywords7 std_ulogic std_ulogic_vector std_logic
-syn keyword VerKeywords7 std_logic_vector qsim_state qsim_state_vector
-syn keyword VerKeywords7 qsim_12state qsim_12state_vector qsim_strength
-syn keyword VerKeywords7 mux_bit mux_vector reg_bit reg_vector wor_bit
-syn keyword VerKeywords7 wor_vector string severity_level
+hi  link  VhdlKeywords7 AllFilesSystemColor2
+syn keyword VhdlKeywords7 bit bit_vector character boolean integer real time
+syn keyword VhdlKeywords7 positive natural signed unsigned line text
+syn keyword VhdlKeywords7 std_ulogic std_ulogic_vector std_logic
+syn keyword VhdlKeywords7 std_logic_vector
+syn keyword VhdlKeywords7 string severity_level
 
 " Array attributes
-syn match VerKeywords7 "\'high"
-syn match VerKeywords7 "\'left"
-syn match VerKeywords7 "\'length"
-syn match VerKeywords7 "\'low"
-syn match VerKeywords7 "\'range"
-syn match VerKeywords7 "\'reverse_range"
-syn match VerKeywords7 "\'right"
-syn match VerKeywords7 "\'ascending"
+syn match VhdlKeywords7 "\'high"
+syn match VhdlKeywords7 "\'left"
+syn match VhdlKeywords7 "\'length"
+syn match VhdlKeywords7 "\'low"
+syn match VhdlKeywords7 "\'range"
+syn match VhdlKeywords7 "\'reverse_range"
+syn match VhdlKeywords7 "\'right"
+syn match VhdlKeywords7 "\'ascending"
 
 " Block attributes
-syn match VerKeywords7 "\'behaviour"
-syn match VerKeywords7 "\'structure"
-syn match VerKeywords7 "\'simple_name"
-syn match VerKeywords7 "\'instance_name"
-syn match VerKeywords7 "\'path_name"
-syn match VerKeywords7 "\'foreign"
+syn match VhdlKeywords7 "\'behaviour"
+syn match VhdlKeywords7 "\'structure"
+syn match VhdlKeywords7 "\'simple_name"
+syn match VhdlKeywords7 "\'instance_name"
+syn match VhdlKeywords7 "\'path_name"
+syn match VhdlKeywords7 "\'foreign"
 
 " Signal attribute
-syn match VerKeywords7 "\'active"
-syn match VerKeywords7 "\'delayed"
-syn match VerKeywords7 "\'event"
-syn match VerKeywords7 "\'last_active"
-syn match VerKeywords7 "\'last_event"
-syn match VerKeywords7 "\'last_value"
-syn match VerKeywords7 "\'quiet"
-syn match VerKeywords7 "\'stable"
-syn match VerKeywords7 "\'transaction"
-syn match VerKeywords7 "\'driving"
-syn match VerKeywords7 "\'driving_value"
+syn match VhdlKeywords7 "\'active"
+syn match VhdlKeywords7 "\'delayed"
+syn match VhdlKeywords7 "\'event"
+syn match VhdlKeywords7 "\'last_active"
+syn match VhdlKeywords7 "\'last_event"
+syn match VhdlKeywords7 "\'last_value"
+syn match VhdlKeywords7 "\'quiet"
+syn match VhdlKeywords7 "\'stable"
+syn match VhdlKeywords7 "\'transaction"
+syn match VhdlKeywords7 "\'driving"
+syn match VhdlKeywords7 "\'driving_value"
 " Type attributes
-syn match VerKeywords7 "\'base"
-syn match VerKeywords7 "\'high"
-syn match VerKeywords7 "\'left"
-syn match VerKeywords7 "\'leftof"
-syn match VerKeywords7 "\'low"
-syn match VerKeywords7 "\'pos"
-syn match VerKeywords7 "\'pred"
-syn match VerKeywords7 "\'rightof"
-syn match VerKeywords7 "\'succ"
-syn match VerKeywords7 "\'val"
-syn match VerKeywords7 "\'image"
-syn match VerKeywords7 "\'value"
+syn match VhdlKeywords7 "\'base"
+syn match VhdlKeywords7 "\'high"
+syn match VhdlKeywords7 "\'left"
+syn match VhdlKeywords7 "\'leftof"
+syn match VhdlKeywords7 "\'low"
+syn match VhdlKeywords7 "\'pos"
+syn match VhdlKeywords7 "\'pred"
+syn match VhdlKeywords7 "\'rightof"
+syn match VhdlKeywords7 "\'succ"
+syn match VhdlKeywords7 "\'val"
+syn match VhdlKeywords7 "\'image"
+syn match VhdlKeywords7 "\'value"
 
-hi  link  VerKeywords8 AllFilesNumColor
-" Values for standard VHDL types
-syn case match
-syn match VerKeywords8 "\'[0L1HXWZU\-\?]\'"
-syn case ignore
-
-" Floating numbers
-syn match VerKeywords8 "0*2#[01_]\+\.[01_]\+#\%(E[+\-]\=\d\+\)\="
-syn match VerKeywords8 "0*16#[0-9a-f_]\+\.[0-9a-f_]\+#\%(E[+\-]\=\d\+\)\="
-syn match VerKeywords8 "0*2#[01_]\+#\%(E[+\-]\=\d\+\)\="
-syn match VerKeywords8 "0*16#[0-9a-f_]\+#\%(E[+\-]\=\d\+\)\="
+hi  link  VhdlKeywords8 AllFilesNumColor
 
 " Operators
-hi  link    VerKeywords9 AllFilesSystemColor2
-syn keyword VerKeywords9 rol ror sla sll sra srl
-syn keyword VerKeywords9 mod rem abs
-syn match   VerKeywords9 "[&><=:+\-*\/|]"
-
-hi  link  VerKeywords10 AllFilesVarColor
-syn match VerKeywords10 "[().,;]"
-
-"------------------------------------------------------------------------------
-hi  link   VerKeywords11 AllFilesDefinesColor
-syn region VerKeywords11 oneline start="-- psl default clock" end=';'
-syn region VerKeywords11 start="-- psl" end=';'
-"------------------------------------------------------------------------------
+hi  link    VhdlKeywords9 AllFilesSystemColor2
+" syn keyword VhdlKeywords9 and nand or nor xor xnor
+syn keyword VhdlKeywords9 rol ror sla sll sra srl
+syn keyword VhdlKeywords9 mod rem abs
 

@@ -29,9 +29,25 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:txt_loaded")
+  finish
+endif
+let g:txt_loaded = 1
+
+
 " smartindent in Vim is an indentation option that provides automatic
 " indentation when starting a new line.
 setlocal nosmartindent
+
+" Background and Foreground that apply only to text files.
+" if g:font_style == 0
+"    hi Normal   guifg=grey70   guibg=grey5
+" else
+"    hi Normal   guifg=grey90   guibg=grey5
+" endif
+
 
 " Match (+) (-) (~)
 "------------------------------------------------------------------------------

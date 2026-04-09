@@ -29,25 +29,19 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:tcl_loaded")
+  finish
+endif
+let g:tcl_loaded = 1
+
+
 " A bunch of useful keywords.
 hi  link    TclKeywords1 AllFilesSystemColor
-syn keyword TclKeywords1 proc global return lindex
+syn keyword TclKeywords1 proc lindex
 syn keyword TclKeywords1 llength lappend lreplace lrange list concat incr
 syn keyword TclKeywords1 upvar set
-syn keyword TclKeywords1 init add
-
-hi  link    TclKeywords2 AllFilesLoopCondColor
-syn keyword TclKeywords2 case default
-
-hi  link    TclKeywords3 AllFilesLoopCondColor
-syn keyword TclKeywords3 if then else elseif switch
-syn keyword TclKeywords3 assertion
-
-hi  link    TclKeywords4 AllFilesLoopCondColor
-syn keyword TclKeywords4 while for foreach break continue
-
-hi  link    TclKeywords5 AllFilesVarColor
-syn keyword TclKeywords5 insert create polygon fill outline tag
 
 " Commands associated with widgets.
 syn keyword TclKeywords5 background highlightbackground insertontime cget
@@ -58,7 +52,7 @@ syn keyword TclKeywords5 font insertborderwidth relief
 syn keyword TclKeywords5 foreground insertofftime selectbackground
 syn keyword TclKeywords5 height spacing1 spacing2 spacing3 insertwidth
 syn keyword TclKeywords5 state tabs width wrap
-syn keyword TclKeywords5 command default xscrollcommand yscrollcommand
+syn keyword TclKeywords5 command xscrollcommand yscrollcommand
 syn keyword TclKeywords5 scrollregion xscrollincrement yscrollincrement
 syn keyword TclKeywords5 closeenough confine orient
 syn keyword TclKeywords5 indicatoron offvalue onvalue selectcolor selectimage
@@ -71,8 +65,8 @@ syn keyword TclKeywords5 activerelief elementborderwidth
 syn keyword TclKeywords5 delete names types create
 
 
-syn keyword TclKeywords5 active end last none cascade checkbutton command
-syn keyword TclKeywords5 activebackground actveforeground accelerator
+syn keyword TclKeywords5 active last none cascade checkbutton command
+syn keyword TclKeywords5 activebackground activeforeground accelerator
 syn keyword TclKeywords5 font foreground hidemargin image indicatoron
 syn keyword TclKeywords5 selectcolor selectimage state underline value variable
 syn keyword TclKeywords5 add clone configure delete entrycget entryconfigure
@@ -82,7 +76,7 @@ syn keyword TclKeywords5 label menu offvalue onvalue index insert invoke
 
 " Commands associated with namespace.
 syn keyword TclKeywords5 children code current delete eval
-syn keyword TclKeywords5 export forget import inscope origin
+syn keyword TclKeywords5 export forget inscope origin
 syn keyword TclKeywords5 parent qualifiers tail which command variable
 
 " Commands associated with expr.
@@ -93,7 +87,7 @@ syn keyword TclKeywords5 atan2 floor pow   tanh
 syn keyword TclKeywords5 ceil  fmod  sin
 
 " Commands associated with pack.
-syn keyword TclKeywords5 forget info propogate slaves ipadx ipady padx pady
+syn keyword TclKeywords5 forget info propagate slaves ipadx ipady padx pady
 syn keyword TclKeywords5 after anchor before expand fill in side
 
 " Commands associated with string.
@@ -105,7 +99,7 @@ syn keyword TclKeywords5 anymore donesearch exists get names nextelement
 syn keyword TclKeywords5 size startsearch set
 
 " Switches for lsort.
-syn keyword TclKeywords5 ascii dictionary integer real command
+syn keyword TclKeywords5 ascii dictionary command
 syn keyword TclKeywords5 increasing decreasing index clock
 
 "------------------------------------------------------------------------------
@@ -125,6 +119,4 @@ syn keyword TclKeywords9 del
 
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
-
-" let b:current_syntax = "tcl"
 

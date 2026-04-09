@@ -31,7 +31,16 @@
 "==============================================================================
 
 
+" Exit if the file was already loaded
+if exists("b:all_pre_loaded")
+  finish
+endif
+let g:all_pre_loaded = 1
+
 let g:supports_regex=0
+
+" Just in case another file has it set to ignore...
+syn case match
 
 " VINOTE: By using hi link (along with statusline in vimrc), vim will display
 "         the name of the link and what it links to in the statusline. This is
@@ -39,395 +48,485 @@ let g:supports_regex=0
 "         for the "hi link", I add the file name "AllPre" first, to know which
 "         file the syntax group is located in.
 
+hi  link    AllPreComments2   AllFilesComment2Color
+hi  link    AllPreComments    AllFilesCommentColor
+hi  link    CMultiLineComment AllFilesCommentColor
+
+
 "------------------------------------------------------------------------------
 " Highlight chars that you don't want used such as tabs
-hi  link     AllPreTabs    HLGray10BgB
-syn match    AllPreTabs    '\t'       contains=@NoSpell containedin=CommentColor,Comment2Color
+hi  link     AllPreTabs    AllFilesBarelyVisible
+syn match    AllPreTabs    '\t'       contains=@NoSpell containedin=ALL
 " Highlight trailing white spaces
-hi  link     AllPreTrailingSpaces    HLGray10BgB
-syn match    AllPreTrailingSpaces    '\s\+$'       contains=@NoSpell containedin=CommentColor,Comment2Color
+hi  link     AllPreTrailingSpaces    AllFilesBarelyVisible
+syn match    AllPreTrailingSpaces    '\s\+\(\S\|\s\)\@!'       contains=@NoSpell containedin=ALL
 "------------------------------------------------------------------------------
 
-" Add default matches for special chars, many will be overridden later.
-"------------------------------------------------------------------------------
-" Slashes
-hi  link    AllPreSpChars1    AllFilesOpColor
-syn match   AllPreSpChars1    "/"        containedin=AllPrePaths
 
-hi  link    AllPreSpChars2    AllFilesSpecialColor
-syn match   AllPreSpChars2    "[\\]"     containedin=AllPrePaths
+" " Add default matches for special chars, many will be overridden later.
+" "------------------------------------------------------------------------------
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   " Slashes
+   hi  link    AllPreSpChars1    AllFilesOpColor
+   syn match   AllPreSpChars1    "/""
 
-" Quotes
-hi  link    AllPreSpChars3    AllFilesQuotesColor1
-syn match   AllPreSpChars3    "\%(\w\|\s\)\@<=`\%(\w\)\@!" contained containedin=CommentColor
-syn match   AllPreSpChars3    "\%(\w\)\@<!`\%(\w\|\s\|$\)\@=" contained containedin=CommentColor
+   hi  link    AllPreSpChars2    AllFilesSpecialColor
+   syn match   AllPreSpChars2    "[\\]"
 
-hi  link    AllPreSpChars4    AllFilesQuotesColor2
-syn match   AllPreSpChars4    '\%(\s\|(\|^\|\[\|{\)\@<="'
-syn match   AllPreSpChars4    '"\%(\s\|)\|$\|\]\|}\|.\|,\|;\|:\|!\|?\)\@='
+   " Quotes
+   " hi  link    AllPreSpChars3    AllFilesQuotesColor1
+   " syn match   AllPreSpChars3    "\%(\w\|\s\)\@<=`\w\@!" contained containedin=.*Comment.*
+   " syn match   AllPreSpChars3    "\%(\w\)\@<!`\%(\w\|\s\|$\)\@=" contained containedin=.*Comment.*
 
-hi  link    AllPreSpChars5    AllFilesQuotesColor3
-syn match   AllPreSpChars5    "\%(\s\|(\|^\|\[\|{\)\@<='"
-syn match   AllPreSpChars5    "'\%(\s\|)\|$\|\]\|}\|.\|,\|;\|:\|!\|?\)\@="
+   hi  link    AllPreSpChars4    AllFilesQuotesColor2
+   syn match   AllPreSpChars4    '\%(\s\|(\|^\|\[\|{\)\@<="'
+   syn match   AllPreSpChars4    '"\%(\s\|)\|$\|\]\|}\|.\|,\|;\|:\|!\|?\)\@='
+
+   hi  link    AllPreSpChars5    AllFilesQuotesColor3
+   syn match   AllPreSpChars5    "\%(\s\|(\|^\|\[\|{\)\@<='"
+   syn match   AllPreSpChars5    "'\%(\s\|)\|$\|\]\|}\|.\|,\|;\|:\|!\|?\)\@="
+endif
 
 " Operators
 hi  link    AllPreSpChars6    AllFilesOpColor
-syn match   AllPreSpChars6    "\%(\/\)\@<!\*\%(\/\)\@!"
 syn match   AllPreSpChars6    "[*]"
-syn match   AllPreSpChars6    "[+]"
-syn match   AllPreSpChars6    "[%^]"
-syn match   AllPreSpChars6    "[&|]"
-syn match   AllPreSpChars6    "[~]"
-syn match   AllPreSpChars6    "-"
+syn match   AllPreSpChars6    "&&"
+syn match   AllPreSpChars6    "||"
 
-" Parenthesis/brackets
-hi  link    AllPreSpParen     AllFilesFuncColor
-syn match   AllPreSpParen     "[)(]"
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   syn match   AllPreSpChars6    "\%(\/\)\@<!\*\%(\/\)\@!"
+   syn match   AllPreSpChars6    "[+]"
+   syn match   AllPreSpChars6    "[%^]"
+   syn match   AllPreSpChars6    "[&|]"
+   syn match   AllPreSpChars6    "[~]"
+   syn match   AllPreSpChars6    "-"
 
-hi  link    AllPreSpSBr       AllFilesSBrColor
-syn match   AllPreSpSBr       "[[\]]"
+   " Parenthesis/brackets
+   hi  link    AllPreSpParen     AllFilesFuncColor
+   syn match   AllPreSpParen     "[)(]"
 
-hi  link    AllPreSpCBr       AllFilesCBrColor
-syn match   AllPreSpCBr       "[}{]"
+   hi  link    AllPreSpSBr       AllFilesSBrColor
+   syn match   AllPreSpSBr       "[[\]]"
+
+   hi  link    AllPreSpCBr       AllFilesCBrColor
+   syn match   AllPreSpCBr       "[}{]"
+
+   hi  link    AllPreSpTBr       AllFilesTBrColor
+   syn match   AllPreSpTBr       "[><]"
+endif
 
 hi  link    AllPreSpTBr       AllFilesTBrColor
-syn match   AllPreSpTBr       "[><]"
+syn match   AllPreSpTBr       ">>"
+syn match   AllPreSpTBr       "<<"
 
 " Equalities
-hi  link    AllPreSpChars7    AllFilesEquality
+hi  link    AllPreSpChars7    AllFilesEqualityColor
 syn match   AllPreSpChars7    "="
+syn match   AllPreSpChars7    "=="
 syn match   AllPreSpChars7    ">="
 syn match   AllPreSpChars7    "<="
+syn match   AllPreSpChars7    "!="
+syn match   AllPreSpChars7    "\\n"
 
-" Special characters
-hi  link    AllPreSpChars9    AllFilesSpecialColor
-syn match   AllPreSpChars9    "[@]"
-syn match   AllPreSpChars9    "[#]"
-syn match   AllPreSpChars9    "[!?]"
-syn match   AllPreSpChars9    "[$]"
-
-hi  link    AllPreSpChars10   AllFilesSpecialColor2
-syn match   AllPreSpChars10   "[:;]"
-
-" Arrows
-hi  link    AllPreSpChars8    AllFilesArrowsColor
+hi  link    AllPreSpChars8    AllFilesEqualityColor
 syn match   AllPreSpChars8    "=>"
+syn match   AllPreSpChars8    "|=>"
 syn match   AllPreSpChars8    "<=>"
 
+" Special characters
+hi  link    AllPreSpChars9    AllFilesOpColor
+syn match   AllPreSpChars9    "[?]"
+if exists("b:comment_leader") && b:comment_leader != '!'
+   syn match   AllPreSpChars9    "[!]"
+endif
+
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   syn match   AllPreSpChars9    "[@]"
+   syn match   AllPreSpChars9    "[#]"
+   syn match   AllPreSpChars9    "[$]"
+endif
+
+hi  link    AllPreSpChars10   AllFilesSpecialColor2
+" syn match   AllPreSpChars10   "[:;]"
+" Match ;:, inside parenthesis
+syn match   AllPreSpChars10 "\((.*\)\@<=[:;,]\(.*)\)\@="
+
+" Match . between words
+hi  link    AllPreSpChars11   AllFilesSpecialColorB
+syn match   AllPreSpChars11   "\([a-zA-Z0-9\])]\)\@<=\.\([a-zA-Z]\)\@="
+
+" Arrows
 hi  link    AllPreSpChars12   AllFilesArrowsColor
 syn match   AllPreSpChars12   "->"
+syn match   AllPreSpChars12   "|->"
 syn match   AllPreSpChars12   "<-"
 syn match   AllPreSpChars12   "<->"
 "------------------------------------------------------------------------------
 
 
-hi  link    AllPreCommentColor   CommentColor
-hi  link    AllPreComment2Color  Comment2Color
-" Ignore spell checking for the following matches.
 "------------------------------------------------------------------------------
-" if !exists("g:minimal_matching")
-if exists("g:spell_check_en") && g:spell_check_en
-   " 1 capital letter not at first char.
-   syn match    AllPreCommentColor  "\<[a-z]\+[A-Z][a-z]*\>" contains=@NoSpell contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-z]\+[A-Z][a-z]*\>" contains=@NoSpell contained containedin=Comment2Color
-   syn match    AllPreCapitalized1  "\<[a-z]\+[A-Z][a-z]*\>" contains=@NoSpell
+" only enabled if spellchecking is on
+" Ignore spell checking for the following matches.
+function! IgnoreSpellings()
+   " Ignore spell on words with 1 or more capital letters, or numbers or dashes
+   " or underscores or dots.
+   hi  link     AllPreSpellCommentColor   AllFilesCommentColor
+   syn match    AllPreSpellCommentColor   "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+   syn match    AllPreSpellNoColor        "\<[a-z]*\([A-Z]\|[0-9]\|[\._-]\)[a-zA-Z0-9\._-]*\>\('\)\@!" contains=@NoSpell
 
-   " 2 or more capital letters.
-   syn match    AllPreCommentColor  "\<[a-zA-Z]*[A-Z][a-zA-Z]*[A-Z][a-zA-Z]*\>"   contains=@NoSpell contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-zA-Z]*[A-Z][a-zA-Z]*[A-Z][a-zA-Z]*\>"   contains=@NoSpell contained containedin=Comment2Color
-   syn match    AllPreCapitalized2  "\<[a-zA-Z]*[A-Z][a-zA-Z]*[A-Z][a-zA-Z]*\>"   contains=@NoSpell
+   " Ignore spell on functions () followed by () or arrays [] followed by [].
+   " No need to match dashes or numbers or capitals as that is covered above...
+   syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell contained containedin=.*Comment.*
+   syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell
 
-   " 1 Capital letter at first char but not at start of line or sentence.
-   syn match    AllPreCommentColor  "\%(^\s*\|[\.!?]\s\+\|\-\-\s*\|\/\/\s*\)\@<!\<[A-Z][a-z]*\>"   contains=@NoSpell contained containedin=CommentColor
-   syn match    AllPreComment2Color "\%(^\s*\|[\.!?]\s\+\|\-\-\s*\|\/\/\s*\)\@<!\<[A-Z][a-z]*\>"   contains=@NoSpell contained containedin=Comment2Color
-   syn match    AllPreCapitalized3  "\%(^\s*\|[\.!?]\s\+\|\-\-\s*\|\/\/\s*\)\@<!\<[A-Z][a-z]*\>"   contains=@NoSpell
-
-   " Contains number.
-   syn match    AllPreCommentColor  "\<[a-zA-Z0-9]*[0-9][a-zA-Z0-9]*\>"   contains=@NoSpell contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-zA-Z0-9]*[0-9][a-zA-Z0-9]*\>"   contains=@NoSpell contained containedin=Comment2Color
-   syn match    AllPreContainsNumber    "\<[a-zA-Z0-9]*[0-9][a-zA-Z0-9]*\>"   contains=@NoSpell
-
-   " Contains dash or underscore or dots.
-   syn match    AllPreCommentColor  "\<[a-zA-Z0-9\._-]*[\._-][a-zA-Z0-9\._-]*\>"  contains=@NoSpell contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-zA-Z0-9\._-]*[\._-][a-zA-Z0-9\._-]*\>"  contains=@NoSpell contained containedin=Comment2Color
-   syn match    AllPreDotsUndDash   "\<[a-zA-Z0-9\._-]*[\._-][a-zA-Z0-9\._-]*\>"  contains=@NoSpell,AllFilesCapsColor,AllFilesNumColor,UnicodeVectors
-
-   " Is a function name followed by ().
-   hi  link     AllPreFunction      AllFilesFuncColor
-   syn match    AllPreCommentColor  "\<[a-z][a-z0-9]\+\>\%(\s*()\)\@="  contains=@NoSpell,AllFilesLoopCondColor contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-z][a-z0-9]\+\>\%(\s*()\)\@="  contains=@NoSpell,AllFilesLoopCondColor contained containedin=Comment2Color
-   syn match    AllPreFunction      "\<[a-z][a-z0-9]\+\>\%(\s*()\)\@="  contains=@NoSpell,AllFilesLoopCondColor
-
-   " Is a function name immediately followed by ( with no spaces.
-   hi  link     AllPreFunction2     AllFilesFuncColor
-   syn match    AllPreCommentColor  "\<[a-z][a-z0-9]\+\>\%((\)\@=\%((\%(i\?e\?s\))\)\@!"  contains=@NoSpell,AllFilesLoopCondColor contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-z][a-z0-9]\+\>\%((\)\@=\%((\%(i\?e\?s\))\)\@!"  contains=@NoSpell,AllFilesLoopCondColor contained containedin=Comment2Color
-   syn match    AllPreFunction2     "\<[a-z][a-z0-9]\+\>\%((\)\@=\%((\%(i\?e\?s\))\)\@!"  contains=@NoSpell,AllFilesLoopCondColor
-
-   " Is an array name followed by [].
-   syn match    AllPreCommentColor  "\<[a-z][a-z0-9]\+\>\%(\s*\[\]\)\@="  contains=@NoSpell,AllFilesLoopCondColor contained containedin=CommentColor
-   syn match    AllPreComment2Color "\<[a-z][a-z0-9]\+\>\%(\s*\[\]\)\@="  contains=@NoSpell,AllFilesLoopCondColor contained containedin=Comment2Color
-   syn match    AllPreArray         "\<[a-z][a-z0-9]\+\>\%(\s*\[\]\)\@="  contains=@NoSpell,AllFilesLoopCondColor
-" endif
+   " Ignore spell on functions( immediately followed by ( with no spaces.
+   " No need to match dashes or numbers or capitals as that is covered above...
+   syn match    AllPreSpellCommentColor   "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+   syn match    AllPreSpellNoColor        "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell
+endfunction
+if exists("g:spell_check_en") && g:spell_check_en && &spell
+   call IgnoreSpellings()
 endif
 "------------------------------------------------------------------------------
 
 
-
-" Match common keywords in programming languages.
+" Match CAPITAL words.
 "------------------------------------------------------------------------------
-
-" NOTE: Using match instead of keyword as it is easier to override.
-hi  link  AllPreKeywords2  AllFilesFuncColor
-syn match AllPreKeywords2  "\<or\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<and\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<not\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<xor\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<xnor\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<nor\>"  contains=@NoSpell
-syn match AllPreKeywords2  "\<nand\>"  contains=@NoSpell
-
-hi  link  AllPreKeywords6  AllFilesLoopCondColor
-syn match AllPreKeywords6  "\<begin\>"
-syn match AllPreKeywords6  "\<end\>"
-syn match AllPreKeywords6  "\<case\>"
-syn match AllPreKeywords6  "\<default\>"
-syn match AllPreKeywords6  "\<forever\>"
-syn match AllPreKeywords6  "\<then\>"
-syn match AllPreKeywords6  "\<repeat\>"
-
-hi  link  AllPreKeywords7  AllFilesSystemColor
-syn match AllPreKeywords7  "\<true\>"
-syn match AllPreKeywords7  "\<false\>"
-
-syn match AllPreKeywords7  "\<open\>"
-syn match AllPreKeywords7  "\<close\>"
-syn match AllPreKeywords7  "\<return\>"
-syn match AllPreKeywords7  "\<import\>"
-syn match AllPreKeywords7  "\<exit\>"
-syn match AllPreKeywords7  "\<system\>"
-"------------------------------------------------------------------------------
-" https://vimdoc.sourceforge.net/htmldoc/syntax.html
-" The :syntax commands that define syntax items take a number of arguments.
-" Not all commands accept all arguments.  This table shows which arguments
-" can not be used for all commands:
-"                    contains    oneline  fold  display  extend   concealends  contained  containedin
-" :syntax keyword    -           -        -     -        -        -            yes  !!!   yes  !!!
-" :syntax match      yes         -        yes   yes      yes      -            yes        yes
-" :syntax region     yes         yes      yes   yes      yes      yes          yes        yes
-
-" NOTE: Can't use "syntax keyword" with "contains=@NoSpell".
-hi  link  AllPreKeywords8  AllFilesLoopCondColor
-syn match AllPreKeywords8  "\<do\>\%( not\)\@!"  contains=@NoSpell
-syn match AllPreKeywords8  "\<iff\>"      contains=@NoSpell
-syn match AllPreKeywords8  "\<\%(if\|else\|for\|while\)\>" contains=@NoSpell
-syn match AllPreKeywords8  "\<endcase\>"  contains=@NoSpell
-syn match AllPreKeywords8  "\<esac\>"     contains=@NoSpell
-syn match AllPreKeywords8  "\<elseif\>"   contains=@NoSpell
-syn match AllPreKeywords8  "\<endif\>"    contains=@NoSpell
-syn match AllPreKeywords8  "\<elif\>"     contains=@NoSpell
-syn match AllPreKeywords8  "\<fi\>"       contains=@NoSpell
-syn match AllPreKeywords8  "\<endfor\>"   contains=@NoSpell
-syn match AllPreKeywords8  "\<endwhile\>" contains=@NoSpell
-syn match AllPreKeywords8  "\<foreach\>"  contains=@NoSpell
-"------------------------------------------------------------------------------
-
-
-" Matches decimal/hex/oct/bin numbers.
-"------------------------------------------------------------------------------
-" NOTE: The characters "\<" and "\>" "anchor" the expression between to only
-"       match if it is on a word boundary end.
-" Numbers
-hi  link  AllPreNumbers1   AllFilesNumColor
-syn match AllPreNumbers1   "\<[0-9]\+\>"             contains=@NoSpell
-syn match AllPreNumbers1   "\<[0-9]\+\%(\W\)\@="      contains=@NoSpell
-syn match AllPreNumbers1   "\<[0-9]\+-[0-9]\+\>"     contains=@NoSpell
-syn match AllPreNumbers1   "\<0[x][0-9A-Fa-f]\+\>"   contains=@NoSpell
-syn match AllPreNumbers1   "\<[x][0-9A-F]\+\>"       contains=@NoSpell
-
-"\%( and \) lets you create a grouping.
-"\< means beginning of word.
-"\> means end of word.
-"\d means decimal.
-"\+ means one or more match.
-"\s means white space or tab.
-"|\ means or but it followed by nothing so match with or without anything.
-"%( means make group non capturing.
-"\= means match 0 or 1 times.
-"\? means match 0 or 1 times.
-" NOTE: Inside a character class like [ ], the dot and $ loses its special
-"       meaning and matches a literal dot and $.
-
-" matches 19'd1238  19'h1238af 32'b01010111 8'o3241
-" matches   'd1238    'h1238af   'b01010111  'o3241
-hi  link  AllPreNumbers2   AllFilesNumColor
-syn match AllPreNumbers2   "\%(\<\d\+\|\)'[bB][0-1_?]\+" contains=@NoSpell
-syn match AllPreNumbers2   "\%(\<\d\+\|\)'[oO][0-7_?]\+" contains=@NoSpell
-syn match AllPreNumbers2   "\%(\<\d\+\|\)'[dD][0-9_?]\+" contains=@NoSpell
-syn match AllPreNumbers2   "\%(\<\d\+\|\)'[hH][0-9a-fA-F_?]\+" contains=@NoSpell
-"------------------------------------------------------------------------------
-
-
-" Match scientific/exponent/floating point notation/number.
-" (±423.234 x 10±³ ±4243.234E±8)
-"------------------------------------------------------------------------------
-syn case ignore
-" matches 329E+32 32E-32 32E32
-" matches .329E+32 .32E-32 .32 .32E32
-" matches 234.23 2332.329e-32 2323.32e+32 2332.32e32
-" matches        2332.329E+32 2323.32E-32
-" matches 329x10^32 32x10^-32 32x10^32
-" matches .329x10^+32 .32x10^-32 .32x10^32
-" matches 2332.329x10^-32 2323.32x10^+32 2332.32x10^32 2332.32x10^32
-" matches 2332.329x10^+32 2323.32x10^-32
-" and also matches 2^14 2.32^43
-hi  link  AllPreNumbers3   AllFilesNumColor
-syn match AllPreNumbers3   "\%(\<\d*\)\?\.\?\<\d\+\%(\%(e\|x10\^\|\^\)[-+±∓]\?\)\?\d\+\>" contains=@NoSpell
-syn case match
-"------------------------------------------------------------------------------
-
-
-" Time
-"------------------------------------------------------------------------------
-" Matches 34ns 34ps 34fs 34us 34ms 34s
-" Matches 34sec 34min 34hr
-hi  link  AllPreTime    AllFilesTimeColor
-syn match AllPreTime    "\<\d\+\%(\%([fpnum]s\|s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
-" syn match AllPreTime    "\<\%(\%([fpnum]s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
-
-" Matches 34.23ns 34.23ps 34.23fs 34.23us 34.23ms 34.23s
-" Matches 34.23sec 34.23min 34.23hr
-syn match AllPreTime    "\<\d\+\.\d\+\%(\%([fpnum]s\|s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
-"------------------------------------------------------------------------------
-
-
-" Color CAPITAL words.
-"------------------------------------------------------------------------------
-hi  link     AllPreCapital AllFilesCapsColor
-syn match    AllPreCapital "\%(^\|\W\|\<[0-9]\+\)\@<=[A-Z][A-Z]\+\%(\W\|$\)\@=\%('[a-zA-Z]\)\@!" contains=@NoSpell
-syn match    AllPreCapital "\%(^\|\W\)\@<=[A-Z][A-Z0-9_]\+\%(\W\|$\)\@=" contains=@NoSpell containedin=CommentColor
-" Match words like DON'T that have ' in them.
-syn match    AllPreCapital "\%(^\|\W\)\@<=[A-Z]\+'[A-Z]\+\%(\W\|$\)\@=" contains=@NoSpell containedin=CommentColor
-
-" Match 's' at end of abbreviations.
-syn match   AllPreCapital  "\<[A-Z][A-Z]\+s\>" contains=@NoSpell containedin=CommentColor
+if g:performance_mode <= 1
+   " Matches ABC and ABC123ABC and ABC_123A_BC  but not 123ABC or 1A2B3C
+   " Also Matches words like ABCs, DON'T and WOULD'VE
+   hi  link     AllPreCapital1 AllFilesCapsColor
+   syn match    AllPreCapital1 "\<[A-Z][A-Z0-9_]\+\%('[A-Z][A-Z]\?\|s\)\?\%(\W\|\>\)\@=" contains=@NoSpell containedin=.*Comment.*
+endif
 "------------------------------------------------------------------------------
 
 
 " Match defines or special variables.
 " Moved bach to _pre so `quotes` would work, is this needed to go elsewhere?
 "------------------------------------------------------------------------------
-if exists("b:comment_leader") && b:comment_leader != '#'
-   " Matches words like #define.
-   hi  link    AllPreHash AllFilesDefinesColor
-   syn match   AllPreHash "\%(s#.*\|#\)\@<!#[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=CommentColor
+if g:performance_mode <= 1
+   if exists("b:comment_leader") && b:comment_leader != '#'
+      " Matches words like #define.
+      hi  link    AllPreHash     AllFilesDefinesColor
+      syn match   AllPreHash     "\%(#\)\@<!#[a-zA-Z0-9_]\+\>" contains=@NoSpell
 
-   " Matches hex #329AF.
-   hi  link    AllPreHashHex  AllFilesNumColor
-   syn match   AllPreHashHex  "\%(s#.*\|#\)\@<!#[a-fA-F0-9_]\+\>" contains=@NoSpell containedin=CommentColor
+      " Matches hex #329AF.
+      hi  link    AllPreHashHex  AllFilesNumColor
+      syn match   AllPreHashHex  "\%(#\)\@<!#[a-fA-F0-9_]\+\>" contains=@NoSpell
+   endif
+
+   " Matches $myVariable123
+   hi  link    AllPreDollar      AllFilesDefinesColor
+   syn match   AllPreDollar      "[$][a-zA-Z0-9_]\+\>"         contains=@NoSpell containedin=AllPrePaths1,AllPrePaths2
+   " Matches ${myVariable123}
+   syn match   AllPreDollar      "\${[a-zA-Z0-9_]\+}"          contains=@NoSpell containedin=AllPrePaths1,AllPrePaths2
+
+   hi  link    AllPreTick        AllFilesDefinesColor
+   syn match   AllPreTick        "`[a-zA-Z0-9_]\+\>\%(`\)\@!"  contains=@NoSpell
+
+   " Matches @abc123
+   hi  link    AllPreAt          AllFilesNumColor
+   syn match   AllPreAt          "@[a-zA-Z0-9_]\+\>"           contains=@NoSpell
+
+   " Matches %ld
+   hi  link    AllPrePercent     AllFilesSystemColor2
+   syn match   AllPrePercent     "%[a-zA-Z0-9.]*[a-zA-Z]\>"    contains=@NoSpell
+
+   " Matches word: if first word on line
+   hi  link    AllPreDirective   AllFilesSystemColor3
+   syn match   AllPreDirective   "\%(^\s*\)\@<=\<\w\+:" contains=@NoSpell
+   " Matches "word": if first word on line
+   hi  link    AllPreDirective2  AllFilesSystemColor3
+   syn match   AllPreDirective2  "\%(^\s*\)\@<=\"\w\+\":" contains=@NoSpell
+
+   if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5 && exists("b:comment_leader")
+      " Word: is matched if it's the first word in a comment
+      hi  link    AllPreDirective3  AllFilesFuncColor
+      execute 'syn match   AllPreDirective3  +\%(\s*' . b:comment_leader . '\s*\)\@<=\w\w*:+ contains=@NoSpell contained containedin=.*Comment.*'
+   endif
 endif
-
-hi  link    AllPreDollar      AllFilesDefinesColor
-syn match   AllPreDollar      "[$][a-zA-Z0-9_]\+\>"         contains=@NoSpell containedin=AllPrePaths,CommentColor,Comment2Color
-syn match   AllPreDollar      "\${[a-zA-Z0-9_]\+}"          contains=@NoSpell containedin=AllPrePaths,CommentColor,Comment2Color
-
-hi  link    AllPreTick        AllFilesDefinesColor
-syn match   AllPreTick        "`[a-zA-Z0-9_]\+\>\%(`\)\@!"   contains=@NoSpell containedin=CommentColor,Comment2Color
-
-hi  link    AllPreAt          AllFilesNumColor
-syn match   AllPreAt          "@[a-zA-Z0-9_]\+\>"           contains=@NoSpell containedin=CommentColor,Comment2Color
 "------------------------------------------------------------------------------
 
 
 " Matches linux paths.
 " WARNING: Can slow down/reduce performance.
 "------------------------------------------------------------------------------
-if g:performance_mode <= 0
-   hi  link     AllPrePaths   AllFilesPathsColor
-   " Match optional ~/ or / at start.
-   " Match word/word/... or word/word1\ word2\ .../...
-   " Match optional word.extension or .. or . at the end.
-   " Lookaheads \@! \@= at the end to make sure it's a proper path.
-   syn match    AllPrePaths   "\
-      \%(\~\?\/\)\?\
-      \%(\%([a-zA-Z0-9_.$]\%([a-zA-Z0-9_.\-]\|\\ \)\+\|[a-zA-Z0-9]\)\/\)\+\
-      \%(\%([a-zA-Z0-9_.$]\%([a-zA-Z0-9_.\-]\|\\ \)\+\|[a-zA-Z0-9]\)\.[a-zA-Z0-9]\+\|\.\.\?\)\?\
-      \%([a-zA-Z0-9_.\-]\|\\ [a-zA-Z0-9_]\)\@!\
-      \%($\|\s\|\'\|\"\)\@=" contains=@NoSpell containedin=CommentColor,Comment2Color
+if g:performance_mode <= 0 && &filetype != '' && &filetype != 'html'
+
+   " Removed the lookbehind...
+   " NOTE: Although adding \%(\s\|^\) incorrectly matches a space or new line,
+   " it drastically improves performance by matching only full words without
+   " using an expensive/slow lookbehind.
+
+   " Don't match if preceded py certain chars with lookbehind \@<!
+   " Match ~/path/file or /path/file or ./$path/file or ../path/ or /a/b or
+   " ~/path/file.ext or /path/file.ext or ./$path/file.ext or /a/b/c/d/e/f.g
+   " Match ~/path/file/ or /path/file/ or ./$path/file/ or ../path/ or /a/b/ or
+   " ~/path/file.ext/ or /path/file.ext/ or ./$path/file.ext/ or /a/b/c/d/e/f.g/
+   " Don't match /word or /2
+   " Can't be preceded by: [0-9a-zA-Z]!#$%&/)*+,\-./;>?@\]^_|}~
+   " Can   be preceded by: spaces"'(:<=[`{ and non-ASCII unicode characters...
+   " The [!-'*-.0-[\]-~] matches all ASCII characters except \ / ( )
+
+   " Part 1: Must start with / or ~/ or ./ or ../
+   hi  link     AllPrePaths1 AllFilesPathsColor
+   syn match    AllPrePaths1 "\
+      \%(\s\|^\)\
+      \%(\~\|\.\.\?\)\?\
+      \%(\/\%([!-'*-.0-[\]-~]\|\\ \)\+\)\+\
+      \%(\/\%([!-'*-.0-[\]-~]\|\\ \)\+\)\+\
+      \%(\/\)\?\
+      \%([!-~]\)\@!" contains=@NoSpell,AllPreDollar containedin=.*Comment.*
+
+   " Don't match if preceded by certain chars with lookbehind \@<!
+   " No ~/ or / or ./ at start as that is covered above but must end with a
+   " file extension like in $USER/path/file.ext or a/b/c.txt or a slash like in
+   " path/path/ or a/b/ path/file.ext/ or $USER/path/
+   " Don't match abc/ or 3/2.1 or option1/option2/option3 or 0.123/1.234 or
+   " path/file.ext or option1/option2/... (Must have more than 1 slash)...
+   " Don't match (123/456)/(7890/123.45) -> Don't match round parenthesis...
+
+   " Part 2: Must start with non slashes
+   hi  link     AllPrePaths2 AllFilesPathsColor
+   syn match    AllPrePaths2 "\
+      \%(\s\|^\)\
+      \%([!-'*-.0-[\]-~]\)\+\
+      \%(\/\%([!-'*-.0-[\]-~]\|\\ \)\+\)\+\
+      \%(\/\|\%(\%(\/\%([!-'*-.0-[\]-~]\|\\ \)\+\)\.\%([!-'*-.0-[\]-~]\|\\ \)\+\)\)\
+      \%(\.\.\?\)\?\
+      \%(\.\.\.\)\@<!\%([!-~]\)\@!" contains=@NoSpell,AllPreDollar containedin=.*Comment.*
+
+   " Match simple Windows paths C:\Users\name\AppData\ D:\Users E:\path\file
+   " Does not match paths like \Users\file without the C:\
+   hi  link     AllPreWinPaths AllFilesPathsColor
+   syn match    AllPreWinPaths "\<[C-E]:\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell containedin=AllPreDollar,.*Comment.*
 endif
 "------------------------------------------------------------------------------
 
 
 " Match websites.
 "------------------------------------------------------------------------------
-if g:performance_mode <= 0
-   hi  link     AllPreWebLinks   AllFilesPathsColor
-   syn match    AllPreWebLinks   "www\.[a-zA-Z0-9.?!\-_=\/~@()]\+"  contains=@NoSpell containedin=CommentColor,Comment2Color
-   " No parenthesis or spaces.
-   syn match    AllPreWebLinks   '\w\+:\/\/[^[:space:]]\+'      contains=@NoSpell containedin=CommentColor,Comment2Color
+if g:performance_mode <= 1
+   " Match links like www.vim.org
+   hi  link     AllPreWebLinks1  AllFilesPathsColor
+   syn match    AllPreWebLinks1  "www\.[a-zA-Z0-9.?!\-_=\/~@()]\+"  contains=@NoSpell containedin=.*Comment.*
+   " Match links like https://www.vim.org/download.php
+   hi  link     AllPreWebLinks2  AllFilesPathsColor
+   syn match    AllPreWebLinks2  '\w\+:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&''()*+,;=%]\+'      contains=@NoSpell containedin=.*Comment.*
+endif
+"------------------------------------------------------------------------------
+
+
+" Matches numbers.
+"------------------------------------------------------------------------------
+" \%( and \) lets you create a grouping.
+" \< means beginning of word.
+" \> means end of word.
+" \d means decimal.
+" \+ means one or more match.
+" \s means white space or tab.
+" |\ means or but it followed by nothing so match with or without anything.
+" %( means make group non capturing.
+" \= means match 0 or 1 times.
+" \? means match 0 or 1 times.
+" Inside a character class like [ ], the dot and $ loses its special
+" meaning and matches a literal dot and $.
+
+" Match scientific/exponent/floating point notation/number.
+if g:performance_mode <= 1
+   " matches 329E+32 32E-32 32E32
+   " matches .329E+32 .32E-32 .32 .32E32
+   " matches 234.23 2332.329e-32 2323.32e+32 2332.32e32
+   " matches        2332.329E+32 2323.32E-32
+   " matches 329x10^32 32x10^-32 32x10^32
+   " matches .329x10^+32 .32x10^-32 .32x10^32
+   " matches 2332.329x10^-32 2323.32x10^+32 2332.32x10^32 2332.32x10^32
+   " matches 2332.329x10^+32 2323.32x10^-32
+   " and also matches 2^14 2.32^43
+   hi  link  AllPreNumbers1   AllFilesNumColor
+   syn match AllPreNumbers1   "\<\%(\d*\)\?\.\?\d\+\%(\%([eE]\|x10\^\|\^\)[-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+   " NOTE: 4-5x slower... what was the reason again??
+   " syn match AllPreNumbers1   "\%(\w\)\@<!\%(\d*\)\?\.\?\d\+\%(\%([eE]\|x10\^\|\^\)[-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+endif
+
+" Matches hex numbers such as 0x12ad4 or x8732FFA8 or x87_32FFA8 or 0xDEAD_C0DE
+" but not x_123_45 or 0x123_ or 0x123__456
+hi  link  AllPreNumbers2   AllFilesNumColor
+syn match AllPreNumbers2   "\<0[x][0-9A-Fa-f]\%(_\?[0-9A-Fa-f]\)\+\>"   contains=@NoSpell
+syn match AllPreNumbers2   "\<[x][0-9A-F]\%(_\?[0-9A-F]\)\+\>"       contains=@NoSpell,MathXInNum
+
+" Matches 19'd1238  19'h1238af 32'b01010111 8'o3241
+" Matches   'd1238    'h1238af   'b01010111  'o3241
+" Matches 19'd12?8  19'h?238af 32'b??10?1? 8'o?241
+" Matches   'd123?    'h??38af   'b???1???  'o32??
+hi  link  AllPreNumbers3   AllFilesNumColor
+syn match AllPreNumbers3   "\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
+
+" Matches undercores in numbers.
+" 1_2_3_4 or 123_456_789 or 12345_67890
+" but not _123_45 or 123_ or 123__456
+hi  link  AllPreNumbers4   AllFilesNumColor
+syn match AllPreNumbers4   "\<[0-9]\+\%(_[0-9]\+\)\+\>" contains=@NoSpell
+"------------------------------------------------------------------------------
+
+
+" Matches time
+"------------------------------------------------------------------------------
+if g:performance_mode <= 0 && g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   " Matches 34ns 34ps 34fs 34us 34ms 34s
+   " Matches 34sec 34min 34hr
+   " Matches 34.23ns 34.23ps 34.23fs 34.23us 34.23ms 34.23s
+   " Matches 34.23sec 34.23min 34.23hr
+   hi  link  AllPreTime    AllFilesSystemColor4
+   syn match AllPreTime    "\<\d\+\.\?\d\+\%(\%([fpnum]s\|s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
+endif
+"------------------------------------------------------------------------------
+
+
+" Match common keywords in programming languages.
+"------------------------------------------------------------------------------
+" My custom syntax without any default vim settings.
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+
+   "------------------------------------------------------------------------------
+   " https://vimdoc.sourceforge.net/htmldoc/syntax.html
+   " The :syntax commands that define syntax items take a number of arguments.
+   " Not all commands accept all arguments.  This table shows which arguments
+   " can not be used for all commands:
+   "                    contains    oneline  fold  display  extend   concealends  contained  containedin
+   " :syntax keyword    -           -        -     -        -        -            yes  !!!   yes  !!!
+   " :syntax match      yes         -        yes   yes      yes      -            yes        yes
+   " :syntax region     yes         yes      yes   yes      yes      yes          yes        yes
+   " NOTE: Can't use "syntax keyword" with "contains=@NoSpell".
+   "------------------------------------------------------------------------------
+
+   " NOTE: Using match instead of keyword as it is easier to override.
+
+   " Functions and operators
+   hi  link  AllPreKeywords1  AllFilesFuncColor
+   syn match AllPreKeywords1  "\<x\?n\?or\>" contains=@NoSpell
+   syn match AllPreKeywords1  "\<n\?and\>"   contains=@NoSpell
+   syn match AllPreKeywords1  "\<not\>"      contains=@NoSpell
+
+   " Major blocks of code
+   hi  link  AllPreKeywords2  AllFilesSystemColor
+   syn match AllPreKeywords2  "\<\%(end\)\?\%(function\|interface\|class\|module\|task\)\>" contains=@NoSpell
+
+   " Common Literals
+   hi  link  AllPreKeywords3  AllFilesSystemColor
+   syn match AllPreKeywords3  "\<true\>"
+   syn match AllPreKeywords3  "\<TRUE\>"
+   syn match AllPreKeywords3  "\<false\>"
+   syn match AllPreKeywords3  "\<FALSE\>"
+   syn match AllPreKeywords3  "\<null\>"
+   syn match AllPreKeywords3  "\<NULL\>"
+
+   " Common system keywords
+   syn match AllPreKeywords3  "\<open\>"
+   syn match AllPreKeywords3  "\<close\>"
+   syn match AllPreKeywords3  "\<import\>"
+   syn match AllPreKeywords3  "\<system\>"
+
+   " jumps
+   syn match AllPreKeywords3  "\<break\>"
+   syn match AllPreKeywords3  "\<continue\>"
+   syn match AllPreKeywords3  "\<goto\>"     contains=@NoSpell
+   syn match AllPreKeywords3  "\<return\>"
+   syn match AllPreKeywords3  "\<exit\>"
+
+   " Error
+   " hi  link  AllPreError      AllFilesSpecialColorB
+   " syn match AllPreError      "\<error\>"
+   " syn match AllPreError      "\<ERROR\>"
+
+   hi  link  AllPreWarning    AllFilesEqualityColor
+   syn match AllPreWarning    "\<warning\>"
+
+   " Loops and conditionals
+   hi  link  AllPreKeywords4  AllFilesLoopCondColor
+   syn match AllPreKeywords4  "\<[iI]ff\?\>"                         contains=@NoSpell
+   syn match AllPreKeywords4  "\<then\>"
+   syn match AllPreKeywords4  "\<el\%(se\|seif\|if\)\>"              contains=@NoSpell
+   syn match AllPreKeywords4  "\<end\%(if\|for\|while\|case\)\?\>"   contains=@NoSpell
+   syn match AllPreKeywords4  "\<fi\>"                               contains=@NoSpell
+   syn match AllPreKeywords4  "\<for\%(each\|ever\)\?\>"
+   syn match AllPreKeywords4  "\<while\>"
+   syn match AllPreKeywords4  "\<do\>\%( not\)\@!"
+   syn match AllPreKeywords4  "\<repeat\>"
+   syn match AllPreKeywords4  "\<case\>"
+   syn match AllPreKeywords4  "\<default\>"
+   syn match AllPreKeywords4  "\<switch\>"
+   syn match AllPreKeywords4  "\<esac\>"              contains=@NoSpell
+   syn match AllPreKeywords4  "\<begin\>"
+
+   " Common data types in programming languages
+   hi  link  AllPreKeywords5  AllFilesSystemColor2
+   syn match AllPreKeywords5  "\<int\%(eger\)\?\>"    contains=@NoSpell
+   syn match AllPreKeywords5  "\<char\>"              contains=@NoSpell
+   syn match AllPreKeywords5  "\<float\>"             contains=@NoSpell
+   syn match AllPreKeywords5  "\<double\>"            contains=@NoSpell
+   syn match AllPreKeywords5  "\<real\>"              contains=@NoSpell
+   syn match AllPreKeywords5  "\<bit\>"               contains=@NoSpell
+   syn match AllPreKeywords5  "\<byte\>"              contains=@NoSpell
+   syn match AllPreKeywords5  "\<void\>"              contains=@NoSpell
+   syn match AllPreKeywords5  "\<bool\%(ean\)\?\>"    contains=@NoSpell
+
+   syn match AllPreKeywords5  "\<const\>"             contains=@NoSpell
+   syn match AllPreKeywords5  "\<signed\>"            contains=@NoSpell
+   syn match AllPreKeywords5  "\<unsigned\>"          contains=@NoSpell
+
+   syn match AllPreKeywords5  "\<auto\%(matic\)\?\>"  contains=@NoSpell
+   syn match AllPreKeywords5  "\<static\>"
+   syn match AllPreKeywords5  "\<global\>"
+   syn match AllPreKeywords5  "\<local\>"
+
+   hi  link  AllPreKeywords6  AllFilesStructColor
+   syn match AllPreKeywords6  "\<typedef\>"  contains=@NoSpell
+   syn match AllPreKeywords6  "\<struct\>"   contains=@NoSpell
+   syn match AllPreKeywords6  "\<enum\>"     contains=@NoSpell
+   syn match AllPreKeywords6  "\<union\>"    contains=@NoSpell
+
+   " Highlight sudo keyword
+   hi  link  AllPreSudo       AllFilesSpecialColorB
+   syn match AllPreSudo       "\<sudo\>"     contains=@NoSpell containedin=.*Comment.*
+
 endif
 "------------------------------------------------------------------------------
 
 
 " Comments leader and second.
 "------------------------------------------------------------------------------
-hi  link    Comment2Color  AllFilesComment2Color
-hi  link    CommentColor   AllFilesCommentColor
-if exists("b:comment_second")
-   execute 'syn match   Comment2Color    +' . b:comment_second . '.*+    contains=Comment2Color'
-endif
-if exists("b:comment_leader")
-   execute 'syn match   CommentColor     +' . b:comment_leader . '.*+    contains=CommentColor'
+" My custom syntax without any default vim settings.
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   if exists("b:comment_second")
+      execute 'syn match   AllPreComments2    +' . b:comment_second . '.*+    contains=AllPreComments2,AllPreWebLinks,AllPrePaths1,AllPrePaths2'
+   endif
+   if exists("b:comment_leader")
+      execute 'syn match   AllPreComments     +' . b:comment_leader . '.*+    contains=AllPreComments,AllPreWebLinks,AllPrePaths1,AllPrePaths2'
+   endif
 endif
 "------------------------------------------------------------------------------
 
-" NOTE: Disables spell checking inside parenthesis or if matching parenthesis
-"       is not closed!! Conflicts with one of the Error matches in c.vim if
-"       placed inside all_post.vim.
+" Multi-line Comments
+"------------------------------------------------------------------------------
+" My custom syntax without any default vim settings.
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
+   if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
+      execute 'syn region CMultiLineComment start="' . b:multi_line_comment_start .  '" end="' . b:multi_line_comment_end . '"    contains=AllPreWebLinks,AllPrePaths1,AllPrePaths2'
+   endif
+endif
+"------------------------------------------------------------------------------
+
+
 " Match each layer of matching parenthesis with different colors:
 " ((())) [[[]]] {{{}}}
+" WARNING: Rainbow parenthesis ignores spell checking inside parenthesis or if
+"          matching parenthesis is not closed!!
 "------------------------------------------------------------------------------
-if !exists("g:spell_check_en") && exists("g:supports_regex") && g:supports_regex == 0 && g:performance_mode <= 0
+if g:performance_mode <= 0 && !exists("g:spell_check_en") && exists("g:supports_regex") && g:supports_regex == 0
    call Highlight_rainbow_round_parenthesis ()
    call Highlight_rainbow_square_parenthesis ()
    call Highlight_rainbow_bracket_parenthesis ()
 endif
-"------------------------------------------------------------------------------
-
-
-"------------------------------------------------------------------------------
-" Setting up a custom dictionary !!!!
-"------------------------------------------------------------------------------
-" Vim's internal dictionary is not perfect and may not align with your writing
-" style. The dictionary can fortunately be overridden with a local dictionary.
-" A local dictionary is automatically created whenever a word is added or
-" ignored.
-
-" The location of this file is in ~/.vim/spell/, and is named based on the
-" defined language, e.g. ~/.vim/spell/en.utf-8.add.
-
-" A custom dictionary can be created and defined like so:
-" setlocal spell spelllang=custom_file.spl
-" Where custom_file.spl is the path to the custom dictionary.
-
-" Will highlight spelling mistakes, NOTE: spellcheck != autocorrect.
-" 1)
-" if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
-"    setlocal spelllang+=custom_spell
-" endif
-
-" 2)
-" Create file ~/.vim/spell/custom_file.utf-8.add
-
-" 3) It should be noted that the *.spl extension is a compressed format. To
-"    generate a *.spl file, the mkspell command can be used like so:
-":mkspell! custom_file.utf-8.add
-
-" 4)
-" Can't find the file custom_file.utf-8.spl  (because it's called
-"                                             custom_file.utf-8.add.spl !!)
-" So create a link to it:
-" cd ~/.vim/spell/
-" ln -s ~/.vim/spell/custom_file.utf-8.add.spl custom_file.utf-8.spl
 "------------------------------------------------------------------------------
 

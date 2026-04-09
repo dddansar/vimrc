@@ -190,6 +190,14 @@
 "   END OF TERMS AND CONDITIONS
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:math_mappings_loaded")
+  finish
+endif
+let g:math_mappings_loaded = 1
+
+
 " NOTE: Using   <c-r>=Eatchar('\s')<cr>   to consume the space typed after an
 "       abbreviation.
 

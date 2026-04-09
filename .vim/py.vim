@@ -29,6 +29,14 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:py_loaded")
+  finish
+endif
+let g:py_loaded = 1
+
+
 hi  link    PyKeywords1 AllFilesSystemColor
 syn keyword PyKeywords1       from __file__
 
@@ -44,15 +52,12 @@ syn keyword PyKeywords1          as
 syn keyword PyKeywords1          assert
 syn keyword PyKeywords1          async
 syn keyword PyKeywords1          await
-syn keyword PyKeywords1          break
-syn keyword PyKeywords1          continue
 syn keyword PyKeywords1          class
 syn keyword PyKeywords1          def
 syn keyword PyKeywords1          del
 syn keyword PyKeywords1          except
 syn keyword PyKeywords1          finally
 syn keyword PyKeywords1          from
-syn keyword PyKeywords1          global
 syn keyword PyKeywords1          in
 syn keyword PyKeywords1          is
 syn keyword PyKeywords1          lambda

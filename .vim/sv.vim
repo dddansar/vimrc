@@ -30,6 +30,14 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:sv_loaded")
+  finish
+endif
+let g:sv_loaded = 1
+
+
 " iskeyword is an option that defines which characters are considered part of
 " a word. NOTE: Below will consider var++ one word!!!
 " setlocal iskeyword=@,48-57,_,192-255,+,-,?
@@ -39,28 +47,24 @@ hi  link  SvKeywords2 AllFilesSystemColor2
 hi  link  SvKeywords3 AllFilesSystemColor3
 hi  link  SvKeywords4 AllFilesDefinesColor
 hi  link  SvKeywords5 AllFilesLoopCondColor
-hi  link  SvKeywords6 AllFilesSystemColor4
+hi  link  SvKeywords6 AllFilesSystemColor
 hi  link  SvKeywords7 AllFilesCapsColor
+hi  link  SvKeywords8 AllFilesStructColor
 
 " A bunch of useful Verilog keywords
 syn keyword SvKeywords1  disable assign deassign force release
-syn keyword SvKeywords1  parameter localparam function endfunction
-syn keyword SvKeywords1  always initial module endmodule
-syn keyword SvKeywords1  task endtask
+syn keyword SvKeywords1  parameter localparam
 syn keyword SvKeywords1  input output inout
 syn keyword SvKeywords1  posedge negedge wait
 syn keyword SvKeywords1  buf pullup pull0 pull1 pulldown
-syn keyword SvKeywords2  tri0 tri1 tri trireg reg wire tranif0 tranif1 triand
-syn keyword SvKeywords2  trior weak0 weak1 wand wor triand trior
-syn keyword SvKeywords2  supply0 supply supply1
-syn keyword SvKeywords1  defparam untyped signed unsigned
-syn keyword SvKeywords3  or and not xor xnor
-
-syn keyword SvKeywords4  strong weak triggered matched sequence_method
-syn keyword SvKeywords4  constraint with automatic
-syn keyword SvKeywords4  accept_on reject_on sync_accept_on sync_reject_on
+syn keyword SvKeywords1  defparam
 syn keyword SvKeywords1  nexttime s_nexttime s_always s_eventually eventually
 syn keyword SvKeywords1  until s_until until_with s_until_with implies
+
+syn keyword SvKeywords2  tri0 tri1 tri trireg reg wire tranif0 tranif1 triand
+syn keyword SvKeywords2  trior weak0 weak1 wand wor triand trior
+syn keyword SvKeywords2  supply0 supply1
+" syn keyword SvKeywords2  signed unsigned automatic
 
 syn keyword SvKeywords3  find find_index find_first find_last find_last_index
 syn keyword SvKeywords3  find_first_index min max unique unique_index
@@ -75,51 +79,58 @@ syn keyword SvKeywords3  cross_num_print_missing detect_overlap
 syn keyword SvKeywords3  option type_option per_instance strobe
 syn keyword SvKeywords3  merge_instances get_inst_coverage
 
-" System Verilog extensions
-syn keyword SvKeywords2  integer real int longint shortint bins binsof bit byte
-syn keyword SvKeywords2  logic modport shortreal string void
-syn keyword SvKeywords2  time realtime event chandle
+" syn keyword SvKeywords4  or and not xor xnor
 
-syn keyword SvKeywords1  alias always_ff always_comb always_latch assert assume
-syn keyword SvKeywords1  before bind break clocking const restrict
-syn keyword SvKeywords1  contraint context continue cover covergroup coverpoint
-syn keyword SvKeywords1  cross dist do endclocking endgroup checker endchecker
+syn keyword SvKeywords4  strong weak triggered matched sequence_method
+syn keyword SvKeywords4  constraint with
+syn keyword SvKeywords4  accept_on reject_on sync_accept_on sync_reject_on
+
+syn keyword SvKeywords5  always initial
+
+syn keyword SvKeywords6  module endmodule
+syn keyword SvKeywords6  task endtask
+syn keyword SvKeywords6  function endfunction
+
+" System Verilog extensions
+syn keyword SvKeywords1  alias assert assume
+syn keyword SvKeywords1  before bind break clocking restrict
+syn keyword SvKeywords1  constraint context continue cover covergroup coverpoint
+syn keyword SvKeywords1  cross dist endclocking endgroup checker endchecker
 syn keyword SvKeywords1  package program endpackage endprogram
 syn keyword SvKeywords1  expect export extends extern final
-syn keyword SvKeywords1  first_match foreach  ignore_bins illegal_bins
+syn keyword SvKeywords1  first_match ignore_bins illegal_bins
 syn keyword SvKeywords1  import inside intersect
-syn keyword SvKeywords1  local matches new null  packed priority program
+syn keyword SvKeywords1  matches new null  packed priority program
 syn keyword SvKeywords1  protected pure rand randc randcase
-syn keyword SvKeywords1  randsequence ref return  solve static super
+syn keyword SvKeywords1  randsequence ref return solve super
 syn keyword SvKeywords1  tagged this throughout timeprecision timeunit type
 syn keyword SvKeywords1  var virtual wait_order wildcard within
 
 syn keyword SvKeywords1  generate genvar endgenerate
-syn keyword SvKeywords1  CGwParameter
 
-syn keyword SvKeywords4  signal_force signal_release
-syn keyword SvKeywords4  uvm_hdl_force uvm_report_info
+syn keyword SvKeywords2  integer real int longint shortint bins binsof
+syn keyword SvKeywords2  logic modport shortreal string bit byte void
+syn keyword SvKeywords2  time realtime event chandle const local static
 
 syn keyword SvKeywords3  property endproperty sequence endsequence
+syn keyword SvKeywords3  expression_or_dist
+syn keyword SvKeywords3  sequence_expr
+syn keyword SvKeywords3  property_expr
 
-syn keyword SvKeywords5  begin end fork join forkjoin join_any join_none
+syn keyword SvKeywords4  uvm_hdl_force uvm_report_info
+
+syn keyword SvKeywords5  begin end fork join join_any join_none
 syn keyword SvKeywords5  if else case casex casez default endcase iff
-syn keyword SvKeywords5  forever repeat while for
-syn keyword SvKeywords6  struct union enum
+syn keyword SvKeywords5  forever repeat do while for foreach
+syn keyword SvKeywords5  always_ff always_comb always_latch
+
 syn keyword SvKeywords6  class endclass interface endinterface
-syn keyword SvKeywords2  type typedef
 
-syn keyword SvKeywords3 expression_or_dist
-syn keyword SvKeywords3 sequence_expr
-syn keyword SvKeywords3 property_expr
-
-syn match   SvKeywords3  "`ifdef"
-syn match   SvKeywords3  "`ifndef"
-syn match   SvKeywords3  "`else"
-syn match   SvKeywords3  "`endif"
+syn keyword SvKeywords8  struct union enum typedef
 
 syn match   SvNoColor    ";"
 
+" sv system functions
 syn match   SvKeywords4  "$finish"
 syn match   SvKeywords4  "$stop"
 syn match   SvKeywords4  "$exit"
@@ -364,7 +375,7 @@ inorea _svsva     //------------------------------------------------------------
             \//-----------------------------------------------------------------------------<cr>
             \a_name : assert property (@(posedge clk) disable iff(reset_n == 0 \|\| !enable_assertions)<cr>
             \         \|=><cr>
-            \) else `ASSERTION_ERROR_FULL("a_name")<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
+            \) else `VIP_ASSERTION_ERROR_FULL("a_name")<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea _svprop    //-----------------------------------------------------------------------------<cr>
             \// Assertion: a_name<cr>
@@ -379,7 +390,7 @@ inorea _svprop    //------------------------------------------------------------
             \@(clocking_event) disable iff (disable_expr)<cr>
             \(condition, expected_data=value) \|=> (result == expected_data);<cr>
             \<bs><bs><bs>endproperty<cr>
-            \a_name: assert property (p_name()) else `ASSERTION_ERROR_FULL("a_name")<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
+            \a_name: assert property (p_name()) else `VIP_ASSERTION_ERROR_FULL("a_name")<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea _svseq     //-----------------------------------------------------------------------------<cr>
             \// Assertion: a_name<cr>
@@ -397,7 +408,7 @@ inorea _svseq     //------------------------------------------------------------
             \   @(clocking_event) disable iff (disable_expr)<cr>
             \s_name(disable, posedge clk, in1, in2, in3, in4, in5) \|=> (result);<cr>
             \<bs><bs><bs>endproperty<cr>
-            \a_name: assert property (p_name(disable, posedge clk, in1, in2)) else `ASSERTION_ERROR_FULL("a_name")<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
+            \a_name: assert property (p_name(disable, posedge clk, in1, in2)) else `VIP_ASSERTION_ERROR_FULL("a_name")<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea _svaf    //-----------------------------------------------------------------------------<cr>
             \// Assertion: a_name<cr>
@@ -436,7 +447,7 @@ inorea _svaif   //--------------------------------------------------------------
             \// Description:<cr>
             \// Condition:<cr>
             \//-----------------------------------------------------------------------------<cr>
-            \sva_async_signal_compare_if #(.SIG_SIZE ($bits()))  a_name();<cr>
+            \sva_vip_async_signal_compare_if #(.SIG_SIZE ($bits()))  a_name();<cr>
             \   assign a_name.disable_expr  = ();<cr>
             \assign a_name.sig0          = ();<cr>
             \assign a_name.sig1          = ();<left><right><c-r>=Eatchar('\s')<cr>
@@ -455,7 +466,7 @@ inorea _svcovif   //------------------------------------------------------------
             \// Cover Property: cg_name<cr>
             \// Description:<cr>
             \//-----------------------------------------------------------------------------<cr>
-            \cg_all_values_hit_if #(.SIG_SIZE ($bits(sig_name)))   cg_name();<cr>
+            \cg_vip_all_values_hit_if #(.SIG_SIZE ($bits(sig_name)))   cg_name();<cr>
             \   assign cg_name.cover_signal       = sig_name;<cr>
             \assign cg_name.enable_coverpoints = m_enable_coverpoints && reset_n;<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -789,8 +800,8 @@ inorea _svgen generate<cr>
             \endgenerate<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea _svintf   `include "verification_defs.svh"<cr>
-            \`include "generic_interfaces.svh"<cr>
-            \`include "generic_covergroups.svh"<cr>
+            \`include "vip_generic_interfaces.svh"<cr>
+            \`include "vip_generic_covergroups.svh"<cr>
             \<cr>
             \interface interface_name #(<cr>
             \<bs><bs><bs>parameter                  PARAM_1 = 7,<cr>
@@ -805,12 +816,12 @@ inorea _svintf   `include "verification_defs.svh"<cr>
             \<bs><bs><bs>);<cr>
             \<cr>
             \`include "verification_params.svh"<cr>
-            \`include "generic_properties.svh"<cr>
+            \`include "vip_generic_properties.svh"<cr>
             \<cr>
             \endinterface<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 inorea _svmod  `include "verification_defs.svh"<cr>
-            \`include "generic_interfaces.svh"<cr>
-            \`include "generic_covergroups.svh"<cr>
+            \`include "vip_generic_interfaces.svh"<cr>
+            \`include "vip_generic_covergroups.svh"<cr>
             \<cr>
             \module module_name #(<cr>
             \<bs><bs><bs>parameter                  PARAM_1 = 7,<cr>
@@ -825,7 +836,7 @@ inorea _svmod  `include "verification_defs.svh"<cr>
             \<bs><bs><bs>);<cr>
             \<cr>
             \`include "verification_params.svh"<cr>
-            \`include "generic_properties.svh"<cr>
+            \`include "vip_generic_properties.svh"<cr>
             \<cr>
             \endmodule<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -835,6 +846,8 @@ inorea _svbind    bind `PRJ_DIG_TOP(0).rtl_block interface_name #(<cr>
             \<bs><bs><bs>) interface_name_0 (<cr>
             \.sys_clk                                     (`PRJ_DIG_TOP(0).sys_clk),<cr>
             \.sys_clk_reset_n                             (`PRJ_DIG_TOP(0).sys_clk_reset_n),<cr>
+            \<cr>
+            \.func_cov_if                                 (dut_shell.m_func_cov_if)<cr>
             \<bs><bs><bs>);<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea _svpkg     package dut_pkg;<cr>

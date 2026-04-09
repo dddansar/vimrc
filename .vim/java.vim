@@ -29,15 +29,24 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:java_loaded")
+  finish
+endif
+let g:java_loaded = 1
+
+
 hi  link    JavaKeywords AllFilesSystemColor
-syn keyword JavaKeywords abstract    assert      boolean     break       byte
-syn keyword JavaKeywords catch       char        class       const   implements
-syn keyword JavaKeywords continue    double      synchronized
-syn keyword JavaKeywords enum        extends     final       finally     float
-syn keyword JavaKeywords instanceof  int         interface   long        native
-syn keyword JavaKeywords new         package     private     protected   public
-syn keyword JavaKeywords short       static      strictfp    super       goto
-syn keyword JavaKeywords switch      this        throw       throws      String
-syn keyword JavaKeywords transient   try         void        volatile
+syn keyword JavaKeywords abstract    assert      boolean
+syn keyword JavaKeywords catch       implements
+syn keyword JavaKeywords synchronized
+syn keyword JavaKeywords extends     final       finally
+syn keyword JavaKeywords instanceof  interface   long        native
+syn keyword JavaKeywords class       private     protected   public
+syn keyword JavaKeywords new         package
+syn keyword JavaKeywords short       strictfp    super
+syn keyword JavaKeywords this        throw       throws
+syn keyword JavaKeywords transient   try         volatile
 
 syn keyword JavaKeywords System java

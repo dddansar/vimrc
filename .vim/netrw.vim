@@ -30,10 +30,17 @@
 " SOFTWARE.
 "==============================================================================
 
-" Color for no extension.
-hi  link     NetrwHidden   HLGrey50
-syn match    NetrwHidden   "\(\/\|\w\)\@<!\.[a-zA-Z0-9_-][a-zA-Z0-9_ -]*\>\(\/\|.\)\@!"
 
+" Exit if the file was already loaded
+if exists("b:netrw_loaded")
+  finish
+endif
+let g:netrw_loaded = 1
+
+
+" Color for no extension.
+hi  link     NetrwHidden   AllFilesMidGrey
+syn match    NetrwHidden   "\(\/\|\w\)\@<!\.[a-zA-Z0-9_-][a-zA-Z0-9_ -]*\>\(\/\|.\)\@!"
 
 
 " Microsoft Office (Open XML & Legacy Formats):
@@ -51,7 +58,6 @@ syn match    NetrwHidden   "\(\/\|\w\)\@<!\.[a-zA-Z0-9_-][a-zA-Z0-9_ -]*\>\(\/\|
 "     Visio: .vsdx (Drawing), .vsdm (Macro-enabled), .vssx (Stencil)
 
 hi  link     NetrwDocs   AllFilesSystemColor4
-
 syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.doc\>\(\\\)\@!"
 syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.docx\>"
 syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.docm\>"
@@ -85,7 +91,6 @@ syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pub\>"
 "     Disk Images: .iso, .img, .vhd (Virtual Hard Disk)
 
 hi  link     NetrwExe   AllFilesSystemColor
-
 syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.exe\>"
 syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dll\>"
 syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.msi\>"
@@ -98,7 +103,6 @@ syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.deb\>"
 syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.rpm\>"
 
 hi  link     NetrwOther   AllFilesSystemColor
-
 syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.iso\>"
 syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.img\>"
 
@@ -119,7 +123,6 @@ syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.img\>"
 "     3GP/3G2 (.3gp, .3g2): Used in older mobile phones.
 
 hi  link     NetrwVid   AllFilesSystemColor2
-
 syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mp4"
 syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.m4v\>"
 syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.m4p\>"
@@ -149,7 +152,6 @@ syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.3g2"
 "     DSD (.dsd): Direct Stream Digital.
 
 hi  link     NetrwAud   AllFilesSystemColor2
-
 syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mp3"
 syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wav\>"
 syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wave\>"
@@ -199,7 +201,6 @@ syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.midi\>"
 "     .jxl (JPEG XL): Modern, high-efficiency image format.
 
 hi  link     NetrwImg   AllFilesSystemColor3
-
 syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jpg\>"
 syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jpeg\>"
 syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.png\>"
@@ -249,8 +250,7 @@ syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pgm\>"
 "     .gz / .z: GNU gzip format, standard on Linux.
 "     .bz2: BZip2 compressed file format.
 
-hi  link     NetrwCompress   HLDodgerblue
-
+hi  link     NetrwCompress   AllFilesVarColor
 syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.zip\>"
 syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.zipx\>"
 syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.7z\>"
@@ -264,21 +264,19 @@ syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.bz2\>"
 
 
 " Programming languages:
-hi  link     NetrwPrgm1   HLOrangeB
-
-syn match    NetrwPrgm1   ".bash[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
-syn match    NetrwPrgm1   "\<bash[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
+hi  link     NetrwPrgm1   AllFilesCBrColor
+syn match    NetrwPrgm1   "\.bash[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
+syn match    NetrwPrgm1   "\<bash[a-zA-Z0-9_-][a-zA-Z0-9_ -]\+\>"
 syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sh\>"
-syn match    NetrwPrgm1   ".cshrc[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
+syn match    NetrwPrgm1   "\.cshrc[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
 syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.csh\>"
-syn match    NetrwPrgm1   ".aliases\>"
+syn match    NetrwPrgm1   "\.aliases\>"
 syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ps1"
 
 syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.reg"
 syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.REG"
 
-hi  link     NetrwPrgm2   HLDarkorangeB
-
+hi  link     NetrwPrgm2   AllFilesFuncColor
 syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vhd\>"
 syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vhdl\>"
 syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.psl\>"
@@ -291,37 +289,35 @@ syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.v\>"
 syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vlib\>"
 syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vh\>"
 
-hi  link     NetrwPrgm3   HLLightcoralB
-
+hi  link     NetrwPrgm3   AllFilesFuncColor
+syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.objdump\>"
 syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.asm\>"
 syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.masm\>"
 syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.s\>"
-syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.objdump\>"
 
-hi  link     NetrwPrgm4   HLTomatoB
-
+hi  link     NetrwPrgm4   AllFilesFuncColor
 syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.c\>"
-syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.h\>"
 syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.cpp\>"
-syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.hpp\>"
 
-hi  link     NetrwPrgm5   HLChocolateB
+hi  link     NetrwPrgm5   AllFilesPathsColor2
+syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.h\>"
+syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.hpp\>"
 
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.java\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.py\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tcl\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.f\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
+hi  link     NetrwPrgm6   AllFilesFuncColor
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.java\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.py\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tcl\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.f\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
+syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
 
-hi  link     NetrwPrgm6   HLGoldenrodB
-
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tex\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.lean\>"
-syn match    NetrwPrgm6   ".vimrc[a-zA-Z0-9._-]*\>\(\/\)\@!"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vim\>"
+hi  link     NetrwPrgm7   AllFilesNumColor
+syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tex\>"
+syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.lean\>"
+syn match    NetrwPrgm7   ".vimrc[a-zA-Z0-9._-]*\>\(\/\)\@!"
+syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vim\>"
 
 " Text files
 hi  link     NetrwText   AllFilesNumColor
@@ -348,14 +344,17 @@ syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.php\>"
 
 syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.txt\>"
 
-
 " Paths/folders
 hi  link     NetrwPaths1   AllFilesPathsColor
 syn match    NetrwPaths1   "\%([a-zA-Z0-9_.\-]\|\\ \)\+/" contains=@NoSpell
 
-hi  link     NetrwPaths2   AllFilesPathsColor2
+hi  link     NetrwPaths2   AllFilesPathsColor
 syn match    NetrwPaths2   "\.\%([a-zA-Z0-9_.\-]\|\\ \)\+/" contains=@NoSpell
 
 hi  link     NetrwExec   AllFilesSpecialColorB
 syn match    NetrwExec   "*"
+
+
+hi  link     NetrwLinks   AllFilesArrowsColor
+syn match    NetrwLinks   ".*--> .*"
 

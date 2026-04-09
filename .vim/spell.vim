@@ -30,30 +30,34 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:spell_loaded")
+  finish
+endif
+let g:spell_loaded = 1
+
+
 " Enable spell checking if g:spell_check_en is set.
 "------------------------------------------------------------------------------
-let g:spell_check_en=1
-if exists("g:spell_check_en") && g:spell_check_en
-   setlocal spell
-   setlocal spelllang+=en_us
-   " Ignore uppercase of first word.
-   setlocal spellcapcheck=
+setlocal spell
+setlocal spelllang+=en_us
+" Ignore uppercase of first word.
+setlocal spellcapcheck=
 
-   " Need to disable rainbow_parenthesis with spell checking as there
-   " is a bug where it will not spell check inside of parenthesis or
-   " if matching parenthesis is not closed!!!!!!!
-   hi  link    SpellParen1 AllFilesSBrColor
-   hi  link    SpellParen2 AllFilesFuncColor
-   hi  link    SpellParen3 AllFilesCBrColor
-   syn match   SpellParen1     "[\[\]]"
-   syn match   SpellParen2     "[)(]"
-   syn match   SpellParen3     "[}{]"
 
-   " Since we enable spell checking that means we are writing text
-   " and in such cases, word'word should not match as part of a quote like
-   " 'word ... word'.
-   syn match SpellNoColor  "\%(\w\)\@<='\%(\w\)\@="
+" Need to disable rainbow_parenthesis with spell checking as there
+" is a bug where it will not spell check inside of parenthesis or
+" if matching parenthesis is not closed!!!!!!!
+if exists('*Clear_rainbow_parenthesis')
+   call Clear_rainbow_parenthesis()
 endif
+
+
+" Since we enable spell checking that means we are writing text
+" and in such cases, word'word should not match as part of a quote like
+" 'word ... word'.
+syn match SpellNoColor  "\%(\w\)\@<='\%(\w\)\@="
 "------------------------------------------------------------------------------
 
 

@@ -30,68 +30,95 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:regex_loaded")
+  finish
+endif
+let g:regex_loaded = 1
+
+
 let g:supports_regex=1
 
 " NOTE: Inside a character class like [ ], the dot . and $ loses its special
 "       meaning and matches a literal dot . and $.
 
-" Clear/set colors of special characters in regular expression for visibility.
-syn match   RegexNoColor1  "[!?]"
-syn match   RegexNoColor1  "[+%]"
-syn match   RegexNoColor1  "[&|><]"
-syn match   RegexNoColor1  "`"
-syn match   RegexNoColor1  "[{}()]"
-syn match   RegexNoColor1  "'"
+" My custom syntax without any default vim settings.
+if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
 
-hi  link    RegexSpChars1  AllFilesSpecialColor
-syn match   RegexSpChars1  "$"
-syn match   RegexSpChars1  "-"
+   " Clear/set colors of special characters in regular expression for visibility.
+   syn match   RegexNoColor1  "[!?]"
+   syn match   RegexNoColor1  "[+%]"
+   syn match   RegexNoColor1  "[&|><]"
 
-hi  link    RegexSpChars2  AllFilesVarColor
-syn match   RegexSpChars2  "[][]"
+   syn match   RegexNoColor1  "`"
+   syn match   RegexNoColor1  "[{}()]"
+   syn match   RegexNoColor1  "'" contains=AllPreNumbers3
 
-hi  link    RegexSpChars3  AllFilesArrowsColor
-syn match   RegexSpChars3  "*"
+   hi  link    RegexSpChars1  AllFilesSpecialColor
+   syn match   RegexSpChars1  "\$" contains=AllPreDollar
+   syn match   RegexSpChars1  "-"
 
-if exists("b:comment_leader")
-   if b:comment_leader != '"' && exists("b:comment_second") && b:comment_second != '"'
+   hi  link    RegexSpChars2  AllFilesVarColor
+   syn match   RegexSpChars2  "[][]"
+
+   hi  link    RegexSpChars3  AllFilesArrowsColor
+   syn match   RegexSpChars3  "*"
+
+   " Rematch double and/or.
+   hi  link    RegexAndOr     AllFilesOpColor
+   syn match   RegexAndOr     "&&"
+   syn match   RegexAndOr     "||"
+
+   if exists("b:comment_leader")
+      if b:comment_leader != '"' && exists("b:comment_second") && b:comment_second != '"'
+         syn match   RegexNoColor2        '"'
+      endif
+      if b:comment_leader != '#'
+         syn match   RegexNoColor2        "#"
+      else
+         syn match   RegexNoColor2        "\%(\S.*\)\@<=#"
+      endif
+   else
       syn match   RegexNoColor2        '"'
    endif
-   if b:comment_leader != '#'
-      syn match   RegexNoColor2        "#"
-   else
-      syn match   RegexNoColor2        "\%(\S.*\)\@<=#"
-   endif
-else
-   syn match   RegexNoColor2        '"'
 endif
 
 " Ranges
 hi  link    RegexRanges    AllFilesVarColor
-syn match   RegexRanges    "\%(\[.*\)\@<=\%([a-z]-[a-z]\|[A-Z]-[A-Z]\|[0-9]-[0-9]\)\%(.*\]\)\@=" contains=@NoSpell
+syn match   RegexRanges    "\[.\{-}\\\@<!]" contains=@NoSpell
 
 " Escaped colors
 hi  link    RegexSpChars4  AllFilesSpecialColor
 syn match   RegexSpChars4  "\^"
 syn match   RegexSpChars4  "\\"
 
-syn match   RegexNoColor3  "\\[\.\[\]\$\\\-'\"~]"
+" syn match   RegexNoColor3  "\\[\.\[\]\$\\\-'\"~]"
+syn match   RegexNoColor3  "\\[\.\[\]\$\\\-''\"~]"
 syn match   RegexNoColor3  "\\\/"
+syn match   RegexNoColor3  "\\\^"
 
 hi  link    RegexSpChars5  AllFilesNumColor
-syn match   RegexSpChars5  "\\<"
+syn match   RegexSpChars5  "\(^\s*\)\@<!\\<"
 syn match   RegexSpChars5  "\\>"
 
-hi  link    RegexSpChars6  AllFilesNumColor
-syn match   RegexSpChars6  "\\<lt>" contains=@NoSpell
+hi  link    RegexSpChars6  AllFilesVarColor
+syn match   RegexSpChars6  "\\<lt>.\{-}>" contains=@NoSpell
 
 hi  link    RegexSpChars7  AllFilesOpColor
 syn match   RegexSpChars7  "\\|"
+syn match   RegexSpChars7  "\\\\|"
 
 hi  link    RegexSpChars8  AllFilesSystemColor
 syn match   RegexSpChars8  "\\("
 syn match   RegexSpChars8  "\\%("
 syn match   RegexSpChars8  "\\)"
+
+syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\)\@="
+" Using \(\s\|\S\) because $ is causing issues as it can corrupt the next line
+" when used with containedin.
+syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\|\S\)\@!"
+" syn match   RegexSpChars8  "\(\s\)\@<===#\?\(\s\)\@="
 
 hi  link    RegexSpChars9  AllFilesSystemColor3
 syn match   RegexSpChars9  "\\@<="
@@ -111,34 +138,15 @@ syn match   RegexSpChars11 "\\{[0-9]*,[0-9]\+}"
 syn match   RegexSpChars11 "\\{[0-9]\+,[0-9]*}"
 
 hi  link    RegexSpChars12 AllFilesVarColor
-syn match   RegexSpChars12 "\\s" contains=@NoSpell
-syn match   RegexSpChars12 "\\S" contains=@NoSpell
-syn match   RegexSpChars12 "\\d" contains=@NoSpell
-syn match   RegexSpChars12 "\\D" contains=@NoSpell
-syn match   RegexSpChars12 "\\x" contains=@NoSpell
-syn match   RegexSpChars12 "\\X" contains=@NoSpell
-syn match   RegexSpChars12 "\\o" contains=@NoSpell
-syn match   RegexSpChars12 "\\O" contains=@NoSpell
-syn match   RegexSpChars12 "\\h" contains=@NoSpell
-syn match   RegexSpChars12 "\\H" contains=@NoSpell
-syn match   RegexSpChars12 "\\p" contains=@NoSpell
-syn match   RegexSpChars12 "\\P" contains=@NoSpell
-syn match   RegexSpChars12 "\\w" contains=@NoSpell
-syn match   RegexSpChars12 "\\W" contains=@NoSpell
-syn match   RegexSpChars12 "\\a" contains=@NoSpell
-syn match   RegexSpChars12 "\\A" contains=@NoSpell
-syn match   RegexSpChars12 "\\l" contains=@NoSpell
-syn match   RegexSpChars12 "\\L" contains=@NoSpell
-syn match   RegexSpChars12 "\\u" contains=@NoSpell
-syn match   RegexSpChars12 "\\U" contains=@NoSpell
-
-hi  link    RegexSpChars13 AllFilesNumColor
-syn match   RegexSpChars13 "\\t" contains=@NoSpell
-syn match   RegexSpChars13 "\\r" contains=@NoSpell
-syn match   RegexSpChars13 "\\n" contains=@NoSpell
-syn match   RegexSpChars13 "\\f" contains=@NoSpell
-" Matches a control character using caret notation
-syn match   RegexSpChars13 "\\c[A-Z]" contains=@NoSpell
+syn match   RegexSpChars12 "\(^\s*\)\@<!\\[sSdDxXoOhHpPwWaAlLuU]" contains=@NoSpell
+"
+" hi  link    RegexSpChars13 AllFilesNumColor
+" syn match   RegexSpChars13 "\\t" contains=@NoSpell
+" syn match   RegexSpChars13 "\\r" contains=@NoSpell
+" syn match   RegexSpChars13 "\\n" contains=@NoSpell
+" syn match   RegexSpChars13 "\\f" contains=@NoSpell
+" " Matches a control character using caret notation
+" syn match   RegexSpChars13 "\\c[A-Z]" contains=@NoSpell
 
 " Match s///
 hi  link    RegexSearches1 AllFilesOpColor
@@ -151,6 +159,4 @@ hi  link    RegexSearches2 AllFilesOpColor
 syn match   RegexSearches2 "\%([a-zA-Z]\)\@<!%\?s#\%(.\+#.*#\)\@="
 syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+\)\@<=#\%(.*#\)\@="
 syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+#.*\)\@<=#\w*"
-
-
 

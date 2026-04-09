@@ -29,6 +29,14 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:lean_loaded")
+  finish
+endif
+let g:lean_loaded = 1
+
+
 if !has('nvim')
    if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
       setlocal spelllang+=lean
@@ -39,11 +47,6 @@ else
    endif
 endif
 
-hi  link    LeanCommentColor CommentColor
-hi  link    LeanComment2Color Comment2Color
-syn match   LeanCommentColor  "\<h[abcxyzpqrntfaos]\+\>\%(:\)\@!" contains=@NoSpell contained containedin=CommentColor
-syn match   LeanComment2Color "\<h[abcxyzpqrntfaos]\+\>\%(:\)\@!" contains=@NoSpell contained containedin=Comment2Color
-syn match   LeanNoColor       "\<h[abcxyzpqrntfaos]\+\>\%(:\)\@!" contains=@NoSpell
 
 hi  link    LeanKeywords1     AllFilesSystemColor
 syn keyword LeanKeywords1     true false variables
@@ -51,11 +54,11 @@ syn keyword LeanKeywords1     True False
 
 hi  link    LeanKeywords2     AllFilesFuncColor
 syn keyword LeanKeywords2     function endfunction instance
-syn keyword LeanKeywords2     or and not xor xnor nor nand non fun
-syn keyword LeanKeywords2     Or And Not Xor Xnor Nor Nand Non
 
 hi  link    LeanKeywords3     AllFilesNumColor
 syn keyword LeanKeywords3     inputs outputs inouts input output inout ports
+syn keyword LeanKeywords3     Type type Set set Prop Nat inductive
+syn keyword LeanKeywords3     _ Proof axiom theorem proof lemma
 
 hi  link    LeanKeywords4     AllFilesLoopCondColor
 syn keyword LeanKeywords4     If Then Else if then else iff case elseif endif
@@ -64,11 +67,11 @@ syn keyword LeanKeywords4     section end namespace open close import
 syn keyword LeanKeywords4     set_option open_locale
 
 hi  link    LeanKeywords5     AllFilesFuncColor
-syn keyword LeanKeywords5     Type type Set set Prop Nat Bool String inductive
-syn keyword LeanKeywords5     _ Proof axiom theorem proof lemma
+syn keyword LeanKeywords5     or and not xor xnor nor nand non fun
+syn keyword LeanKeywords5     Or And Not Xor Xnor Nor Nand Non Bool String
 
 hi  link    LeanKeywords6     AllFilesSystemColor2
-syn keyword LeanKeywords6     example
+syn keyword LeanKeywords6     example done
 
 hi  link    LeanKeywords7     AllFilesSpecialColorB
 syn keyword LeanKeywords7     sorry
@@ -91,10 +94,5 @@ syn keyword LeanKeywords11    obtain rcases refine refl right ring rintro rw
 syn keyword LeanKeywords11    simp simpa specialize split triv trivial use
 syn keyword LeanKeywords11    contradiction rfl let tauto simp_rw rwa
 syn keyword LeanKeywords11    squeeze_simp calc by
-
-
-" WARNING: DO NOT add CommentColor in contains, otherwise if -- is found it
-"          will not match the end!!
-syn region  LeanCommentColor start="\/-" end="-\/"
 
 

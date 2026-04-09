@@ -3,6 +3,7 @@
 "------------------------------------------------------------------------------
 " Description: Generic abbreviations for all files.
 "              Gets loaded by .vimrc when opening any file with a vim GUI.
+" NOTE: Some extension specific *.vim files also have their own abbreviations.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -29,12 +30,20 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:abbrev_loaded")
+  finish
+endif
+let g:abbrev_loaded = 1
+
+
 " NOTE: To make sure a Vim abbreviation does not trigger existing mappings,
 "       use the noreabbrev (inorea) command instead of the abbrev (ia) command.
 
 " Can you call an abbreviation from another?
 " YES!!!! works!! The extra "a" is to enter insert mode.
-inorea _iatest    <esc>:normal  asvhead<cr>
+inorea _iatest    <esc>:normal  a_c0<cr>
 
 " NOTE: Using   <c-r>=Eatchar('\s')<cr>   to consume the space typed after an
 "       abbreviation.
@@ -192,4 +201,36 @@ inorea _case    switch () {<cr>
             \<bs><bs><bs>default:<cr>
             \break;<cr>
             \<bs><bs><bs><bs><bs><bs>}<up><up><up><up><up><up><up><esc>$<left><left><left>a<left><right><c-r>=Eatchar('\s')<cr>
+
+" Common regex abbreviations
+" Non-capuring groups
+inorea r_p        \%(\)<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_po       \%(\\|\)<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_op       \%(\\|\)<left><right><c-r>=Eatchar('\s')<cr>
+" Positive/negative look ahead/behind
+inorea r_pb       \%(\)\@<=<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_bp       \%(\)\@<=<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_pa       \%(\)\@=<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_ap       \%(\)\@=<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_nb       \%(\)\@<!<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_bn       \%(\)\@<!<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_na       \%(\)\@!<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_an       \%(\)\@!<left><right><c-r>=Eatchar('\s')<cr>
+" Word boundaries
+inorea r_b        \<\><left><right><c-r>=Eatchar('\s')<cr>
+" Common ranges
+inorea r_az       [a-z]<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_AZ       [A-Z]<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_aZ       [a-zA-Z]<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_a9       [a-z0-9]<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_A9       [A-Z0-9]<left><right><c-r>=Eatchar('\s')<cr>
+inorea r_aZ9      [a-zA-Z0-9]<left><right><c-r>=Eatchar('\s')<cr>
+" Matches 2 letters in a row
+inorea r_2l       \([a-z]\)\1<left><right><c-r>=Eatchar('\s')<cr>
+" Matches a 5 letter palindrome
+inorea r_5p       \([a-z]\)\([a-z]\)[a-z]\2\1<left><right><c-r>=Eatchar('\s')<cr>
+" Matches at least n times and at most m times the previous match
+inorea r_nm       \{n,m}<left><right><c-r>=Eatchar('\s')<cr>
+" non-greedy version
+inorea r_ngnm     \{-n,m}<left><right><c-r>=Eatchar('\s')<cr>
 

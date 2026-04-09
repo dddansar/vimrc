@@ -31,6 +31,14 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:unicode_loaded")
+  finish
+endif
+let g:unicode_loaded = 1
+
+
 if !has('nvim')
    if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
       setlocal spelllang+=math
@@ -95,19 +103,47 @@ call setcellwidths([
 "         the name of the link and what it links to in the statusline. This is
 "         very useful to debug which syntax group is causing any issues. And
 "         for the "hi link", I add the file name "AllPre" first, to know which
-"         file the syntax group is located in.
-hi  link    UnicodeSetsColor        HLHotpinkB
-hi  link    UnicodeBCColor          HLIndianredB
-hi  link    UnicodeBColor           HLWhiteB
-hi  link    UnicodeCColor           HLKhaki4B
-hi  link    UnicodeDBColor          HLYellowB
-hi  link    UnicodeMColor           HLOrangeB
+"         file the syntax group is located in. The "syn keyword" will then
+"         Color the "hi link" name with the color it is mapped to.
+hi  link    UnicodeSetsColor     HLHotpinkB
+hi  link    UnicodeBCColor       HLHotpinkB
+hi  link    UnicodeBColor        HLWhiteB
+hi  link    UnicodeCColor        HLBlueB
+hi  link    UnicodeDBColor       HLYellowB
+hi  link    UnicodeMColor        HLOrangeB
+hi  link    UnicodeVarColor      AllFilesVarColor
+hi  link    UnicodeBsColor       HLOrangeredB
 
+" My custom syntax without any default vim settings.
+syn keyword UnicodeSetsColor     UnicodeSetsColor
+syn keyword UnicodeBCColor       UnicodeBCColor
+syn keyword UnicodeBColor        UnicodeBColor
+syn keyword UnicodeCColor        UnicodeCColor
+syn keyword UnicodeDBColor       UnicodeDBColor
+syn keyword UnicodeMColor        UnicodeMColor
+syn keyword UnicodeVarColor      UnicodeVarColor
+syn keyword UnicodeBsColor       UnicodeBsColor
+
+
+" Do not spell check any of the special characters in the whole unicode range!!
 " -----------------------------------------------------------------------------
 if g:performance_mode <= 0
-   " Highlight chars that you don't want used:
+   " Don't spell check any word followed by unicode:
+   " hi  link     UnicodeCommentColor   AllPreComments
+   " syn match    UnicodeCommentColor  "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell contained containedin=.*Comment.*
+   " syn match    UnicodeNoColor1      "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell
+
+   " Set default color for all unicode chars outside of the main ASCII range:
+   " hi  link     UnicodeDefault   AllFilesDefaultColor
+   " syn match    UnicodeCommentColor  "[^ -~]"  contains=@NoSpell contained containedin=.*Comment.*
+   " syn match    UnicodeDefault   "[^ -~]"  contains=@NoSpell containedin=.*Comment.*
+
+   " Highlight chars that you don't want used such as tabs:
+   " hi  link     UnicodeError   HLRedBgB
    hi  link     UnicodeDontUse AllFilesSpecialColorB
-   syn match    UnicodeDontUse "[‘-‟−—–∣]" contains=@NoSpell containedin=CommentColor,Comment2Color
+   syn match    UnicodeDontUse "[‘-‟−—–∣]" contains=@NoSpell containedin=RegExRanges
+   " syn match    UnicodeError     '\t'       contains=@NoSpell containedin=.*Comment.*
+   " syn match    HLRedBgB          "	"  " same as \t  ASCII hex 0x9
 endif
 " -----------------------------------------------------------------------------
 
@@ -241,14 +277,14 @@ inorea e_lightning   🗲<left><right><c-r>=Eatchar('\s')<cr>
 inorea e_light       🗲<left><right><c-r>=Eatchar('\s')<cr>
 
 
-hi  link    UnicodeRandom AllFilesDefaultColor
-syn match   UnicodeRandom "[✓✓✗✗™©®®¤€£₤¥₱₹₽₿♂♀☼§§§¶¶¿‰⅌⁇⁈‽‽‼⁉𝄉№⋯…øØ⅋∶¡‡†⋱⊺♯♩♮‾♥❤♡☯♲⚖⚔☮☀⋔✂☺☻☹‣•]" contains=@NoSpell
-syn match   UnicodeRandom "[𝄉]" contains=@NoSpell
-hi  link    UnicodeLightning HLYellowB
-syn match   UnicodeLightning "[🗲]" contains=@NoSpell
+" hi  link    UnicodeRandom AllFilesDefaultColor
+" syn match   UnicodeRandom "[✓✓✗✗™©®®¤€£₤¥₱₹₽₿♂♀☼§§§¶¶¿‰⅌⁇⁈‽‽‼⁉𝄉№⋯…øØ⅋∶¡‡†⋱⊺♯♩♮‾♥❤♡☯♲⚖⚔☮☀⋔✂☺☻☹‣•]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeRandom "[𝄉]" contains=@NoSpell  containedin=RegExRanges
+" hi  link    UnicodeLightning HLYellowB
+" syn match   UnicodeLightning "[🗲]" contains=@NoSpell  containedin=RegExRanges
 
-hi  link    UnicodeImportant AllFilesSpecialColorB
-syn match   UnicodeImportant "[≝≟⚠☣☢⚛⯑☡]" contains=@NoSpell
+" hi  link    UnicodeImportant AllFilesSpecialColorB
+" syn match   UnicodeImportant "[≝≟⚠☣☢⚛⯑☡]" contains=@NoSpell  containedin=RegExRanges
 
 
 
@@ -292,7 +328,7 @@ inorea _lfsl      ⧸<left><right><c-r>=Eatchar('\s')<cr>
 inorea _lbsl      ⧹<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLines UnicodeDBColor
-syn match   UnicodeLines "[∠∡∢∟∥᜶°∤∦‖॥᱾᱿ᐦ⧸⧹¦≬]" contains=@NoSpell
+syn match   UnicodeLines "[∠∡∢∟∥᜶°∤∦‖॥᱾᱿ᐦ⧸⧹¦≬]" contains=@NoSpell  containedin=RegExRanges
 
 inorea _tri       △<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_tri      ∆<left><right><c-r>=Eatchar('\s')<cr>
@@ -369,7 +405,7 @@ inorea _2tri     ⟁<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2jsq     ⧉<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeShapes  AllFilesOpColor
-syn match   UnicodeShapes  "[△∆□□▭◊⬠⬡○⬯★✯☆⭑⋆◆◈◇■▣▢◫✧✦✶✴✹▱▰◁▷▽△◀▶▼▲▹▿▵◃▸▾◂▴●◌◯▪▪▬▯▮∎⟁⧉]" contains=@NoSpell
+syn match   UnicodeShapes  "[△∆□□▭◊⬠⬡○⬯★✯☆⭑⋆◆◈◇■▣▢◫✧✦✶✴✹▱▰◁▷▽△◀▶▼▲▹▿▵◃▸▾◂▴●◌◯▪▪▬▯▮∎⟁⧉]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Operators
@@ -386,7 +422,7 @@ inorea _~~        ∼<left><right><c-r>=Eatchar('\s')<cr>
 inorea __\|       ∣<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOperators1 AllFilesOpColor
-syn match   UnicodeOperators1 "[±∓÷∗∼]" contains=@NoSpell
+syn match   UnicodeOperators1 "[±∓÷∗∼]" contains=@NoSpell  containedin=RegExRanges
 
 "
 inorea _neg       −<left><right><c-r>=Eatchar('\s')<cr>
@@ -399,9 +435,10 @@ inorea _dot       ⬝<left><right><c-r>=Eatchar('\s')<cr>
 inorea _sdot      ⋅<left><right><c-r>=Eatchar('\s')<cr>
 inorea _ast       ∗<left><right><c-r>=Eatchar('\s')<cr>
 inorea _**        ∗<left><right><c-r>=Eatchar('\s')<cr>
+inorea _times     ×<left><right><c-r>=Eatchar('\s')<cr>
 inorea _xx        ×<left><right><c-r>=Eatchar('\s')<cr>
 inorea _x2        ⨯<left><right><c-r>=Eatchar('\s')<cr>
-inorea b_x        ✖<left><right><c-r>=Eatchar('\s')<cr>
+inorea b_xx       ✖<left><right><c-r>=Eatchar('\s')<cr>
 inorea _lx        ☓<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_lx      𐌗<left><right><c-r>=Eatchar('\s')<cr>
 " Hermitian conjugate matrix
@@ -471,13 +508,11 @@ inorea _divx      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 inorea _xdiv      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOperators2 AllFilesOpColor
-syn match   UnicodeOperators2 "[∘∗×⨯⋅✖☓𐌗⨉⋇⋄⬝⋉⋊⋈⊹∔]" contains=@NoSpell
+syn match   UnicodeOperators2 "[∘∗×⨯⋅✖☓𐌗⨉⋇⋄⬝⋉⋊⋈⊹∔]" contains=@NoSpell  containedin=RegExRanges
 
 " syn match   UnicodeOperators2 "/" contains=@NoSpell
 hi  link    UnicodeOShapes AllFilesDefaultColor
-syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚◎⊜⨀𐌏⦾⦷🟗🟕⧁⧀⍟⊞⊟⊠⊡⚀⊘⦸⦶⦰ⵁ⊛⎊]" contains=@NoSpell
-
-syn match   UnicodeOperators2    "\%(\/\|\*\)\@<!\/\%(\/\|\*\)\@!"
+syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚◎⊜⨀𐌏⦾⦷🟗🟕⧁⧀⍟⊞⊟⊠⊡⚀⊘⦸⦶⦰ⵁ⊛⎊]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Sets
@@ -499,7 +534,7 @@ inorea _because   ∵<left><right><c-r>=Eatchar('\s')<cr>
 inorea _bc        ∵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets0 UnicodeSetsColor
-syn match   UnicodeSets0 "[∀∃∄∴∵]" contains=@NoSpell
+syn match   UnicodeSets0 "[∀∃∄∴∵]" contains=@NoSpell  containedin=RegExRanges
 
 " Empty set, null set
 inorea _null     ∅<left><right><c-r>=Eatchar('\s')<cr>
@@ -552,10 +587,10 @@ inorea _ncontains ∌<left><right><c-r>=Eatchar('\s')<cr>
 inorea _ncnt      ∌<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets1 UnicodeSetsColor
-syn match   UnicodeSets1 "[∩∪⋃⋂⋒⋓⊎⊍⨄⨃∈∉∋∌∍]" contains=@NoSpell
+syn match   UnicodeSets1 "[∩∪⋃⋂⋒⋓⊎⊍⨄⨃∈∉∋∌∍]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeSetsO UnicodeSetsColor
-syn match   UnicodeSetsO "[∁⟆⋌⋋≀]" contains=@NoSpell
+syn match   UnicodeSetsO "[∁⟆⋌⋋≀]" contains=@NoSpell  containedin=RegExRanges
 
 " Subsets/superset
 inorea _sub       ⊂<left><right><c-r>=Eatchar('\s')<cr>
@@ -587,7 +622,7 @@ inorea _lcoset   ⧏<left><right><c-r>=Eatchar('\s')<cr>
 inorea _rcoset   ⧐<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets2 UnicodeSetsColor
-syn match   UnicodeSets2 "[⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊊⊋⋐⋑⊲⊴⋪⋬⊳⊵⋫⋭⧏⧐∖⊸]" contains=@NoSpell
+syn match   UnicodeSets2 "[⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊊⊋⋐⋑⊲⊴⋪⋬⊳⊵⋫⋭⧏⧐∖⊸]" contains=@NoSpell  containedin=RegExRanges
 
 " Squared include/union/subset/superset
 inorea _sin       ⊓<left><right><c-r>=Eatchar('\s')<cr>
@@ -603,7 +638,7 @@ inorea _snsube    ⋢<left><right><c-r>=Eatchar('\s')<cr>
 inorea _snsupe    ⋣<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets3 UnicodeSetsColor
-syn match   UnicodeSets3 "[⊓⨅⊔⊑⊏⊒⊐⨆⋢⋣]" contains=@NoSpell
+syn match   UnicodeSets3 "[⊓⨅⊔⊑⊏⊒⊐⨆⋢⋣]" contains=@NoSpell  containedin=RegExRanges
 
 
 "---------------------------
@@ -622,7 +657,7 @@ inorea _cor       ⋎<left><right><c-r>=Eatchar('\s')<cr>
 inorea _cand      ⋏<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLogic  AllFilesOpColor
-syn match   UnicodeLogic "[∧∨¬⊻⊕⊙⊼⊽!⋎⋏]" contains=@NoSpell
+syn match   UnicodeLogic "[∧∨¬⊻⊕⊙⊼⊽!⋎⋏]" contains=@NoSpell  containedin=RegExRanges
 
 "
 inorea _!=        ≠<left><right><c-r>=Eatchar('\s')<cr>
@@ -702,8 +737,8 @@ inorea _geomeq    ≎<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2bump     ≎<left><right><c-r>=Eatchar('\s')<cr>
 inorea _Bumped    ≎<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeEquality   AllFilesEquality
-syn match   UnicodeEquality   "[≁≠≡≃≄≅≋≊⋍≌∽≣≕≗∻≔∺∷≓≒≂∹≑≐∸≘≙≚≍≛≜≜≖≏≎]" contains=@NoSpell
+hi  link    UnicodeEquality   AllFilesEqualityColor
+syn match   UnicodeEquality   "[≁≠≡≃≄≅≋≊⋍≌∽≣≕≗∻≔∺∷≓≒≂∹≑≐∸≘≙≚≍≛≜≜≖≏≎]" contains=@NoSpell  containedin=RegExRanges
 
 inorea _le        ≤<left><right><c-r>=Eatchar('\s')<cr>
 inorea _el        ⋜<left><right><c-r>=Eatchar('\s')<cr>
@@ -745,8 +780,8 @@ inorea _mg        ≫<left><right><c-r>=Eatchar('\s')<cr>
 inorea _3g        ⋙<left><right><c-r>=Eatchar('\s')<cr>
 inorea _3l        ⋘<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeInEquality AllFilesEquality
-syn match   UnicodeInEquality "[≤⋜≥⋝≰≱≈≉≮≯≢≇≦≲⋚≶⋦≨≧⋧≩≳⋛≷≴≵⋖⋗⩿⪀≪≪≫≫⋙⋘]" contains=@NoSpell
+hi  link    UnicodeInEquality AllFilesEqualityColor
+syn match   UnicodeInEquality "[≤⋜≥⋝≰≱≈≉≮≯≢≇≦≲⋚≶⋦≨≧⋧≩≳⋛≷≴≵⋖⋗⩿⪀≪≪≫≫⋙⋘]" contains=@NoSpell  containedin=RegExRanges
 
 " Preceding
 inorea _pc        ≺<left><right><c-r>=Eatchar('\s')<cr>
@@ -766,8 +801,8 @@ inorea _nsce      ⋡<left><right><c-r>=Eatchar('\s')<cr>
 inorea _scae      ≿<left><right><c-r>=Eatchar('\s')<cr>
 inorea _scnae     ⋩<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeCeding AllFilesEquality
-syn match   UnicodeCeding "[≿≽⋩≻≾≼⋨≺⋞⋠⊀⋡⊁⋟]" contains=@NoSpell
+hi  link    UnicodeCeding AllFilesEqualityColor
+syn match   UnicodeCeding "[≿≽⋩≻≾≼⋨≺⋞⋠⊀⋡⊁⋟]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Arrows
@@ -812,7 +847,7 @@ inorea _nrta      ↛<left><right><c-r>=Eatchar('\s')<cr>
 inorea _vlra      ⇹<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows1 AllFilesArrowsColor
-syn match   UnicodeArrows1 "[→←↑↓↖↗↘↙⤡⤢↔↕↚↮↛⇹]" contains=@NoSpell
+syn match   UnicodeArrows1 "[→←↑↓↖↗↘↙⤡⤢↔↕↚↮↛⇹]" contains=@NoSpell  containedin=RegExRanges
 
 " Double/long arrow
 inorea _drta     ⟶<left><right><c-r>=Eatchar('\s')<cr>
@@ -832,7 +867,7 @@ inorea _llra      🡘<left><right><c-r>=Eatchar('\s')<cr>
 inorea _luda      🡙<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows2 AllFilesArrowsColor
-syn match   UnicodeArrows2 "[⟶⟵⟷🡒🡐🡑🡓🡔🡕🡖🡗🡘🡙]" contains=@NoSpell
+syn match   UnicodeArrows2 "[⟶⟵⟷🡒🡐🡑🡓🡔🡕🡖🡗🡘🡙]" contains=@NoSpell  containedin=RegExRanges
 
 inorea _rta2      ⇒<left><right><c-r>=Eatchar('\s')<cr>
 inorea _lfa2      ⇐<left><right><c-r>=Eatchar('\s')<cr>
@@ -855,7 +890,7 @@ inorea _dna4     ⟱<left><right><c-r>=Eatchar('\s')<cr>
 inorea _upa4     ⟰<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows3 AllFilesArrowsColor
-syn match   UnicodeArrows3 "[⇒⇐⇑⇓⇕⇗⇖⇘⇙⇔⇏⇍⇎⇚⇛⟱⟰]" contains=@NoSpell
+syn match   UnicodeArrows3 "[⇒⇐⇑⇓⇕⇗⇖⇘⇙⇔⇏⇍⇎⇚⇛⟱⟰]" contains=@NoSpell  containedin=RegExRanges
 
 inorea _2lra      ⇆<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2rla      ⇄<left><right><c-r>=Eatchar('\s')<cr>
@@ -870,7 +905,7 @@ inorea _3lfa      ⬱<left><right><c-r>=Eatchar('\s')<cr>
 inorea _3rta      ⇶<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows4 AllFilesArrowsColor
-syn match   UnicodeArrows4 "[⇆⇄⇇⇉⇈⇊⇅⇵⬱⇶]" contains=@NoSpell
+syn match   UnicodeArrows4 "[⇆⇄⇇⇉⇈⇊⇅⇵⬱⇶]" contains=@NoSpell  containedin=RegExRanges
 
 " Top/bot/right/left harpoon arrow
 inorea _rtha      ⇀<left><right><c-r>=Eatchar('\s')<cr>
@@ -886,7 +921,7 @@ inorea _ltrbha    ⇋<left><right><c-r>=Eatchar('\s')<cr>
 inorea _rbltha    ⇌<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows5 AllFilesArrowsColor
-syn match   UnicodeArrows5 "[⇀⇁↼↽↿↾⇃⇂⇋⇌]" contains=@NoSpell
+syn match   UnicodeArrows5 "[⇀⇁↼↽↿↾⇃⇂⇋⇌]" contains=@NoSpell  containedin=RegExRanges
 
 " Hollow
 inorea _hlfa      ⇦<left><right><c-r>=Eatchar('\s')<cr>
@@ -901,7 +936,7 @@ inorea _hlra      ⬄<left><right><c-r>=Eatchar('\s')<cr>
 inorea _huda      ⇳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows6 AllFilesArrowsColor
-syn match   UnicodeArrows6 "[⇦⇨⇧⇩⬁⬀⬂⬃⬄⇳]" contains=@NoSpell
+syn match   UnicodeArrows6 "[⇦⇨⇧⇩⬁⬀⬂⬃⬄⇳]" contains=@NoSpell  containedin=RegExRanges
 
 " Full
 inorea _flfa      ⬅<left><right><c-r>=Eatchar('\s')<cr>
@@ -916,7 +951,7 @@ inorea _flra      ⬌<left><right><c-r>=Eatchar('\s')<cr>
 inorea _fuda      ⬍<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows7 AllFilesArrowsColor
-syn match   UnicodeArrows7 "[⬅➡⬆⬇⬉⬈⬊⬋⬌⬍]" contains=@NoSpell
+syn match   UnicodeArrows7 "[⬅➡⬆⬇⬉⬈⬊⬋⬌⬍]" contains=@NoSpell  containedin=RegExRanges
 
 " 2 headed
 inorea _2hda      ↡<left><right><c-r>=Eatchar('\s')<cr>
@@ -942,8 +977,8 @@ inorea a_upa      ꜛ<left><right><c-r>=Eatchar('\s')<cr>
 inorea a_dna      ꜜ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows8 AllFilesArrowsColor
-syn match   UnicodeArrows8 "[↡↟↞↠˿ꜛꜜ↧↥↨↤↦]" contains=@NoSpell
-syn match   UnicodeArrows8 "[⟹⟸⟺]" contains=@NoSpell
+syn match   UnicodeArrows8 "[↡↟↞↠˿ꜛꜜ↧↥↨↤↦]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows8 "[⟹⟸⟺]" contains=@NoSpell  containedin=RegExRanges
 
 " Squiggle
 inorea _leadsto   ⇝<left><right><c-r>=Eatchar('\s')<cr>
@@ -965,7 +1000,7 @@ inorea _lfwa      ↜<left><right><c-r>=Eatchar('\s')<cr>
 inorea _lrtwa     ⤳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows9 AllFilesArrowsColor
-syn match   UnicodeArrows9 "[⇝⇜↫↬↢↜↣↝↭⤳]" contains=@NoSpell
+syn match   UnicodeArrows9 "[⇝⇜↫↬↢↜↣↝↭⤳]" contains=@NoSpell  containedin=RegExRanges
 
 
 " L arrow
@@ -992,8 +1027,8 @@ inorea _clfa      ⥁<left><right><c-r>=Eatchar('\s')<cr>
 inorea _crta2    ⟲<left><right><c-r>=Eatchar('\s')<cr>
 inorea _clfa2    ⟳<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeArrows10 AllFilesArrowsColor
-syn match   UnicodeArrows10 "[↰↱↲↳⬐⬎⬑⬏↩↪↶↷↻↺⥀⥁⟲⟳]" contains=@NoSpell
+" hi  link    UnicodeArrows10 AllFilesArrowsColor
+" syn match   UnicodeArrows10 "[↰↱↲↳⬐⬎⬑⬏↩↪↶↷↻↺⥀⥁⟲⟳]" contains=@NoSpell  containedin=RegExRanges
 
 " Bot/top corners
 inorea _blc       ⌞<left><right><c-r>=Eatchar('\s')<cr>
@@ -1018,8 +1053,8 @@ inorea _rq         ’<left><right><c-r>=Eatchar('\s')<cr>
 inorea _dlq        „<left><right><c-r>=Eatchar('\s')<cr>
 inorea _slq        ‚<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeEdges AllFilesFuncColor
-syn match   UnicodeEdges "[⌞⌟⌜⌝˻˼˹˺⁀‿⁐]" contains=@NoSpell
+" hi  link    UnicodeEdges AllFilesFuncColor
+" syn match   UnicodeEdges "[⌞⌟⌜⌝˻˼˹˺⁀‿⁐]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Fractions
@@ -1040,8 +1075,8 @@ inorea _f56       ⅚<left><right><c-r>=Eatchar('\s')<cr>
 inorea _f58       ⅝<left><right><c-r>=Eatchar('\s')<cr>
 inorea _f78       ⅞<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeFractions  AllFilesNumColor
-syn match   UnicodeFractions  "[½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞]" contains=@NoSpell
+" hi  link    UnicodeFractions  AllFilesNumColor
+" syn match   UnicodeFractions  "[½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Brackets/parenthesis
@@ -1080,8 +1115,8 @@ inorea _rfloor    ⌋<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2laq      «<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2raq      »<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link  UnicodeTBrk  AllFilesEquality
-syn match UnicodeTBrk  "[⟨⟩⟪⟫«»❬❮❰❭❯❱《》]" contains=@NoSpell
+hi  link  UnicodeTBrk  AllFilesEqualityColor
+syn match UnicodeTBrk  "[⟨⟩⟪⟫«»❬❮❰❭❯❱《》]" contains=@NoSpell  containedin=RegExRanges
 
 inorea d_lpa      ⟦<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_rpa      ⟧<left><right><c-r>=Eatchar('\s')<cr>
@@ -1089,7 +1124,7 @@ inorea d_lcb      ⦃<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_rcb      ⦄<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link  UnicodeDbParen   UnicodeDBColor
-syn match UnicodeDbParen   "[⟦⟧⦃⦄]" contains=@NoSpell
+syn match UnicodeDbParen   "[⟦⟧⦃⦄]" contains=@NoSpell  containedin=RegExRanges
 
 inorea _topp     ︵<left><right><c-r>=Eatchar('\s')<cr>
 inorea _botp     ︶<left><right><c-r>=Eatchar('\s')<cr>
@@ -1097,8 +1132,8 @@ inorea _botp     ︶<left><right><c-r>=Eatchar('\s')<cr>
 " Curves and function builder shapes
 " ◜◝◟◞︵︶()⎛⎞⎝⎠⎧ ⎫⎩ ⎭⎰╰ ╯╮╭‾᭴⦦⦧⦢⦣⦟⼈㇏𝈺𝈻 ⼃⵰৴ノ𝀎Ꜥᜆ⎎
 " ⁀‿◠◡ ◠ ◡ ∿ ~∼/\⊃⊂／＼⨜∫⳽
-hi  link    UnicodeCurves  AllFilesOpColor
-syn match   UnicodeCurves  "[◜◝◟◞╰╯╭╮⨜᭴⦦⦧⦢⦣⦟⳽⵰⼈⼃৴ノ𝀎Ꜥᜆ⎎㇏𝈺𝈻◠◡／＼]" contains=@NoSpell
+" hi  link    UnicodeCurves  AllFilesOpColor
+" syn match   UnicodeCurves  "[◜◝◟◞╰╯╭╮⨜᭴⦦⦧⦢⦣⦟⳽⵰⼈⼃৴ノ𝀎Ꜥᜆ⎎㇏𝈺𝈻◠◡／＼]" contains=@NoSpell  containedin=RegExRanges
 
 " Box drawings: u2500->u257F
 " ┌───┬───┐ ┏━━━┳━━━┓ ╔═══╦═══╗
@@ -1106,6 +1141,24 @@ syn match   UnicodeCurves  "[◜◝◟◞╰╯╭╮⨜᭴⦦⦧⦢⦣⦟⳽⵰
 " ├───┼───┤ ┣━━━╋━━━┫ ╠═══╬═══╣
 " │   │   │ ┃   ┃   ┃ ║   ║   ║
 " └───┴───┘ ┗━━━┻━━━┛ ╚═══╩═══╝
+"                           ┌──┐
+" x[n]🡒+o──w[n]──────┬───🡒│b₀├─🡒+o─🡒y[n]
+"        +            │     └──┘    +
+"        🡑            🡓             🡑
+"        │          ┌───┐           │
+"        │          │z⁻¹│           │
+"        │          └─┬─┘           │
+"        │   ┌──┐     │     ┌──┐    │
+"        o-🡐│a₁│🡐───┼───🡒│b₁├─🡒+o
+"        -   └──┘     │     └──┘    +
+"        🡑            🡓             🡑
+"        │          ┌───┐           │
+"        │          │z⁻¹│           │
+"        │          └─┬─┘           │
+"        │            │             │
+"        │   ┌──┐     │     ┌──┐    │
+"        └───┤a₂│🡐───┴───🡒│b₂├────┘
+"            └──┘           └──┘
 inorea _btl     ┌<left><right><c-r>=Eatchar('\s')<cr>
 inorea _bbl     └<left><right><c-r>=Eatchar('\s')<cr>
 inorea _btr     ┐<left><right><c-r>=Eatchar('\s')<cr>
@@ -1120,6 +1173,7 @@ inorea _blf     ┤<left><right><c-r>=Eatchar('\s')<cr>
 inorea _box     ┌───┬───┐<cr>│   │   │<cr>├───┼───┤<cr>│   │   │<cr>└───┴───┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea _boxs    ┌───┐<cr>│   │<cr>└───┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea _boxr    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
+inorea _boxl    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea b_btl     ┏<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_bbl     ┗<left><right><c-r>=Eatchar('\s')<cr>
@@ -1135,6 +1189,7 @@ inorea b_blf     ┫<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_box    ┏━━━┳━━━┓<cr>┃   ┃   ┃<cr>┣━━━╋━━━┫<cr>┃   ┃   ┃<cr>┗━━━┻━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_boxs   ┏━━━┓<cr>┃   ┃<cr>┗━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_boxr   ┏━━━━━━┓<cr>┃      ┃<cr>┗━━━━━━┛<left><right><c-r>=Eatchar('\s')<cr>
+inorea b_boxl   ┏━━━━━━┓<cr>┃      ┃<cr>┗━━━━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea d_btl     ╔<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_bbl     ╚<left><right><c-r>=Eatchar('\s')<cr>
@@ -1150,9 +1205,10 @@ inorea d_blf     ╣<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_box    ╔═══╦═══╗<cr>║   ║   ║<cr>╠═══╬═══╣<cr>║   ║   ║<cr>╚═══╩═══╝<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_boxs   ╔═══╗<cr>║   ║<cr>╚═══╝<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_boxr   ╔══════╗<cr>║      ║<cr>╚══════╝<left><right><c-r>=Eatchar('\s')<cr>
+inorea d_boxl   ╔══════╗<cr>║      ║<cr>╚══════╝<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeBoxDrawings  AllFilesDefaultColor
-syn match   UnicodeBoxDrawings  "[┌└┐┘│─┬┼┴├┤┏┗┓┛┃━┳╋┻┣┫╔╚╗╝║═╦╬╩╠╣]" contains=@NoSpell
+syn match   UnicodeBoxDrawings  "[┌└┐┘│─┬┼┴├┤┏┗┓┛┃━┳╋┻┣┫╔╚╗╝║═╦╬╩╠╣]" contains=@NoSpell  containedin=RegExRanges
 
 
 " Multi-line parenthesis, square/curly brackets
@@ -1172,19 +1228,21 @@ inorea _2cbrack2     ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2cbracket2   ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeMultiParen AllFilesFuncColor
-syn match   UnicodeMultiParen "[︵︶⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell
+syn match   UnicodeMultiParen "[︵︶⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeMultiSBrk AllFilesFuncColor
-syn match   UnicodeMultiSBrk "[⎡⎤⎢⎥⎣⎦⌈⌊⌉⌋]" contains=@NoSpell
+syn match   UnicodeMultiSBrk "[⎡⎤⎢⎥⎣⎦⌈⌊⌉⌋]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeMultiCBrk AllFilesCBrColor
-syn match   UnicodeMultiCBrk "[⎧⎫⎪⎨⎬⎩⎭⎰⎱]" contains=@NoSpell
+syn match   UnicodeMultiCBrk "[⎧⎫⎪⎨⎬⎩⎭⎰⎱]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Tees
 "---------------------------
 
 " Tack, turnstile, tee, yields, proves, satisfies, entails, assert
+" inorea _\|-      ⊢<left><right><c-r>=Eatchar('\s')<cr>
+" inorea _!\|-     ⊬<left><right><c-r>=Eatchar('\s')<cr>
 inorea _assert   ⊦<left><right><c-r>=Eatchar('\s')<cr>
 inorea _tee      ⊢<left><right><c-r>=Eatchar('\s')<cr>
 inorea _ntee     ⊬<left><right><c-r>=Eatchar('\s')<cr>
@@ -1218,7 +1276,7 @@ inorea _2tee2    ⊫<left><right><c-r>=Eatchar('\s')<cr>
 inorea _3tee     ⊪<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeTees UnicodeSetsColor
-syn match   UnicodeTees "[⊦⊢⊬⊣⊤⊥⟂⟙丅⟘丄ᗮ⊨⊧⊭⊩⊮⊫⊯⊪]" contains=@NoSpell
+syn match   UnicodeTees "[⊦⊢⊬⊣⊤⊥⟂⟙丅⟘丄ᗮ⊨⊧⊭⊩⊮⊫⊯⊪]" contains=@NoSpell  containedin=RegExRanges
 
 
 "---------------------------
@@ -1263,10 +1321,10 @@ inorea _intc      ∲<left><right><c-r>=Eatchar('\s')<cr>
 inorea _inta      ∳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link   UnicodeAlgebra     AllFilesOpColor
-syn match  UnicodeAlgebra     "[∂𝜕∫∮∯∯∰∰∲∳∬∭′‵]" contains=@NoSpell
+syn match  UnicodeAlgebra     "[∂𝜕∫∮∯∯∰∰∲∳∬∭′‵]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link   UnicodeAlgebraNary AllFilesMultOpColor
-syn match  UnicodeAlgebraNary "[∏∐∑⋀⋁]" contains=@NoSpell
+syn match  UnicodeAlgebraNary "[∏∐∑⋀⋁]" contains=@NoSpell  containedin=RegExRanges
 
 
 "---------------------------
@@ -1289,13 +1347,15 @@ inorea _prop      ∝<left><right><c-r>=Eatchar('\s')<cr>
 inorea _sine      ∿<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOther   AllFilesOpColor
-syn match   UnicodeOther   "[∿∝ħⅇ]" contains=@NoSpell
+syn match   UnicodeOther   "[∿∝ħⅇ]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeOperators3 AllFilesOpColor
-syn match   UnicodeOperators3 "[√∛∜]" contains=@NoSpell
+syn match   UnicodeOperators3 "[√∛∜]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeInfinity   AllFilesNumColor
-syn match   UnicodeInfinity   "[∞]" contains=@NoSpell
+syn match   UnicodeInfinity   "[∞]" contains=@NoSpell  containedin=RegExRanges
+
+" syn match   UnicodeInfinityPlus   "[∞]\+[A-Z0-9]\+" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Circled digits/alphabet
@@ -1473,11 +1533,11 @@ inorea o_y       ⓨ<left><right><c-r>=Eatchar('\s')<cr>
 inorea o_z       ⓩ<left><right><c-r>=Eatchar('\s')<cr>
 
 
-hi  link    UnicodeEnumNumbers   AllFilesArrowsColor
-syn match   UnicodeEnumNumbers "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]" contains=@NoSpell
+" hi  link    UnicodeEnumNumbers   AllFilesArrowsColor
+" syn match   UnicodeEnumNumbers "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]" contains=@NoSpell  containedin=RegExRanges
 
-hi  link    UnicodeEnumLetters   AllFilesOpColor
-syn match   UnicodeEnumLetters "[🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]" contains=@NoSpell
+" hi  link    UnicodeEnumLetters   AllFilesOpColor
+" syn match   UnicodeEnumLetters "[🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]" contains=@NoSpell  containedin=RegExRanges
 
 
 "---------------------------
@@ -1542,8 +1602,8 @@ inorea _Om2      Ω<left><right><c-r>=Eatchar('\s')<cr>
 inorea _Nabla     𝞩<left><right><c-r>=Eatchar('\s')<cr>
 inorea _Na        𝞩<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeGreekUNorm AllFilesVarColor
-syn match   UnicodeGreekUNorm "[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩᴨФᴪ𝞩Ω]" contains=@NoSpell
+hi  link    UnicodeGreekUNorm UnicodeVarColor
+syn match   UnicodeGreekUNorm "[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩᴨФᴪ𝞩Ω]" contains=@NoSpell  containedin=RegExRanges
 
 " Cursive
 inorea c_Alpha    𝛢<left><right><c-r>=Eatchar('\s')<cr>
@@ -1596,7 +1656,7 @@ inorea c_Nabla    𝛻<left><right><c-r>=Eatchar('\s')<cr>
 inorea c_Na       𝛻<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUC UnicodeCColor
-syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell
+syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell  containedin=RegExRanges
 
 " Greek
 inorea _alpha     α<left><right><c-r>=Eatchar('\s')<cr>
@@ -1654,8 +1714,8 @@ inorea _om        ω<left><right><c-r>=Eatchar('\s')<cr>
 inorea _nabla     ∇<left><right><c-r>=Eatchar('\s')<cr>
 inorea _na        ∇<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeGreekLNorm AllFilesVarColor
-syn match   UnicodeGreekLNorm "[αβγɣδεζηθικλμνξοπρςστυφχψω∇µф]" contains=@NoSpell
+hi  link    UnicodeGreekLNorm UnicodeVarColor
+syn match   UnicodeGreekLNorm "[αβγɣδεζηθικλμνξοπρςστυφχψω∇µф]" contains=@NoSpell  containedin=RegExRanges
 
 " Cursive
 inorea c_alpha    𝛼<left><right><c-r>=Eatchar('\s')<cr>
@@ -1708,7 +1768,7 @@ inorea c_omega    𝜔<left><right><c-r>=Eatchar('\s')<cr>
 inorea c_om       𝜔<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLC UnicodeCColor
-syn match   UnicodeGreekLC "[𝛼𝛽𝛾𝛿𝜀𝜁𝜂𝜃𝜄𝜅𝜆𝜇𝜈𝜉𝜊𝜋𝜌𝜍𝜎𝜏𝜐𝜑𝜙𝜒𝜓𝜔]" contains=@NoSpell
+syn match   UnicodeGreekLC "[𝛼𝛽𝛾𝛿𝜀𝜁𝜂𝜃𝜄𝜅𝜆𝜇𝜈𝜉𝜊𝜋𝜌𝜍𝜎𝜏𝜐𝜑𝜙𝜒𝜓𝜔]" contains=@NoSpell  containedin=RegExRanges
 
 " Bold cursive
 inorea bc_Alpha   𝜜<left><right><c-r>=Eatchar('\s')<cr>
@@ -1763,7 +1823,7 @@ inorea bc_Nabla   𝜵<left><right><c-r>=Eatchar('\s')<cr>
 inorea bc_Na      𝜵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUBC UnicodeBCColor
-syn match   UnicodeGreekUBC "[𝜜𝜝𝜞𝜟𝞓𝜠𝜡𝜢𝜣𝜤𝜥𝜦𝜧𝜨𝜩𝜪𝜫𝜬𝜭𝜮𝜯𝜰𝜱𝜲𝜳𝜴𝜵]" contains=@NoSpell
+syn match   UnicodeGreekUBC "[𝜜𝜝𝜞𝜟𝞓𝜠𝜡𝜢𝜣𝜤𝜥𝜦𝜧𝜨𝜩𝜪𝜫𝜬𝜭𝜮𝜯𝜰𝜱𝜲𝜳𝜴𝜵]" contains=@NoSpell  containedin=RegExRanges
 
 " Bold cursive
 inorea bc_alpha   𝜶<left><right><c-r>=Eatchar('\s')<cr>
@@ -1816,7 +1876,7 @@ inorea bc_omega   𝝎<left><right><c-r>=Eatchar('\s')<cr>
 inorea bc_om      𝝎<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLBC UnicodeBCColor
-syn match   UnicodeGreekLBC "[𝜶𝜷𝜸𝜹𝜺𝜻𝜼𝜽𝜾𝜿𝝀𝝁𝝂𝝃𝝄𝝅𝝆𝝇𝝈𝝉𝝊𝝋𝝌𝝍𝝎𝝓]" contains=@NoSpell
+syn match   UnicodeGreekLBC "[𝜶𝜷𝜸𝜹𝜺𝜻𝜼𝜽𝜾𝜿𝝀𝝁𝝂𝝃𝝄𝝅𝝆𝝇𝝈𝝉𝝊𝝋𝝌𝝍𝝎𝝓]" contains=@NoSpell  containedin=RegExRanges
 
 " Bold
 inorea b_Alpha    𝚨<left><right><c-r>=Eatchar('\s')<cr>
@@ -1873,7 +1933,7 @@ inorea b_Nabla    𝛁<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_Na       𝛁<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUB UnicodeBColor
-syn match   UnicodeGreekUB "[𝚨𝚩𝚪𝚫𝝙𝚬𝚭𝚮𝚯𝚰𝚱𝚲𝚳𝚴𝚵𝚶𝚷𝚸𝚹𝚺𝚻𝚼𝚽𝚾𝚿𝛀𝛁𝛟]" contains=@NoSpell
+syn match   UnicodeGreekUB "[𝚨𝚩𝚪𝚫𝝙𝚬𝚭𝚮𝚯𝚰𝚱𝚲𝚳𝚴𝚵𝚶𝚷𝚸𝚹𝚺𝚻𝚼𝚽𝚾𝚿𝛀𝛁𝛟]" contains=@NoSpell  containedin=RegExRanges
 
 " Bold
 inorea b_alpha    𝛂<left><right><c-r>=Eatchar('\s')<cr>
@@ -1924,7 +1984,7 @@ inorea b_omega    𝛚<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_om       𝛚<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLB UnicodeBColor
-syn match   UnicodeGreekLB "[𝛂𝛃𝛄𝛅𝛆𝛇𝛈𝛉𝛊𝛋𝛌𝛍𝛎𝛏𝛐𝛑𝛒𝛓𝛔𝛕𝛖𝛗𝛘𝛙𝛚]" contains=@NoSpell
+syn match   UnicodeGreekLB "[𝛂𝛃𝛄𝛅𝛆𝛇𝛈𝛉𝛊𝛋𝛌𝛍𝛎𝛏𝛐𝛑𝛒𝛓𝛔𝛕𝛖𝛗𝛘𝛙𝛚]" contains=@NoSpell  containedin=RegExRanges
 
 "---------------------------
 " Combined
@@ -1966,7 +2026,7 @@ inorea c_y        𝑦<left><right><c-r>=Eatchar('\s')<cr>
 inorea c_z        𝑧<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLC UnicodeCColor
-syn match   UnicodeLatinLC "[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝘩𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧]" contains=@NoSpell
+syn match   UnicodeLatinLC "[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝘩𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧]" contains=@NoSpell  containedin=RegExRanges
 
 
 " Bold
@@ -1998,7 +2058,7 @@ inorea b_y        𝐲<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_z        𝐳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLB UnicodeBColor
-syn match   UnicodeLatinLB "[𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳]" contains=@NoSpell
+syn match   UnicodeLatinLB "[𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳]" contains=@NoSpell  containedin=RegExRanges
 
 
 " Bold, cursive
@@ -2030,7 +2090,7 @@ inorea bc_y       𝒚<left><right><c-r>=Eatchar('\s')<cr>
 inorea bc_z       𝒛<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLBC UnicodeBCColor
-syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell
+syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell  containedin=RegExRanges
 
 " Cursive
 inorea c_A        𝐴<left><right><c-r>=Eatchar('\s')<cr>
@@ -2061,7 +2121,7 @@ inorea c_Y        𝑌<left><right><c-r>=Eatchar('\s')<cr>
 inorea c_Z        𝑍<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUC UnicodeCColor
-syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell
+syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell  containedin=RegExRanges
 
 " Bold
 inorea b_A        𝐀<left><right><c-r>=Eatchar('\s')<cr>
@@ -2092,7 +2152,7 @@ inorea b_Y        𝐘<left><right><c-r>=Eatchar('\s')<cr>
 inorea b_Z        𝐙<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUB UnicodeBColor
-syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell
+syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell  containedin=RegExRanges
 
 
 " Bold cursive
@@ -2124,7 +2184,7 @@ inorea bc_Y       𝒀<left><right><c-r>=Eatchar('\s')<cr>
 inorea bc_Z       𝒁<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUBC UnicodeBCColor
-syn match   UnicodeLatinUBC "[𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁]" contains=@NoSpell
+syn match   UnicodeLatinUBC "[𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁]" contains=@NoSpell  containedin=RegExRanges
 
 " Mathematical bold script
 inorea bs_a       𝓪<left><right><c-r>=Eatchar('\s')<cr>
@@ -2154,8 +2214,8 @@ inorea bs_x       𝔁<left><right><c-r>=Eatchar('\s')<cr>
 inorea bs_y       𝔂<left><right><c-r>=Eatchar('\s')<cr>
 inorea bs_z       𝔃<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeLatinLBS AllFilesCBrColor
-syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell
+hi  link    UnicodeLatinLBS UnicodeBsColor
+syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell  containedin=RegExRanges
 
 
 " Mathematical bold script
@@ -2186,8 +2246,8 @@ inorea bs_X       𝓧<left><right><c-r>=Eatchar('\s')<cr>
 inorea bs_Y       𝓨<left><right><c-r>=Eatchar('\s')<cr>
 inorea bs_Z       𝓩<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeLatinUBS AllFilesCBrColor
-syn match   UnicodeLatinUBS "[𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩]" contains=@NoSpell
+hi  link    UnicodeLatinUBS UnicodeBsColor
+syn match   UnicodeLatinUBS "[𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩]" contains=@NoSpell  containedin=RegExRanges
 
 " Mathematical Fraktur
 inorea f_A        𝔄<left><right><c-r>=Eatchar('\s')<cr>
@@ -2218,7 +2278,7 @@ inorea f_Y        𝔜<left><right><c-r>=Eatchar('\s')<cr>
 inorea f_Z        ℨ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUF UnicodeMColor
-syn match   UnicodeLatinUF "[𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ]" contains=@NoSpell
+syn match   UnicodeLatinUF "[𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ]" contains=@NoSpell  containedin=RegExRanges
 
 inorea f_a        𝔞<left><right><c-r>=Eatchar('\s')<cr>
 inorea f_b        𝔟<left><right><c-r>=Eatchar('\s')<cr>
@@ -2248,7 +2308,7 @@ inorea f_y        𝔶<left><right><c-r>=Eatchar('\s')<cr>
 inorea f_z        𝔷<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLF UnicodeMColor
-syn match   UnicodeLatinLF "[𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷]" contains=@NoSpell
+syn match   UnicodeLatinLF "[𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷]" contains=@NoSpell  containedin=RegExRanges
 
 " Mathematical Script
 inorea s_A        𝒜<left><right><c-r>=Eatchar('\s')<cr>
@@ -2279,7 +2339,7 @@ inorea s_Y        𝒴<left><right><c-r>=Eatchar('\s')<cr>
 inorea s_Z        𝒵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUS UnicodeMColor
-syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell
+syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell  containedin=RegExRanges
 
 inorea s_a        𝒶<left><right><c-r>=Eatchar('\s')<cr>
 inorea s_b        𝒷<left><right><c-r>=Eatchar('\s')<cr>
@@ -2310,7 +2370,7 @@ inorea s_y        𝓎<left><right><c-r>=Eatchar('\s')<cr>
 inorea s_z        𝓏<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLS UnicodeMColor
-syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell
+syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell  containedin=RegExRanges
 
 " Double
 inorea d_nP       ℙ̶<left><right><c-r>=Eatchar('\s')<cr>
@@ -2373,8 +2433,8 @@ inorea d_pi        ℼ<left><right><c-r>=Eatchar('\s')<cr>
 inorea d_Pi        ℿ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinD UnicodeDBColor
-syn match   UnicodeLatinD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell
-syn match   UnicodeLatinD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell
+syn match   UnicodeLatinD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell  containedin=RegExRanges
 
 
 "---------------------------
@@ -2643,21 +2703,21 @@ inorea __y        ʸ<left><right><c-r>=Eatchar('\s')<cr>
 inorea __z        ᶻ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSPNum AllFilesNumColor
-syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛᴺᵀ]" contains=@NoSpell
+syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛᴺᵀ]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeSPOps AllFilesOpColor
-syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell
+syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell  containedin=RegExRanges
 
 
 hi  link    UnicodeSPParen AllFilesFuncColor
-syn match   UnicodeSPParen "[⁽⁾]" contains=@NoSpell
+syn match   UnicodeSPParen "[⁽⁾]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeSPLatinL AllFilesNumColor
-syn match   UnicodeSPLatinL "[ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᕐʳˢᵗᵘᵛᵚˣʸᶻ]" contains=@NoSpell
-syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ᵗʰ" contains=@NoSpell
-syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ˢᵗ" contains=@NoSpell
-syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ⁿᵈ" contains=@NoSpell
-syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ʳᵈ" contains=@NoSpell
+syn match   UnicodeSPLatinL "[ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᕐʳˢᵗᵘᵛᵚˣʸᶻ]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ᵗʰ" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ˢᵗ" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ⁿᵈ" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ʳᵈ" contains=@NoSpell  containedin=RegExRanges
 
 " NOTE no C F Q S
 " ʷʿ꜂ 𞥅ᒼ𓎭ᶜ⸇⸄⸁ᶠᣵ𝆍ᶳᔆᕁᕽ𝁂꭛ʸᶣ𐨗ᔾ⸃⸂ᶽᶻ𝆎ᙆᙇ ً𝆎⌕𑱔
@@ -2771,7 +2831,7 @@ inorea __Y        𐨗<left><right><c-r>=Eatchar('\s')<cr>
 inorea __Z        ᙆ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSPLatinU AllFilesNumColor
-syn match   UnicodeSPLatinU "[ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴼᴾᴿᵁⱽᵂᒼ⸁⌕ᔆᕽ𐨗ᙆ]" contains=@NoSpell
+syn match   UnicodeSPLatinU "[ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴼᴾᴿᵁⱽᵂᒼ⸁⌕ᔆᕽ𐨗ᙆ]" contains=@NoSpell  containedin=RegExRanges
 
 " Subscript
 inorea z_0        ₀<left><right><c-r>=Eatchar('\s')<cr>
@@ -3031,7 +3091,7 @@ inorea _mny      ₋ᵧ<left><right><c-r>=Eatchar('\s')<cr>
 inorea _mnz      ₋⳾<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSBLatinL AllFilesNumColor
-syn match   UnicodeSBLatinL "[ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ᙮ⱃ꜀𑚤ғﻣ𖾟⳾ꮷ]" contains=@NoSpell
+syn match   UnicodeSBLatinL "[ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ᙮ⱃ꜀𑚤ғﻣ𖾟⳾ꮷ]" contains=@NoSpell  containedin=RegExRanges
 
 " NOTE no uppercase subscripts!!
 " ៰ꜟ៲៴៱៷｡𐫶𔗐𛱈𐼦ࡘ𐼈៳𖾕𖾛𐼜ₚ𐼦ﻣﻪ ཱર𖾗𑇁៴⌄˯ ̬𖾓𖾙𐺜꛵ₓ᙮𝄪𝅃⸼𐺔𝀘
@@ -3147,19 +3207,19 @@ inorea _mnZ      ₋𛲟<left><right><c-r>=Eatchar('\s')<cr>
 
 
 hi  link    UnicodeSBLatinU AllFilesNumColor
-syn match   UnicodeSBLatinU "[ₓ៷៱𐫶𐼦ᇀꜰ𛱖ԋ៲𐼈𖾘៳៰𐼜ﻪ𑇁𐮀꛵៴𐺔𐽀𛲟]" contains=@NoSpell
-syn match   UnicodeSBLatinU " ཱ" contains=@NoSpell
-syn match   UnicodeSBLatinU " ྻ" contains=@NoSpell
+syn match   UnicodeSBLatinU "[ₓ៷៱𐫶𐼦ᇀꜰ𛱖ԋ៲𐼈𖾘៳៰𐼜ﻪ𑇁𐮀꛵៴𐺔𐽀𛲟]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSBLatinU " ཱ" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSBLatinU " ྻ" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodaSBOps AllFilesOpColor
-syn match   UnicodaSBOps "[₊₋₌៸‹›𝅃ᶺ․｡⁎៶˷ꜟ˱˲˯˰꜁꜆꜇]" contains=@NoSpell
+syn match   UnicodaSBOps "[₊₋₌៸‹›𝅃ᶺ․｡⁎៶˷ꜟ˱˲˯˰꜁꜆꜇]" contains=@NoSpell  containedin=RegExRanges
 
 
 hi  link    UnicodaSBParen AllFilesFuncColor
-syn match   UnicodaSBParen "[₍₎]" contains=@NoSpell
+syn match   UnicodaSBParen "[₍₎]" contains=@NoSpell  containedin=RegExRanges
 
 hi  link    UnicodeSBNum AllFilesNumColor
-syn match   UnicodeSBNum "[₀₁₂₃₄₅₆₇₈₉𝆗]" contains=@NoSpell
+syn match   UnicodeSBNum "[₀₁₂₃₄₅₆₇₈₉𝆗]" contains=@NoSpell  containedin=RegExRanges
 
 " Greek superscript
 " Many were missing!
@@ -3298,7 +3358,7 @@ inorea __mnom     ⁻ᐜ<left><right><c-r>=Eatchar('\s')<cr>
 inorea __mnna     ⁻▿<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSPGreekL AllFilesNumColor
-syn match   UnicodeSPGreekL "[ᵅᵝᵞᵟᵋᶼᶯᶱᵠᵡᶷᶿᶲꭟᣔᘁᶳꟸᶮᣖᣙ𑁮ᶭᐜ𝇉▿]" contains=@NoSpell
+syn match   UnicodeSPGreekL "[ᵅᵝᵞᵟᵋᶼᶯᶱᵠᵡᶷᶿᶲꭟᣔᘁᶳꟸᶮᣖᣙ𑁮ᶭᐜ𝇉▿]" contains=@NoSpell  containedin=RegExRanges
 
 " ˹ᣘᣴ𝆌⌜⸀ᅀᐞ꒫ᣔᶺ⌃𞄺˄ˆᐪ⸆𐩥𝇉ꚜᴯꚝ⏷
 " ³ะཇaᄐᕑaᶧ𐣾𒑋 ̐ˠ ّ ࣘ౻ ඁ ྂ⫝꒴꒶ꣲ ꤪ𐦽𐹪𘡩𝄌 𞥉𞲬
@@ -3430,7 +3490,7 @@ inorea __mnOm     ⁻ᵜ<left><right><c-r>=Eatchar('\s')<cr>
 inorea __mnNa     ⁻🢓<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSPGreekU AllFilesNumColor
-syn match   UnicodeSPGreekU "[ᣕᣘᐞ⌃ᶧᵜᄐꣲ🢓ᶽ]" contains=@NoSpell
+syn match   UnicodeSPGreekU "[ᣕᣘᐞ⌃ᶧᵜᄐꣲ🢓ᶽ]" contains=@NoSpell  containedin=RegExRanges
 
 " Greek subscript
 " ᵤ៵ﻌﻪ 𖾜ₑₔ𖽞៹ࡘㆴ₏ₙ⁁𐽑𐬓 𐴟 𐮀𐮪 𐴟 ៴⌄˯ ̬⌵ࡘ𐺝 ࣣ𖽚𖾙 ̫𖾟𛱠𛱝𛱜𐼚𐼦 ۭꮄ༝
@@ -3562,7 +3622,7 @@ inorea _mnom     ₋𖾟<left><right><c-r>=Eatchar('\s')<cr>
 inorea _mnna     ₋𝅎<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSBGreekL AllFilesNumColor
-syn match   UnicodeSBGreekL "[ᵦᵧᵨᵩᵪ៵𖾜𖽞៹𛱝𐽑𐮪៴ࡘ₏𖽚𖾙ഄ𝅎]" contains=@NoSpell
+syn match   UnicodeSBGreekL "[ᵦᵧᵨᵩᵪ៵𖾜𖽞៹𛱝𐽑𐮪៴ࡘ₏𖽚𖾙ഄ𝅎]" contains=@NoSpell  containedin=RegExRanges
 
 " ៱‸ꞈ𐽑𝅈𐺆𓐆𝍢𛱜᭦𐫭₏𖾕𐺝𑀙𐳲ₐ᭦ﻌᢦ𐺉𝅎▿𖾖𝅏
 " inorea z_Alpha    ៱<left><right><c-r>=Eatchar('\s')<cr>
@@ -3693,7 +3753,7 @@ inorea _mnOm     ₋ﻌ<left><right><c-r>=Eatchar('\s')<cr>
 inorea _mnNa     ₋𐺉<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSBGreekU AllFilesNumColor
-syn match   UnicodeSBGreekU "[៱𖾖𐺆ᇀ𛲟𛱜៲‸៳𓐆៰𖾕𐼜𐺝𖾓𐽀𐳲ᵪﻌ𐺉]" contains=@NoSpell
+syn match   UnicodeSBGreekU "[៱𖾖𐺆ᇀ𛲟𛱜៲‸៳𓐆៰𖾕𐼜𐺝𖾓𐽀𐳲ᵪﻌ𐺉]" contains=@NoSpell  containedin=RegExRanges
 
 
 inorea ith        iᵗʰ<left><right><c-r>=Eatchar('\s')<cr>
@@ -4051,6 +4111,16 @@ inorea zuv_x   ₓ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea zuv_y   ᵧ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
+" Vectors
+hi  link       MathVectors  AllFilesMultVarColor
+syn match      MathVectors  "d\?\%(.⃗\)" contains=@NoSpell  containedin=RegExRanges
+syn match      MathVectors  "\%(d⃗\)" contains=@NoSpell  containedin=RegExRanges
+syn match      MathVectors  "\%(.̂\)" contains=@NoSpell  containedin=RegExRanges
+
+" Negation
+hi  link       MathNotLogic AllFilesVarColor
+syn match      MathNotLogic "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegExRanges
+
 " You could also use other combining unicode chars such as the overline used
 " for not (u0305).
 " A̅ ∨ B̅
@@ -4068,6 +4138,7 @@ inorea o_aa  ́ <left><right><c-r>=Eatchar('\s')<cr>
 " U+0302  ◌̂ ^ Combining Circumflex Accent
 inorea o_^  ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea o_uv  ̂<left><right><c-r>=Eatchar('\s')<cr>
+inorea o_uvec  ̂<left><right><c-r>=Eatchar('\s')<cr>
 " U+0303  ◌̃ ~ Combining Tilde
 inorea o_~  ̃ <left><right><c-r>=Eatchar('\s')<cr>
 " U+0304  ◌̄ - Combining Macron

@@ -1,3 +1,5 @@
+" Add the abbreviation list to the thesaurus to look them up as you type
+" with <c-x><c-t> or <c-n> or <c-p>. See "set thesaurus" in .vimrc
 _iatest
 _beginend
 _bparen
@@ -37,6 +39,28 @@ _for
 _while
 _do
 _case
+r_p
+r_po
+r_op
+r_pb
+r_bp
+r_pa
+r_ap
+r_nb
+r_bn
+r_na
+r_an
+r_b
+r_az
+r_AZ
+r_aZ
+r_a9
+r_A9
+r_aZ9
+r_2l
+r_5p
+r_nm
+r_ngnm
 _shif
 _shifel
 _shifelif

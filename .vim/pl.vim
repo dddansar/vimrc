@@ -29,13 +29,15 @@
 " SOFTWARE.
 "==============================================================================
 
-" Remove quotes '' and "" colors...
-syn match   PlNoColor    '"'
-syn match   PlNoColor    "'"
-syn match   PlNoColor    "`"
+
+" Exit if the file was already loaded
+if exists("b:pl_loaded")
+  finish
+endif
+let g:pl_loaded = 1
 
 hi  link  PlKeywords1 AllFilesSystemColor
-syn keyword PlKeywords1       sub my use system
+syn keyword PlKeywords1    sub my use
 
 hi  link  PlKeywords2 AllFilesSystemColor2
 syn keyword PlKeywords2    printf print exists

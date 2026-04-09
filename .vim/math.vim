@@ -30,9 +30,13 @@
 " SOFTWARE.
 "==============================================================================
 
-" If set will not update highlighting as you scroll (improves performance and
-" scroll speed).
-let g:do_not_update_highlighting_while_scrolling = 1
+
+" Exit if the file was already loaded
+if exists("b:math_loaded")
+  finish
+endif
+let g:math_loaded = 1
+
 
 " NOTE: See also math_mappings.vim for unicode math mappings from leanprover
 "       vscode that start with "\".
@@ -43,57 +47,63 @@ let g:do_not_update_highlighting_while_scrolling = 1
 "       done properly or you don't want it at all, so you can't really cut
 "       corners.
 if g:performance_mode <= 0
+
+   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
+   " Used to improve scrolling performance and speed.
+   " nnoremap <pageup>   :let g:syntax_disabled = 1<cr>:syntax clear<cr><pageup>
+   " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
+
    " Match single chars.
    " --------------------------------------------------------------------------
    " Match single character in its own word.
    hi  link    MathSingleChar AllFilesVarColor
-   syn match   MathSingleChar "\%(\<\|\W\)\@<=[a-zA-Z]\%(\>\|\W\)\@=" contains=@NoSpell
+   syn match   MathSingleChar "\%(\w\)\@<![a-zA-Z]\%(\w\)\@!" contains=@NoSpell
 
    " Unmatch s when it's inside a parenthesis like in apple(s).
-   syn match   MathNoColorS "\%([a-zA-Z][a-z]\+(\)\@<=s\%()\)\@=" contains=@NoSpell
+   syn match   MathNoColorS "(s)" contains=@NoSpell
 
-   " Unmatch d s t after a quote mark ' like in it's or t after like in can't
-   " or d like in you'd.
-   syn match   MathNoColorDST "\%([a-zA-Z][a-z]\+'\)\@<=[dst]\%([ :;,?!.>)\]]\)\@=" contains=@NoSpell
-
-   " Unmatch d or m in I'd or I'm.
-   syn match   MathNoColorI "\%(\<I'\)\@<=[dm]\%( \)\@=" contains=@NoSpell
-
+   " Unmatch d s t after a quote mark ' like in it's or can't or you'd
+   syn match   MathNoColorDST "\%('\)\@<=[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
 
    " Unmatch I a A as they are common 1 letter words in English.
-   syn match   MathNoColorIaA "\%(^ *\|[:;,?!."'><()\\[\]] \|\w \)\@<=\<[IaA]\>\%(\s[a-zA-Z0-9'"(]\{2,}\|\s[0-9]\+\>\|'[dm] \)\@=" contains=@NoSpell
+   syn match   MathNoColorIaA "\%(\%(\W\)\@<!\s\|^\|\%((\)\@<=\)[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=\%( \%(and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\|will\|was\|is\)\>\)\@!" contains=@NoSpell
 
    " Rematch I a A when certain logic words are before/after.
-   hi  link    MathIaA1       AllFilesVarColor
-   syn match   MathIaA1       "\<[IaA]\>\%( \%(is\|and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\)\>\)\@=" contains=@NoSpell
-   hi  link    MathIaA1       AllFilesVarColor
-   syn match   MathIaA1       "\<[aA]\>\%( \%(will be\|was\)\>\)\@=" contains=@NoSpell
-   syn match   MathIaA1       "\%(\<\%(the\|The\) \)\@=\<[IaA]\>" contains=@NoSpell
+   " hi  link    MathIaA1       AllFilesVarColor
+   " syn match   MathIaA1       "\s\?\<[IaA]\>\%( \%(is\|and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\)\>\)\@=" contains=@NoSpell
+
+   " hi  link    MathIaA2       AllFilesVarColor
+   " syn match   MathIaA2       "\<[aA]\>\%( \%(will\|was\|is\)\>\)\@=" contains=@NoSpell
+   " syn match   MathIaA2       "\%(\<\%(the\|The\) \)\@=\<[IaA]\>" contains=@NoSpell
 
 
-   " Re-match stuff like 10X, 5y, 123xyz.
+   " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.
-   hi  link    MathVarInNum   AllFilesVarColor
-   syn match   MathVarInNum   "\%(\<[0-9]\+\)\@<=[a-zA-Z]\+\%(\>\|\W\)\@=" contains=@NoSpell
    hi  link    MathNumInVar   AllFilesNumColor
-   syn match   MathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@="   contains=@NoSpell
+   syn match   MathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell
+   hi  link    MathVarInNum   AllFilesVarColor
+   syn match   MathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
 
 
    " Match x when it mean multiplication or hex number.
    hi  link    MathXInNum     AllFilesOpColor
-   syn match   MathXInNum     "\%(\%(\>\|\W\)[0-9]*\)\@<=x\%([0-9]\+\%(\>\|\W\)\)\@=" contains=@NoSpell
+   syn match   MathXInNum     "x" contained contains=@NoSpell
    hi  link    MathNumWithX   AllFilesNumColor
-   syn match   MathNumWithX   "\%(\<\|\W\)\@<=[0-9]*\([x×][0-9]\+\)\+\%(\>\|\W\)\@=" contains=@NoSpell,MathXInNum,UnicodeOperators2
+   syn match   MathNumWithX   "\%(\w\)\@<!\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
 
+   " Match 2 char math variables.
+   " Disabled as there are too many 2 char words in English...
+   " hi  link    MathMathVar2   AllFilesVarColor
+   " syn match   MathMathVar2   "\%(\%(^\|\w\)\s*\)\@<![A-Z][a-z]\%(\%(\s*\|'\?\)\%($\|\w\)\)\@!" contains=@NoSpell
 
    " Match math variables such as Ax that are surrounded by non words.
-   hi  link    MathMathVar3   AllFilesVarColor
-   syn match   MathMathVar3   "\%(\<\|\W\)\@<=\%([a-df-np-z][xz]\|[ac-ln-z][y]\|uv\)\%( \?\W\)\@=" contains=@NoSpell
+   " hi  link    MathMathVar3   AllFilesVarColor
+   " syn match   MathMathVar3   "\%(\w\)\@<!\%([a-df-np-z][xz]\|[ac-ln-z][y]\|uv\)\%( \?\W\)\@=" contains=@NoSpell
 
    " Derivatives
    hi  link    MathDeriv      AllFilesVarColor
-   syn match   MathDeriv      "\%(\<\|\W\)\@<=d[a-np-zA-Z]\%(\>\|\W\)\@=\%(-\)\@!"  contains=@NoSpell
-   syn match   MathDeriv      "\%(\<\|\W\)\@<=\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\>\|\W\)\@="  contains=@NoSpell
+   syn match   MathDeriv      "\%(\w\)\@<!d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
+   syn match   MathDeriv      "\%(\s\|^\)\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
 
    hi  link    MathDeriv2     AllFilesVarColor
    syn match   MathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
@@ -101,31 +111,30 @@ if g:performance_mode <= 0
 
    " Highlight common math multi-variables.
    hi  link    MathMultiVars1 AllFilesVarColor
-   syn match   MathMultiVars1 "\%(\<\|\W\)\@<=\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\>\|\W\)\@=" contains=@NoSpell
+   syn match   MathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    MathMultiVars2 AllFilesVarColor
-   syn match   MathMultiVars2 "\%(\%(^ *\|\w\|[:;,?!."']\)\s\?\)\@<![a-z][A-Za-z]\%(\s\?'\?\w\|-[a-z][a-z][a-z]\| ["'][a-z][a-z][a-z]\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2,MathVectors
-   syn match   MathMultiVars2 "\%(\%(^ *\|\w\|[:;,?!."']\)\s\?\)\@<![A-Za-z][a-z]\%(\s\?'\?\w\|-[a-z][a-z][a-z]\| ["'][a-z][a-z][a-z]\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2,MathVectors
+   syn match   MathMultiVars2 "\%(\w\s\?\)\@<!\([a-z][A-Za-z]\|[A-Za-z][a-z]\)\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
-   syn match   MathMultiVarsNoColor "\<\%(in\|on\|ex\|ie\|vs\|to\|[oO]k\)\>" contains=@NoSpell
+   hi  link    MathMultiVars3 AllFilesVarColor
+   syn match   MathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegExRanges
+
+   " syn match   MathMultiVarsNoColor "\<\%(in\|[Ii]t\|on\|of\|ex\|ie\|vs\|to\|[oO]k\)\>" contains=@NoSpell
+   syn match   MathMultiVarsNoColor "\<\%(on\)\>" contains=@NoSpell
 
    " Match more functions.
    hi  link    MathFunction   AllFilesFuncColor
-   syn match   MathFunction   "\%(\<\|\W\)\@<=[f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,AllFilesLoopCondColor
+   " Matches incorrectly things like n(n-1).
+   " syn match   MathFunction   "\%(\s\|^\)[a-z][a-z0-9]*\>\%('\?(\)\@="  contains=@NoSpell,AllFilesLoopCondColor
+   syn match   MathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,AllFilesLoopCondColor
 
    " Highlight math terms/functions.
-   hi  link    MathMathTerms  AllFilesFuncColor
-   syn match   MathMathTerms  "\%(\<[0-9]*\|\W\)\@<=\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\|erf\|curl\|grad\|div\|clk\|rot\|mod\|lim\|det\|proj\|rref\|log\|ln\)\%(\>\|\W\)\@=" contains=@NoSpell
+   syn match   MathFunction   "\%(\w\)\@<!\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell
+   syn match   MathFunction   "\%(\w\)\@<![0-9]*\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
+   syn match   MathFunction   "\%(\w\)\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
    " --------------------------------------------------------------------------
 endif
-
-hi  link       MathVectors AllFilesMultVarColor
-syn match      MathVectors "d\?\%(.⃗\)" contains=@NoSpell
-syn match      MathVectors  "\%(.̂\)" contains=@NoSpell
-
-hi  link       MathNotLogic AllFilesVarColor
-syn match      MathNotLogic "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell
 
 
 "---------------------------
@@ -184,6 +193,7 @@ inorea _midp      m = ((x₁+x₂)/2, (y₁+y₂)/2)<left><right><c-r>=Eatchar('
 
 " Euler's formula and identity
 inorea _eulerf    eⁱˣ=cos(x)+i.sin(x)<left><right><c-r>=Eatchar('\s')<cr>
+" inorea _euleri    eⁱꟸ=-i<left><right><c-r>=Eatchar('\s')<cr>
 inorea _euleri    eⁱꟸ+i=0<left><right><c-r>=Eatchar('\s')<cr>
 inorea _euler     eⁱꟸ+i=0<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -313,6 +323,7 @@ inorea _nlde      y⁽ⁿ⁾=f(y⁽ⁿ⁻¹⁾,...,y⁽¹⁾,y⁽⁰⁾,x)<left>
 inorea _2cv       ∫∫ ཱf(x,y)dxdy=∫∫𑇁f(x(u,v),y(u,v))\|∂(x,y)/∂(u,v)\|du.dv<left><right><c-r>=Eatchar('\s')<cr>
 
 " Polar coordinates
+" inorea _2pol      ∫∫ ཱf(x,y)dxdy=∫(៵:ᵦ)∫(₍𛱝₎:ₕ₍𛱝₎)f(r cos θ, r sin θ) r drdθ<left><right><c-r>=Eatchar('\s')<cr>
 inorea _2pol      ∫∫ ཱf(x,y)dxdy=∫∫f(r.cosθ,r.sinθ) r drdθ<left><right><c-r>=Eatchar('\s')<cr>
 inorea _3pol      ∫∫∫𛱖f(x,y,z)dxdydz=∫∫∫𑇁f(r.sinθcosф,r.sinθsinф,r.cosθ) r²sinθ drdθdф<left><right><c-r>=Eatchar('\s')<cr>
 

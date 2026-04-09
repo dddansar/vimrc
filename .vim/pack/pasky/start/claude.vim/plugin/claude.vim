@@ -451,8 +451,7 @@ function! s:ClaudeLoadPrompt(prompt_type)
 endfunction
 
 if !exists('g:claude_default_system_prompt')
-  " let g:claude_default_system_prompt = s:ClaudeLoadPrompt('system')
-  let g:claude_default_system_prompt = []
+  let g:claude_default_system_prompt = s:ClaudeLoadPrompt('system')
 endif
 
 " Add this near the top of the file, after other configuration variables

@@ -29,6 +29,14 @@
 " SOFTWARE.
 "==============================================================================
 
+
+" Exit if the file was already loaded
+if exists("b:latex_loaded")
+  finish
+endif
+let g:latex_loaded = 1
+
+
 " Match "\word"
 hi  link    LatexKeywords AllFilesSystemColor
 syn match   LatexKeywords "\%(\\\)\@<!\\[a-zA-Z]\+" contains=@NoSpell
