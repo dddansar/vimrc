@@ -1,8 +1,7 @@
 "==============================================================================
-" File: rcf.vim
+" File: svn.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all rcf files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
+" Description: This file adds custom syntax highlighting svn.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -29,6 +28,29 @@
 " SOFTWARE.
 "==============================================================================
 
-hi  link  AllPreNumbers1   AllFilesNumColor
-syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
+
+" Exit if the file was already loaded
+if exists("b:svn_loaded")
+  finish
+endif
+let g:svn_loaded = 1
+
+" clear previous highlightings
+syn clear
+
+hi  link    SvnComments    AllFilesCommentColor
+syn region  SvnComments    start="--This line, and those below, will be ignored--" end=+\%$+
+
+hi  link    SvnNew         AllFilesEqualityColor
+syn match   SvnNew         "\%(^\)\@<=A.*" contained containedin=SvnComments
+
+hi  link    SvnModified    AllFilesFuncColor
+syn match   SvnModified    "\%(^\)\@<=M.*" contained containedin=SvnComments
+
+hi  link    SvnDeleted     AllFilesVarColor
+syn match   SvnDeleted     "\%(^\)\@<=D.*" contained containedin=SvnComments
+
+hi  link    SvnReplaced    AllFilesSystemColor3
+syn match   SvnReplaced    "\%(^\)\@<=R.*" contained containedin=SvnComments
+
 

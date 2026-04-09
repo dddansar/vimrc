@@ -1,8 +1,7 @@
 "==============================================================================
-" File: csv.vim
+" File: custom_syntax.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all csv files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
+" Description: Loads the custom syntax highlighting groups based on filetype.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -29,7 +28,7 @@
 " SOFTWARE.
 "==============================================================================
 
-
-hi  link    CsvComma       HLOrangeredB
-syn match   CsvComma       ","
+" This will load all my custom syntax highlightings for all files based
+" on their file extension. EnCustomSyntax can be found in .vimrc.
+doautocmd EnCustomSyntax BufRead
 
