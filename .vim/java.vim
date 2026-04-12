@@ -37,7 +37,7 @@ endif
 let g:java_loaded = 1
 
 
-hi  link    JavaKeywords AllFilesSystemColor
+hi  link    JavaKeywords Statement
 syn keyword JavaKeywords abstract    assert      boolean
 syn keyword JavaKeywords catch       implements
 syn keyword JavaKeywords synchronized

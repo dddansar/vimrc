@@ -1,10 +1,10 @@
 "==============================================================================
 " File: colors.vim
 "------------------------------------------------------------------------------
-" Description: This file adds additional highlighting groups that get used
+" Description: This file adds additional highlighting groups that may get used
 "              throughout the .vim files.
 "              Gets loaded by .vimrc when opening select files with a vim GUI.
-" NOTE: See also highlightings.vim.
+" NOTE: See also custom_colorscheme.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -41,42 +41,42 @@ let g:colors_loaded = 1
 
 " Custom syntax highlighting groups
 "------------------------------------------------------------------------------
-hi  link    AllFilesFuncColor       Function
-hi  link    AllFilesDefaultColor    Define
-hi  link    AllFilesDefinesColor    Define
-hi  link    AllFilesSBrColor        Define
-hi  link    AllFilesOpColor         Operator
-hi  link    AllFilesCBrColor        HLDarkorange3B
-hi  link    AllFilesTBrColor        HLOrangeredB
-hi  link    AllFilesEqualityColor   HLOrangeredB
-hi  link    AllFilesPointerColor    HLTomato1B
-hi  link    AllFilesArrowsColor     HLHotpinkB
-hi  link    AllFilesArrayColor      HLDeeppinkB
-hi  link    AllFilesWarningColor    HLRedBU
-hi  link    AllFilesSpecialColor    Exception
-hi  link    AllFilesSpecialColorB   NonText
-hi  link    AllFilesSpecialColor2   Statement
-hi  link    AllFilesSystemColor     Statement
-hi  link    AllFilesSystemColor2    Type
-hi  link    AllFilesSystemColor3    Conditional
-hi  link    AllFilesSystemColor4    Debug
-hi  link    AllFilesSystemColor5    Delimiter
-hi  link    AllFilesNumColor        Constant
-hi  link    AllFilesCapsColor       Special
-hi  link    AllFilesVarColor        Special
-hi  link    AllFilesMultVarColor    HLBlue
-hi  link    AllFilesMultOpColor     HLBlueB
-hi  link    AllFilesCommentColor    Comment
-hi  link    AllFilesComment2Color   SpecialComment
-hi  link    AllFilesTimeColor       HLGreen3B
-hi  link    AllFilesQuotesColor1    String
-hi  link    AllFilesQuotesColor2    HLGreen
-hi  link    AllFilesQuotesColor3    HLGreen3
-hi  link    AllFilesLoopCondColor   Conditional
-hi  link    AllFilesPathsColor      HLOlive
-hi  link    AllFilesPathsColor2     HLKhaki4
-hi  link    AllFilesStructColor     Structure
-hi  link    AllFilesMidGrey         HLGrey30
+" hi  link    AllFilesDefinesColor    Define
+" hi  link    AllFilesFuncColor       Function
+" hi  link    AllFilesDefaultColor    StorageClass
+" hi  link    AllFilesSBrColor        StorageClass
+" hi  link    AllFilesOpColor         Operator
+" hi  link    AllFilesCBrColor        PreProc
+" hi  link    AllFilesTBrColor        Define
+" hi  link    AllFilesEqualityColor   Define
+" hi  link    AllFilesPointerColor    MoreMsg
+" hi  link    AllFilesArrowsColor     Question
+" hi  link    AllFilesArrayColor      Title
+" hi  link    AllFilesWarningColor    WarningMsg
+" hi  link    AllFilesSpecialColor1   Exception
+" hi  link    AllFilesSpecialColorB   NonText
+" hi  link    AllFilesSpecialColor2   Keyword
+" hi  link    AllFilesSystemColor1    Statement
+" hi  link    AllFilesSystemColor2    Type
+" hi  link    AllFilesSystemColor3    Conditional
+" hi  link    AllFilesSystemColor4    Debug
+" hi  link    AllFilesSystemColor5    Delimiter
+" hi  link    AllFilesNumColor        Constant
+" hi  link    AllFilesCapsColor       Special
+" hi  link    AllFilesVarColor        SpecialChar
+" hi  link    AllFilesMultVarColor    HLBlue
+" hi  link    AllFilesMultOpColor     SpecialKey
+" hi  link    AllFilesCommentColor    Comment
+" hi  link    AllFilesComment2Color   SpecialComment
+" hi  link    AllFilesTimeColor       Label
+" hi  link    AllFilesQuotesColor1    String
+" hi  link    AllFilesQuotesColor2    Identifier
+" hi  link    AllFilesQuotesColor3    Character
+" hi  link    AllFilesLoopCondColor   Conditional
+" hi  link    AllFilesPathsColor1     Underlined
+" hi  link    AllFilesPathsColor2     Tag
+" hi  link    AllFilesStructColor     Structure
+" hi  link    AllFilesMidGrey         LineNr
 hi  link    AllFilesBarelyVisible   HLGrey15BgB
 "------------------------------------------------------------------------------
 
@@ -110,8 +110,8 @@ hi default HLYellowB             cterm=bold gui=bold ctermfg=184 guifg=yellow
 hi default HLYellowgreenB        cterm=bold gui=bold ctermfg=148 guifg=yellowgreen
 hi default HLGreen                                   ctermfg=46  guifg=green
 hi default HLGreenB              cterm=bold gui=bold ctermfg=46  guifg=green
-hi default HLGreen3                                  ctermfg=34  guifg=green4
-hi default HLGreen3B             cterm=bold gui=bold ctermfg=34  guifg=green4
+hi default HLGreen3                                  ctermfg=34  guifg=green3
+hi default HLGreen3B             cterm=bold gui=bold ctermfg=34  guifg=green3
 hi default HLOlive                                   ctermfg=100 guifg=olive
 hi default HLOliveB              cterm=bold gui=bold ctermfg=100 guifg=olive
 hi default HLKhaki4                                  ctermfg=101 guifg=khaki4
@@ -152,10 +152,10 @@ hi default HLRedBgB              cterm=bold gui=bold ctermfg=16 guifg=black cter
 "------------------------------------------------------------------------------
 " Undercurl like in spell errors!
 " cterm does not support undercurl so using underline instead.
-hi default HLRedUC                 cterm=underline     gui=undercurl                 guisp=red
-hi default HLDarkBlueUC            cterm=underline     gui=undercurl                 guisp=blue
-hi default HLFuchsiaUC             cterm=underline     gui=undercurl                 guisp=magenta
-hi default HLCyanUC                cterm=underline     gui=undercurl                 guisp=cyan
+" hi default HLRedUC                 cterm=underline     gui=undercurl                 guisp=red
+" hi default HLDarkBlueUC            cterm=underline     gui=undercurl                 guisp=blue
+" hi default HLFuchsiaUC             cterm=underline     gui=undercurl                 guisp=magenta
+" hi default HLCyanUC                cterm=underline     gui=undercurl                 guisp=cyan
 
 " Strikethrough
 hi default HLGreyOut                                                     ctermfg=235 guifg=grey20
@@ -163,25 +163,25 @@ hi default HLStrikeThroughDefault  cterm=strikethrough gui=strikethrough
 hi default HLStrikeThroughGrey     cterm=strikethrough gui=strikethrough ctermfg=236 guifg=grey30
 
 " Background and foreground mixes
-hi default CyanOnGrey      cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=244      guibg=#555555
-hi default CyanOnGrey3     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=102      guibg=#888888
-hi default CyanOnGrey2     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=darkgrey guibg=darkgrey
-hi default CyanOnLightGrey cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=grey     guibg=grey
-hi default DarkBlueOnTeal  cterm=bold gui=bold ctermfg=20   guifg=blue ctermbg=darkcyan guibg=darkcyan
+" hi default CyanOnGrey      cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=244      guibg=#555555
+" hi default CyanOnGrey3     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=102      guibg=#888888
+" hi default CyanOnGrey2     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=darkgrey guibg=darkgrey
+" hi default CyanOnLightGrey cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=grey     guibg=grey
+" hi default DarkBlueOnTeal  cterm=bold gui=bold ctermfg=20   guifg=blue ctermbg=darkcyan guibg=darkcyan
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
 " List of all possible gui options (many don't work...).
-hi default HLSpecial1  gui=bold          guisp=red guifg=grey40
-hi default HLSpecial2  gui=underline     guisp=red guifg=grey40
-hi default HLSpecial3  gui=undercurl     guisp=red guifg=grey40
-hi default HLSpecial4  gui=underdotted   guisp=red guifg=grey40
-hi default HLSpecial5  gui=underdouble   guisp=red guifg=grey40
-hi default HLSpecial6  gui=underdashed   guisp=red guifg=grey40
-hi default HLSpecial7  gui=inverse       guisp=red guifg=grey40
-hi default HLSpecial8  gui=italic        guisp=red guifg=grey40
-hi default HLSpecial9  gui=standout      guisp=red guifg=grey40
-hi default HLSpecial10 gui=nocombine     guisp=red guifg=grey40
-hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey40
+hi default HLSpecial1  gui=bold          guisp=red guifg=grey50
+hi default HLSpecial2  gui=underline     guisp=red guifg=grey50
+hi default HLSpecial3  gui=undercurl     guisp=red guifg=grey50
+hi default HLSpecial4  gui=underdotted   guisp=red guifg=grey50
+hi default HLSpecial5  gui=underdouble   guisp=red guifg=grey50
+hi default HLSpecial6  gui=underdashed   guisp=red guifg=grey50
+hi default HLSpecial7  gui=inverse       guisp=red guifg=grey50
+hi default HLSpecial8  gui=italic        guisp=red guifg=grey50
+hi default HLSpecial9  gui=standout      guisp=red guifg=grey50
+hi default HLSpecial10 gui=nocombine     guisp=red guifg=grey50
+hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey50
 "------------------------------------------------------------------------------
 

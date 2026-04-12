@@ -36,9 +36,9 @@ if exists("b:pl_loaded")
 endif
 let g:pl_loaded = 1
 
-hi  link  PlKeywords1 AllFilesSystemColor
+hi  link  PlKeywords1 Statement
 syn keyword PlKeywords1    sub my use
 
-hi  link  PlKeywords2 AllFilesSystemColor2
+hi  link  PlKeywords2 Type
 syn keyword PlKeywords2    printf print exists
 

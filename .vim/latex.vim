@@ -38,6 +38,6 @@ let g:latex_loaded = 1
 
 
 " Match "\word"
-hi  link    LatexKeywords AllFilesSystemColor
+hi  link    LatexKeywords Statement
 syn match   LatexKeywords "\%(\\\)\@<!\\[a-zA-Z]\+" contains=@NoSpell
 

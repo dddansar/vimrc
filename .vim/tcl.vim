@@ -38,7 +38,7 @@ let g:tcl_loaded = 1
 
 
 " A bunch of useful keywords.
-hi  link    TclKeywords1 AllFilesSystemColor
+hi  link    TclKeywords1 Statement
 syn keyword TclKeywords1 proc lindex
 syn keyword TclKeywords1 llength lappend lreplace lrange list concat incr
 syn keyword TclKeywords1 upvar set
@@ -105,16 +105,16 @@ syn keyword TclKeywords5 increasing decreasing index clock
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
 
-hi  link    TclKeywords6 AllFilesSpecialColor
+hi  link    TclKeywords6 Exception
 syn keyword TclKeywords6 force
 
-hi  link    TclKeywords7 AllFilesNumColor
+hi  link    TclKeywords7 Constant
 syn keyword TclKeywords7 constraint
 
-hi  link    TclKeywords8 AllFilesSystemColor2
+hi  link    TclKeywords8 Type
 syn keyword TclKeywords8 run prove
 
-hi  link    TclKeywords9 AllFilesSystemColor3
+hi  link    TclKeywords9 Conditional
 syn keyword TclKeywords9 del
 
 "------------------------------------------------------------------------------

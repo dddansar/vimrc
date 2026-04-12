@@ -44,7 +44,7 @@ let g:asm_loaded = 1
 " https://jarrettbillingsley.github.io/teaching/classes/cs0447/guides/instructions.html
 "------------------------------------------------------------------------------
 
-hi  link  AsmArithm    AllFilesSystemColor
+hi  link  AsmArithm    Statement
 " Arithmetic and Bitwise Instructions
 syn match AsmArithm  "\<NEG[IU]\{0,2}\>"   contains=@NoSpell | "a, b       a = -b     gives the negative of b.
 syn match AsmArithm  "\<ADD[IU]\{0,2}\>"   contains=@NoSpell | "a, b, c    a = b + c  adds signed numbers.
@@ -190,7 +190,7 @@ syn match AsmArithm  "\<bgeu\>"            contains=@NoSpell
 " control operations that programmers commonly use to write application and
 " system software to run on an Intel Architecture processor.
 
-hi  link  AsmData AllFilesSystemColor3
+hi  link  AsmData Conditional
 " 30.2.1.1. Data Transfer Instructions
 syn match AsmData "\<MOV\>"                               contains=@NoSpell | "Move
 syn match AsmData "\<MOVB\>"                              contains=@NoSpell | "Move into the single byte
@@ -243,7 +243,7 @@ syn match AsmData "\<XCHG[BWLQ]\?A\>"                     contains=@NoSpell | "e
 syn match AsmData "\<MOVAPS\>"                            contains=@NoSpell
 syn match AsmData "\<MOVSLQ\>"                            contains=@NoSpell
 
-hi  link  AsmLogic AllFilesOpColor
+hi  link  AsmLogic Operator
 " 30.2.1.2. Binary Arithmetic Instructions
 syn match AsmLogic "\<ADD[BWQL]\?\>"                      contains=@NoSpell | "Integer add
 syn match AsmLogic "\<ADC[BWLQ]\?\>"                      contains=@NoSpell | "Add with carry
@@ -283,7 +283,7 @@ syn match AsmLogic "\<ROL[BWLQ]\?\>"                      contains=@NoSpell | "R
 syn match AsmLogic "\<RCR[BWLQ]\?\>"                      contains=@NoSpell | "Rotate through carry right
 syn match AsmLogic "\<RCL[BWLQ]\?\>"                      contains=@NoSpell | "Rotate through carry left
 
-hi  link  AsmBit AllFilesArrowsColor
+hi  link  AsmBit Question
 " 30.2.1.6. Bit and Byte Instructions
 syn match AsmBit "\<BT[WLQ]\?\>"                          contains=@NoSpell | "Bit test
 syn match AsmBit "\<BTS[WLQ]\?\>"                         contains=@NoSpell | "Bit test and set
@@ -309,7 +309,7 @@ syn match AsmBit "\<\%(SETPE\|SETP\)\>"                   contains=@NoSpell | "S
 syn match AsmBit "\<\%(SETPO\|SETNP\)\>"                  contains=@NoSpell | "Set byte if parity odd/Set byte if not parity
 syn match AsmBit "\<TEST[WLQ]\?\>"                        contains=@NoSpell | "Logical compare
 
-hi  link  AsmControl AllFilesSystemColor2
+hi  link  AsmControl Type
 " 30.2.1.7. Control Transfer Instructions
 syn match AsmControl "\<JMP\>"                            contains=@NoSpell | "Jump
 syn match AsmControl "\<\%(JE\|JZ\)\>"                    contains=@NoSpell | "Jump if equal/Jump if zero
@@ -343,7 +343,7 @@ syn match AsmControl "\<BOUND[WL]\?\>"                    contains=@NoSpell | "D
 syn match AsmControl "\<ENTER\>"                          contains=@NoSpell | "High-level procedure entry
 syn match AsmControl "\<LEAVE\>"                          contains=@NoSpell | "High-level procedure exit
 
-hi  link  AsmString AllFilesEqualityColor
+hi  link  AsmString Define
 " 30.2.1.8. String Instructions
 syn match AsmString "\<\%(MOVSQ\)\>"                      contains=@NoSpell | "Move string/Move byte string
 syn match AsmString "\<\%(MOVS[Q]\?\|MOVSB\)\>"           contains=@NoSpell | "Move string/Move byte string
@@ -371,7 +371,7 @@ syn match AsmString "\<\%(OUTS\|OUTSB\)\>"                contains=@NoSpell | "O
 syn match AsmString "\<\%(OUTS\|OUTSW\)\>"                contains=@NoSpell | "Output string to port/Output word string to port
 syn match AsmString "\<\%(OUTS\|OUTSD\)\>"                contains=@NoSpell | "Output string to port/Output doubleword string to port
 
-hi  link  AsmFlag AllFilesSystemColor
+hi  link  AsmFlag Statement
 " 30.2.1.9. Flag Control Instructions
 syn match AsmFlag "\<STC\>"                               contains=@NoSpell | "Set carry flag
 syn match AsmFlag "\<CLC\>"                               contains=@NoSpell | "Clear the carry flag
@@ -385,7 +385,7 @@ syn match AsmFlag "\<\%(POPF[LQ]\?\|POPFD\)\>"            contains=@NoSpell | "P
 syn match AsmFlag "\<STI\>"                               contains=@NoSpell | "Set interrupt flag
 syn match AsmFlag "\<CLI\>"                               contains=@NoSpell | "Clear the interrupt flag
 
-hi  link  AsmSegment AllFilesEqualityColor
+hi  link  AsmSegment Define
 " 30.2.1.10. Segment Register Instructions
 syn match AsmSegment "\<LDS[WL]\?\>"                      contains=@NoSpell | "Load far pointer using DS
 syn match AsmSegment "\<LES[WL]\?\>"                      contains=@NoSpell | "Load far pointer using ES
@@ -393,7 +393,7 @@ syn match AsmSegment "\<LFS[WL]\?\>"                      contains=@NoSpell | "L
 syn match AsmSegment "\<LGS[WL]\?\>"                      contains=@NoSpell | "Load far pointer using GS
 syn match AsmSegment "\<LSS[WL]\?\>"                      contains=@NoSpell | "Load far pointer using SS
 
-hi  link  AsmMisc AllFilesSystemColor
+hi  link  AsmMisc Statement
 " 30.2.1.11. Miscellaneous Instructions
 syn match AsmMisc "\<LEA[WLQ]\?\>"                        contains=@NoSpell | "Load effective address
 syn match AsmMisc "\<NOP\>"                               contains=@NoSpell | "No operation
@@ -414,7 +414,7 @@ syn match AsmMisc "\<NOTRACK\>"                           contains=@NoSpell | "P
 " implement the Intel MMX technology. These instructions operate on
 " packed-byte, packed-word, packed-doubleword, and quadword operands.
 
-hi  link  AsmMMX AllFilesMultVarColor
+hi  link  AsmMMX SpecialKey
 " 30.2.2.1. MMX™ Data Transfer Instructions
 syn match AsmMMX "\<MOVD\>"                               contains=@NoSpell | "Move doubleword
 syn match AsmMMX "\<MOVQ\>"                               contains=@NoSpell | "Move quadword
@@ -484,7 +484,7 @@ syn match AsmMMX "\<EMMS\>"                               contains=@NoSpell | "E
 " operands. As with the integer instructions, the following list of
 " floating-point instructions is divided into subgroups.
 
-hi  link  AsmFData AllFilesSystemColor3
+hi  link  AsmFData Conditional
 " 30.2.3.1. Data Transfer
 syn match AsmFData "\<FLD\>"                              contains=@NoSpell | "Load real
 syn match AsmFData "\<FST\>"                              contains=@NoSpell | "Store real
@@ -504,7 +504,7 @@ syn match AsmFData "\<FCMOVNBE\>"                         contains=@NoSpell | "F
 syn match AsmFData "\<FCMOVU\>"                           contains=@NoSpell | "Floating-point conditional move if unordered
 syn match AsmFData "\<FCMOVNU\>"                          contains=@NoSpell | "Floating-point conditional move if not unordered
 
-hi  link  AsmFArith AllFilesOpColor
+hi  link  AsmFArith Operator
 " 30.2.3.2. Basic Arithmetic
 syn match AsmFArith "\<FADD\>"                            contains=@NoSpell | "Add real
 syn match AsmFArith "\<FADDP\>"                           contains=@NoSpell | "Add real and pop
@@ -533,7 +533,7 @@ syn match AsmFArith "\<FSCALE\>"                          contains=@NoSpell | "S
 syn match AsmFArith "\<FSQRT\>"                           contains=@NoSpell | "Square root
 syn match AsmFArith "\<FXTRACT\>"                         contains=@NoSpell | "Extract exponent and significand
 
-hi  link  AsmFComp AllFilesSystemColor
+hi  link  AsmFComp Statement
 " 30.2.3.3. Comparison
 syn match AsmFComp "\<FCOM\>"                             contains=@NoSpell | "Compare real
 syn match AsmFComp "\<FCOMP\>"                            contains=@NoSpell | "Compare real and pop
@@ -1068,10 +1068,10 @@ syn match AsmFComp "\<rdtsc\>"                            contains=@NoSpell
 " the 64-bit registers, extending the 32-bit registers again, to rax, rbx etc.
 " In the process, they added a few new registers that didn't exist before,
 " r8-r15.
-hi  link  AsmDotStar AllFilesOpColor
+hi  link  AsmDotStar Operator
 syn match AsmDotStar "<.*>" contains=@NoSpell | "Function calls
 
-hi  link  AsmRegs AllFilesVarColor
+hi  link  AsmRegs SpecialChar
 syn match AsmRegs "\<rax\|rbx\|rcx\|rdx\|rsi\|rdi\|rsp\|rbp\|rip\>"  contains=@NoSpell | "Registers
 syn match AsmRegs "\<RAX\|RBX\|RCX\|RDX\|RSI\|RDI\|RSP\|RBP\|RIP\>"  contains=@NoSpell | "Registers
 syn match AsmRegs "\<eax\|ebx\|ecx\|edx\|esi\|edi\>"                 contains=@NoSpell | "Registers
@@ -1079,14 +1079,14 @@ syn match AsmRegs "\<EAX\|EBX\|ECX\|EDX\|ESI\|EDI\>"                 contains=@N
 syn match AsmRegs "%\w*\>"                                           contains=@NoSpell | "Registers
 
 " Match 2 or more times.
-hi  link  AsmHex AllFilesNumColor
+hi  link  AsmHex Constant
 syn match AsmHex "\<[0-9a-f][0-9a-f]\+\>"               contains=@NoSpell | "Hex numbers
 
 " Convert Long To Quad (cltq): AT&T-style
 " Convert Double to Quad Extend (cdqe): Intel
 " quad (aka quad-word) == 8 bytes
 " long (AT&T) == double-word (Intel) == 4 bytes
-hi  link  AsmOther AllFilesSystemColor
+hi  link  AsmOther Statement
 syn match AsmOther "\<cltq\>"                     contains=@NoSpell
 syn match AsmOther "\<CLTQ\>"                     contains=@NoSpell
 
@@ -1094,6 +1094,6 @@ syn match AsmRegs "\<cs\>" contains=@NoSpell
 syn match AsmRegs "\<CS\>" contains=@NoSpell | "Code segment (CS) is a 16-bit register containing address of 64 KB segment with processor instructions. The processor uses CS segment for all accesses to instructions referenced by instruction pointer (IP) register.
 
 " .word
-hi  link  AsmLabel AllFilesSystemColor2
+hi  link  AsmLabel Type
 syn match AsmLabel "\.\w\+\>" contains=@NoSpell | "Function calls
 

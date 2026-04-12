@@ -47,17 +47,17 @@ if hlexists('AllPreComments2')
 endif
 
 " Match functions like abc()
-hi  link  LogMatches1  AllFilesOpColor
+hi  link  LogMatches1  Operator
 syn match LogMatches1  "\<\w\+()"
 
-hi  link  LogMatches3  AllFilesSpecialColorB
+hi  link  LogMatches3  NonText
 syn match LogMatches3 "\<Mismatch\>"
 syn match LogMatches3 "\<errors\>"
 syn match LogMatches3 "\%(error\>\)\@<=.*"
 syn match LogMatches3 "\<abort\%(ed\|ing\)\?\>"
 syn match LogMatches3 "\<abort\>"
 
-hi  link  LogMatches4  AllFilesSystemColor
+hi  link  LogMatches4  Statement
 syn match LogMatches4 "\<initializing\>"
 syn match LogMatches4 "\<terminating\>"
 syn match LogMatches4 "\<start\>"
@@ -72,7 +72,7 @@ syn match LogMatches4 "\<exiting\>"
 syn match LogMatches4 "\<listening\>"
 syn match LogMatches4 "\<accepted\>"
 
-hi  link  LogMatches4  AllFilesSystemColor
+hi  link  LogMatches4  Statement
 syn match LogMatches4  "\<file\>"
 syn match LogMatches4  "\<compiling\>"
 syn match LogMatches4  "\<compilation\>"
@@ -84,14 +84,14 @@ syn match LogMatches4  "\<creating\>"
 syn match LogMatches4  "\<recompiling\>"
 syn match LogMatches4  "\<generating\>"
 
-hi  link  LogMatches5  AllFilesOpColor
+hi  link  LogMatches5  Operator
 syn match LogMatches5  "\<uvm_info\>"
 syn match LogMatches5  "\<info\>"
 syn match LogMatches5  "\<correct\>"
 syn match LogMatches5  "\<uvm_\w\+\>"
 syn match LogMatches5  "\<debug\>"
 
-hi  link  LogMatches6  AllFilesSystemColor2
+hi  link  LogMatches6  Type
 syn match LogMatches6  "\<read\>"
 syn match LogMatches6  "\<write\>"
 syn match LogMatches6  "\<reading\>"
@@ -101,10 +101,10 @@ syn match LogMatches6  "\<address\>"
 syn match LogMatches6  "\<data\>"
 
 " Match word.word
-hi  link  LogMatches7  AllFilesPathsColor2
+hi  link  LogMatches7  Tag
 syn match LogMatches7  "\<\w\+\(\.\w\+\)\+\>" contains=AllPreTime,AllPreNumbers1
 
-hi  link  LogMatches8  AllFilesEqualityColor
+hi  link  LogMatches8  Define
 syn match LogMatches8  "warning"
 syn match LogMatches8  "UVM_WARNING"
 

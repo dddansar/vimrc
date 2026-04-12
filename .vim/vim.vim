@@ -43,61 +43,70 @@ let g:vim_loaded = 1
 setlocal nospell
 
 " Match global variables in vim.
-hi  link    VimVariables   AllFilesOpColor
-syn match   VimVariables   '\%(\%(g\|b\):\)\@<=\w\+'  contains=@NoSpell
+hi  link    VimVariables   Operator
+syn match   VimVariables   '\%(\<[gbwtsl]:\)\@<=\w\+'  contains=@NoSpell
 
 " My custom syntax without any default vim settings.
 if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
 
    " Override default coloring of the syn/ia/au commands and any following text.
    "------------------------------------------------------------------------------
-   hi  link    VimMatch1   AllFilesSystemColor
-   syn match   VimMatch1   '\<\%(syn\|synt\|synta\|syntax\|augroup\|au\|autocmd\|colorscheme\)\>'  contains=@NoSpell
-   syn match   VimMatch1   '\<\%(ia\|iabbrev\|ab\|norea\|ca\|cnorea\|inorea\|abbrev\|noreabrev\|cabrev\|cnoreabrev\|inoreabrev\)\>'  contains=@NoSpell
+   hi  link    VimMatch1   Statement
+   syn match   VimMatch1   '\<\%(syn\%(t\%(ax\?\)\?\)\?\)\>'  contains=@NoSpell
+   syn match   VimMatch1   '\<\%(au\%(group\|tocmd\)\?\)\>'  contains=@NoSpell
+   syn match   VimMatch1   '\<\%(colorscheme\|filetype\|\%(do\|no\)autocmd\|command\)\>'  contains=@NoSpell
+   syn match   VimMatch1   '\<\%([ci]\%(nore\)\?\)a\%(bbrev\)\?\>'  contains=@NoSpell
+   syn match   VimMatch1   '\<\%(ab\|abbreviate\)\>'  contains=@NoSpell
 
-   hi  link    VimMatch2   AllFilesSystemColor2
+   hi  link    VimMatch2   Type
    syn match   VimMatch2   '\<\%(BufNewFile\|BufRead\|FileType\|keyword\|region\|match\|ignore\|clear\|exists\|hlexists\|has\)\>'  contains=@NoSpell
 
-   hi  link    VimMatch3   AllFilesVarColor
+   hi  link    VimMatch3   SpecialChar
    syn match   VimMatch3   "\<contains="
    syn match   VimMatch3   "\<contained\>"
    syn match   VimMatch3   "\<containedin="  contains=@NoSpell
 
-   hi  link    VimDirections  AllFilesVarColor
+   hi  link    VimDirections  SpecialChar
    syn match   VimDirections  "\%(<\)\@<=\%([cas]-\)\?\%(left\|right\|up\|down\)\%(>\)\@="  contains=@NoSpell
    "------------------------------------------------------------------------------
 
    " Override default coloring of the map commands.
    "------------------------------------------------------------------------------
-   hi  link    VimMatch4   AllFilesSystemColor
-   syn match   VimMatch4   '\<\%(map\|nmap\|vmap\|imap\|cmap\|omap\|smap\|xmap\|noremap\|nnoremap\|vnoremap\|inoremap\|cnoremap\|onoremap\|snoremap\|xnoremap\|nore\|finish\)\>'  contains=@NoSpell
+   hi  link    VimMatch4   Statement
+   syn match   VimMatch4   '\<\%([nvixotcsl]\?\%(nore\)\?map\)\>'  contains=@NoSpell
+   syn match   VimMatch4   '\<\%([nvi]\?unmap\)\>'  contains=@NoSpell
+   syn match   VimMatch4   '\<\%(nore\|finish\)\>'  contains=@NoSpell
+
    syn match   VimMatch4   '\<\%(hi\|highlight\)\>'  contains=@NoSpell
-   syn match   VimMatch4   '\<\%(endfun\)\>'  contains=@NoSpell
+   syn match   VimMatch4   '\<\%(fun\|endfun\)\>'  contains=@NoSpell
 
-   hi  link    VimMatch5   AllFilesSystemColor2
-   syn match   VimMatch5   '\<\%(link\|bold\|underline\)\>'  contains=@NoSpell
+   hi  link    VimMatch5   Type
+   syn match   VimMatch5   '\<\%(link\|bold\|underline\|undercurl\|mapleader\|maplocalleader\)\>'  contains=@NoSpell
+   syn match   VimMatch5   '\<\%(plug\%(in\|ged\)\?\)\>'  contains=@NoSpell
+   syn match   VimMatch5   '\<\%(echo\%(m\|n\|hl\)\?\|redraw\|sign\)\>'  contains=@NoSpell
    "------------------------------------------------------------------------------
 
-   " Keywords
+   " Other Keywords
    "------------------------------------------------------------------------------
-   hi  link    VimMatch6   AllFilesNumColor
+   hi  link    VimMatch6   Constant
    syn match   VimMatch6   '\<\%(normal\|exe\|execute\|search\|silent\|exclude\|dir\|copen\|call\)\>'  contains=@NoSpell
-   syn match   VimMatch6   '\<\%(let\|unlet\|set\|setlocal\|unset\)\>'  contains=@NoSpell
-   syn match   VimMatch6   '\<\%(source\|windo\|bufdo\|shellescape\|expand\|mode\|so\|source\)\>'  contains=@NoSpell
+   syn match   VimMatch6   '\<\%(let\|unlet\|set\|setlocal\|setglobal\|unset\|indent\)\>'  contains=@NoSpell
+   syn match   VimMatch6   '\<[gbwtsl]:'  contains=@NoSpell
+   syn match   VimMatch6   '\<\%(source\|windo\|bufdo\|shellescape\|expand\|mode\|so\|source\|runtime\|packadd\)\>'  contains=@NoSpell
 
-   hi  link    VimMatch7   AllFilesFuncColor
-   syn match   VimMatch7   '\<\%(gui\|guifg\|guibg\|guisp\|guifont\|cterm\|ctermfg\|ctermbg\|matchgroup\|skip\)\>'  contains=@NoSpell
+   hi  link    VimMatch7   Function
+   syn match   VimMatch7   '\<\%(gui\|guifg\|guibg\|guisp\|guifont\|cterm\|ctermfg\|ctermbg\|matchgroup\|skip\|on\|enable\|off\|nospell\|spell\)\>'  contains=@NoSpell
 
-   hi  link    VimMatch8   AllFilesLoopCondColor
-   syn match   VimMatch8   '\<start\>'  contains=@NoSpell
+   hi  link    VimMatch8   Conditional
+   syn match   VimMatch8   '\<\%(start\|try\|catch\|finally\|endtry\|throw\)\>'  contains=@NoSpell
 
    " Match expr in between < >.
-   hi  link    VimExpr        AllFilesSystemColor2
+   hi  link    VimExpr        Type
    syn match   VimExpr        "\%(<\)\@<=expr\%(>\)\@="  contains=@NoSpell
    "------------------------------------------------------------------------------
 
    " Match hex numbers in vim.
-   hi  link    VimHexNum   AllFilesNumColor
+   hi  link    VimHexNum   Constant
    syn match   VimHexNum   '\%(#\)\@<=[0-9a-fA-F]\+\>'  contains=@NoSpell
 
    " Don't match comments after a non space.
@@ -111,29 +120,37 @@ if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
    syn match   VimNoColor3 '\%(\'\)\@<="\%(\'\)\@='  contains=@NoSpell
 
    " Don't match comments after =" ".
-   syn match   VimNoColor4 '\%(=\s*\)\@<="'  contains=@NoSpell
+   syn match   VimNoColor4 '\%([=\\]\s*\)\@<="'  contains=@NoSpell
    syn match   VimNoColor4 '\%(=\s*".*\)\@<="'  contains=@NoSpell
 
    " Special combinations ctrl/shift/alt.
    syn case ignore
-      hi  link    VimComb  AllFilesVarColor
+      hi  link    VimComb  SpecialChar
       syn match   VimComb  "\%(<\)\@<=\%([csa]\-\)\?\%(bs\|esc\|cr\|tab\|space\|leader\|middlemouse\|leftmouse\|rightmouse\|pageup\|pagedown\|backspace\|bar\)\%(>\)\@=" contains=@NoSpell
       syn match   VimComb  "\%(<\)\@<=[csa]\-[!-~]\%(>\)\@=" contains=@NoSpell
    syn case match
 
    " Match first \ in new line.
-   hi  link    VimFirstSlash   AllFilesSpecialColor2
+   hi  link    VimFirstSlash   Keyword
    syn match   VimFirstSlash   '\%(^\s*\)\@<=\\\%(%(\|(\)\@!'  contains=@NoSpell
+
+   " Must start with $path
+   hi  link     VimDollarPaths Underlined
+   syn match    VimDollarPaths "\
+      \%(^\|\s\)\@<=\$\
+      \%([!-'*-.0-[\]-~]\|\\ \)\+\/\
+      \%([!-'*-.0-[\]-~]\|\\ \)\+\
+      \%([!-~]\)\@!" contains=@NoSpell containedin=AllPreDollar,RegexSpChars1,AllPreSpChars1,AllPreSpChars11
 
 " Mix of my custom syntax and default vim settings.
 elseif g:select_custom_syntax == 2
 
    " Match :commands in vim
-   hi  link    VimCommands   AllFilesOpColor
+   hi  link    VimCommands   Operator
    syn match   VimCommands   '\%(\W\|_\)\@<=:\w\+'  contains=@NoSpell contained containedin=vimMapRhs
 
    " Abbreviation name like in inorea
-   hi  link     VimAbName  AllFilesSystemColor2
+   hi  link     VimAbName  Type
    syn match    VimAbName  "\%(\s\)\@<=\<_\S\+" contained containedin=vimMapLhs
    syn match    VimAbName  "\%(\s\)\@<=\w\?\w\?\w\?_\S\+" contained containedin=vimMapLhs
 endif
@@ -148,42 +165,42 @@ let b:match_words='\<function\>:\<endfunction\>,
 " to and throughout the .vim files.
 "------------------------------------------------------------------------------
 " Custom syntax groups
-syn match AllFilesFuncColor     "\<AllFilesFuncColor\>"     contains=@NoSpell
-syn match AllFilesDefaultColor  "\<AllFilesDefaultColor\>"  contains=@NoSpell
-syn match AllFilesDefinesColor  "\<AllFilesDefinesColor\>"  contains=@NoSpell
-syn match AllFilesOpColor       "\<AllFilesOpColor\>"       contains=@NoSpell
-syn match AllFilesSBrColor      "\<AllFilesSBrColor\>"      contains=@NoSpell
-syn match AllFilesCBrColor      "\<AllFilesCBrColor\>"      contains=@NoSpell
-syn match AllFilesTBrColor      "\<AllFilesTBrColor\>"      contains=@NoSpell
-syn match AllFilesEqualityColor "\<AllFilesEqualityColor\>" contains=@NoSpell
-syn match AllFilesPointerColor  "\<AllFilesPointerColor\>"  contains=@NoSpell
-syn match AllFilesArrowsColor   "\<AllFilesArrowsColor\>"   contains=@NoSpell
-syn match AllFilesArrayColor    "\<AllFilesArrayColor\>"    contains=@NoSpell
-syn match AllFilesWarningColor  "\<AllFilesWarningColor\>"  contains=@NoSpell
-syn match AllFilesSpecialColor  "\<AllFilesSpecialColor\>"  contains=@NoSpell
-syn match AllFilesSpecialColorB "\<AllFilesSpecialColorB\>" contains=@NoSpell
-syn match AllFilesSpecialColor2 "\<AllFilesSpecialColor2\>" contains=@NoSpell
-syn match AllFilesSystemColor   "\<AllFilesSystemColor\>"   contains=@NoSpell
-syn match AllFilesSystemColor2  "\<AllFilesSystemColor2\>"  contains=@NoSpell
-syn match AllFilesSystemColor3  "\<AllFilesSystemColor3\>"  contains=@NoSpell
-syn match AllFilesSystemColor4  "\<AllFilesSystemColor4\>"  contains=@NoSpell
-syn match AllFilesSystemColor5  "\<AllFilesSystemColor5\>"  contains=@NoSpell
-syn match AllFilesNumColor      "\<AllFilesNumColor\>"      contains=@NoSpell
-syn match AllFilesCapsColor     "\<AllFilesCapsColor\>"     contains=@NoSpell
-syn match AllFilesVarColor      "\<AllFilesVarColor\>"      contains=@NoSpell
-syn match AllFilesMultVarColor  "\<AllFilesMultVarColor\>"  contains=@NoSpell
-syn match AllFilesMultOpColor   "\<AllFilesMultOpColor\>"   contains=@NoSpell
-syn match AllFilesCommentColor  "\<AllFilesCommentColor\>"  contains=@NoSpell
-syn match AllFilesComment2Color "\<AllFilesComment2Color\>" contains=@NoSpell
-syn match AllFilesTimeColor     "\<AllFilesTimeColor\>"     contains=@NoSpell
-syn match AllFilesQuotesColor1  "\<AllFilesQuotesColor1\>"  contains=@NoSpell
-syn match AllFilesQuotesColor2  "\<AllFilesQuotesColor2\>"  contains=@NoSpell
-syn match AllFilesQuotesColor3  "\<AllFilesQuotesColor3\>"  contains=@NoSpell
-syn match AllFilesLoopCondColor "\<AllFilesLoopCondColor\>" contains=@NoSpell
-syn match AllFilesPathsColor    "\<AllFilesPathsColor\>"    contains=@NoSpell
-syn match AllFilesPathsColor2   "\<AllFilesPathsColor2\>"   contains=@NoSpell
-syn match AllFilesStructColor   "\<AllFilesStructColor\>"   contains=@NoSpell
-syn match AllFilesMidGrey       "\<AllFilesMidGrey\>"       contains=@NoSpell
+" syn match AllFilesFuncColor     "\<AllFilesFuncColor\>"     contains=@NoSpell
+" syn match AllFilesDefaultColor  "\<AllFilesDefaultColor\>"  contains=@NoSpell
+" syn match AllFilesDefinesColor  "\<AllFilesDefinesColor\>"  contains=@NoSpell
+" syn match AllFilesOpColor       "\<AllFilesOpColor\>"       contains=@NoSpell
+" syn match AllFilesSBrColor      "\<AllFilesSBrColor\>"      contains=@NoSpell
+" syn match AllFilesCBrColor      "\<AllFilesCBrColor\>"      contains=@NoSpell
+" syn match AllFilesTBrColor      "\<AllFilesTBrColor\>"      contains=@NoSpell
+" syn match AllFilesEqualityColor "\<AllFilesEqualityColor\>" contains=@NoSpell
+" syn match AllFilesPointerColor  "\<AllFilesPointerColor\>"  contains=@NoSpell
+" syn match AllFilesArrowsColor   "\<AllFilesArrowsColor\>"   contains=@NoSpell
+" syn match AllFilesArrayColor    "\<AllFilesArrayColor\>"    contains=@NoSpell
+" syn match AllFilesWarningColor  "\<AllFilesWarningColor\>"  contains=@NoSpell
+" syn match AllFilesSpecialColor1 "\<AllFilesSpecialColor1\>" contains=@NoSpell
+" syn match AllFilesSpecialColorB "\<AllFilesSpecialColorB\>" contains=@NoSpell
+" syn match AllFilesSpecialColor2 "\<AllFilesSpecialColor2\>" contains=@NoSpell
+" syn match AllFilesSystemColor1  "\<AllFilesSystemColor1\>"  contains=@NoSpell
+" syn match AllFilesSystemColor2  "\<AllFilesSystemColor2\>"  contains=@NoSpell
+" syn match AllFilesSystemColor3  "\<AllFilesSystemColor3\>"  contains=@NoSpell
+" syn match AllFilesSystemColor4  "\<AllFilesSystemColor4\>"  contains=@NoSpell
+" syn match AllFilesSystemColor5  "\<AllFilesSystemColor5\>"  contains=@NoSpell
+" syn match AllFilesNumColor      "\<AllFilesNumColor\>"      contains=@NoSpell
+" syn match AllFilesCapsColor     "\<AllFilesCapsColor\>"     contains=@NoSpell
+" syn match AllFilesVarColor      "\<AllFilesVarColor\>"      contains=@NoSpell
+" syn match AllFilesMultVarColor  "\<AllFilesMultVarColor\>"  contains=@NoSpell
+" syn match AllFilesMultOpColor   "\<AllFilesMultOpColor\>"   contains=@NoSpell
+" syn match AllFilesCommentColor  "\<AllFilesCommentColor\>"  contains=@NoSpell
+" syn match AllFilesComment2Color "\<AllFilesComment2Color\>" contains=@NoSpell
+" syn match AllFilesTimeColor     "\<AllFilesTimeColor\>"     contains=@NoSpell
+" syn match AllFilesQuotesColor1  "\<AllFilesQuotesColor1\>"  contains=@NoSpell
+" syn match AllFilesQuotesColor2  "\<AllFilesQuotesColor2\>"  contains=@NoSpell
+" syn match AllFilesQuotesColor3  "\<AllFilesQuotesColor3\>"  contains=@NoSpell
+" syn match AllFilesLoopCondColor "\<AllFilesLoopCondColor\>" contains=@NoSpell
+" syn match AllFilesPathsColor1   "\<AllFilesPathsColor1\>"   contains=@NoSpell
+" syn match AllFilesPathsColor2   "\<AllFilesPathsColor2\>"   contains=@NoSpell
+" syn match AllFilesStructColor   "\<AllFilesStructColor\>"   contains=@NoSpell
+" syn match AllFilesMidGrey       "\<AllFilesMidGrey\>"       contains=@NoSpell
 syn match AllFilesBarelyVisible "\<AllFilesBarelyVisible\>" contains=@NoSpell
 
 syn match HLSiennaB             "\<HLSiennaB\>"             contains=@NoSpell
@@ -355,15 +372,23 @@ syn match Visual            "\<Visual\>"            contains=@NoSpell
 syn match VisualNOS         "\<VisualNOS\>"         contains=@NoSpell
 syn match WarningMsg        "\<WarningMsg\>"        contains=@NoSpell
 syn match WildMenu          "\<WildMenu\>"          contains=@NoSpell
+syn match TitleBar          "\<TitleBar\>"          contains=@NoSpell
+syn match TitleBarNC        "\<TitleBarNC\>"        contains=@NoSpell
+syn match ToolbarButton     "\<ToolbarButton\>"     contains=@NoSpell
+syn match ToolbarLine       "\<ToolbarLine\>"       contains=@NoSpell
+syn match PmenuMatch        "\<PmenuMatch\>"        contains=@NoSpell
+syn match PmenuMatchSel     "\<PmenuMatchSel\>"     contains=@NoSpell
+syn match TabPanel          "\<TabPanel\>"          contains=@NoSpell
+syn match TabPanelFill      "\<TabPanelFill\>"      contains=@NoSpell
 "------------------------------------------------------------------------------
 
 
 "------------------------------------------------------------------------------
 " Undercurl like in spell errors!
-syn match HLRedUC      "\<HLRedUC\>"      contains=@NoSpell
-syn match HLDarkBlueUC "\<HLDarkBlueUC\>" contains=@NoSpell
-syn match HLFuchsiaUC  "\<HLFuchsiaUC\>"  contains=@NoSpell
-syn match HLCyanUC     "\<HLCyanUC\>"     contains=@NoSpell
+" syn match HLRedUC      "\<HLRedUC\>"      contains=@NoSpell
+" syn match HLDarkBlueUC "\<HLDarkBlueUC\>" contains=@NoSpell
+" syn match HLFuchsiaUC  "\<HLFuchsiaUC\>"  contains=@NoSpell
+" syn match HLCyanUC     "\<HLCyanUC\>"     contains=@NoSpell
 
 " Strikethrough
 syn match HLGreyOut              "\<HLGreyOut\>"              contains=@NoSpell
@@ -371,15 +396,15 @@ syn match HLStrikeThroughDefault "\<HLStrikeThroughDefault\>" contains=@NoSpell
 syn match HLStrikeThroughGrey    "\<HLStrikeThroughGrey\>"    contains=@NoSpell
 
 " Background and foreground mixes
-syn match CyanOnGrey      "\<CyanOnGrey\>"      contains=@NoSpell
-syn match CyanOnGrey3     "\<CyanOnGrey3\>"     contains=@NoSpell
-syn match CyanOnGrey2     "\<CyanOnGrey2\>"     contains=@NoSpell
-syn match CyanOnLightGrey "\<CyanOnLightGrey\>" contains=@NoSpell
-syn match DarkBlueOnTeal  "\<DarkBlueOnTeal\>"  contains=@NoSpell
+" syn match CyanOnGrey      "\<CyanOnGrey\>"      contains=@NoSpell
+" syn match CyanOnGrey3     "\<CyanOnGrey3\>"     contains=@NoSpell
+" syn match CyanOnGrey2     "\<CyanOnGrey2\>"     contains=@NoSpell
+" syn match CyanOnLightGrey "\<CyanOnLightGrey\>" contains=@NoSpell
+" syn match DarkBlueOnTeal  "\<DarkBlueOnTeal\>"  contains=@NoSpell
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
-" List of all possible gui options (many don't work...).
+" List of all possible gui options (many may not work...).
 syn match HLSpecial1       "\<HLSpecial1\>"       contains=@NoSpell
 syn match HLSpecial2       "\<HLSpecial2\>"       contains=@NoSpell
 syn match HLSpecial3       "\<HLSpecial3\>"       contains=@NoSpell

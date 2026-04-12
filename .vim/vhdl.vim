@@ -38,17 +38,17 @@ let g:vhdl_loaded = 1
 
 
 " VHDL keywords
-hi  link    VhdlKeywords1 AllFilesDefinesColor
+hi  link    VhdlKeywords1 Define
 syn keyword VhdlKeywords1 alias assert label library use generate
 
-hi  link    VhdlKeywords2 AllFilesArrayColor
+hi  link    VhdlKeywords2 Title
 syn keyword VhdlKeywords2 architecture array attribute package procedure process
 
-hi  link    VhdlKeywords3 AllFilesSystemColor3
+hi  link    VhdlKeywords3 Conditional
 syn keyword VhdlKeywords3 component configuration constant register
 syn keyword VhdlKeywords3 select signal
 
-hi  link    VhdlKeywords4 AllFilesSystemColor
+hi  link    VhdlKeywords4 Statement
 syn keyword VhdlKeywords4 access after block body buffer bus disconnect
 syn keyword VhdlKeywords4 entity generic group guarded impure in downto file
 syn keyword VhdlKeywords4 inertial is linkage literal new next null of on
@@ -56,11 +56,11 @@ syn keyword VhdlKeywords4 others out range postponed pure record reject report
 syn keyword VhdlKeywords4 severity shared subtype to transport type unaffected
 syn keyword VhdlKeywords4 wait with note warning failure units
 
-hi  link    VhdlKeywords5 AllFilesLoopCondColor
+hi  link    VhdlKeywords5 Conditional
 syn keyword VhdlKeywords5 all until until elsif when
 
 " Predefined VHDL types, standard IEEE VHDL types, non standard VHDL types.
-hi  link  VhdlKeywords7 AllFilesSystemColor2
+hi  link  VhdlKeywords7 Type
 syn keyword VhdlKeywords7 bit bit_vector character boolean integer real time
 syn keyword VhdlKeywords7 positive natural signed unsigned line text
 syn keyword VhdlKeywords7 std_ulogic std_ulogic_vector std_logic
@@ -111,10 +111,10 @@ syn match VhdlKeywords7 "\'val"
 syn match VhdlKeywords7 "\'image"
 syn match VhdlKeywords7 "\'value"
 
-hi  link  VhdlKeywords8 AllFilesNumColor
+hi  link  VhdlKeywords8 Constant
 
 " Operators
-hi  link    VhdlKeywords9 AllFilesSystemColor2
+hi  link    VhdlKeywords9 Type
 " syn keyword VhdlKeywords9 and nand or nor xor xnor
 syn keyword VhdlKeywords9 rol ror sla sll sra srl
 syn keyword VhdlKeywords9 mod rem abs

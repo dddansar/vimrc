@@ -51,11 +51,11 @@ setlocal nosmartindent
 
 " Match (+) (-) (~)
 "------------------------------------------------------------------------------
-hi  link    TxtPlusParen      AllFilesSBrColor
+hi  link    TxtPlusParen      StorageClass
 syn match   TxtPlusParen      "(+)"
-hi  link    TxtMinusParen     AllFilesFuncColor
+hi  link    TxtMinusParen     Function
 syn match   TxtMinusParen     "(-)"
-hi  link    TxtTildaParen     AllFilesCBrColor
+hi  link    TxtTildaParen     PreProc
 syn match   TxtTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 
@@ -63,8 +63,8 @@ syn match   TxtTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 " Start of line, one or more spaces followed by 0 or 1 "(" followed by
 " number/letter and ")".
-hi  link    TxtNumberParen    AllFilesArrowsColor
-hi  link    TxtLetterParen    AllFilesOpColor
+hi  link    TxtNumberParen    Question
+hi  link    TxtLetterParen    Operator
 syn match   TxtNumberParen    "\%(^\s*-\?\s*\)\@<=(\?[0-9]\+)" contains=@NoSpell
 syn match   TxtLetterParen    "\%(^\s*-\?\s*\)\@<=(\?[A-Z])" contains=@NoSpell
 syn match   TxtNumberParen    "\%(\s\+\)\@<=([0-9]\+)" contains=@NoSpell

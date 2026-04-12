@@ -90,25 +90,25 @@ syn match   AllPostHLWarning     "\<WARNING\%(:\|\>\)\@=" contains=@NoSpell cont
 "------------------------------------------------------------------------------
 if g:performance_mode < 1
    if exists("b:comment_leader")
-      hi  link  AllPostTitles1   AllFilesSystemColor
+      hi  link  AllPostTitles1   Statement
       execute 'syn match AllPostTitles1 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      hi  link  AllPostTitles2   AllFilesEqualityColor
+      hi  link  AllPostTitles2   Define
       execute 'syn match AllPostTitles2 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      hi  link  AllPostTitles3   AllFilesTimeColor
+      hi  link  AllPostTitles3   Label
       execute 'syn match AllPostTitles3 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      hi  link  AllPostTitles4   AllFilesSystemColor5
+      hi  link  AllPostTitles4   Delimiter
       execute 'syn match AllPostTitles4 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      hi  link  AllPostTitles5   AllFilesArrayColor
+      hi  link  AllPostTitles5   Title
       execute 'syn match AllPostTitles5 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      " hi  link  AllPostTitles6   AllFilesSystemColor4
+      " hi  link  AllPostTitles6   Debug
       " execute 'syn match AllPostTitles6 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      " hi  link  AllPostTitles7   AllFilesPointerColor
+      " hi  link  AllPostTitles7   MoreMsg
       " execute 'syn match AllPostTitles7 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      " hi  link  AllPostTitles8   AllFilesQuotesColor1
+      " hi  link  AllPostTitles8   String
       " execute 'syn match AllPostTitles8 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      " hi  link  AllPostTitles9   AllFilesNumColor
+      " hi  link  AllPostTitles9   Constant
       " execute 'syn match AllPostTitles9 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
-      " hi  link  AllPostTitles10  AllFilesStructColor
+      " hi  link  AllPostTitles10  Structure
       " execute 'syn match AllPostTitles10 ''\%(' . b:comment_leader . '\s\+\)\@<=[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell containedin=.*Comment.*'
    endif
 endif
@@ -116,7 +116,7 @@ endif
 
 
 " Match \ if it's the last character in the line.
-hi  link    AllPostSlash   AllFilesSpecialColorB
+hi  link    AllPostSlash   NonText
 syn match   AllPostSlash   '\\\%(\s*$\)\@='
 
 

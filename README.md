@@ -6,8 +6,8 @@ Contains all my vimrc settings.
 
 - Works in GVim, Vim and NeoVim
 - Supports both Windows and Linux OS
-- Includes AI Integration with a plugin for using Anthropic's Claude AI via an API (Default is Sonnet 4.6)
-- Uses a custom colorscheme where the user has full control over all the colors
+- Includes AI Integration with a plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6)
+- Uses my own custom colorscheme where the user has full control over all the colors
 - Supports different syntax configuration, can select between Vim's default syntax matching or use a custom syntax highlighting for 20+ file types (default)
 - Support for both Colemak-DH and QWERTY keyboard layouts
 - Includes performance optimization features, multiple performance modes and large file handling
@@ -17,7 +17,7 @@ Contains all my vimrc settings.
 - Contains font and GUI customizations
 - Improved search and replace usability with mappings
 - Contains autocorrect support
-- Displays the name of the syntax group being applied under the cursor to make debugging easier
+- Displays the name of the syntax group being applied under the cursor to make debugging syntax groups easier
 
 ## .vim/ Folder Contents
 ```
@@ -29,7 +29,7 @@ Contains all my vimrc settings.
 ├── asm.vim                 # Assembly custom syntax highlighting
 ├── bash.vim                # Bash/shell custom syntax highlighting
 ├── c.vim                   # C/C++ custom syntax highlighting
-├── colors.vim              # Adds additional highlighting groups used throughout the .vim files
+├── colors.vim              # Adds additional highlighting groups
 ├── colors/                 # Contains the custom colorscheme
 ├── java.vim                # Java custom syntax highlighting
 ├── latex.vim               # LaTeX custom syntax highlighting
@@ -57,6 +57,8 @@ Contains all my vimrc settings.
 
 ## Pasky's Plugin for using Anthropic's Claude AI
 
+I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ubuntu/Mint Linux OS and I also got it working on my Windows OS using GVim (I have not tried NeoVim on Windows). I don't own a MAC machine so I could not test it there.
+
 The unmodified Pasky Plugin for using Anthropic's Claude AI can be found at:
 https://github.com/pasky/claude.vim
 
@@ -78,13 +80,15 @@ Here is a list of changes that I made with help from the Claude AI:
 - Added settings to disable tool and web usage by default. I prefer to keep everything in the chat window, to not let Claude directly edit my files and to keep costs down by not opening large files/websites. Set g:claude_disable_tool_use=0 if you want to enable them.
 - Removed automatic indentation in Claude's responses. See g:claude_no_indent.
 - Cleared the claud_*_prompt.md files to use Claude's default prompt settings.
+- Print g:claude_model instead of printing "Claude:"
+- Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
 
 
 ## Getting Started
 
-To use, first install GVim, Vim or NeoVim on linux or windows (GVim being my main editor), and then place the .vim files in the appropriate location.
+To use, first install GVim, Vim or NeoVim on linux or Windows (GVim being my main editor), and then place the .vim files in the appropriate location.
 - For linux, place the .vimrc file and the .vim/ folder in ~/ (aka $HOME/ or /home/username/) then open any file with GVim and the settings should all be loaded.
-- For Windows, place the .vimrc file and the .vim/ folder under C:\Users\username\ then open any file with GVim and the settings should all be loaded.
+- For Windows, place the .vimrc file and the .vim/ folder under C:\Users\username\ (but rename the .vim folder to vimfiles in Windows) then open any file with GVim and the settings should all be loaded.
 
 
 ## NeoVim

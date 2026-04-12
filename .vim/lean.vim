@@ -48,45 +48,45 @@ else
 endif
 
 
-hi  link    LeanKeywords1     AllFilesSystemColor
+hi  link    LeanKeywords1     Statement
 syn keyword LeanKeywords1     true false variables
 syn keyword LeanKeywords1     True False
 
-hi  link    LeanKeywords2     AllFilesFuncColor
+hi  link    LeanKeywords2     Function
 syn keyword LeanKeywords2     function endfunction instance
 
-hi  link    LeanKeywords3     AllFilesNumColor
+hi  link    LeanKeywords3     Constant
 syn keyword LeanKeywords3     inputs outputs inouts input output inout ports
 syn keyword LeanKeywords3     Type type Set set Prop Nat inductive
 syn keyword LeanKeywords3     _ Proof axiom theorem proof lemma
 
-hi  link    LeanKeywords4     AllFilesLoopCondColor
+hi  link    LeanKeywords4     Conditional
 syn keyword LeanKeywords4     If Then Else if then else iff case elseif endif
 syn keyword LeanKeywords4     for loop while loops repeat endfor endwhile
 syn keyword LeanKeywords4     section end namespace open close import
 syn keyword LeanKeywords4     set_option open_locale
 
-hi  link    LeanKeywords5     AllFilesFuncColor
+hi  link    LeanKeywords5     Function
 syn keyword LeanKeywords5     or and not xor xnor nor nand non fun
 syn keyword LeanKeywords5     Or And Not Xor Xnor Nor Nand Non Bool String
 
-hi  link    LeanKeywords6     AllFilesSystemColor2
+hi  link    LeanKeywords6     Type
 syn keyword LeanKeywords6     example done
 
-hi  link    LeanKeywords7     AllFilesSpecialColorB
+hi  link    LeanKeywords7     NonText
 syn keyword LeanKeywords7     sorry
 
-hi  link    LeanKeywords8     AllFilesNumColor
+hi  link    LeanKeywords8     Constant
 syn keyword LeanKeywords8     def variable universe structure
 
-hi  link    LeanKeywords9     AllFilesSystemColor3
+hi  link    LeanKeywords9     Conditional
 syn keyword LeanKeywords9     show from where
 
-hi  link    LeanKeywords10    AllFilesSystemColor3
+hi  link    LeanKeywords10    Conditional
 syn keyword LeanKeywords10    linter id List Vector
 
 " Lean tactics
-hi  link    LeanKeywords11    AllFilesSystemColor4
+hi  link    LeanKeywords11    Debug
 syn keyword LeanKeywords11    apply assumption by_cases by_contra cases change
 syn keyword LeanKeywords11    constructor exact exfalso ext have intro intros
 syn keyword LeanKeywords11    left linarith nlinarith norm_num nth_rewrite

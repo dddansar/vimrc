@@ -56,7 +56,7 @@ if g:performance_mode <= 0
    " Match single chars.
    " --------------------------------------------------------------------------
    " Match single character in its own word.
-   hi  link    MathSingleChar AllFilesVarColor
+   hi  link    MathSingleChar SpecialChar
    syn match   MathSingleChar "\%(\w\)\@<![a-zA-Z]\%(\w\)\@!" contains=@NoSpell
 
    " Unmatch s when it's inside a parenthesis like in apple(s).
@@ -69,65 +69,65 @@ if g:performance_mode <= 0
    syn match   MathNoColorIaA "\%(\%(\W\)\@<!\s\|^\|\%((\)\@<=\)[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=\%( \%(and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\|will\|was\|is\)\>\)\@!" contains=@NoSpell
 
    " Rematch I a A when certain logic words are before/after.
-   " hi  link    MathIaA1       AllFilesVarColor
+   " hi  link    MathIaA1       SpecialChar
    " syn match   MathIaA1       "\s\?\<[IaA]\>\%( \%(is\|and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\)\>\)\@=" contains=@NoSpell
 
-   " hi  link    MathIaA2       AllFilesVarColor
+   " hi  link    MathIaA2       SpecialChar
    " syn match   MathIaA2       "\<[aA]\>\%( \%(will\|was\|is\)\>\)\@=" contains=@NoSpell
    " syn match   MathIaA2       "\%(\<\%(the\|The\) \)\@=\<[IaA]\>" contains=@NoSpell
 
 
    " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.
-   hi  link    MathNumInVar   AllFilesNumColor
+   hi  link    MathNumInVar   Constant
    syn match   MathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell
-   hi  link    MathVarInNum   AllFilesVarColor
+   hi  link    MathVarInNum   SpecialChar
    syn match   MathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
 
 
    " Match x when it mean multiplication or hex number.
-   hi  link    MathXInNum     AllFilesOpColor
+   hi  link    MathXInNum     Operator
    syn match   MathXInNum     "x" contained contains=@NoSpell
-   hi  link    MathNumWithX   AllFilesNumColor
+   hi  link    MathNumWithX   Constant
    syn match   MathNumWithX   "\%(\w\)\@<!\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
 
    " Match 2 char math variables.
    " Disabled as there are too many 2 char words in English...
-   " hi  link    MathMathVar2   AllFilesVarColor
+   " hi  link    MathMathVar2   SpecialChar
    " syn match   MathMathVar2   "\%(\%(^\|\w\)\s*\)\@<![A-Z][a-z]\%(\%(\s*\|'\?\)\%($\|\w\)\)\@!" contains=@NoSpell
 
    " Match math variables such as Ax that are surrounded by non words.
-   " hi  link    MathMathVar3   AllFilesVarColor
+   " hi  link    MathMathVar3   SpecialChar
    " syn match   MathMathVar3   "\%(\w\)\@<!\%([a-df-np-z][xz]\|[ac-ln-z][y]\|uv\)\%( \?\W\)\@=" contains=@NoSpell
 
    " Derivatives
-   hi  link    MathDeriv      AllFilesVarColor
+   hi  link    MathDeriv      SpecialChar
    syn match   MathDeriv      "\%(\w\)\@<!d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
    syn match   MathDeriv      "\%(\s\|^\)\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
 
-   hi  link    MathDeriv2     AllFilesVarColor
+   hi  link    MathDeriv2     SpecialChar
    syn match   MathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
 
 
    " Highlight common math multi-variables.
-   hi  link    MathMultiVars1 AllFilesVarColor
+   hi  link    MathMultiVars1 SpecialChar
    syn match   MathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
-   hi  link    MathMultiVars2 AllFilesVarColor
+   hi  link    MathMultiVars2 SpecialChar
    syn match   MathMultiVars2 "\%(\w\s\?\)\@<!\([a-z][A-Za-z]\|[A-Za-z][a-z]\)\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
-   hi  link    MathMultiVars3 AllFilesVarColor
+   hi  link    MathMultiVars3 SpecialChar
    syn match   MathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegExRanges
 
    " syn match   MathMultiVarsNoColor "\<\%(in\|[Ii]t\|on\|of\|ex\|ie\|vs\|to\|[oO]k\)\>" contains=@NoSpell
    syn match   MathMultiVarsNoColor "\<\%(on\)\>" contains=@NoSpell
 
    " Match more functions.
-   hi  link    MathFunction   AllFilesFuncColor
+   hi  link    MathFunction   Function
    " Matches incorrectly things like n(n-1).
-   " syn match   MathFunction   "\%(\s\|^\)[a-z][a-z0-9]*\>\%('\?(\)\@="  contains=@NoSpell,AllFilesLoopCondColor
-   syn match   MathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,AllFilesLoopCondColor
+   " syn match   MathFunction   "\%(\s\|^\)[a-z][a-z0-9]*\>\%('\?(\)\@="  contains=@NoSpell,Conditional
+   syn match   MathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
 
    " Highlight math terms/functions.
    syn match   MathFunction   "\%(\w\)\@<!\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell

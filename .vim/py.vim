@@ -37,15 +37,15 @@ endif
 let g:py_loaded = 1
 
 
-hi  link    PyKeywords1 AllFilesSystemColor
+hi  link    PyKeywords1 Statement
 syn keyword PyKeywords1       from __file__
 
-hi  link    PyKeywords2 AllFilesSystemColor2
+hi  link    PyKeywords2 Type
 syn keyword PyKeywords2       pyplot numpy pandas random rmdir self debugpy matplotlib sys csv os
 syn keyword PyKeywords2       threading time datetime chdir fsync mkdir path remove everything
 syn keyword PyKeywords2       math inspect torch dataclasses
 
-hi  link    PyKeywords2 AllFilesDefinesColor
+hi  link    PyKeywords2 Define
 syn keyword PyKeywords2          file
 
 syn keyword PyKeywords1          as

@@ -80,6 +80,10 @@ let b:claude_plugin_loaded=1
 " You: When you search through internet links you are getting the message: elinks Update your browser Your browser isn't supported anymore. To continue your search, upgrade to a recent version. Propose a fix for this issue.
 " --> lots of back and forth until it found a solution that works by using curl and changing from google to brave...
 " You: How can I set g:claude_map_cancel_response = "<c-c>" and have it only affect the claude chat window and not any other file?
+" You: I want to have the functions print "claude-sonnet-4-6:" using g:claude_model instead of printing "Claude:"
+" You: I asked you to show me a diff before making the changes yet you gave me an error...
+"      Unknown Claude protocol output: "{"type":"error","error":{"type":"invalid_request_error","message":"messages: text content blocks must be non-empty"},"request_id":"req_011CZwmNjfkhCsMGwEaheCjt"}"
+"      Suggest a fix for the error in claude.vim in this chat.
 " ============================================================================
 
 
@@ -607,7 +611,8 @@ function! s:DisplayTokenUsageAndCost(json_data)
     let l:output_cost = (s:total_output_tokens / 1000000.0) * l:rates[1]
 
     let s:last_token_usage = printf(
-      \ "Token usage - Input: %d+%dc+%dr ($%.4f), Output: %d ($%.4f), Total: ($%.4f)",
+      \ "%s - Token usage - Input: %d+%dc+%dr (%.4f$), Output: %d (%.4f$), Total: (%.4f$)",
+      \ strftime("%Y-%m-%d %H:%M:%S"),
       \ s:total_input_tokens, s:total_cache_creation_tokens, s:total_cache_read_tokens, l:input_cost,
       \ s:total_output_tokens, l:output_cost, l:input_cost + l:output_cost)
     echom s:last_token_usage
@@ -624,6 +629,7 @@ let s:claude_pricing = {
   \ 'claude-sonnet-4':         [3.00,  15.00],
   \ 'claude-sonnet-4-6':       [3.00,  15.00],
   \ 'claude-opus-4':           [15.00, 75.00],
+  \ 'claude-opus-4-6':         [15.00, 75.00],
   \ }
 
 " ============================================================================
@@ -1405,9 +1411,11 @@ endfunction
 function! s:AppendResponse(response)
   let l:response_lines = split(a:response, "\n")
   if len(l:response_lines) == 1
-    call append('$', 'Claude: ' . l:response_lines[0])
+    " call append('$', 'Claude: ' . l:response_lines[0])
+    call append('$', g:claude_model . ': ' . l:response_lines[0])
   else
-    call append('$', 'Claude:')
+    " call append('$', 'Claude:')
+    call append('$', g:claude_model . ':')
     let l:indent = s:GetClaudeIndent()
     call append('$', map(l:response_lines, {_, v -> v =~ '^\s*$' ? '' : l:indent . v}))
   endif
@@ -1492,25 +1500,43 @@ function! g:SetupClaudeChatSyntax()
     return
   endif
 
-  syntax include @markdown syntax/markdown.vim
+  " syntax include @markdown syntax/markdown.vim
 
   if !empty(g:claude_default_system_prompt)
-    syntax region claudeChatSystem start=/^System prompt:/ end=/^\S/me=s-1 contains=claudeChatSystemKeyword
+    " syntax region claudeChatSystem start=/^System prompt:/ end=/^\S/me=s-1 contains=claudeChatSystemKeyword
     syntax match claudeChatSystemKeyword /^System prompt:/ contained
   endif
   syntax match claudeChatYou /^You:/
-  syntax match claudeChatClaude /^Claude\.*:/
+  syntax match claudeChatClaude /^[Cc]laude[a-zA-Z0-9._-]*:/
   syntax match claudeChatToolUse /^Tool use.*:/
   syntax match claudeChatToolResult /^Tool result.*:/
   " syntax region claudeChatClaudeContent start=/^Claude.*:/ end=/^\S/me=s-1 contains=claudeChatClaude,@markdown,claudeChatCodeBlock
-  syntax region claudeChatToolBlock start=/^Tool.*:/ end=/^\S/me=s-1 contains=claudeChatToolUse,claudeChatToolResult
-  syntax region claudeChatCodeBlock start=/^\s*```/ end=/^\s*```/ contains=@NoSpell
+  " syntax region claudeChatToolBlock start=/^Tool.*:/ end=/^\S/me=s-1 contains=claudeChatToolUse,claudeChatToolResult
 
-  " Don't make everything a code block; FIXME this works satisfactorily
+  syntax match  claudeChatQuotes "[`]"
+  syntax match  claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<=`[!-_a-~ –]\{-1,}`\%(\s\|$\|[:/.,)}\]]\)\@=" contains=claudeChatError
+  syntax match  claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<='[!-_a-~ –]\{-1,}'\%(\s\|$\|[:/.,)}\]]\)\@=" contains=claudeChatError
+  syntax match  claudeChatQuotes '\%(\s\|^\|[{(/[:]\)\@<="[!-_a-~ –]\{-1,}"\%(\s\|$\|[:/.,)}\]]\)\@=' contains=claudeChatError
+  syntax match claudeAsterixQuotes "\*\*.\{-}\*\*"
+
+  syntax region claudeChatCodeBlock start=/^\s*```\%($\)\@!/ end=/^\s*```\%($\)\@=/ contains=@NoSpell
+
+  syntax match claudeChatTitles0 "^\s*# .*"
+  syntax match claudeChatTitles0 "\%([Cc]laude[a-zA-Z0-9._-]*:\s\)\@<=# .*"
+  syntax match claudeChatTitles1 "^\s*## .*"
+  syntax match claudeChatTitles2 "^\s*### .*"
+  syntax match claudeChatTitles3 "^\s*#### .*"
+
+  syntax match claudeChatError "\<\%([Ee]rror\|ERROR\)\%([:'"`]\)\@=\>"
+
+  " syntax match claudeChatDiffAdd    "^\s*>.*"
+  " syntax match claudeChatDiffChange "^\s*<.*"
+
+  " Don't make everything a code block;
   " only for inline markdown pieces
-  if hlexists('markdownCodeBlock')
-     syntax clear markdownCodeBlock
-  endif
+  " if hlexists('markdownCodeBlock')
+  "    syntax clear markdownCodeBlock
+  " endif
 
   if !empty(g:claude_default_system_prompt)
     highlight default link claudeChatSystem Comment
@@ -1518,10 +1544,19 @@ function! g:SetupClaudeChatSyntax()
   endif
   highlight default link claudeChatYou Todo
   highlight default link claudeChatClaude Note
-  highlight default link claudeChatToolUse Keyword
-  highlight default link claudeChatToolResult Keyword
-  highlight default link claudeChatToolBlock Comment
-  highlight default link claudeChatCodeBlock Function
+  highlight default link claudeChatError Error
+  highlight default link claudeChatQuotes Debug
+  highlight default link claudeChatToolUse Structure
+  highlight default link claudeChatToolResult Structure
+  highlight default link claudeChatCodeBlock StorageClass
+  highlight default link claudeChatCodeMarkings StorageClass
+  highlight default link claudeChatTitles0 Keyword
+  highlight default link claudeChatTitles1 Define
+  highlight default link claudeChatTitles2 Label
+  highlight default link claudeChatTitles3 Delimiter
+  highlight default link claudeAsterixQuotes Type
+  " highlight default link claudeChatDiffAdd DiffAdd
+  " highlight default link claudeChatDiffChange DiffChange
 
   let b:current_syntax = "claudechat"
 endfunction
@@ -1587,10 +1622,8 @@ function! s:OpenClaudeChat()
       call append('$', map(g:claude_default_system_prompt[1:], {_, v -> "\t" . v}))
       call append('$', ['Type your messages below, press C-] to send.  (Content of all buffers is shared alongside!)', '', 'You: '])
     else
-      " call setline(1, ['Show your answers in this chat. Try not to use online search unless necessary.'])
-      " call setline(1, ['Be very brief and clear in your responses. Do no edit any files, instead show your answers in this chat. Do not search online. Do not use web_search. Do not use open_web. Do not use tools. Answer from your knowledge directly.'])
       call setline(1, ['You: '])
-      call setline(2, ['Answer from your knowledge directly and be very brief.'])
+      " call setline(2, ['Answer from your knowledge directly and be brief.'])
     endif
 
     " Fold the system prompt
@@ -1605,8 +1638,10 @@ function! s:OpenClaudeChat()
 
     " Add mappings for this buffer
     command! -buffer -nargs=1 SendChatMessage call s:SendChatMessage(<q-args>)
-    execute "inoremap <buffer> " . g:claude_map_send_chat_message . " <Esc>:call <SID>SendChatMessage('Claude:')<CR>"
-    execute "nnoremap <buffer> " . g:claude_map_send_chat_message . " :call <SID>SendChatMessage('Claude:')<CR>"
+    " execute "inoremap <buffer> " . g:claude_map_send_chat_message . " <Esc>:call <SID>SendChatMessage('Claude:')<CR>"
+    " execute "nnoremap <buffer> " . g:claude_map_send_chat_message . " :call <SID>SendChatMessage('Claude:')<CR>"
+    execute "inoremap <buffer> " . g:claude_map_send_chat_message . " <Esc>:call <SID>SendChatMessage(g:claude_model . ':')<CR>"
+    execute "nnoremap <buffer> " . g:claude_map_send_chat_message . " :call <SID>SendChatMessage(g:claude_model . ':')<CR>"
     " DS: make the cancel key for claude_map_cancel_response local to the claude chat buffer only
     execute "nnoremap <buffer> " . g:claude_map_cancel_response . " :ClaudeCancel<CR>"
   else
@@ -1638,11 +1673,15 @@ endfunction
 " NOTE: currently only handles one tool_use or tool_result per message.
 " ============================================================================
 function! s:AddMessageToList(messages, message)
-  " FIXME: Handle multiple tool_use, tool_result blocks at once
   if !empty(a:message.role)
     let l:message = {'role': a:message.role, 'content': join(a:message.content, "\n")}
     if !empty(a:message.tool_use)
-      let l:message['content'] = [{'type': 'text', 'text': l:message.content}, a:message.tool_use]
+      let l:text = l:message.content
+      if !empty(l:text)
+        let l:message['content'] = [{'type': 'text', 'text': l:text}, a:message.tool_use]
+      else
+        let l:message['content'] = [a:message.tool_use]
+      endif
     endif
     if !empty(a:message.tool_result)
       let l:message['content'] = [a:message.tool_result]
@@ -1918,7 +1957,8 @@ function! s:SendChatMessage(prefix)
   normal! G
 
   " Reset token accumulators for a fresh top-level request
-  if a:prefix ==# 'Claude:'
+  " if a:prefix ==# 'Claude:'
+  if a:prefix ==# g:claude_model . ':'
      unlet! s:total_input_tokens
      unlet! s:total_output_tokens
      unlet! s:total_cache_creation_tokens
@@ -1939,7 +1979,8 @@ function! s:SendChatMessage(prefix)
 endfunction
 
 " Command to send message in normal mode
-command! ClaudeSend call <SID>SendChatMessage('Claude:')
+" command! ClaudeSend call <SID>SendChatMessage('Claude:')
+command! ClaudeSend call <SID>SendChatMessage(g:claude_model . ':')
 
 
 " ----- Handling responses: Tool use
@@ -2100,7 +2141,8 @@ function! s:ResponseExtractChanges()
 
   " Find the start of the last Claude block
   normal! G
-  let l:start_line = search('^Claude:', 'b')  " Skip over Claude...:
+  " let l:start_line = search('^Claude:', 'b')  " Skip over Claude...:
+  let l:start_line = search('^' . g:claude_model . ':', 'b')  " Skip over claude-model...:
   let l:end_line = line('$')
   let l:markdown_delim = '^' . s:GetClaudeIndent() . '```'
 

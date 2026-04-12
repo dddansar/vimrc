@@ -42,13 +42,13 @@ let g:c_loaded = 1
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
 
-hi  link  CKeywordJump  AllFilesSystemColor
+hi  link  CKeywordJump  Statement
 syn match CKeywordJump  "\<break\>"     contains=@NoSpell
 syn match CKeywordJump  "\<continue\>"  contains=@NoSpell
 syn match CKeywordJump  "\<goto\>"      contains=@NoSpell
 syn match CKeywordJump  "\<return\>"    contains=@NoSpell
 
-hi  link  CKeyword1     AllFilesSystemColor2
+hi  link  CKeyword1     Type
 syn match CKeyword1     "\<signed\>"    contains=@NoSpell
 syn match CKeyword1     "\<unsigned\>"  contains=@NoSpell
 
@@ -62,7 +62,7 @@ syn match CKeyword1     "\<local\>"     contains=@NoSpell
 syn match CKeyword1     "\<automatic\>" contains=@NoSpell
 syn match CKeyword1     "\<register\>"  contains=@NoSpell
 
-hi  link  CKeyword2     AllFilesSystemColor2
+hi  link  CKeyword2     Type
 syn match CKeyword2     "\<codeseg\>"   contains=@NoSpell
 syn match CKeyword2     "\<void\>"      contains=@NoSpell
 
@@ -96,7 +96,7 @@ syn match CKeyword3     "\<asm\>"       contains=@NoSpell
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
 " List of Standard C Library Functions
-hi  link  CKeyword4     AllFilesSystemColor
+hi  link  CKeyword4     Statement
 " https://www.ibm.com/docs/en/i/7.5.0?topic=extensions-standard-c-library-functions-table-by-name
 syn match CKeyword4     "\<abort\>"           contains=@NoSpell
 syn match CKeyword4     "\<abs\>"             contains=@NoSpell
@@ -423,7 +423,7 @@ syn match CKeyword4     "\<sizeof\>"          contains=@NoSpell
 
 
 " Highlight some critical functions that require extra care.
-hi  link  CKeyword5     AllFilesWarningColor
+hi  link  CKeyword5     WarningMsg
 syn match CKeyword5    "\<malloc\>"           contains=@NoSpell
 syn match CKeyword5    "\<calloc\>"           contains=@NoSpell
 syn match CKeyword5    "\<realloc\>"          contains=@NoSpell
@@ -437,7 +437,7 @@ syn match CKeyword5    "\<va_start\>"         contains=@NoSpell
 syn match CKeyword5    "\<va_end\>"           contains=@NoSpell
 
 
-hi  link  CKeyword6     AllFilesSystemColor
+hi  link  CKeyword6     Statement
 syn match CKeyword6     "\<stdin\>"           contains=@NoSpell
 syn match CKeyword6     "\<stdout\>"          contains=@NoSpell
 syn match CKeyword6     "\<stderr\>"          contains=@NoSpell
@@ -462,7 +462,7 @@ syn match CKeyword6     "\<imer_settime\>"    contains=@NoSpell
 syn match CKeyword6     "\<zset\>"            contains=@NoSpell
 syn match CKeyword6     "\<time_t\>"          contains=@NoSpell
 
-hi  link  CKeyword7     AllFilesStructColor
+hi  link  CKeyword7     Structure
 syn match CKeyword7     "\<typedef\>"   contains=@NoSpell
 syn match CKeyword7     "\<union\>"           contains=@NoSpell
 syn match CKeyword7     "\<struct\>"          contains=@NoSpell
@@ -471,20 +471,20 @@ syn match CKeyword7     "\<enum\>"            contains=@NoSpell
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
 " C++ keywords
-hi  link  CppKeyword1 AllFilesSystemColor
+hi  link  CppKeyword1 Statement
 syn match CppKeyword1 "\<\%(class\|private\|protected\|public\|virtual\|friend\|this\|inline\)\>" contains=@NoSpell
 syn match CppKeyword1 "\<\%(template\|typename\)\>" contains=@NoSpell
 syn match CppKeyword1 "\<\%(new\|delete\)\>" contains=@NoSpell
 syn match CppKeyword1 "\<\%(try\|catch\|throw\)\>" contains=@NoSpell
 syn match CppKeyword1 "\<\%(namespace\|using\)\>" contains=@NoSpell
 
-hi  link  CppKeyword2 AllFilesSystemColor2
+hi  link  CppKeyword2 Type
 syn match CppKeyword2 "\<\%(static_cast\|dynamic_cast\|const_cast\|reinterpret_cast\)\>" contains=@NoSpell
 syn match CppKeyword2 "\<\%(bool\|true\|false\|nullptr\|mutable\|explicit\|operator\|typeid\|typename\|thread_local\|alignas\|alignof\|constexpr\|noexcept\)\>" contains=@NoSpell
 
 syn match CppKeyword2 "\<\%(Type\)\>" contains=@NoSpell
 
-hi  link  CppKeyword3 AllFilesSystemColor
+hi  link  CppKeyword3 Statement
 syn match CppKeyword3 "\<\%(std::\)\?\%(cout\|cin\)\>" contains=@NoSpell
 syn match CppKeyword3 "\<\%(std::\)\?\%(string\|vector\|map\|variant\|optional\|string_view\)\>" contains=@NoSpell
 syn match CppKeyword3 "::" contains=@NoSpell
@@ -492,10 +492,11 @@ syn match CppKeyword3 "::" contains=@NoSpell
 "------------------------------------------------------------------------------
 
 
+
 " Mix of my custom syntax and default vim settings.
 if g:select_custom_syntax == 2
    " Operators
-   hi  link    CSpChars6    AllFilesOpColor
+   hi  link    CSpChars6    Operator
    syn match   CSpChars6    "\%(\/\)\@<!\*\%(\/\)\@!"
    syn match   CSpChars6    "[*]"
    syn match   CSpChars6    "[+]"
@@ -504,24 +505,25 @@ if g:select_custom_syntax == 2
    syn match   CSpChars6    "[~]"
    syn match   CSpChars6    "-"
 
-   hi  link    CSpTBr       AllFilesTBrColor
+   hi  link    CSpTBr       Define
    syn match   CSpTBr       "[><]"
 
-   hi  link    CSpChars9    AllFilesSpecialColor
+   hi  link    CSpChars9    Exception
    syn match   CSpChars9    "[!]"
 endif
 
 
-hi  link  CUnderUpper     AllFilesVarColor
+hi  link  CUnderUpper     SpecialChar
 syn match CUnderUpper     "__[0-9A-Z_]\+"    contains=@NoSpell
-hi  link  CUnderLower     AllFilesVarColor
+hi  link  CUnderLower     SpecialChar
 syn match CUnderLower     "__[0-9a-z_]\+"    contains=@NoSpell
 
 
-hi  link  CMain    AllFilesSystemColor
+
+hi  link  CMain    Statement
 syn match CMain    "\<main\>"            contains=@NoSpell
 
-hi  link  CArg    AllFilesSystemColor4
+hi  link  CArg    Debug
 syn match CArg    "\<argc\>"            contains=@NoSpell
 syn match CArg    "\<argv\>"            contains=@NoSpell
 
@@ -577,7 +579,6 @@ inorea _cfunci    //------------------------------------------------------------
             \ <bs><cr>
             \return i_fname;<cr>
             \<bs><bs><bs>}<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
 
 inorea _cmain    //------------------------------------------------------------------------------<cr>
             \// Function: main<cr>

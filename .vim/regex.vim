@@ -55,18 +55,18 @@ if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
    syn match   RegexNoColor1  "[{}()]"
    syn match   RegexNoColor1  "'" contains=AllPreNumbers3
 
-   hi  link    RegexSpChars1  AllFilesSpecialColor
+   hi  link    RegexSpChars1  Exception
    syn match   RegexSpChars1  "\$" contains=AllPreDollar
    syn match   RegexSpChars1  "-"
 
-   hi  link    RegexSpChars2  AllFilesVarColor
+   hi  link    RegexSpChars2  SpecialChar
    syn match   RegexSpChars2  "[][]"
 
-   hi  link    RegexSpChars3  AllFilesArrowsColor
+   hi  link    RegexSpChars3  Question
    syn match   RegexSpChars3  "*"
 
    " Rematch double and/or.
-   hi  link    RegexAndOr     AllFilesOpColor
+   hi  link    RegexAndOr     Operator
    syn match   RegexAndOr     "&&"
    syn match   RegexAndOr     "||"
 
@@ -85,11 +85,11 @@ if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
 endif
 
 " Ranges
-hi  link    RegexRanges    AllFilesVarColor
+hi  link    RegexRanges    SpecialChar
 syn match   RegexRanges    "\[.\{-}\\\@<!]" contains=@NoSpell
 
 " Escaped colors
-hi  link    RegexSpChars4  AllFilesSpecialColor
+hi  link    RegexSpChars4  Exception
 syn match   RegexSpChars4  "\^"
 syn match   RegexSpChars4  "\\"
 
@@ -98,18 +98,18 @@ syn match   RegexNoColor3  "\\[\.\[\]\$\\\-''\"~]"
 syn match   RegexNoColor3  "\\\/"
 syn match   RegexNoColor3  "\\\^"
 
-hi  link    RegexSpChars5  AllFilesNumColor
+hi  link    RegexSpChars5  Constant
 syn match   RegexSpChars5  "\(^\s*\)\@<!\\<"
 syn match   RegexSpChars5  "\\>"
 
-hi  link    RegexSpChars6  AllFilesVarColor
+hi  link    RegexSpChars6  SpecialChar
 syn match   RegexSpChars6  "\\<lt>.\{-}>" contains=@NoSpell
 
-hi  link    RegexSpChars7  AllFilesOpColor
+hi  link    RegexSpChars7  Operator
 syn match   RegexSpChars7  "\\|"
 syn match   RegexSpChars7  "\\\\|"
 
-hi  link    RegexSpChars8  AllFilesSystemColor
+hi  link    RegexSpChars8  Statement
 syn match   RegexSpChars8  "\\("
 syn match   RegexSpChars8  "\\%("
 syn match   RegexSpChars8  "\\)"
@@ -120,27 +120,27 @@ syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\)\@="
 syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\|\S\)\@!"
 " syn match   RegexSpChars8  "\(\s\)\@<===#\?\(\s\)\@="
 
-hi  link    RegexSpChars9  AllFilesSystemColor3
+hi  link    RegexSpChars9  Conditional
 syn match   RegexSpChars9  "\\@<="
 syn match   RegexSpChars9  "\\@="
 syn match   RegexSpChars9  "\\zs" contains=@NoSpell
 syn match   RegexSpChars9  "\\ze" contains=@NoSpell
 
-hi  link    RegexSpChars10 AllFilesArrowsColor
+hi  link    RegexSpChars10 Question
 syn match   RegexSpChars10 "\\@<!"
 syn match   RegexSpChars10 "\\@!"
 
-hi  link    RegexSpChars11 AllFilesArrowsColor
+hi  link    RegexSpChars11 Question
 syn match   RegexSpChars11 "\\+"
 syn match   RegexSpChars11 "\\?"
 syn match   RegexSpChars11 "\\="
 syn match   RegexSpChars11 "\\{[0-9]*,[0-9]\+}"
 syn match   RegexSpChars11 "\\{[0-9]\+,[0-9]*}"
 
-hi  link    RegexSpChars12 AllFilesVarColor
+hi  link    RegexSpChars12 SpecialChar
 syn match   RegexSpChars12 "\(^\s*\)\@<!\\[sSdDxXoOhHpPwWaAlLuU]" contains=@NoSpell
 "
-" hi  link    RegexSpChars13 AllFilesNumColor
+" hi  link    RegexSpChars13 Constant
 " syn match   RegexSpChars13 "\\t" contains=@NoSpell
 " syn match   RegexSpChars13 "\\r" contains=@NoSpell
 " syn match   RegexSpChars13 "\\n" contains=@NoSpell
@@ -149,13 +149,13 @@ syn match   RegexSpChars12 "\(^\s*\)\@<!\\[sSdDxXoOhHpPwWaAlLuU]" contains=@NoSp
 " syn match   RegexSpChars13 "\\c[A-Z]" contains=@NoSpell
 
 " Match s///
-hi  link    RegexSearches1 AllFilesOpColor
+hi  link    RegexSearches1 Operator
 syn match   RegexSearches1 "\%([a-zA-Z]\)\@<!%\?s\/\%(.\+\/.*\/\)\@="
 syn match   RegexSearches1 "\%(\%([a-zA-Z]\)\@<!%\?s\/.\+\)\@<=\/\%(.*\/\)\@="
 syn match   RegexSearches1 "\%(\%([a-zA-Z]\)\@<!%\?s\/.\+\/.*\)\@<=\/\w*"
 
 " Match s###g s###e
-hi  link    RegexSearches2 AllFilesOpColor
+hi  link    RegexSearches2 Operator
 syn match   RegexSearches2 "\%([a-zA-Z]\)\@<!%\?s#\%(.\+#.*#\)\@="
 syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+\)\@<=#\%(.*#\)\@="
 syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+#.*\)\@<=#\w*"

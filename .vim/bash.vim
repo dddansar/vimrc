@@ -40,40 +40,40 @@ let g:bash_loaded = 1
 
 " My custom syntax without any default vim settings.
 if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
-   hi  link    BashKeywords1     AllFilesSystemColor
+   hi  link    BashKeywords1     Statement
    syn keyword BashKeywords1     setenv
    syn keyword BashKeywords1     module load
 
-   hi  link    BashKeywords2     AllFilesSystemColor2
+   hi  link    BashKeywords2     Type
    syn keyword BashKeywords2     alias vsp set unset
 
-   hi  link    BashKeywords3     AllFilesSystemColor3
+   hi  link    BashKeywords3     Conditional
    syn keyword BashKeywords3     status log
 
-   hi  link    BashKeywords4     AllFilesSBrColor
+   hi  link    BashKeywords4     StorageClass
    syn keyword BashKeywords4     topleft
 
-   hi  link    BashKeywords5     AllFilesLoopCondColor
+   hi  link    BashKeywords5     Conditional
    syn keyword BashKeywords5     in done
 
    " Match .
-   hi  link    BashMatches       AllFilesSpecialColor
+   hi  link    BashMatches       Exception
    syn match   BashMatches       "\."
 
    " Match settings such as -r and --some-setting.
-   hi  link    BashSettings      AllFilesDefinesColor
+   hi  link    BashSettings      Define
    syn match   BashSettings      "\%(^\|\s\+\)\@<=-[a-z0-9A-Z_-]\+"      contains=@NoSpell
 
    " Match '\'' and ''\'.
-   hi  link    BashSlash         AllFilesNumColor
+   hi  link    BashSlash         Constant
    syn match   BashSlash         "'\\''"
    syn match   BashSlash         "''\\'"
 
-   hi  link    BashDollar        AllFilesDefinesColor
+   hi  link    BashDollar        Define
    syn match   BashDollar        "\${.\+}"          contains=@NoSpell containedin=AllPrePaths1,AllPrePaths2
 
    " # inside ${ } is not a comment.
-   hi  link    BashNotComment    AllFilesSpecialColor
+   hi  link    BashNotComment    Exception
    syn match   BashNotComment    "\%(\${.*\)\@<=#\%(.*}\)\@="
    syn match   BashNotComment    "\%(\[.*\)\@<=#\%(.*\]\)\@="
    syn match   BashNotComment    "\%((.*\)\@<=#\%(.*)\)\@="
@@ -82,14 +82,14 @@ if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
 " Mix of my custom syntax and default vim settings.
 elseif g:select_custom_syntax == 2
    " Slashes
-   hi  link    BashSpChars1    AllFilesOpColor
+   hi  link    BashSpChars1    Operator
    syn match   BashSpChars1    "\/" contained containedin=shSingleQuote
 
-   hi  link    BashSpChars2    AllFilesSpecialColor2
+   hi  link    BashSpChars2    Keyword
    syn match   BashSpChars2    "[\\]" contained containedin=shSingleQuote
 
    " Operators
-   hi  link    BashSpChars6    AllFilesOpColor
+   hi  link    BashSpChars6    Operator
    syn match   BashSpChars6    "\%(\/\)\@<!\*\%(\/\)\@!" contained containedin=shSingleQuote
    syn match   BashSpChars6    "[*]" contained containedin=shSingleQuote
    syn match   BashSpChars6    "[+]" contained containedin=shSingleQuote
@@ -99,42 +99,42 @@ elseif g:select_custom_syntax == 2
    syn match   BashSpChars6    "-" contained containedin=shSingleQuote
 
    " Parenthesis/brackets
-   hi  link    BashSpParen     AllFilesFuncColor
+   hi  link    BashSpParen     Function
    syn match   BashSpParen     "[)(]" contained containedin=shSingleQuote
 
-   hi  link    BashSpSBr       AllFilesSBrColor
+   hi  link    BashSpSBr       StorageClass
    syn match   BashSpSBr       "[[\]]" contained containedin=shSingleQuote
 
-   hi  link    BashSpCBr       AllFilesCBrColor
+   hi  link    BashSpCBr       PreProc
    syn match   BashSpCBr       "[}{]" contained containedin=shSingleQuote
 
-   hi  link    BashSpTBr       AllFilesTBrColor
+   hi  link    BashSpTBr       Define
    syn match   BashSpTBr       "[><]" contained containedin=shSingleQuote
 
    " Equalities
-   hi  link    BashSpChars7    AllFilesEqualityColor
+   hi  link    BashSpChars7    Define
    syn match   BashSpChars7    "=" contained containedin=shSingleQuote
    syn match   BashSpChars7    ">=" contained containedin=shSingleQuote
    syn match   BashSpChars7    "<=" contained containedin=shSingleQuote
 
    " Special characters
-   hi  link    BashSpChars9    AllFilesSpecialColor2
+   hi  link    BashSpChars9    Keyword
    syn match   BashSpChars9    "[@]" contained containedin=shSingleQuote
    syn match   BashSpChars9    "[#]" contained containedin=shSingleQuote
    syn match   BashSpChars9    "[!?]" contained containedin=shSingleQuote
    syn match   BashSpChars9    "[$]" contains=AllPreDollar contained containedin=shSingleQuote
 
-   hi  link    BashSpChars10   AllFilesSpecialColor2
+   hi  link    BashSpChars10   Keyword
    syn match   BashSpChars10   "[:;]" contained containedin=shSingleQuote
 
    hi  link    BashOptions   shOption
    syn match   BashOptions   "\(\s\)\@<=-\(\w\|-\)\+" contained containedin=shSingleQuote
 
-   hi  link    BashCommands  AllFilesSystemColor2
+   hi  link    BashCommands  Type
    syn match   BashCommands  "\<\(apt\|sleep\|tmux\|history\|gvim\|nvim\|history\|ls\|echo\|find\|tkdiff\|cd\|svn\|git\|systemctl\)\>" contained containedin=shSingleQuote
 
    " Highlight sudo keyword
-   hi  link  BashSudo  AllFilesSpecialColorB
+   hi  link  BashSudo  NonText
    syn match BashSudo  "\<sudo\>" containedin=ALL
 endif
 

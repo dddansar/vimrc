@@ -38,19 +38,19 @@ let g:svn_loaded = 1
 " clear previous highlightings
 syn clear
 
-hi  link    SvnComments    AllFilesCommentColor
+hi  link    SvnComments    Comment
 syn region  SvnComments    start="--This line, and those below, will be ignored--" end=+\%$+
 
-hi  link    SvnNew         AllFilesEqualityColor
+hi  link    SvnNew         Define
 syn match   SvnNew         "\%(^\)\@<=A.*" contained containedin=SvnComments
 
-hi  link    SvnModified    AllFilesFuncColor
+hi  link    SvnModified    Function
 syn match   SvnModified    "\%(^\)\@<=M.*" contained containedin=SvnComments
 
-hi  link    SvnDeleted     AllFilesVarColor
+hi  link    SvnDeleted     SpecialChar
 syn match   SvnDeleted     "\%(^\)\@<=D.*" contained containedin=SvnComments
 
-hi  link    SvnReplaced    AllFilesSystemColor3
+hi  link    SvnReplaced    Conditional
 syn match   SvnReplaced    "\%(^\)\@<=R.*" contained containedin=SvnComments
 
 

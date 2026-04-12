@@ -95,8 +95,8 @@ endif
 " Path to key vim folders
 " For Windows
 if g:using_windows
-   let $vim_folder_path  = '$HOME/.vim'
-   let $vim_spell_path   = '$HOME/.vim/spell'
+   let $vim_folder_path  = '$HOME/vimfiles'
+   let $vim_spell_path   = '$HOME/vimfiles/spell'
    let $nvim_folder_path = '$HOME/AppData/Local/nvim'
    let $nvim_spell_path  = '$HOME/AppData/Local/nvim/spell'
 else " For Linux
@@ -144,7 +144,7 @@ endfunction
 " and add it to .vim/pack/pasky/start/claude.vim/
 " 2) Get an API key from https://platform.claude.com
 " 3) Add API key in g:claude_api_key
-let g:claude_api_key='add_api_key_here'
+let g:claude_api_key='sk-ant-api03-wwwwwwwww_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy-zzzzzzzz'
 " OR add the API key your inside your shell configuration file:
 " export API_KEY=add_api_key_here
 " and load the API_KEY with:
@@ -173,6 +173,8 @@ if g:claude_disable_tool_use
 endif
 " If set, Claude will not add indentation to it's answers.
 let g:claude_no_indent = 1
+" Set the model to use. By default set to claude-sonnet-4-6
+" let g:claude_model = 'claude-opus-4-6'
 " Manually save history to ~/claude_history.txt with <leader>cs
 noremap <leader>cs :w >> ~/claude_history.txt<cr>
 
@@ -181,6 +183,8 @@ noremap <leader>cs :w >> ~/claude_history.txt<cr>
 " selection buffer even though I have clipboard utility installed and
 " loaded... and yet gvim did not have this problem...
 " Below works to solve this problem in vim/neovim and even works in Windows.
+" NOTE: Sometimes you have to give a second for it to grab the selected text...
+" NOTE: Set g:hack_copy_selection to 1 to enable.
 let g:hack_copy_selection=0
 if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
 
@@ -916,10 +920,6 @@ function! DefaultSettings()
    " Search related mappings
    "------------------------------------------------------------------------
 
-   " Recenter window after search.
-   nnoremap n nzz:echo @/<CR>
-   nnoremap N Nzz:echo @/<CR>
-
    " Search for item under cursor with mouse.
    " "*y will add selection to the linux selection buffer (needed here
    "     because I have lazyredraw set).
@@ -1298,7 +1298,7 @@ function! DefaultSettings()
    nnoremap <leader>j5 83%
 
    " Enable disable spell checking.
-   nnoremap <leader>sc  :so ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>sc  :so ~/.vim/spell.vim<cr>:syntax spell notoplevel<cr>
    nnoremap <leader>ss  :so ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
    nnoremap <leader>nsc :setlocal nospell<cr>
 
@@ -1317,7 +1317,7 @@ function! DefaultSettings()
    " nnoremap <leader>lsp :topleft<space>vnew<cr><c-w><bar><c-w>_
    " nnoremap <leader>rsp :botright<space>vnew<cr><c-w><bar><c-w>_
    " close window and fix split screens
-   nnoremap <leader>q   :bd<cr><c-w><bar><c-w>_
+   " nnoremap <leader>q   :bd<cr><c-w><bar><c-w>_
    " nnoremap <leader>q   :q<cr><c-w><bar><c-w>_
    " nnoremap <leader>wq  :wq<cr><c-w><bar><c-w>_
 
@@ -1451,185 +1451,56 @@ function! DefaultSettings()
       au FileType text syntax spell toplevel
 
       " Just let vim know that I recognize these file extensions...
-      au BufNewFile,BufRead *.log,*.log.*,transcript set filetype=log
+      au BufNewFile,BufRead *.log,*.log.* set filetype=log
 
+   augroup END
+
+
+   " -----------------------------------------------------------------------
+   " Add filetype for extensions that don't have any and other FileType
+   " related autocmds.
+   " -----------------------------------------------------------------------
+   augroup AddFiletype
+
+      " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
+      au!
+
+      " If this is here, will not auto-comment by default.
+      au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+      " Add filetype for extensions that don't have any
+      au BufNewFile,BufRead *.REG          set filetype=registry
+      au BufNewFile,BufRead .aliases       set filetype=sh
+      au BufNewFile,BufRead *.log,*.log.*  set filetype=log
+
+      " Apply spell checking everywhere in text files.
+      au FileType text syntax spell toplevel
    augroup END
 
 
    " -----------------------------------------------------------------------
    " Colors and Syntax Highlighting
    " -----------------------------------------------------------------------
-   " This will load all the custom syntax highlightings for all files based
-   " on the file extension.
-   augroup EnCustomSyntax
-
-      " If you want to clear a group, use autocmd!/au! inside the group.
-      au!
-
-      "=====================================================================
-      "===================== Source syntax files ===========================
-      "=====================================================================
-
-      " Use my colorscheme.
-      if g:select_custom_syntax >= 1 && g:select_custom_syntax < 5
-         " Moved all highlighting setting into it's own file.
-         " NOTE: Moved inside .vim/colors/custom_colorscheme.vim
-         " au BufNewFile,BufRead * so  $vim_folder_path/highlightings.vim
-
-         " This file will color the highlighting groups names to the colors
-         " that they are mapped to.
-         au BufNewFile,BufRead * so  $vim_folder_path/colors.vim
-      endif
-
-      " NOTE: FileType specific syntax files can be found in:
-      "       $VIMRUNTIME/syntax/
-      " See:  $VIMRUNTIME/syntax/vim.vim
-      " NOTE: Vim determines which syntax file to load based on the file:
-      "       $VIMRUNTIME/filetype.vim
-      if g:select_custom_syntax >= 2 && g:select_custom_syntax < 5
-
-         " If a dedicated syntax file is not found, then source $VIMRUNTIME/syntax/'FileType'.vim
-         au BufNewFile,BufRead * let g:custom_syntax_found=0
-
-         " Load rainbow parenthesis functions.
-         au BufNewFile,BufRead * so  $vim_folder_path/rainbow_parenthesis.vim
-
-         " NOTE: THIS WILL ADD CUSTOM SYNTAX FOR ALL FILES BEFORE THE
-         "       RESPECTIVE FILE SETTINGS ARE APPLIED!!!
-         " WARNING: BufNewFile and BufRead load before au FileType!!
-         au BufNewFile,BufRead * so $vim_folder_path/all_pre.vim
-
-         " Enables spellchecking in specific file extensions.
-         if g:performance_mode <= 1
-            au BufNewFile,BufRead *.txt so $vim_folder_path/spell.vim
-         endif
+   " NOTE: This file is responsible for loading the custom syntax
+   " highlighting groups based on the file extension whenever
+   " g:select_custom_syntax >= 2
+   " -----------------------------------------------------------------------
+   so $vim_folder_path/syntax/custom_syntax.vim
 
 
-         " Add custom syntax for files that use math symbols.
-         au BufNewFile,BufRead math_mappings.vim,*.lean so $vim_folder_path/math_mappings.vim
-
-         " Add custom syntax for files that use math symbols.
-         " au BufNewFile,BufRead *.uni.txt so $vim_folder_path/math.vim
-
-         " Add custom syntax for files that use unicode chars.
-         au BufNewFile,BufRead math_mappings.vim,math.vim,unicode.vim,*.lean,*.uni.txt so $vim_folder_path/unicode.vim
-
-         " Add custom syntax for .vimrc.
-         au BufNewFile,BufRead *vimrc*,*.vim so $vim_folder_path/vim.vim | let g:custom_syntax_found=1
-
-         if g:select_custom_syntax >= 3
-            " Add custom syntax for vhdl.
-            au BufNewFile,BufRead *.vhd,*.vhdl,*.psl so $vim_folder_path/vhdl.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for System Verilog.
-            au BufNewFile,BufRead *.sv,*.svh,*.sv.bak,*.vt,*.vb,*.v,*.vlib,*.vh so $vim_folder_path/sv.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for assembly.
-            au BufNewFile,BufRead *.asm,*.masm,*.s,*.objdump so $vim_folder_path/asm.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for java.
-            au BufNewFile,BufRead *.java so $vim_folder_path/java.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for perl.
-            au BufNewFile,BufRead *.pl,*.pm so $vim_folder_path/pl.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for python.
-            au BufNewFile,BufRead *.py so $vim_folder_path/py.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for TCL.
-            au BufNewFile,BufRead *.tcl,*.f so $vim_folder_path/tcl.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for latex.
-            au BufNewFile,BufRead *.tex so $vim_folder_path/latex.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for .log.
-            au BufNewFile,BufRead *.log,*.log.* so $vim_folder_path/log.vim | let g:custom_syntax_found=1
-
-            " Add custom syntax for files that use strikethrough and gray-out.
-            au BufNewFile,BufRead *.txt so $vim_folder_path/strikethrough.vim
-
-            " Settings for the file browser aka the netrw plugin (when opening
-            " folders with vim or can be opened with :E).
-            au FileType netrw so $vim_folder_path/netrw.vim | let g:custom_syntax_found=1
-         endif
-
-         " Add custom syntax for C.
-         au BufNewFile,BufRead *.c,*.h,*.cpp,*.hpp,*.i so $vim_folder_path/c.vim | let g:custom_syntax_found=1
-
-         " Add custom syntax for txt.
-         " au BufNewFile,BufRead *.txt,*.tex so $vim_folder_path/txt.vim | let g:custom_syntax_found=1
-
-         " Add custom syntax for bash. \w is to avoid loading bash.vim.
-         au BufNewFile,BufRead bash_*,.bash*,*.sh,.cshrc*,*.csh,.aliases,*.ps1 so $vim_folder_path/bash.vim | let g:custom_syntax_found=1
-
-         " Add custom syntax for lean.
-         au BufNewFile,BufRead *lean.txt,*.lean so $vim_folder_path/lean.vim | let g:custom_syntax_found=1
-
-         " Syntax for files that support regular expressions.
-         " (NOTE: May be extension dependent as different
-         "        programs/editors/programming languages/OS can use regex
-         "        slightly differently and with different syntax).
-         au BufNewFile,BufRead *.pl,*.pm,*vimrc*,*.vim,tags so $vim_folder_path/regex.vim
-
-         " NOTE Add abbreviations to shorten common and repetitive text.
-         au BufNewFile,BufRead * so $vim_folder_path/abbrev.vim
-
-         " Use default syntax for vim help documents.
-         au BufNewFile,BufRead $VIMRUNTIME/doc/* let g:custom_syntax_found=0
-
-         " No custom syntax file needed for the following filetypes.
-         let g:remember_cursor_postion = 1
-         au BufNewFile,BufRead .gitignore,*ipynb,*.ahk,*.md let g:custom_syntax_found=1
-         au BufNewFile,BufRead svn-commit*.tmp let g:custom_syntax_found=1 | let g:remember_cursor_postion = 0 | so  $vim_folder_path/svn.vim
-
-         " Add custom syntax for claude_history.txt
-         au BufNewFile,BufRead claude_history.txt call g:SetupClaudeChatSyntax() | let g:custom_syntax_found=1
-
-         " NOTE: THIS WILL ADD CUSTOM SYNTAX FOR ALL FILES AFTER THE
-         "       RESPECTIVE FILE SETTINGS ARE APPLIED!!!
-         au BufNewFile,BufRead * so $vim_folder_path/all_post.vim
-
-         " NOTE: Moved deliberately after all_post.vim as I want to clear
-         "       all syntax first or the file can feel laggy!!!
-         " NOTE: all_colors.vim contains a list of all colors colorized!
-         au BufNewFile,BufRead all_colors.vim syn clear | so $vim_folder_path/all_colors.vim
-
-         " If a custom syntax file is not found, then source one from $VIMRUNTIME/syntax/'FileType'.vim
-         if g:select_custom_syntax == 3
-            au BufNewFile,BufRead * if g:custom_syntax_found==0 && &filetype != '' && &filetype != 'custom_syntax' && filereadable(expand('$VIMRUNTIME/syntax/' . &filetype . '.vim')) | syntax clear | exe 'so $VIMRUNTIME/syntax/' . &filetype . '.vim' | redraw | echom "Custom syntax file not found, loading default syntax from $VIMRUNTIME/" | endif
-         endif
-
-         " This will prevent any future "syntax on" from loading the default
-         " syntax files in $VIMRUNTIME/syntax/'FileType'.vim. Syntax on will
-         " now load the custom syntax files in the current
-         " augroup EnCustomSyntax by loading the local
-         " .vim/syntax/custom_syntax.vim file.
-         if g:select_custom_syntax >= 3
-            autocmd BufNewFile,BufRead * if g:custom_syntax_found==1 && &filetype != 'custom_syntax' | set filetype=custom_syntax | endif
-         endif
-
-      endif
-      "=====================================================================
-      "=====================================================================
-      "=====================================================================
-
-   augroup END
-
-
+   " -----------------------------------------------------------------------
+   " Always load file at last known cursor position
+   " -----------------------------------------------------------------------
    augroup RestoreCursor
       au!
-      " Always load file at last known cursor position
       if g:performance_mode <= 1 && g:using_encryption == 0
          autocmd BufReadPost *
             \ let line = line("'\"")
             \ | if line >= 1
-            \      && line <= line("$") && &filetype !~# 'commit' && exists("g:remember_cursor_postion") && g:remember_cursor_postion
-            \      && index(['xxd', 'gitrebase', 'tutor'], &filetype) == -1
+            \      && line <= line("$") && &filetype !~# 'commit'
+            \      && index(['xxd', 'gitrebase', 'tutor', 'svn'], &filetype) == -1
+            \      && expand("%") !~# 'svn-commit'
             \ |    execute "normal! g`\""
-            " Fix for the scrollbar not refreshing to current position when
-            " opening single files. But causes every windows in multiple
-            " splits to immediately refresh, slowing down file loading.
-            " \ |    execute "redraw!"
             \ | endif
       endif
    augroup END

@@ -2,7 +2,7 @@
 " File: all_colors.vim
 "------------------------------------------------------------------------------
 " Description: Contains all the colors available in GUI vim.
-" NOTE: See also highlightings.vim and colors.vim.
+" NOTE: See also custom_colorscheme.vim. and colors.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -35,6 +35,10 @@ if exists("b:all_colors_loaded")
   finish
 endif
 let g:all_colors_loaded = 1
+
+" Clear all syntax match groups from every other file to improve performance.
+" This file uses it's own syntax matching.
+syn clear
 
 "------------------------------------------------------------------------------
 "------------------------------------------------------------------------------
@@ -4156,7 +4160,7 @@ syn match   HLTeal                 "\<HLTeal\>"
 
 
 "------------------------------------------------------------------------------
-" NOTE: you can only see these colors when loading vim with no GUI
+" NOTE: You can also see the colors below in vim with no GUI
 syn match   HLCterm0             "\<HLCterm0\>"
 syn match   HLCterm1             "\<HLCterm1\>"
 syn match   HLCterm2             "\<HLCterm2\>"
@@ -7415,23 +7419,25 @@ hi default HLCterm255         cterm=bold ctermfg=255
 hi default HLCterm256         cterm=bold ctermfg=256
 "------------------------------------------------------------------------------
 
-
 " Other syntax matchings were cleared to improve this file's performance
 " So recreating basic matchings just for this file.
-hi  link    AllColorsMatch1   AllFilesSystemColor
+hi  link    AllColorsMatch1   Statement
 syn match   AllColorsMatch1   '\<syn\>'
 syn match   AllColorsMatch1   '\<hi\>'
 
-hi  link    AllColorsMatch2   AllFilesSystemColor2
+hi  link    AllColorsMatch2   Type
 syn match   AllColorsMatch2   '\<\%(match\|default\|link\|bold\|underline\|exists\)\>'
 
-hi  link    AllColorsMatch3   AllFilesCommentColor
+hi  link    AllColorsMatch3   Comment
 syn match   AllColorsMatch3   "^ *\".*"
 
-hi  link    AllColorsMatch4   AllFilesFuncColor
+hi  link    AllColorsMatch4   Function
 syn match   AllColorsMatch4   '\<gui\%(\|fg\|bg\)\>'
 syn match   AllColorsMatch4   '\<cterm\%(\|fg\|bg\)\>'
 
-hi  link    AllColorsMatch5   AllFilesLoopCondColor
+hi  link    AllColorsMatch5   Conditional
 syn match   AllColorsMatch5   '\<\%(if\|endif\)\>'
+
+hi  link    AllColorsHLNote   Note
+syn match   AllColorsHLNote   "\<NOTE\%(:\|\>\)\@=" contained containedin=AllColorsMatch3
 

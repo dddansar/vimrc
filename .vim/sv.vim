@@ -42,14 +42,14 @@ let g:sv_loaded = 1
 " a word. NOTE: Below will consider var++ one word!!!
 " setlocal iskeyword=@,48-57,_,192-255,+,-,?
 
-hi  link  SvKeywords1 AllFilesSystemColor
-hi  link  SvKeywords2 AllFilesSystemColor2
-hi  link  SvKeywords3 AllFilesSystemColor3
-hi  link  SvKeywords4 AllFilesDefinesColor
-hi  link  SvKeywords5 AllFilesLoopCondColor
-hi  link  SvKeywords6 AllFilesSystemColor
-hi  link  SvKeywords7 AllFilesCapsColor
-hi  link  SvKeywords8 AllFilesStructColor
+hi  link  SvKeywords1 Statement
+hi  link  SvKeywords2 Type
+hi  link  SvKeywords3 Conditional
+hi  link  SvKeywords4 Define
+hi  link  SvKeywords5 Conditional
+hi  link  SvKeywords6 Statement
+hi  link  SvKeywords7 Special
+hi  link  SvKeywords8 Structure
 
 " A bunch of useful Verilog keywords
 syn keyword SvKeywords1  disable assign deassign force release
