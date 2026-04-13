@@ -119,13 +119,3 @@ endif
 hi  link    AllPostSlash   NonText
 syn match   AllPostSlash   '\\\%(\s*$\)\@='
 
-
-" Load hl_matchit file that highlights custom match_words pairs when one pair
-" is selected.
-"------------------------------------------------------------------------------
-if !exists("g:HlMatchitLoaded") && exists("g:hl_matchit_enable_on_vim_startup") && exists("b:match_words")
-   let g:HlMatchitLoaded=1
-   so ${vim_folder_path}hl_matchit.vim
-endif
-"------------------------------------------------------------------------------
-

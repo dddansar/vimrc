@@ -55,35 +55,6 @@ Contains all my vimrc settings.
 └── vim.vim                 # Vim custom syntax highlighting
 ```
 
-## Pasky's Plugin for using Anthropic's Claude AI
-
-I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ubuntu/Mint Linux OS and I also got it working on my Windows OS using GVim (I have not tried NeoVim on Windows). I don't own a MAC machine so I could not test it there.
-
-The unmodified Pasky Plugin for using Anthropic's Claude AI can be found at:
-https://github.com/pasky/claude.vim
-
-I made some modifications to Pasky's plugins to address some issues I was having, to make the chat experience better suit my personal preferences, to not use the claud_*_prompt.md files (I prefer default prompts), and to add additional comments.
-
-Here is a list of changes that I made with help from the Claude AI:
-- Fixed the error "executing job failed: Argument list too long".
-- Allow the context window to increase from 200k to 1m. See g:claude_use_1m_context (default set to 200k).
-- Updated the claude_model version to use Claude Sonnet 4.6.
-- Asked Claude to add a lot of comments.
-- Disabled automatic chat folding. See g:claude_enable_folding.
-- Print the token usage and cost in the chat after each answer.
-- Fix for the printed token usage as it was not always accurate.
-- Modified the system prompt to only have the "You:" line. See g:claude_default_system_prompt.
-- Increased 'max_tokens' to allow Claude AI to give longer responses before cutting off. See g:claude_max_tokens.
-- Add fix for elinks "Update your browser Your browser isn't supported anymore".
-- Set g:claude_map_cancel_response = "<c-c>" and have it only affect the Claude chat window.
-- Tell Claude to answer from it's knowledge directly and to be very brief.
-- Added settings to disable tool and web usage by default. I prefer to keep everything in the chat window, to not let Claude directly edit my files and to keep costs down by not opening large files/websites. Set g:claude_disable_tool_use=0 if you want to enable them.
-- Removed automatic indentation in Claude's responses. See g:claude_no_indent.
-- Cleared the claud_*_prompt.md files to use Claude's default prompt settings.
-- Print g:claude_model instead of printing "Claude:"
-- Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
-
-
 ## Getting Started
 
 To use, first install GVim, Vim or NeoVim on linux or Windows (GVim being my main editor), and then place the .vim files in the appropriate location.
@@ -114,6 +85,36 @@ Link Pasky's plugin for using Anthropic's Claude AI in NeoVim.
 ```
 ln -s ~/.vim/pack ~/.config/nvim/pack
 ```
+
+
+## Pasky's Plugin for using Anthropic's Claude AI
+
+I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ubuntu/Mint Linux OS and I also got it working on my Windows OS using GVim (I have not tried NeoVim on Windows). I don't own a MAC machine so I could not test it there.
+
+The unmodified Pasky Plugin for using Anthropic's Claude AI can be found at:
+https://github.com/pasky/claude.vim
+
+I made some modifications to Pasky's plugins to address some issues I was having, to make the chat experience better suit my personal preferences, to not use the claud_*_prompt.md files (I prefer default prompts), and to add additional comments.
+
+Here is a list of changes that I made with help from the Claude AI:
+- Fixed the error "executing job failed: Argument list too long".
+- Allow the context window to increase from 200k to 1m. See g:claude_use_1m_context (default set to 200k).
+- Updated the claude_model version to use Claude Sonnet 4.6.
+- Asked Claude to add a lot of comments.
+- Disabled automatic chat folding. See g:claude_enable_folding.
+- Print the token usage and cost in the chat after each answer.
+- Fix for the printed token usage as it was not always accurate.
+- Modified the system prompt to only have the "You:" line. See g:claude_default_system_prompt.
+- Increased 'max_tokens' to allow Claude AI to give longer responses before cutting off. See g:claude_max_tokens.
+- Add fix for elinks "Update your browser Your browser isn't supported anymore".
+- Set g:claude_map_cancel_response = "<c-c>" and have it only affect the Claude chat window.
+- Tell Claude to answer from it's knowledge directly and to be very brief.
+- Added settings to disable tool and web usage by default. I prefer to keep everything in the chat window, to not let Claude directly edit my files and to keep costs down by not opening large files/websites. Set g:claude_disable_tool_use=0 if you want to enable them.
+- Removed automatic indentation in Claude's responses. See g:claude_no_indent.
+- Cleared the claud_*_prompt.md files to use Claude's default prompt settings.
+- Print g:claude_model instead of printing "Claude:"
+- Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
+
 
 ## What my custom colorscheme and custom syntax matching looks like
 

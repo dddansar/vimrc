@@ -30,12 +30,12 @@
 "==============================================================================
 
 
-" --------------------------------------------------------------------------
+" -----------------------------------------------------------------------------
 " Setting b:comment_leader based on Filetype. This can then be used to
 " syntax match comments or to create comments with remappings.
 " b:comment_leader is used to determine the comments when
 " g:select_custom_syntax >= 2.
-" --------------------------------------------------------------------------
+" -----------------------------------------------------------------------------
 augroup SetFiletypeComment
 
    " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
@@ -104,9 +104,9 @@ augroup SetFiletypeComment
 augroup END
 
 
-" -----------------------------------------------------------------------
+" -----------------------------------------------------------------------------
 " Colors and Syntax Highlighting
-" -----------------------------------------------------------------------
+" -----------------------------------------------------------------------------
 " This will load all the custom syntax highlightings for all files based
 " on the file extension.
 augroup EnCustomSyntax
@@ -114,15 +114,18 @@ augroup EnCustomSyntax
    " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
    au!
 
-   "=====================================================================
-   "===================== Source syntax files ===========================
-   "=====================================================================
+   "===========================================================================
+   "===================== Source syntax files =================================
+   "===========================================================================
 
    " NOTE: FileType specific syntax files can be found in:
    "       $VIMRUNTIME/syntax/
    " See:  $VIMRUNTIME/syntax/vim.vim
    " NOTE: Vim determines which syntax file to load based on the file:
    "       $VIMRUNTIME/filetype.vim
+
+   " WARNING: A delay may be noticed after setting "syntax on". This delay is
+   "          the disk I/O time spent sourcing the selected files below.
 
    " Use my colorscheme.
    if g:select_custom_syntax >= 2 && g:select_custom_syntax < 5
@@ -197,7 +200,7 @@ augroup EnCustomSyntax
       au BufNewFile,BufRead *.c,*.h,*.cpp,*.hpp,*.i so $vim_folder_path/c.vim | let g:custom_syntax_found=1
 
       " Add custom syntax for txt.
-      au BufNewFile,BufRead *.txt,*.tex,*.rtf so $vim_folder_path/txt.vim | let g:custom_syntax_found=1
+      au BufNewFile,BufRead *.txt,*.tex,*.rtf,*.md so $vim_folder_path/txt.vim | let g:custom_syntax_found=1
 
       " Add custom syntax for bash. \w is to avoid loading bash.vim.
       au BufNewFile,BufRead bash_*,.bash*,*.sh,.cshrc*,*.csh,.aliases,*.ps1 so $vim_folder_path/bash.vim | let g:custom_syntax_found=1
@@ -223,7 +226,7 @@ augroup EnCustomSyntax
       au BufNewFile,BufRead $VIMRUNTIME/doc/* let g:custom_syntax_found=0
 
       " No custom syntax file needed for the following filetypes.
-      au BufNewFile,BufRead .gitignore,*ipynb,*.ahk,*.md let g:custom_syntax_found=1
+      au BufNewFile,BufRead .gitignore,*ipynb,*.ahk let g:custom_syntax_found=1
       au BufNewFile,BufRead svn-commit*.tmp let g:custom_syntax_found=1 | so  $vim_folder_path/svn.vim
 
       " Add custom syntax for claude_history.txt
@@ -258,7 +261,7 @@ augroup EnCustomSyntax
       endif
 
    endif
-   "=====================================================================
+   "===========================================================================
 
 augroup END
 

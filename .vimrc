@@ -1170,9 +1170,9 @@ function! DefaultSettings()
 
    " Reload the custom syntax highlighting groups without using syntax on
    " and without resourcing .vimrc by reloading EnCustomSyntax instead.
-   nnoremap <leader>sr :let g:select_custom_syntax=3<cr>:syntax clear<cr>:set filetype=custom_syntax<cr>:let g:custom_syntax_found=1<cr>:doautocmd EnCustomSyntax BufRead<cr>:syntax on<cr>
+   nnoremap <leader>sr :let g:orig_buf=bufnr('%')<cr>: syntax clear<cr>:let g:select_custom_syntax=3<cr>:bufdo set filetype=custom_syntax<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=1<cr>:doautocmd EnCustomSyntax BufRead<cr><cr>
    " Loads the default syntax highlighting
-   nnoremap <leader>sa :let g:select_custom_syntax=1<cr>:syntax clear<cr>:set filetype=""<cr>:filetype detect<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr>
+   nnoremap <leader>sa :let g:orig_buf=bufnr('%')<cr>: syntax clear<cr>:let g:select_custom_syntax=1<cr>:bufdo set filetype= \| filetype detect<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr><cr>
 
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
    if g:keyboard_layout == "colemak-dh"
@@ -1501,6 +1501,9 @@ function! DefaultSettings()
             \      && index(['xxd', 'gitrebase', 'tutor', 'svn'], &filetype) == -1
             \      && expand("%") !~# 'svn-commit'
             \ |    execute "normal! g`\""
+            \ |    if len(getbufinfo({'buflisted': 1})) == 1
+            \ |       execute "redraw!"
+            \ |    endif
             \ | endif
       endif
    augroup END

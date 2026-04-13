@@ -333,7 +333,7 @@ endif
 if g:performance_mode <= 0
    " Match emails like abcd@efg.com
    hi  link     AllPreEmails  Tag
-   syn match    AllPreEmails  "\<[a-zA-Z][a-zA-Z0-9_.-]\+@[a-zA-Z0-9_-]\+\.[a-zA-Z0-9_-]\+"  contains=@NoSpell containedin=.*Comment.*
+   syn match    AllPreEmails  "\<[a-zA-Z][a-zA-Z0-9_.-]\+@[a-zA-Z0-9_-]\+\.[a-zA-Z0-9_.-]\+"  contains=@NoSpell containedin=.*Comment.*
 endif
 "------------------------------------------------------------------------------
 

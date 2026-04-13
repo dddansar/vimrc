@@ -84,3 +84,10 @@ syn match Green2bg            "\<P7\>" contains=@NoSpell
 syn match Tealbg              "\<P8\>" contains=@NoSpell
 syn match Blue2bg             "\<P9\>" contains=@NoSpell
 
+" Make lines beginning with # as titles
+syntax match AllPostTitles1 "^\s*# .*"
+syntax match AllPostTitles2 "^\s*## .*"
+syntax match AllPostTitles3 "^\s*### .*"
+syntax match AllPostTitles4 "^\s*#### .*"
+syntax match AllPostTitles5 "^\s*##### .*"
+
