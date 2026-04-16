@@ -36,6 +36,8 @@ if exists("b:latex_loaded")
 endif
 let g:latex_loaded = 1
 
+" Keep autoindent, but remove cindent
+set nocindent
 
 " Match "\word"
 hi  link    LatexKeywords Statement

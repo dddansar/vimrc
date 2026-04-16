@@ -37,6 +37,8 @@ if exists("b:vim_loaded")
 endif
 let g:vim_loaded = 1
 
+" Keep autoindent, but remove cindent
+set nocindent
 
 " This is needed when loading multiple files at the same time, with some .vim
 " extension files and others with spell enabled.
@@ -46,7 +48,74 @@ setlocal nospell
 hi  link    VimVariables   Operator
 syn match   VimVariables   '\%(\<[gbwtsl]:\)\@<=\w\+'  contains=@NoSpell
 
-" My custom syntax without any default vim settings.
+
+" Highlight a bunch of Vim options.
+" Source: $VIMRUNTIME/syntax/vim.vim
+hi  link    vimOption Function
+syn match   vimOption "\<vimOption\>" contains=@NoSpell
+syn match   vimOption "\<\(aleph\|ari\|allowrevins\|ambw\|ambiwidth\|arab\|arabic\|arshape\|arabicshape\|acd\|autochdir\|autocomplete\|acl\|autocompletedelay\|act\|autocompletetimeout\|autoindent\|autoread\|asd\|autoshelldir\|autowrite\|awa\|autowriteall\|background\|backspace\|backup\|bkc\|backupcopy\|bdir\|backupdir\|bex\|backupext\|bsk\|backupskip\|bdlay\|balloondelay\|beval\|ballooneval\|bevalterm\|balloonevalterm\|bexpr\|balloonexpr\|belloff\|bin\|binary\|bomb\|brk\|breakat\|bri\|breakindent\|briopt\|breakindentopt\|bsdir\|browsedir\|bufhidden\|buflisted\|buftype\|cmp\|casemap\|cdh\|cdhome\|cdpath\|cedit\|ccv\|charconvert\|chi\|chistory\|cin\|cindent\|cink\|cinkeys\|cino\|cinoptions\|cinsd\|cinscopedecls\|cinw\|cinwords\|clipboard\|cpm\|clipmethod\|cmdheight\|cwh\|cmdwinheight\|colorcolumn\)\>"
+syn match   vimOption "\<\(columns\|com\|comments\|cms\|commentstring\|compatible\|cpt\|complete\|cfu\|completefunc\|cia\|completeitemalign\|cot\|completeopt\|cpp\|completepopup\|csl\|completeslash\|cto\|completetimeout\|cocu\|concealcursor\|cole\|conceallevel\|confirm\|copyindent\|cpo\|cpoptions\|cryptmethod\|cspc\|cscopepathcomp\|csprg\|cscopeprg\|csqf\|cscopequickfix\|csre\|cscoperelative\|cst\|cscopetag\|csto\|cscopetagorder\|csverb\|cscopeverbose\|crb\|cursorbind\|cuc\|cursorcolumn\|cul\|cursorline\|culopt\|cursorlineopt\|debug\|def\|define\|deco\|delcombine\|dict\|dictionary\|diff\|dia\|diffanchors\|dex\|diffexpr\|dip\|diffopt\|digraph\|dir\|directory\|display\|ead\|eadirection\|edcompatible\|emo\|emoji\|enc\|encoding\|eof\|endoffile\|eol\|endofline\|equalalways\|equalprg\|errorbells\|errorfile\)\>"
+syn match   vimOption "\<\(efm\|errorformat\|esckeys\|eventignore\|eiw\|eventignorewin\|expandtab\|exrc\|fenc\|fileencoding\|fencs\|fileencodings\|fileformat\|ffs\|fileformats\|fic\|fileignorecase\|filetype\|fcs\|fillchars\|ffu\|findfunc\|fixeol\|fixendofline\|fcl\|foldclose\|fdc\|foldcolumn\|fen\|foldenable\|fde\|foldexpr\|fdi\|foldignore\|fdl\|foldlevel\|fdls\|foldlevelstart\|fmr\|foldmarker\|fdm\|foldmethod\|fml\|foldminlines\|fdn\|foldnestmax\|fdo\|foldopen\|fdt\|foldtext\|fex\|formatexpr\|flp\|formatlistpat\|formatoptions\|formatprg\|fsync\|gdefault\|gfm\|grepformat\|grepprg\|gcr\|guicursor\|gfn\|guifont\|gfs\|guifontset\|gfw\|guifontwide\|ghr\|guiheadroom\|gli\|guiligatures\|guioptions\|guipty\|gtl\|guitablabel\|gtt\|guitabtooltip\|helpfile\|helpheight\|hlg\|helplang\|hid\|hidden\|highlight\)\>"
+syn match   vimOption "\<\(history\|hkmap\|hkp\|hkmapp\|hls\|hlsearch\|icon\|iconstring\|ignorecase\|imaf\|imactivatefunc\|imak\|imactivatekey\|imc\|imcmdline\|imd\|imdisable\|imi\|iminsert\|ims\|imsearch\|imsf\|imstatusfunc\|imst\|imstyle\|inc\|include\|inex\|includeexpr\|incsearch\|inde\|indentexpr\|indk\|indentkeys\|inf\|infercase\|insertmode\|isf\|isfname\|isi\|isident\|isk\|iskeyword\|isp\|isprint\|joinspaces\|jop\|jumpoptions\|key\|kmp\|keymap\|keymodel\|kpc\|keyprotocol\|keywordprg\|lmap\|langmap\|langmenu\|lnr\|langnoremap\|lrm\|langremap\|laststatus\|lazyredraw\|lhi\|lhistory\|lbr\|linebreak\|lines\|lsp\|linespace\|lisp\|lop\|lispoptions\|lispwords\|list\|lcs\|listchars\|lpl\|loadplugins\|luadll\|magic\|mef\|makeef\|menc\|makeencoding\|makeprg\|mps\|matchpairs\|mat\|matchtime\|mco\|maxcombine\|mfd\|maxfuncdepth\)\>"
+syn match   vimOption "\<\(mmd\|maxmapdepth\|maxmem\|mmp\|maxmempattern\|mmt\|maxmemtot\|msc\|maxsearchcount\|mis\|menuitems\|mopt\|messagesopt\|msm\|mkspellmem\|modeline\|mle\|modelineexpr\|mls\|modelines\|modifiable\|mod\|modified\|more\|mouse\|mousef\|mousefocus\|mousehide\|mousem\|mousemodel\|mousemev\|mousemoveevent\|mouses\|mouseshape\|mouset\|mousetime\|mzq\|mzquantum\|mzschemedll\|mzschemegcdll\|nrformats\|number\|nuw\|numberwidth\|ofu\|omnifunc\|odev\|opendevice\|opfunc\|operatorfunc\|ost\|osctimeoutlen\|packpath\|para\|paragraphs\|paste\|pastetoggle\|pex\|patchexpr\|patchmode\|path\|perldll\|preserveindent\|pvh\|previewheight\|pvp\|previewpopup\|pvw\|previewwindow\|pdev\|printdevice\|penc\|printencoding\|pexpr\|printexpr\|pfn\|printfont\|pheader\|printheader\|pmbcs\|printmbcharset\|pmbfn\|printmbfont\)\>"
+syn match   vimOption "\<\(popt\|printoptions\|prompt\|pumborder\|pumheight\|pmw\|pummaxwidth\|pumwidth\|pythondll\|pythonhome\|pythonthreedll\|pythonthreehome\|pyx\|pyxversion\|qftf\|quickfixtextfunc\|quoteescape\|readonly\|rdt\|redrawtime\|regexpengine\|rnu\|relativenumber\|remap\|rop\|renderoptions\|report\|restorescreen\|revins\|rightleft\|rlc\|rightleftcmd\|rubydll\|ruler\|ruf\|rulerformat\|rtp\|runtimepath\|scr\|scroll\|scb\|scrollbind\|scf\|scrollfocus\|scrolljump\|scrolloff\|sbo\|scrollopt\|sect\|sections\|secure\|sel\|selection\|slm\|selectmode\|ssop\|sessionoptions\|shell\|shcf\|shellcmdflag\|shellpipe\|shq\|shellquote\|srr\|shellredir\|ssl\|shellslash\|stmp\|shelltemp\|shelltype\|sxe\|shellxescape\|sxq\|shellxquote\|shiftround\|shiftwidth\|shm\|shortmess\|shortname\|sbr\|showbreak\)\>"
+syn match   vimOption "\<\(showcmd\|sloc\|showcmdloc\|sft\|showfulltag\|showmatch\|smd\|showmode\|stal\|showtabline\|stpl\|showtabpanel\|sidescroll\|siso\|sidescrolloff\|scl\|signcolumn\|scs\|smartcase\|smartindent\|sta\|smarttab\|sms\|smoothscroll\|sts\|softtabstop\|spc\|spellcapcheck\|spf\|spellfile\|spl\|spelllang\|spo\|spelloptions\|sps\|spellsuggest\|splitbelow\|spk\|splitkeep\|spr\|splitright\|sol\|startofline\|stl\|statusline\|stlo\|statuslineopt\|suffixes\|sua\|suffixesadd\|swf\|swapfile\|sws\|swapsync\|swb\|switchbuf\|smc\|synmaxcol\|syn\|syntax\|tcl\|tal\|tabline\|tpm\|tabpagemax\|tpl\|tabpanel\|tplo\|tabpanelopt\|tabstop\|tbs\|tagbsearch\|tagcase\|tfu\|tagfunc\|taglength\|tagrelative\|tag\|tags\|tgst\|tagstack\|tcldll\|term\|tbidi\|termbidi\|tenc\|termencoding\|tgc\|termguicolors\|tsy\|termsync\)\>"
+syn match   vimOption "\<\(twk\|termwinkey\|twsl\|termwinscroll\|tws\|termwinsize\|twt\|termwintype\|terse\|textauto\|textmode\|textwidth\|tsr\|thesaurus\|tsrfu\|thesaurusfunc\|top\|tildeop\|timeout\|timeoutlen\|title\|titlelen\|titleold\|titlestring\|toolbar\|tbis\|toolbariconsize\|ttimeout\|ttm\|ttimeoutlen\|tbi\|ttybuiltin\|ttyfast\|ttym\|ttymouse\|tsl\|ttyscroll\|tty\|ttytype\|udir\|undodir\|udf\|undofile\|undolevels\|undoreload\|updatecount\|updatetime\|vsts\|varsofttabstop\|vts\|vartabstop\|vbs\|verbose\|vfile\|verbosefile\|vdir\|viewdir\|vop\|viewoptions\|viminfo\|vif\|viminfofile\|virtualedit\|visualbell\|warn\|wiv\|weirdinvert\|whichwrap\|wildchar\|wcm\|wildcharm\|wig\|wildignore\|wic\|wildignorecase\|wmnu\|wildmenu\|wim\|wildmode\|wop\|wildoptions\|wak\|winaltkeys\|wcr\|wincolor\|window\)\>"
+syn match   vimOption "\<\(wfb\|winfixbuf\|wfh\|winfixheight\|wfw\|winfixwidth\|winheight\|whl\|winhighlight\|wmh\|winminheight\|wmw\|winminwidth\|winptydll\|wiw\|winwidth\|wse\|wlseat\|wst\|wlsteal\|wtm\|wltimeoutlen\|wrap\|wrapmargin\|wrapscan\|write\|writeany\|writebackup\|writedelay\|xtermcodes\)\>"
+
+syn match   vimOption "\<\(noari\|noallowrevins\|noarab\|noarabic\|noarshape\|noarabicshape\|noacd\|noautochdir\|noac\|noautocomplete\|noai\|noautoindent\|noar\|noautoread\|noasd\|noautoshelldir\|noaw\|noautowrite\|noawa\|noautowriteall\|nobk\|nobackup\|nobeval\|noballooneval\|nobevalterm\|noballoonevalterm\|nobin\|nobinary\|nobomb\|nobri\|nobreakindent\|nobl\|nobuflisted\|nocdh\|nocdhome\|nocin\|nocindent\|nocp\|nocompatible\|nocf\|noconfirm\|noci\|nocopyindent\|nocsre\|nocscoperelative\|nocst\|nocscopetag\|nocsverb\|nocscopeverbose\|nocrb\|nocursorbind\|nocuc\|nocursorcolumn\|nocul\|nocursorline\|nodeco\|nodelcombine\|nodiff\|nodg\|nodigraph\|noed\|noedcompatible\|noemo\|noemoji\|noeof\|noendoffile\|noeol\|noendofline\|noea\|noequalalways\|noeb\|noerrorbells\|noek\|noesckeys\|noet\|noexpandtab\|noex\|noexrc\|nofic\|nofileignorecase\)\>"
+syn match   vimOption "\<\(nofixeol\|nofixendofline\|nofen\|nofoldenable\|nofs\|nofsync\|nogd\|nogdefault\|noguipty\|nohid\|nohidden\|nohk\|nohkmap\|nohkp\|nohkmapp\|nohls\|nohlsearch\|noicon\|noic\|noignorecase\|noimc\|noimcmdline\|noimd\|noimdisable\|nois\|noincsearch\|noinf\|noinfercase\|noim\|noinsertmode\|nojs\|nojoinspaces\|nolnr\|nolangnoremap\|nolrm\|nolangremap\|nolz\|nolazyredraw\|nolbr\|nolinebreak\|nolisp\|nolist\|nolpl\|noloadplugins\|nomagic\|noml\|nomodeline\|nomle\|nomodelineexpr\|noma\|nomodifiable\|nomod\|nomodified\|nomore\|nomousef\|nomousefocus\|nomh\|nomousehide\|nomousemev\|nomousemoveevent\|nonu\|nonumber\|noodev\|noopendevice\|nopaste\|nopi\|nopreserveindent\|nopvw\|nopreviewwindow\|noprompt\|noro\|noreadonly\|nornu\|norelativenumber\|noremap\|nors\|norestorescreen\|nori\|norevins\|norl\|norightleft\|noru\|noruler\)\>"
+syn match   vimOption "\<\(noscb\|noscrollbind\|noscf\|noscrollfocus\|nosecure\|nossl\|noshellslash\|nostmp\|noshelltemp\|nosr\|noshiftround\|nosn\|noshortname\|nosc\|noshowcmd\|nosft\|noshowfulltag\|nosm\|noshowmatch\|nosmd\|noshowmode\|noscs\|nosmartcase\|nosi\|nosmartindent\|nosta\|nosmarttab\|nosms\|nosmoothscroll\|nospell\|nosb\|nosplitbelow\|nospr\|nosplitright\|nosol\|nostartofline\|noswf\|noswapfile\|notbs\|notagbsearch\|notr\|notagrelative\|notgst\|notagstack\|notbidi\|notermbidi\|notgc\|notermguicolors\|notsy\|notermsync\|noterse\|nota\|notextauto\|notx\|notextmode\|notop\|notildeop\|noto\|notimeout\|notitle\|nottimeout\|notbi\|nottybuiltin\|notf\|nottyfast\|noudf\|noundofile\|novb\|novisualbell\|nowarn\|nowiv\|noweirdinvert\|nowic\|nowildignorecase\|nowmnu\|nowildmenu\|nowfb\|nowinfixbuf\|nowfh\|nowinfixheight\|nowfw\|nowinfixwidth\)\>"
+syn match   vimOption "\<\(nowst\|nowlsteal\|nowrap\|nows\|nowrapscan\|nowrite\|nowa\|nowriteany\|nowb\|nowritebackup\|noxtermcodes\)\>"
+
+syn match   vimOption "\<\(invari\|invallowrevins\|invarab\|invarabic\|invarshape\|invarabicshape\|invacd\|invautochdir\|invac\|invautocomplete\|invai\|invautoindent\|invar\|invautoread\|invasd\|invautoshelldir\|invaw\|invautowrite\|invawa\|invautowriteall\|invbk\|invbackup\|invbeval\|invballooneval\|invbevalterm\|invballoonevalterm\|invbin\|invbinary\|invbomb\|invbri\|invbreakindent\|invbl\|invbuflisted\|invcdh\|invcdhome\|invcin\|invcindent\|invcp\|invcompatible\|invcf\|invconfirm\|invci\|invcopyindent\|invcsre\|invcscoperelative\|invcst\|invcscopetag\|invcsverb\|invcscopeverbose\|invcrb\|invcursorbind\|invcuc\|invcursorcolumn\|invcul\|invcursorline\|invdeco\|invdelcombine\|invdiff\|invdg\|invdigraph\|inved\|invedcompatible\|invemo\|invemoji\|inveof\|invendoffile\|inveol\|invendofline\|invea\|invequalalways\|inveb\|inverrorbells\)\>"
+syn match   vimOption "\<\(invek\|invesckeys\|invet\|invexpandtab\|invex\|invexrc\|invfic\|invfileignorecase\|invfixeol\|invfixendofline\|invfen\|invfoldenable\|invfs\|invfsync\|invgd\|invgdefault\|invguipty\|invhid\|invhidden\|invhk\|invhkmap\|invhkp\|invhkmapp\|invhls\|invhlsearch\|invicon\|invic\|invignorecase\|invimc\|invimcmdline\|invimd\|invimdisable\|invis\|invincsearch\|invinf\|invinfercase\|invim\|invinsertmode\|invjs\|invjoinspaces\|invlnr\|invlangnoremap\|invlrm\|invlangremap\|invlz\|invlazyredraw\|invlbr\|invlinebreak\|invlisp\|invlist\|invlpl\|invloadplugins\|invmagic\|invml\|invmodeline\|invmle\|invmodelineexpr\|invma\|invmodifiable\|invmod\|invmodified\|invmore\|invmousef\|invmousefocus\|invmh\|invmousehide\|invmousemev\|invmousemoveevent\|invnu\|invnumber\|invodev\|invopendevice\|invpaste\|invpi\|invpreserveindent\)\>"
+syn match   vimOption "\<\(invpvw\|invpreviewwindow\|invprompt\|invro\|invreadonly\|invrnu\|invrelativenumber\|invremap\|invrs\|invrestorescreen\|invri\|invrevins\|invrl\|invrightleft\|invru\|invruler\|invscb\|invscrollbind\|invscf\|invscrollfocus\|invsecure\|invssl\|invshellslash\|invstmp\|invshelltemp\|invsr\|invshiftround\|invsn\|invshortname\|invsc\|invshowcmd\|invsft\|invshowfulltag\|invsm\|invshowmatch\|invsmd\|invshowmode\|invscs\|invsmartcase\|invsi\|invsmartindent\|invsta\|invsmarttab\|invsms\|invsmoothscroll\|invspell\|invsb\|invsplitbelow\|invspr\|invsplitright\|invsol\|invstartofline\|invswf\|invswapfile\|invtbs\|invtagbsearch\|invtr\|invtagrelative\|invtgst\|invtagstack\|invtbidi\|invtermbidi\|invtgc\|invtermguicolors\|invtsy\|invtermsync\|invterse\|invta\|invtextauto\|invtx\|invtextmode\|invtop\|invtildeop\|invto\|invtimeout\)\>"
+syn match   vimOption "\<\(invtitle\|invttimeout\|invtbi\|invttybuiltin\|invtf\|invttyfast\|invudf\|invundofile\|invvb\|invvisualbell\|invwarn\|invwiv\|invweirdinvert\|invwic\|invwildignorecase\|invwmnu\|invwildmenu\|invwfb\|invwinfixbuf\|invwfh\|invwinfixheight\|invwfw\|invwinfixwidth\|invwst\|invwlsteal\|invwrap\|invws\|invwrapscan\|invwrite\|invwa\|invwriteany\|invwb\|invwritebackup\|invxtermcodes\)\>"
+
+
+syn match vimOption "\<\(t_AB\|t_AF\|t_AU\|t_AL\|t_al\|t_bc\|t_BE\|t_BD\|t_cd\|t_ce\|t_Ce\|t_CF\|t_cl\|t_cm\|t_Co\|t_CS\|t_Cs\|t_cs\|t_CV\|t_da\|t_db\|t_DL\|t_dl\|t_ds\|t_Ds\|t_EC\|t_EI\|t_fs\|t_fd\|t_fe\|t_GP\|t_IE\|t_IS\|t_ke\|t_ks\|t_le\|t_mb\|t_md\|t_me\|t_mr\|t_ms\|t_nd\|t_op\|t_RF\|t_RB\|t_RC\|t_RI\|t_Ri\|t_RK\|t_RS\|t_RT\|t_RV\|t_Sb\|t_SC\|t_se\|t_Sf\|t_SH\|t_SI\|t_Si\|t_so\|t_SR\|t_sr\|t_ST\|t_Te\|t_te\|t_TE\|t_ti\|t_TI\|t_Ts\|t_ts\|t_u7\|t_ue\|t_us\|t_Us\|t_ut\|t_vb\|t_ve\|t_vi\|t_VS\|t_vs\|t_WP\|t_WS\|t_XM\|t_xn\|t_xs\|t_ZH\|t_ZR\|t_8f\|t_8b\|t_8u\|t_xo\|t_BS\|t_ES\)\>"
+syn match vimOption "\<\(t_F1\|t_F2\|t_F3\|t_F4\|t_F5\|t_F6\|t_F7\|t_F8\|t_F9\|t_k1\|t_K1\|t_k2\|t_k3\|t_K3\|t_k4\|t_K4\|t_k5\|t_K5\|t_k6\|t_K6\|t_k7\|t_K7\|t_k8\|t_K8\|t_k9\|t_K9\|t_KA\|t_kb\|t_kB\|t_KB\|t_KC\|t_kd\|t_kD\|t_KD\|t_KE\|t_KF\|t_KG\|t_kh\|t_KH\|t_kI\|t_KI\|t_KJ\|t_KK\|t_kl\|t_KL\|t_kN\|t_kP\|t_kr\|t_ku\)\>"
+syn match   vimOption "t_%1"
+syn match   vimOption "t_#2"
+syn match   vimOption "t_#4"
+syn match   vimOption "t_@7"
+syn match   vimOption "t_\*7"
+syn match   vimOption "t_&8"
+syn match   vimOption "t_%i"
+syn match   vimOption "t_k;"
+
+
+" Highlight a bunch of Vim functions.
+" Source: $VIMRUNTIME/syntax/vim.vim
+hi  link    vimFuncName Statement
+syn match   vimFuncName "\<vimFuncName\>" contains=@NoSpell
+syn match vimFuncName "\<\(abs\|acos\|add\|append\|appendbufline\|argc\|argidx\|arglistid\|argv\|asin\|assert_beeps\|assert_equal\|assert_equalfile\|assert_exception\|assert_fails\|assert_false\|assert_inrange\|assert_match\|assert_nobeep\|assert_notequal\|assert_notmatch\|assert_report\|assert_true\|atan\|atan2\|autocmd_add\|autocmd_delete\|autocmd_get\|balloon_gettext\|balloon_show\|balloon_split\|base64_decode\|base64_encode\|bindtextdomain\|blob2list\|blob2str\|browse\|browsedir\|bufadd\|bufexists\|buflisted\|bufload\|bufloaded\|bufname\|bufnr\|bufwinid\|bufwinnr\|byte2line\|byteidx\|byteidxcomp\|call\|ceil\|ch_canread\|ch_close\|ch_close_in\|ch_evalexpr\|ch_evalraw\|ch_getbufnr\|ch_getjob\|ch_info\|ch_log\|ch_logfile\|ch_open\|ch_read\|ch_readblob\|ch_readraw\|ch_sendexpr\|ch_sendraw\|ch_setoptions\|ch_status\|changenr\)\>"
+syn match vimFuncName "\<\(char2nr\|charclass\|charcol\|charidx\|chdir\|cindent\|clearmatches\|cmdcomplete_info\|col\|complete\|complete_add\|complete_check\|complete_info\|confirm\|copy\|cos\|cosh\|count\|cscope_connection\|cursor\|debugbreak\|deepcopy\|delete\|deletebufline\|did_filetype\|diff\|diff_filler\|diff_hlID\|digraph_get\|digraph_getlist\|digraph_set\|digraph_setlist\|echoraw\|empty\|environ\|err_teapot\|escape\|eval\|eventhandler\|executable\|execute\|exepath\|exists\|exists_compiled\|exp\|expand\|expandcmd\|extend\|extendnew\|feedkeys\|filecopy\|filereadable\|filewritable\|filter\|finddir\|findfile\|flatten\|flattennew\|float2nr\|floor\|fmod\|fnameescape\|fnamemodify\|foldclosed\|foldclosedend\|foldlevel\|foldtext\|foldtextresult\|foreach\|foreground\|fullcommand\|funcref\|garbagecollect\|get\|getbufinfo\)\>"
+syn match vimFuncName "\<\(getbufline\|getbufoneline\|getbufvar\|getcellpixels\|getcellwidths\|getchangelist\|getchar\|getcharmod\|getcharpos\|getcharsearch\|getcharstr\|getcmdcomplpat\|getcmdcompltype\|getcmdline\|getcmdpos\|getcmdprompt\|getcmdscreenpos\|getcmdtype\|getcmdwintype\|getcompletion\|getcompletiontype\|getcurpos\|getcursorcharpos\|getcwd\|getenv\|getfontname\|getfperm\|getfsize\|getftime\|getftype\|getimstatus\|getjumplist\|getline\|getloclist\|getmarklist\|getmatches\|getmousepos\|getmouseshape\|getpid\|getpos\|getqflist\|getreg\|getreginfo\|getregion\|getregionpos\|getregtype\|getscriptinfo\|getstacktrace\|gettabinfo\|gettabvar\|gettabwinvar\|gettagstack\|gettext\|getwininfo\|getwinpos\|getwinposx\|getwinposy\|getwinvar\|glob\|glob2regpat\|globpath\|has\|has_key\|haslocaldir\|hasmapto\|histadd\|histdel\)\>"
+syn match vimFuncName "\<\(histget\|histnr\|hlID\|hlexists\|hlget\|hlset\|hostname\|iconv\|id\|indent\|index\|indexof\|input\|inputdialog\|inputlist\|inputrestore\|inputsave\|inputsecret\|insert\|instanceof\|interrupt\|invert\|isabsolutepath\|isdirectory\|isinf\|islocked\|isnan\|items\|job_getchannel\|job_info\|job_setoptions\|job_start\|job_status\|job_stop\|join\|js_decode\|js_encode\|json_decode\|json_encode\|keys\|keytrans\|len\|libcall\|libcallnr\|line\|line2byte\|lispindent\|list2blob\|list2str\|list2tuple\|listener_add\|listener_flush\|listener_remove\|localtime\|log\|log10\|luaeval\|map\|maparg\|mapcheck\|maplist\|mapnew\|mapset\|match\|matchadd\|matchaddpos\|matcharg\|matchbufline\|matchdelete\|matchend\|matchfuzzy\|matchfuzzypos\|matchlist\|matchstr\|matchstrlist\|matchstrpos\|max\|menu_info\|min\|mkdir\|mode\|mzeval\|nextnonblank\)\>"
+syn match vimFuncName "\<\(ngettext\|nr2char\|pathshorten\|perleval\|popup_atcursor\|popup_beval\|popup_clear\|popup_close\|popup_create\|popup_dialog\|popup_filter_menu\|popup_filter_yesno\|popup_findecho\|popup_findinfo\|popup_findpreview\|popup_getoptions\|popup_getpos\|popup_hide\|popup_list\|popup_locate\|popup_menu\|popup_move\|popup_notification\|popup_setbuf\|popup_setoptions\|popup_settext\|popup_show\|pow\|preinserted\|prevnonblank\|printf\|prompt_getprompt\|prompt_setcallback\|prompt_setinterrupt\|prompt_setprompt\|prop_add\|prop_add_list\|prop_clear\|prop_find\|prop_list\|prop_remove\|prop_type_add\|prop_type_change\|prop_type_delete\|prop_type_get\|prop_type_list\|pum_getpos\|pumvisible\|py3eval\|pyeval\|pyxeval\|rand\|range\|readblob\|readdir\|readdirex\|readfile\|redraw_listener_add\|redraw_listener_remove\)\>"
+syn match vimFuncName "\<\(reduce\|reg_executing\|reg_recording\|reltime\|reltimefloat\|reltimestr\|remote_expr\|remote_foreground\|remote_peek\|remote_read\|remote_send\|remote_startserver\|remove\|rename\|resolve\|reverse\|round\|rubyeval\|screenattr\|screenchar\|screenchars\|screencol\|screenpos\|screenrow\|screenstring\|search\|searchcount\|searchdecl\|searchpair\|searchpairpos\|searchpos\|server2client\|serverlist\|setbufline\|setbufvar\|setcellwidths\|setcharpos\|setcharsearch\|setcmdline\|setcmdpos\|setcursorcharpos\|setenv\|setfperm\|setline\|setloclist\|setmatches\|setpos\|setqflist\|setreg\|settabvar\|settabwinvar\|settagstack\|setwinvar\|sha256\|shellescape\|shiftwidth\|sign_define\|sign_getdefined\|sign_getplaced\|sign_jump\|sign_place\|sign_placelist\|sign_undefine\|sign_unplace\|sign_unplacelist\)\>"
+syn match vimFuncName "\<\(simplify\|sin\|sinh\|slice\|sort\|sound_clear\|sound_playevent\|sound_playfile\|sound_stop\|soundfold\|spellbadword\|spellsuggest\|split\|sqrt\|srand\|state\|str2blob\|str2float\|str2list\|str2nr\|strcharlen\|strcharpart\|strchars\|strdisplaywidth\|strftime\|strgetchar\|stridx\|string\|strlen\|strpart\|strptime\|strridx\|strtrans\|strutf16len\|strwidth\|submatch\|substitute\|swapfilelist\|swapinfo\|swapname\|synID\|synIDattr\|synIDtrans\|synconcealed\|synstack\|system\|systemlist\|tabpagebuflist\|tabpagenr\|tabpagewinnr\|tagfiles\|taglist\|tan\|tanh\|tempname\|term_dumpdiff\|term_dumpload\|term_dumpwrite\|term_getaltscreen\|term_getansicolors\|term_getattr\|term_getcursor\|term_getjob\|term_getline\|term_getscrolled\|term_getsize\|term_getstatus\|term_gettitle\|term_gettty\|term_list\|term_scrape\)\>"
+syn match vimFuncName "\<\(term_sendkeys\|term_setansicolors\|term_setapi\|term_setkill\|term_setrestore\|term_setsize\|term_start\|term_wait\|terminalprops\|test_alloc_fail\|test_autochdir\|test_feedinput\|test_garbagecollect_now\|test_garbagecollect_soon\|test_getvalue\|test_gui_event\|test_ignore_error\|test_mswin_event\|test_null_blob\|test_null_channel\|test_null_dict\|test_null_function\|test_null_job\|test_null_list\|test_null_partial\|test_null_string\|test_null_tuple\|test_option_not_set\|test_override\|test_refcount\|test_setmouse\|test_settime\|test_srand_seed\|test_unknown\|test_void\|timer_info\|timer_pause\|timer_start\|timer_stop\|timer_stopall\|tolower\|toupper\|tr\|trim\|trunc\|tuple2list\|type\|typename\|undofile\|undotree\|uniq\|uri_decode\|uri_encode\|utf16idx\|values\|virtcol\|virtcol2col\)\>"
+syn match vimFuncName "\<\(visualmode\|wildmenumode\|wildtrigger\|win_execute\|win_findbuf\|win_getid\|win_gettype\|win_gotoid\|win_id2tabwin\|win_id2win\|win_move_separator\|win_move_statusline\|win_screenpos\|win_splitmove\|winbufnr\|wincol\|windowsversion\|winheight\|winlayout\|winline\|winnr\|winrestcmd\|winrestview\|winsaveview\|winwidth\|wordcount\|writefile\)\>"
+
+" Highlight a bunch of Vim Variables.
+" Source: $VIMRUNTIME/syntax/vim.vim
+hi  link    vimVimVarName Identifier
+syn match   vimVimVarName "\<vimVimVarName\>" contains=@NoSpell
+syn match vimVimVarName "\<\(count\|count1\|prevcount\|errmsg\|warningmsg\|statusmsg\|shell_error\|this_session\|version\|lnum\|termresponse\|fname\|lang\|lc_time\|ctype\|charconvert_from\|charconvert_to\|fname_in\|fname_out\|fname_new\|fname_diff\|cmdarg\|foldstart\|foldend\|folddashes\|foldlevel\|progname\|servername\|dying\|exception\|throwpoint\|register\|cmdbang\|insertmode\|val\|key\|profiling\|fcs_reason\|fcs_choice\|beval_bufnr\|beval_winnr\|beval_winid\|beval_lnum\|beval_col\|beval_text\|scrollstart\|swapname\|swapchoice\|swapcommand\|mouse_win\|mouse_winid\|mouse_lnum\|mouse_col\|operator\|searchforward\|hlsearch\|oldfiles\|windowid\|progpath\|completed_item\|option_new\|option_old\|option_oldlocal\|option_oldglobal\|option_command\|option_type\|errors\|none\|numbermax\|numbermin\|numbersize\)\>"
+syn match vimVimVarName "\<\(vim_did_enter\|testing\|t_number\|t_string\|t_func\|t_list\|t_dict\|t_float\|t_bool\|t_none\|t_job\|t_channel\|t_blob\|t_class\|t_object\|termrfgresp\|termrbgresp\|termu7resp\|termstyleresp\|termblinkresp\|event\|versionlong\|echospace\|argv\|collate\|exiting\|colornames\|sizeofint\|sizeoflong\|sizeofpointer\|maxcol\|python3_version\|t_typealias\|t_enum\|t_enumvalue\|stacktrace\|t_tuple\|wayland_display\|clipmethod\|termda1\|termosc\|vim_did_init\|clipproviders\)\>"
+
+if has("nvim")
+  syn match vimOption "\<\(channel\|inccommand\|mousescroll\|pumblend\|redrawdebug\|scrollback\|shada\|shadafile\|statuscolumn\|termpastefilter\|termsync\|winbar\|winblend\|winhighlight\)\>"
+  syn match vimFuncName "\<\(api_info\|buffer_exists\|buffer_name\|buffer_number\|chanclose\|chansend\|ctxget\|ctxpop\|ctxpush\|ctxset\|ctxsize\|dictwatcheradd\|dictwatcherdel\|file_readable\|highlight_exists\|highlightID\|jobclose\|jobpid\|jobresize\|jobsend\|jobstart\|jobstop\|jobwait\|last_buffer_nr\|menu_get\|msgpackdump\|msgpackparse\|reg_recorded\|rpcnotify\|rpcrequest\|rpcstart\|rpcstop\|serverstart\|serverstop\|sockconnect\|stdioopen\|stdpath\|termopen\|test_write_list_log\|wait\)\>"
+  syn match   vimFuncName   "\<nvim_\w\+\>"
+  syn match vimVimVarName "\<\(lua\|msgpack_types\|relnum\|stderr\|termrequest\|virtnum\)\>"
+endif
+
+
+" My custom syntax without the default vim settings.
 if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
 
    " Override default coloring of the syn/ia/au commands and any following text.
@@ -131,8 +200,8 @@ if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
    syn case match
 
    " Match first \ in new line.
-   hi  link    VimFirstSlash   Keyword
-   syn match   VimFirstSlash   '\%(^\s*\)\@<=\\\%(%(\|(\)\@!'  contains=@NoSpell
+   hi  link    VimFirstSlash   Exception
+   syn match   VimFirstSlash   '^\s*\\\%(%(\|(\)\@!'  contains=@NoSpell
 
    " Must start with $path
    hi  link     VimDollarPaths Underlined
@@ -422,60 +491,66 @@ syn match HLSpecial11      "\<HLSpecial11\>"      contains=@NoSpell
 "------------------------------------------------------------------------------
 "                               Vim abbreviations
 "------------------------------------------------------------------------------
-inorea _vimfunc   " Some description<cr>
-            \function! funcname(some_input)<cr>
-            \    <bs><cr>
-\endfunction<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimfunc0  " Some description<cr>
+inorea _vfunch    "------------------------------------------------------------------------------<cr>
+            \" Function: <cr>
+            \" Description: <cr>
+            \"------------------------------------------------------------------------------<c-r>=Eatchar('\s')<cr>
+inorea _vfunc   "------------------------------------------------------------------------------<cr>
+            \" Function: v_fname<cr>
+            \" Description:<cr>
+            \"------------------------------------------------------------------------------<cr>
             \function! funcname()<cr>
-            \    <bs><cr>
-            \endfunction<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
+            \   <cr>
+            \<bs><bs><bs>endfunction<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
+inorea _vfunci  "------------------------------------------------------------------------------<cr>
+            \" Function: v_fname<cr>
+            \" Description:<cr>
+            \"------------------------------------------------------------------------------<cr>
+            \function! funcname(some_input)<cr>
+            \   <cr>
+            \<bs><bs><bs>endfunction<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea _vimif     if a == b<cr>
-            \ <bs><cr>
+inorea _vif     if a == b<cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimifel   if a == b<cr>
-            \ <bs><cr>
+inorea _vifel   if a == b<cr>
+            \   <cr>
             \<bs><bs><bs>else<cr>
-            \ <bs><cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimifelif if a == b<cr>
-            \ <bs><cr>
+inorea _vifelif if a == b<cr>
+            \   <cr>
             \<bs><bs><bs>elseif c == d<cr>
-            \ <bs><cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimifelifel if a == b<cr>
-            \ <bs><cr>
+inorea _vifelifel if a == b<cr>
+            \   <cr>
             \<bs><bs><bs>elseif c == d<cr>
-            \ <bs><cr>
+            \   <cr>
             \<bs><bs><bs>else<cr>
-            \ <bs><cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea _vimifexists  if exists("g:v")<cr>
-            \ <bs><cr>
+inorea _vifexists  if exists("g:v")<cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimifnexists if !exists("g:v")<cr>
-            \ <bs><cr>
+inorea _vifnexists if !exists("g:v")<cr>
+            \   <cr>
             \<bs><bs><bs>endif<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea _vimia     inorea replace_word   replace_with<left><right><c-r>=Eatchar('\s')<cr>
+inorea _via     inorea replace_word   replace_with<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea _vimahead   \%(\)\@=<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimbehind  \%(\)\@<=<left><right><c-r>=Eatchar('\s')<cr>
+inorea _vso    so $vim_folder_path/filename.vim<left><right><c-r>=Eatchar('\s')<cr>
+inorea _vau    au  BufNewFile,BufRead * so $vim_folder_path/filename.vim<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea _vimso    so $vim_folder_path/filename.vim<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimauso  au  BufNewFile,BufRead * so $vim_folder_path/filename.vim<left><right><c-r>=Eatchar('\s')<cr>
-inorea _vimaulet au  BufNewFile,BufRead * let b:v = 'val'<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _vimaug " Description<cr>
+inorea _vaug " Description<cr>
             \augroup group_name<cr>
-            \    <bs><cr>
+            \<cr>
             \   " If you want to clear a group, use "au!" inside the group<cr>
             \au!<cr>
-            \ <bs><cr>
+            \<cr>
             \autocmd BufNewFile,BufRead * command_here<cr>
-            \ <bs><cr>
+            \<cr>
             \<bs><bs><bs>augroup END<up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 "------------------------------------------------------------------------------
 

@@ -28,15 +28,19 @@
 " SOFTWARE.
 "==============================================================================
 
-" I use the colemak-dh keyboard layout and custom mappings for such layout.
-" Setting it here to qwerty instead as most people use that.
+
+"------------------------------------------------------------------------------
+" 1. Global Variables
+"------------------------------------------------------------------------------
+
+" I use the colemak-dh keyboard layout and custom mappings for this layout.
 let g:keyboard_layout = "qwerty"
 " let g:keyboard_layout = "colemak-dh"
 
 " Selects between windows and linux OS
 let g:using_windows = 0
 
-" Select btw font styles if you use different PCs or Operating Systems.
+" Select btw font styles
 let g:font_style = 0
 
 " Use encryption
@@ -48,14 +52,15 @@ let g:use_autocorrect = 1
 " Set the <leader> key to space
 let mapleader="\<space>"
 
-" Used to load large files faster by not loading vimrc settings.
-" File is large from 1000mb.
-let g:LargeFile = 1024 * 1024 * 1000
+" This is used to load large files faster by not loading vimrc settings.
+" File is large if over 500MB.
+let g:LargeFile = 1024 * 1024 * 500
 
 " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
 " Used to improve scrolling performance and speed.
 " Indicates when pageup/pagedown was last used.
 " let g:syntax_disabled = 0
+
 
 " NOTE: Controls the syntax highlightings in all files.
 " If set to 0 will use the default vim syntax with the pablo colorscheme.
@@ -93,7 +98,6 @@ endif
 
 
 " Path to key vim folders
-" For Windows
 if g:using_windows
    let $vim_folder_path  = '$HOME/vimfiles'
    let $vim_spell_path   = '$HOME/vimfiles/spell'
@@ -107,18 +111,10 @@ else " For Linux
 endif
 
 
-" This will display the name of the syntax group that is being applied under
-" the cursor. Lets you debug which syntax group is giving you issues!
-function! SynGroup()
-    return synIDattr(synID(line('.'),col('.'),1),'name') . ' ' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name')
-endfunction
-
-
 " NOTE: You can open multiple splits/tabs from terminal!!!
 " gvim -o *.sv   horizontal split all files
 " gvim -O *.sv   vertical split all files
 " gvim -p *.sv   tabs all files
-
 
 " NOTE: Link neovim to vim's .vimrc and .vim/ in linux!
 " Link the .vimrc file in neovim.
@@ -132,7 +128,6 @@ endfunction
 " Link the Pasky plugin to use Claude's API in neovim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
 
-
 " NOTE: You can get a Claude API to work with gvim and vim and neovim!!!
 "       See the notes above to link neovim to vim or place everything in
 "       neovim's directory structure instead...
@@ -144,11 +139,10 @@ endfunction
 " and add it to .vim/pack/pasky/start/claude.vim/
 " 2) Get an API key from https://platform.claude.com
 " 3) Add API key in g:claude_api_key
-let g:claude_api_key='sk-ant-api03-wwwwwwwww_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy-zzzzzzzz'
-" OR add the API key your inside your shell configuration file:
+" let g:claude_api_key='add_api_key_here'
+" OR add to your .bash_aliases file:
 " export API_KEY=add_api_key_here
-" and load the API_KEY with:
-" let g:claude_api_key=expand("$API_KEY")
+let g:claude_api_key=expand("$API_KEY")
 " 4) And that should be it, open a new vim window, press <leader>cc to open a
 "    Claude prompt, type your question or command in the prompt, press ctrl-]
 "    to send you question or command, and Claude should start replying in
@@ -157,132 +151,49 @@ let g:claude_api_key='sk-ant-api03-wwwwwwwww_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_yyyy
 let g:claude_map_implement = "<leader>ci"
 let g:claude_map_open_chat = "<leader>cc"
 let g:claude_map_cancel_response = "<c-c>"
+" let g:claude_map_cancel_response = "<c-c>"
+" (<C-]> here only affects Claude window, not tags jumping)
 let g:claude_map_send_chat_message = "<c-]>"
 " Increase limit from 200k to 1m tokens
-" WARNING: Using 1m tokens can increase costs. Only use if necessary!
+" WARNING: Using 1m tokens can easily increase costs. Only use if necessary!
 "          To decrease costs, ask question in small (or even empty files)
 "          and all only keep the relevant code/text to the question.
 let g:claude_use_1m_context = 0
-" Prevent Claude from editing files, opening new files, searching the web or
+" Prevent Claude from editing files, opening new files or searching the web or
 " using tools. Try to keep it's answers simple in the chat window... This will
 " save cost as Claude won't send 5000k lines of code or documentation from a
 " file or website it decided to open...
 let g:claude_disable_tool_use = 1
 if g:claude_disable_tool_use
-   let g:claude_tools = ""
+   " let g:claude_tools = ""
+   let g:claude_tools = []
 endif
 " If set, Claude will not add indentation to it's answers.
 let g:claude_no_indent = 1
-" Set the model to use. By default set to claude-sonnet-4-6
+" Set the model to use. By default this is set to claude-sonnet-4-6
 " let g:claude_model = 'claude-opus-4-6'
 " Manually save history to ~/claude_history.txt with <leader>cs
-noremap <leader>cs :w >> ~/claude_history.txt<cr>
-
-
-" NOTE: Vim/nvim/neovim on my linux was not copying selections to the linux
-" selection buffer even though I have clipboard utility installed and
-" loaded... and yet gvim did not have this problem...
-" Below works to solve this problem in vim/neovim and even works in Windows.
-" NOTE: Sometimes you have to give a second for it to grab the selected text...
-" NOTE: Set g:hack_copy_selection to 1 to enable.
-let g:hack_copy_selection=0
-if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
-
-   " When the cursor moves, first stop any previous timers, then start a new
-   " timer and after 50ms copy the visual selection to the clipboard but only
-   " do this once per selection.
-   let g:visual_copied = 0
-   let g:visual_timer = -1
-   augroup CopyOnVisualHold
-      au!
-      au CursorMoved * call s:visual_hold_reset()
-      function! s:visual_hold_reset()
-          if g:visual_timer != -1
-              call timer_stop(g:visual_timer)
-          endif
-          let mode = mode()
-          if (mode == 'v' || mode == 'V' || mode == "\<C-V>") && g:visual_copied == 0
-              let g:visual_timer = timer_start(50, {-> execute('normal! "*ygv')})
-              let g:visual_copied = 1
-          else
-              let g:visual_timer = -1
-              let g:visual_copied = 0
-          endif
-      endfunction
-   augroup END
-endif
+nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 
 
 "------------------------------------------------------------------------------
-" Default settings
+" 2. Functions
 "------------------------------------------------------------------------------
-function! DefaultSettings()
-   let g:EnteredDefaultSetting = 1
 
-   "------------------------------------------------------------------------
-   " These options and commands set the font, the background
-   " and the dimensions of the vim window.
-
-   " Selects between windows and linux OS
-   if has("gui_running")
-      if g:using_windows
-         if !has('nvim')
-            set guifont=Consolas:h13.5:cANSI
-         else " For neovim
-            set guifont=Consolas:h13.5:cANSI
-         endif
-         set lines=46          " Height
-         set columns=140       " Width
-
-      else " For Linux
-         " Select btw font styles
-         if g:font_style == 0
-            if !has('nvim')
-               set guifont=Monospace\ 12
-            else " for neovim
-               set guifont=Monospace:h12
-            endif
-            set lines=46          " Height
-            set columns=130       " Width
-         else
-            if !has('nvim')
-               set guifont=Monospace\ 20
-               " winpos 1000 0         " Open gvim in top right by default
-            else " For neovim
-               set guifont=Monospace:h20
-            endif
-            set lines=30          " Height
-            set columns=115       " Width
-         endif
-      endif
-   endif
-
-   " Set the default colorscheme
-   if g:select_custom_syntax > 0
-      " The custom colorscheme is in .vim/colors/custom_colorscheme.vim
-      colorscheme custom_colorscheme
-   else
-      " Use one of the default colorschemes
-      colorscheme pablo
-   endif
-
-   "------------------------------------------------------------------------
-   " Set 'nocompatible' to ward off unexpected things that your distro might
-   " have made, as well as sanely reset options when re-sourcing .vimrc.
-   set nocompatible
-
-   " Attempt to determine the type of a file based on its name and possibly
-   " its contents.  Use this to allow intelligent auto-indenting for each
-   " filetype, and for plugins that are filetype specific.
-   filetype indent plugin on
+"------------------------------------------------------------------------------
+" Function: CommonSettings()
+" Description: These options and commands set the font, the background, the
+"              colorsheme and the dimensions of the vim window.
+"------------------------------------------------------------------------------
+function! CommonSettings()
 
    " Enable syntax highlighting
    if g:select_custom_syntax <= 2
       syntax on
    elseif g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
       " NOTE: Here I use my own syntax highlighting settings so turning
-      "       syntax off. See "augroup EnCustomSyntax" below where my
-      "       custom vim syntax files are sourced.
+      "       syntax off. See "augroup EnCustomSyntax" in custom_syntax.vim
+      "       where my custom vim syntax files are sourced.
 
       " If syntax is off, vim's default syntax files will not be loaded.
       "      :syntax list   Lists the syntax groups loaded.
@@ -335,18 +246,101 @@ function! DefaultSettings()
       " then the custom syntax will get loaded after causing a small lag
       " that is noticeable when loading multiple files in split windows.
       " syntax on
-   end
+   endif
 
-   "------------------------------------------------------------------------
+   " NOTE: Need to set colorscheme after syntax on.
+   " Load colorscheme before the LargeFile augroup to avoid a white flash when
+   " first opening new files.
+   call LoadColorscheme()
+
+   " Selects between windows and linux OS
+   if has("gui_running")
+      if g:using_windows
+         if !has('nvim')
+            set guifont=Consolas:h13.5:cANSI
+         else " For neovim
+            set guifont=Consolas:h13.5:cANSI
+         endif
+         set lines=46          " Height
+         set columns=140       " Width
+
+      else " For Linux
+         " Select btw font styles
+         if g:font_style == 0
+            if !has('nvim')
+               set guifont=Monospace\ 12
+               " winpos 1000 0         " Open gvim in top right by default
+            else " for neovim
+               set guifont=Monospace:h12
+            endif
+            set lines=47          " Height
+            set columns=130       " Width
+         else
+            if !has('nvim')
+               set guifont=Monospace\ 20
+               " winpos 1000 0         " Open gvim in top right by default
+            else " For neovim
+               set guifont=Monospace:h20
+            endif
+            set lines=30          " Height
+            set columns=115       " Width
+         endif
+      endif
+   endif
+
+   " Set default value for comment_leader
+   if !exists('b:comment_leader')
+      let b:comment_leader = '//'
+   endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: LoadColorscheme()
+" Description: Loads the selected colorshememe.
+"------------------------------------------------------------------------------
+function! LoadColorscheme()
+   if g:select_custom_syntax > 0 && filereadable(expand($vim_folder_path . "/colors/custom_colorscheme.vim"))
+      " The custom colorscheme is in .vim/colors/custom_colorscheme.vim
+      colorscheme custom_colorscheme
+   else
+      " Use one of the default colorschemes
+      colorscheme pablo
+   endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: DefaultSettings()
+" Description: Loads the default settings, mappings and syntax files
+"------------------------------------------------------------------------------
+function! DefaultSettings()
+   let g:EnteredDefaultSetting = 1
+
+   "---------------------------------------------------------------------------
+   " Set 'nocompatible' to ward off unexpected things that your distro might
+   " have made, as well as sanely reset options when re-sourcing .vimrc.
+   set nocompatible
+
+   " Attempt to determine the type of a file based on its name and possibly
+   " its contents.  Use this to allow intelligent auto-indenting for each
+   " filetype, and for plugins that are filetype specific.
+   filetype indent plugin on
+
+   " Enable title if titlestring is set
+   set title
+
+   "---------------------------------------------------------------------------
    " Allows you to switch from an unsaved buffer without saving it first.
    " Also allows you to keep an undo history for multiple files.
    " Vim will complain if you try to quit without saving, and swap files
    " will keep you safe if your computer crashes.
    set hidden
 
-   " Better command-line completion when pressing tab to autocomplete.
+   " Command-line completion when pressing tab to autocomplete.
    set wildmenu
-   set wildmode=full,full
+   set wildmode=full
+   " set wildmode=longest,full
 
    " Show partial commands in the last line of the screen.
    set showcmd
@@ -357,7 +351,7 @@ function! DefaultSettings()
    " Highlight searches as you type.
    set incsearch
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Use case insensitive search, except when using capital letters.
    set ignorecase
    set smartcase
@@ -374,6 +368,22 @@ function! DefaultSettings()
    " 'cindent' does something like this, works better in most cases, but is
    " more strict,  When 'cindent' is on or 'indentexpr' is set, setting
    " 'smartindent' has no effect. See |C-indenting|.
+   " Normally 'autoindent' should also be on when using 'smartindent'.
+   " An indent is automatically inserted:
+   " - After a line ending in '{'.
+   " - After a line starting with a keyword from 'cinwords'.
+   " - Before a line starting with '}' (only with the "O" command).
+   " When typing '}' as the first character in a new line, that line is
+   " given the same indent as the matching '{'. When using the ">>" command,
+   " lines starting with '#' are not shifted right.
+   " WARNING: smartindent makes it so I can't use >> on lines that start
+   " with # !!
+   " set smartindent
+   " Need to set this or I can't use >> on lines that start with # !!
+   " but this also make vim indent c style with { parenthesis }.
+   " See |C-indenting|.
+   " NOTE: Changing this may affect multiline abbreviations...
+   " Set based on filetype? -> some of my .vim files will override this...
    set cindent
    set cinkeys-=0#
 
@@ -423,8 +433,8 @@ function! DefaultSettings()
    set visualbell
 
    " Enable use of the mouse for all modes.
-   " set mouse=a
-   " set mousemodel=popup
+   set mouse=a
+   set mousemodel=popup
 
    " Yank/copy to clipboard like in windows.
    " set clipboard^=unnamedplus "append += does not word if an item has
@@ -444,7 +454,7 @@ function! DefaultSettings()
    " lastline: When included, as much as possible of the last line
    " in a window will be displayed. When not included, a last line
    " that doesn't fit is replaced with "@" lines.
-   set display+=lastline
+   set display=lastline
 
    " If set, then line numbers above or below are numbered relatively to the
    " current line ...,3,2,1 for lines above and 1,2,3,... for lines below
@@ -452,12 +462,12 @@ function! DefaultSettings()
    " set relativenumber
 
    " Quickly time out on keycodes, but never time out on mappings.
-   set notimeout ttimeout ttimeoutlen=400
+   set notimeout ttimeout ttimeoutlen=100
 
    " If this is here, will not auto-comment by default.
    " set formatoptions-=cro  " NOTE: Added further below.
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Use 3 spaces instead of tabs. Converts tab to spaces.
    set expandtab
    " Automatically indent after new line ex if inside function.
@@ -467,6 +477,8 @@ function! DefaultSettings()
 
    " Indents word-wrapped lines as much as the 'parent' line.
    set breakindent
+   set breakindentopt=min:40
+   " set breakindentopt=shift:2,min:40
 
    " Turn on line-wrapping (text loops around if not enough space).
    set wrap
@@ -478,9 +490,12 @@ function! DefaultSettings()
 
    " In gvim, 'guioptions' controls whether various GUI widgets are shown.
    " Below means left/bottom scroll bar disabled, right scroll bar enabled.
-   set guioptions+=LlRrb
-   set guioptions-=LlRrb
-   set guioptions+=r
+   " set guioptions+=LlRrb
+   " set guioptions-=LlRrb
+   " set guioptions+=r
+   " Remove the toolbar (icon bar) in gvim.
+   " set guioptions-=T
+   set guioptions=aegimtr
 
    " Will highlight spelling mistakes in all file types if set
    " I set this in txt.vim as I don't want it enabled in most file types.
@@ -491,7 +506,7 @@ function! DefaultSettings()
 
    " When you turn on spell checking, tell vim to not check the spelling of
    " text that is not explicitly covered by a syntax item.
-   " syntax spell notoplevel
+   syntax spell notoplevel
 
    " Prevents the cursor from going within the top or bottom x lines of the
    " screen and will readjust the screen to show a min of x lines below or
@@ -533,7 +548,7 @@ function! DefaultSettings()
       " disable folds. You can toggle folding with za and you can fold
       " everything with zm/zM and unfold everything with zr/zR.
       set foldmethod=indent
-      set foldignore=
+      " set foldignore=
       " Don't fold by default.
       set nofoldenable
       " set foldlevel=1
@@ -545,11 +560,15 @@ function! DefaultSettings()
 
    " Add the abbreviation list to the thesaurus to look them up as you type
    " with <c-x><c-t> or <c-n> or <c-p>.
-   set thesaurus+=$vim_folder_path/abbrevlist.vim
+   if filereadable(expand($vim_folder_path . "/abbrevlist.vim"))
+      set thesaurus+=$vim_folder_path/abbrevlist.vim
+   endif
 
    " When this option is set, the screen will not be redrawn while executing
    " macros, registers and other commands that have not been typed. Speeds
    " up macros significantly!!!
+   " WARNING: Messes with some mappings like ones that rely on the linux
+   " selection buffer to copy and paste contents! But there are workarounds.
    set lazyredraw
 
    " Search down into subfolders when using the :find command.
@@ -576,9 +595,10 @@ function! DefaultSettings()
    " s: Scan the thesaurus (I added all my abbreviations in there!).
    " k: Scan dictionary files. (adds too many entries, so keeping this
    "    separate) (see autocomplete mappings further below).
-   set complete=.,w,b,u,t,i,s
+   " set complete=.,w,b,u,t,i,s
+   set complete+=s
    " Use the autocomplete menu even if there is only one match.
-   set completeopt+=menuone
+   set completeopt=menu,preview,menuone
 
    " netrw file browser (can be opened with :E).
    " Disable banner
@@ -597,7 +617,6 @@ function! DefaultSettings()
    " Set a line at column 80 to help encourage keeping the text under 80
    " characters per line.
    " set cc=80
-   " highlight ColorColumn ctermbg=236 guibg=grey30
 
    " Maximum column per line before disabling syntax highlighting.
    if g:performance_mode > 0
@@ -606,31 +625,139 @@ function! DefaultSettings()
       set maxmempattern=5000
    endif
 
-   " Remove the toolbar (icon bar) in gvim.
-   " set guioptions-=T
+   " Disable modelines to avoid potential security issues...
+   set nomodeline
+
+   " --------------------------------------------------------------------------
+   " Some non GUI settings
+   " --------------------------------------------------------------------------
+   if !has("gui_running")
+      " Changes cursor shape in visual/insert mode.
+      let &t_SI = "\e[6 q"
+      let &t_SR = "\e[4 q"
+      let &t_EI = "\e[2 q"
+
+      " set t_Co=256
+   endif " has("gui_running")
+
+   " --------------------------------------------------------------------------
+   " Load all Mappings
+   " --------------------------------------------------------------------------
+   call LoadMappings()
+
+   " --------------------------------------------------------------------------
+   " Load autocorrect files
+   " --------------------------------------------------------------------------
+   if !exists("g:AutocorrectLoaded") && g:use_autocorrect
+      " echo "autocorrect"
+      let g:AutocorrectLoaded=1
+      if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
+         so $vim_folder_path/autocorrect/autocorrect3.vim
+      endif
+      if filereadable(expand($vim_folder_path . "/autocorrect/wordlist.vim"))
+         so $vim_folder_path/autocorrect/wordlist.vim
+      endif
+   endif
 
 
-   "---------------------------------------------------------------------------
-   " remap vs noremap
-   "---------------------------------------------------------------------------
-   " remap is an option that makes mappings work recursively.
-   "
-   " :map and :noremap are recursive and non-recursive versions of the various
-   " mapping commands. What that means is that if you do:
-   " :map j gg
-   " :map Q j
-   " :noremap W j
-   "
-   " j will be mapped to gg. Q will also be mapped to gg, because j will be
-   " expanded for the recursive mapping. W will be mapped to j (and not to gg)
-   " because j will not be expanded for the non-recursive mapping.
-   "
-   " You can even create infinite recursive mapping if you map to the same key!
-   "---------------------------------------------------------------------------
+   " --------------------------------------------------------------------------
+   " Add filetype for extensions that don't have any and other FileType
+   " related autocmds.
+   " --------------------------------------------------------------------------
+   augroup AddFiletype
 
-   "------------------------------------------------------------------------
+      " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
+      au!
+
+      " If this is here, will not auto-comment by default.
+      au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+      " Add filetype for extensions that don't have any
+      au BufNewFile,BufRead *.REG         set filetype=registry
+      au BufNewFile,BufRead .aliases      set filetype=sh
+      au BufNewFile,BufRead *.log,*.log.* set filetype=log
+
+      " Apply spell checking everywhere in text files.
+      au FileType text syntax spell toplevel
+   augroup END
+
+
+   " --------------------------------------------------------------------------
+   " Colors and Syntax Highlighting
+   " --------------------------------------------------------------------------
+   " NOTE: This file is responsible for loading the custom syntax
+   " highlighting groups based on the file extension whenever
+   " g:select_custom_syntax >= 2.
+   " --------------------------------------------------------------------------
+   so $vim_folder_path/syntax/custom_syntax.vim
+
+
+   " --------------------------------------------------------------------------
+   " Always load file at last known cursor position
+   " --------------------------------------------------------------------------
+   augroup RestoreCursor
+      au!
+      if g:performance_mode <= 1 && g:using_encryption == 0
+         autocmd BufReadPost *
+            \ let g:line = line("'\"")
+            \ | if g:line >= 1
+            \      && g:line <= line("$") && &filetype !~# 'commit'
+            \      && index(['xxd', 'gitrebase', 'tutor', 'svn', 'netrw', 'diff', 'fugitive', 'oil'], &filetype) == -1
+            \      && expand("%") !~# '\(svn-commit\|/tmp/\|fugitive://\)'
+            \ |    execute "normal! g`\""
+            \ |    if len(getbufinfo({'buflisted': 1})) == 1
+            \ |       execute "redraw!"
+            \ |    endif
+            \ | endif
+      endif
+   augroup END
+
+   " --------------------------------------------------------------------------
+   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
+   " Used to improve scrolling performance and speed.
+   " --------------------------------------------------------------------------
+   " augroup SyntaxOnCursorHold
+   "    au!
+   "    autocmd CursorHold * if g:syntax_disabled | doautocmd EnCustomSyntax BufRead | let g:syntax_disabled = 0 | endif
+   " augroup END
+
+   " --------------------------------------------------------------------------
+   " Automatically Resize splits whenever a new split is opened.
+   " --------------------------------------------------------------------------
+   augroup AutoResizeSplits
+      autocmd!
+      " WinEnter will prevent keeping 2 splits equal length for comparison.
+      " autocmd WinEnter * wincmd _ | exe "wincmd |"
+      autocmd WinNew * if &buftype == '' | wincmd _ | exe "wincmd |" | endif
+   augroup END
+
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: LoadMappings()
+" Description: Loads all mappings
+"------------------------------------------------------------------------------
+" remap vs noremap:
+" remap is an option that makes mappings work recursively.
+"
+" :map and :noremap are recursive and non-recursive versions of the various
+" mapping commands. What that means is that if you do:
+" :map j gg
+" :map Q j
+" :noremap W j
+"
+" j will be mapped to gg. Q will also be mapped to gg, because j will be
+" expanded for the recursive mapping. W will be mapped to j (and not to gg)
+" because j will not be expanded for the non-recursive mapping.
+"
+" You can even create infinite recursive mapping if you map to the same key!
+"------------------------------------------------------------------------------
+function! LoadMappings()
+
+   "---------------------------------------------------------------------------
    " Make vim similar to windows (save, copy, paste, select, ...)
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Update jump list with m' on cut, copy and paste (you can use <c-o>
    " and <c-i> to jump to past locations). NOTE: gvim requires an extra
@@ -667,37 +794,35 @@ function! DefaultSettings()
    nnoremap <a-p>   a<middlemouse><esc>
 
    " Select all in file.
-   nnoremap <a-a> GVgg
-   vnoremap <a-a> <esc>GVgg
+   nnoremap <a-a> ggVG
+   vnoremap <a-a> <esc>ggVG
 
    " Use CTRL-S for saving, also in Insert mode.
-   nnoremap <c-s> :update<cr>
-   vnoremap <c-s> <esc>:update<cr>
-   " gi goes to last insertion, <c-g>u updates last undo checkpoint.
-   inoremap <c-s> <esc>:update<cr>gi<c-g>u
+   nnoremap <silent> <c-s> :update<cr>
+   " vnoremap <silent> <c-s> <esc>:update<cr>
+   vnoremap <silent> <c-s> <cmd>update<cr>
+   " inoremap <silent> <c-s> <esc>:update<cr>gi
+   inoremap <silent> <c-s> <cmd>update<cr>
 
    " Map backspace to delete like in windows.
    nnoremap <bs> i<bs><right><esc>
    vnoremap <bs> <del>
    nnoremap <del> i<del><right><esc>
 
-   " Added <c-z> to clear/reset an ongoing abbreviation in insert mode.
-   inoremap <c-z> <bs><esc>gi
-
    " Set and unset line wrap.
    nnoremap <silent><a-q> :set wrap!<cr>
 
    " Will pop up a menu if mousemodel=popup.
-   nnoremap <leader>z <rightmouse>
+   nnoremap <leader>zm <rightmouse>
 
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Tab, enter, whitespace mappings
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Insert newline with enter without entering insert mode.
-   noremap <cr> o<esc>
-   noremap <s-cr> O<esc>
+   nnoremap <expr> <cr> index(['quickfix','help','terminal'], &buftype) >= 0 ? "\<cr>" : "o\<esc>"
+   nnoremap <s-cr> O<esc>
    inoremap <s-cr> <cr><esc>i
    inoremap <c-cr> <esc>o
 
@@ -710,7 +835,7 @@ function! DefaultSettings()
    " NOTE: Make tab and space work the same for visual and block visual
    "       mode, let it shift all lines equally.
    if g:using_windows
-      vnoremap <expr> <tab> mode() ==# "v" ? "<c-v><s-i><tab><esc>gv" : "<s-i><tab><esc>gv"
+      vnoremap <expr> <tab> mode() ==# "v" ? "<c-v><s-i><tab>" : "<s-i><tab>"
    else " For Linux
       vnoremap <expr> <tab> mode() ==# "v" ? "<c-v><s-i><tab>" : "<s-i><tab>"
    endif
@@ -729,9 +854,9 @@ function! DefaultSettings()
    inoremap ? ?<c-g>u
 
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Movement related mappings
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
@@ -793,8 +918,8 @@ function! DefaultSettings()
       inoremap <c-l> <esc>la
    endif
 
-   " Add insert mode A I movements c-a c-i.
-   inoremap <c-a> <esc><s-a>
+   " Add insert mode A I movements
+   inoremap <c-1> <esc><s-a>
    " WARNING: "inoremap <c-i>" Messes up tabs as <c-i> is mapped to tab!!!
    " inoremap <c-i> <esc><s-i>
    inoremap <c-0> <esc>0i
@@ -808,11 +933,6 @@ function! DefaultSettings()
       vnoremap <c-f> <c-u>
       nnoremap <a-c> <pagedown><s-m>
       vnoremap <a-c> <pagedown><s-m>
-      nnoremap <c-c> <c-d>
-      vnoremap <c-c> <c-d>
-      " c-c was used to interrupt current command.
-      vnoremap <a-x> <c-c>
-      vnoremap <a-z> <c-c>
    else " For qwerty
 
    endif
@@ -823,33 +943,21 @@ function! DefaultSettings()
    " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
 
    " Uppercase / capitalize / lowercase case of word.
-   nnoremap <c-u> viwU
-   nnoremap <c-l> viwu
+   if g:keyboard_layout == "colemak-dh"
+      nnoremap <c-u> viwU
+      nnoremap <c-l> viwu
+   else " For qwerty
 
+   endif
    " Toggle / uppercase / capitalize / lowercase word under cursor.
    nnoremap <c-`> viw~
 
-   " Delete word in i mode.
-   inoremap <c-d> <c-w>
-   " NOTE: "inoremap <c-v>" conflicts with unicode (i)c-v...
-   " inoremap <c-v> <esc>ediwa<bs><esc>a
-   " Delete word in n mode.
-   inoremap <a-d> daw
-   " Delete WORD in n mode.
-   nnoremap <a-s-d> daW
-
-   " Delete tab at start of line, (<c-t> inserts tab at start of line).
-   inoremap <c-g> <c-d>
-
-   " Map c-d to delete line contents while keeping empty line.
-   " nnoremap <c-d> <c-c>
-   " vnoremap <c-d> <c-c>
-   nnoremap <c-d> 0D
 
    " Append next line to end of current line.
    " See help :join   - J without g will insert up to 2 spaces (variable).
-   nnoremap <a-j> j0i<space><esc>kg<s-j>
+   nnoremap <a-j> <down>0i<space><esc>kg<s-j>
    vnoremap <a-j> <s-j>
+
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
@@ -867,9 +975,9 @@ function! DefaultSettings()
    endif
 
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Autocorrect related mappings
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
@@ -913,12 +1021,10 @@ function! DefaultSettings()
    " Exit autocomplete menu and revert to original text.
    inoremap <c-;> <c-e>
    inoremap <a-;> <c-e>
-   " Select current autocomplete suggestion.
-   inoremap <c-space> <c-y>
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Search related mappings
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Search for item under cursor with mouse.
    " "*y will add selection to the linux selection buffer (needed here
@@ -1008,6 +1114,10 @@ function! DefaultSettings()
    vnoremap <leader>rr <esc>m'gv:<bs><bs><bs><bs><bs>%s/\C\<<middlemouse>\>/<middlemouse>/g<left><left><space><bs>
 
 
+   " Replace all c style /*multi-line*/ comments with single-line //comments.
+   noremap <leader>r/ m':%s/\/\*/\/\//g<cr>:%s/ *\*\///g<cr>:noh<cr><c-o><c-o>
+
+
    " Search for CamelCase.
    nnoremap <leader>sC /\(\<\u\l\+\\|\l\+\)\(\u\)<cr>
    " Convert each NameLikeThis to name_like_this in current line.
@@ -1021,18 +1131,15 @@ function! DefaultSettings()
 
 
    " Clear search highlighting.
-   nnoremap <c-n> :noh<cr>
+   nnoremap <silent> <c-n> :noh<cr>
 
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Switching/recentering window positioning mappings.
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
    " Faster map to quit all files in window.
-   " noremap ZZ :qa<cr>
-
-   " Center window after quitting.
-   " noremap ZA :q<cr><c-w><bar><c-w>_
+   nnoremap <leader>zz :qa<cr>
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
@@ -1058,7 +1165,7 @@ function! DefaultSettings()
    nnoremap <silent> <c-left>  :exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
 
 
-   " Move Vim window to a different position.
+   " Move window to a new position.
    nnoremap <a-1> :winpos 0 0<cr>
    nnoremap <a-2> :winpos 100 0<cr>
    nnoremap <a-3> :winpos 200 0<cr>
@@ -1070,69 +1177,20 @@ function! DefaultSettings()
    nnoremap <a-9> :winpos 800 0<cr>
    nnoremap <a-0> :winpos 900 0<cr>
 
-   " Full-size window current split.
+   " In multi-split windows, will full-size current file.
    nnoremap <c-space> <c-w><bar><c-w>_zz
 
 
-   " File tabs shortcuts.
-   nnoremap <leader>t<cr>     :tabnew<cr>
-   nnoremap <leader>t<Space>  :tabnew
-   nnoremap <leader>tf        :tabfirst<cr>
-   nnoremap <leader>tn        :tabnext<cr>
-   nnoremap <leader>tp        :tabprev<cr>
-   nnoremap <leader>tl        :tablast<cr>
-   nnoremap <leader>tq        :tabclose<cr>
-
-   " Map a-o to insert new line at the beginning of the next line.
-   nnoremap <a-o> o<esc>i
-   inoremap <a-o> <cr><esc>i
-   nnoremap <a-cr> <cr>
-   inoremap <a-cr> <cr><esc>i
-
-   "------------------------------------------------------------------------
    " Zoom in/out.
-   noremap <c-middlemouse> :LargerFont<cr>
-   noremap <s-middlemouse> :SmallerFont<cr>
-   noremap Zi :LargerFont<cr>
-   noremap Zo :SmallerFont<cr>
-
-   " Functions for the zoom in/out.
-   function! AdjustFontSize(amount)
-      let s:pattern = '^\(.* \)\([1-9][0-9]*\)$'
-      let s:minfontsize = 6
-      let s:maxfontsize = 20
-      " if has("gui_gtk2") && has("gui_running")
-      if has("gui_running")
-        let fontname = substitute(&guifont, s:pattern, '\1', '')
-        let cursize = substitute(&guifont, s:pattern, '\2', '')
-        let newsize = cursize + a:amount
-        if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
-          let newfont = fontname . newsize
-          let &guifont = newfont
-        endif
-      else
-        echoerr "You need to run the GTK2 version of Vim to use this function."
-      endif
-   endfunction
-
-   function! LargerFont()
-      call AdjustFontSize(1)
-   endfunction
-   command! LargerFont call LargerFont()
-
-   function! SmallerFont()
-      call AdjustFontSize(-1)
-   endfunction
-   command! SmallerFont call SmallerFont()
-   "------------------------------------------------------------------------
+   nnoremap <c-middlemouse> :LargerFont<cr>
+   nnoremap <s-middlemouse> :SmallerFont<cr>
+   nnoremap <leader>zi :LargerFont<cr>
+   nnoremap <leader>zo :SmallerFont<cr>
 
 
-   "------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Useful scripts mappings
-   "------------------------------------------------------------------------
-
-   " noremap <silent> gc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
-   " noremap <silent> gu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
+   "---------------------------------------------------------------------------
 
    " Commenting blocks of code.
    " <c-b> moves to the beginning of the line in command line mode.
@@ -1142,37 +1200,26 @@ function! DefaultSettings()
    " =     This specifies the expression register.
    " _o_   in visual mode will start from first non white space on first and
    "       last line.
-   vnoremap <expr> <silent> gc mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> <esc>"
-   vnoremap <expr> <silent> gu mode() ==# "v" ? "<c-v>_o_f <del>" : mode() ==# "V" ? "<c-v>_o_f <del>" : "_o_f <del>"
-   vnoremap <expr> <silent> gp mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>"
-   vnoremap <expr> <silent> gt mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>"
+   vnoremap <silent> <expr> gc mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> <esc>"
+   vnoremap <silent> <expr> gs mode() ==# "v" ? "<c-v>_o_f <del>" : mode() ==# "V" ? "<c-v>_o_f <del>" : "_o_f <del>"
    " Puts comment just before first non-whitespace.
-   nnoremap <expr> <silent> gc "_i<c-r>=b:comment_leader<cr> <esc>"
-   nnoremap <expr> <silent> gu "_vf <del>"
-   nnoremap <expr> <silent> gp "_i<c-r>=b:comment_leader<cr> NOTE: <esc>"
-   nnoremap <expr> <silent> gt "_i<c-r>=b:comment_leader<cr> TODO: <esc>"
-
-   " Adds the comment ~~ (similar to //) that will highlight the line as a
-   " gray strikethrough if strikethrough.vim is loaded. Also works on ranges
-   " in the same line by adding a second pair of ~~.
-   nnoremap gr _i~~ <esc>
-   vnoremap gr <esc>`<i~~<esc>`>lla~~<esc>
-   " Remove 2 sets of ~~ starting from current line.
-   nnoremap <leader>gu 0/\~\~<cr>xxnxx:noh<cr>
+   nnoremap <silent> <expr> gc "_i<c-r>=b:comment_leader<cr> <esc>"
+   nnoremap <silent> <expr> gs "_vf <del>"
 
    " Load help for word under cursor.
    " <c-r><c-w> pastes word under cursor into command line!
-   nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:syntax clear AllPreErr1<cr>:setlocal nospell<cr>
+   nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
 
-   " Enable math and unicode mappings (<leader>sc enables spell checking).
-   nnoremap <leader>fm :so $vim_folder_path/math_mappings.vim<cr>:so $vim_folder_path/unicode.vim<cr>
-   nnoremap <leader>sm :so $vim_folder_path/math_mappings.vim<cr>:so $vim_folder_path/unicode.vim<cr>
 
    " Reload the custom syntax highlighting groups without using syntax on
    " and without resourcing .vimrc by reloading EnCustomSyntax instead.
-   nnoremap <leader>sr :let g:orig_buf=bufnr('%')<cr>: syntax clear<cr>:let g:select_custom_syntax=3<cr>:bufdo set filetype=custom_syntax<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=1<cr>:doautocmd EnCustomSyntax BufRead<cr><cr>
+   if !has('nvim')
+      nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=3<cr>:bufdo set filetype=custom_syntax<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=1<cr>:doautocmd EnCustomSyntax BufRead<cr>:call LoadColorscheme()<cr>
+   else " For neovim
+      nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=3<cr>:let g:custom_syntax_found=1<cr>:bufdo set filetype=custom_syntax<cr>:bufdo doautocmd EnCustomSyntax BufRead<cr>:execute 'buffer ' . g:orig_buf<cr>:call LoadColorscheme()<cr>
+   endif
    " Loads the default syntax highlighting
-   nnoremap <leader>sa :let g:orig_buf=bufnr('%')<cr>: syntax clear<cr>:let g:select_custom_syntax=1<cr>:bufdo set filetype= \| filetype detect<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr><cr>
+   nnoremap <silent> <leader>sa :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=1<cr>:bufdo set filetype=<cr>:bufdo filetype detect<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr>:call LoadColorscheme()<cr>
 
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
    if g:keyboard_layout == "colemak-dh"
@@ -1208,7 +1255,7 @@ function! DefaultSettings()
 
    " Capitalize all words after every ending punctuation and every new line
    " in the file.
-   nnoremap <leader>fc m':%s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]\ze[a-z]/\U&/ge<cr>:%s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:%s/^[ 0123456789()-]*[a-z]\ze[a-z]/\U&/ge<cr>:noh<cr><c-o><c-o>
+   nnoremap <leader>fc m':%s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:%s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:%s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:%s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>:noh<cr><c-o><c-o><c-o>
 
    " Capitalize first letter of every Word on the current line.
    nnoremap <leader>fu :s/\<[a-z]/\u&/g<cr>
@@ -1224,6 +1271,8 @@ function! DefaultSettings()
    "  -o ' ' : tells column to use a single space (instead of the default 2)
    " since :!command calls external command, you can get more info with man.
    vnoremap <leader>f<space> :%!column -t -o ' '<cr>
+   " Every | gets it's own column in visual mode.
+   vnoremap <leader>f\| :!column -t -s '\|' -o '\|'<cr>
    " Every tab (but not space) gets it's own column in visual mode.
    vnoremap <leader>f<tab> :%!column -t -s $'	'<cr>
 
@@ -1239,15 +1288,17 @@ function! DefaultSettings()
 
 
    " Re-source .vimrc file without reloading file, then update all windows.
-   nnoremap <a-g> :unlet g:EnteredDefaultSetting<cr>:unlet g:EnteredSmallFile<cr>:so $MYVIMRC<cr>:windo e<cr>
+   " nnoremap <a-g> :unlet! g:EnteredDefaultSetting<cr>:unlet! g:EnteredSmallFile<cr>:unlet! g:AutocorrectLoaded<cr>:so $MYVIMRC<cr>:windo e<cr>
 
 
    " NOTE: Execute shell script on current/selected line and print/replace
    "       over the lines.
-   noremap <leader>fp :.!sh<cr>
+   nnoremap <leader>fp :.!sh<cr>
+   vnoremap <leader>fp :.!sh<cr>
    " NOTE: Execute shell script on current/selected line and print inside
    "       the vim output.
-   noremap <leader>fl :.w !sh<cr>
+   nnoremap <leader>fl :.w !sh<cr>
+   vnoremap <leader>fl :.w !sh<cr>
    " For example, have this on it's own line: echo $(( 1 + 200 / 2))
 
 
@@ -1291,7 +1342,7 @@ function! DefaultSettings()
 
 
    " Jump to % of file.
-   nnoremap <leader>j1 16%
+   nnoremap <leader>j1 17%
    nnoremap <leader>j2 33%
    nnoremap <leader>j3 50%
    nnoremap <leader>j4 67%
@@ -1300,26 +1351,18 @@ function! DefaultSettings()
    " Enable disable spell checking.
    nnoremap <leader>sc  :so ~/.vim/spell.vim<cr>:syntax spell notoplevel<cr>
    nnoremap <leader>ss  :so ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>nsc :setlocal nospell<cr>
+   nnoremap <leader>sn :setlocal nospell<cr>
 
 
    " Fix window after opening a split screen.
    nnoremap <leader>sp  :sp<cr><c-w><bar><c-w>_
    nnoremap <leader>vsp :vsp<cr><c-w><bar><c-w>_
-   nnoremap <leader>lsp :vsp<cr><c-w><bar><c-w>_
    " Opposite of sp and vsp.
    nnoremap <leader>sd  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
    nnoremap <leader>rsp :set<space>splitright<cr>:vsp<cr><c-w><bar><c-w>_:set<space>nosplitright<cr>
    " topleft botright
    nnoremap <leader>tsp :topleft<space>split<cr><c-w><bar><c-w>_
    nnoremap <leader>bsp :botright<space>split<cr><c-w><bar><c-w>_
-   " Full right and full left (should never be used...).
-   " nnoremap <leader>lsp :topleft<space>vnew<cr><c-w><bar><c-w>_
-   " nnoremap <leader>rsp :botright<space>vnew<cr><c-w><bar><c-w>_
-   " close window and fix split screens
-   " nnoremap <leader>q   :bd<cr><c-w><bar><c-w>_
-   " nnoremap <leader>q   :q<cr><c-w><bar><c-w>_
-   " nnoremap <leader>wq  :wq<cr><c-w><bar><c-w>_
 
    " Buffers
    " Next/previous
@@ -1332,226 +1375,257 @@ function! DefaultSettings()
    nnoremap <leader>bf :bfirst<cr>
    nnoremap <leader>bl :blast<cr>
 
+   " grep the word or WORD under the cursor.
+   " First we set the operatorfunc option to our function then we run g@
+   " which calls this function as an operator.
+   nnoremap <leader>gw viW:<c-u>call GrepOperator(visualmode())<cr>
+   nnoremap <leader>gg viw:<c-u>call GrepOperator(visualmode())<cr>
+   " When you type : in visual mode, vim inserts '<,'> automatically but we
+   " don't want that here, so we use <c-u> to say delete from the cursor to
+   " the beginning of the line.
+   " visualmode() returns a one character string representing the last type
+   " of visual mode used. v for characterwise, V for linewise, c-v for
+   " blockwise grep the selected text.
+   vnoremap <leader>gw :<c-u>call GrepOperator(visualmode())<cr>
+   vnoremap <leader>gg :<c-u>call GrepOperator(visualmode())<cr>
 
-   " See :helpgrep Eatchar
-   "------------------------------------------------------------------------
-   " Use to consume the space typed after an abbreviation:
-   " Add  <c-r>=Eatchar('\s')<cr>  at end of abbreviation.
-   if !exists("g:eatcharloaded")
-      let g:eatcharloaded=1
-      function Eatchar(pat)
-         let c = nr2char(getchar(0))
-         return (c =~ a:pat) ? '' : c
-      endfun
+   " Toggle the quickfix window when grep is used.
+   nnoremap <leader>gq :call QuickFixToggle()<cr><c-w>_
+endfunction
+
+
+
+"------------------------------------------------------------------------------
+" Function: AdjustFontSize(amount)
+" Description: Zooms in or zooms out a specific amount.
+"------------------------------------------------------------------------------
+" Functions for the zoom in/out.
+function! AdjustFontSize(amount)
+   if !has("gui_running") | return | endif
+   let l:font = &guifont
+   if l:font =~ ':h[0-9]\+$'
+      let l:newsize = str2nr(matchstr(l:font, ':h\zs[0-9]\+')) + a:amount
+      let &guifont = substitute(l:font, ':h[0-9]\+', ':h' . l:newsize, '')
+   elseif l:font =~ ' [0-9]\+$'
+      let l:newsize = str2nr(matchstr(l:font, ' \zs[0-9]\+$')) + a:amount
+      let &guifont = substitute(l:font, ' [0-9]\+$', ' ' . l:newsize, '')
    endif
-   "------------------------------------------------------------------------
+endfunction
+
+function! LargerFont()
+   call AdjustFontSize(1)
+endfunction
+command! LargerFont call LargerFont()
+
+function! SmallerFont()
+   call AdjustFontSize(-1)
+endfunction
+command! SmallerFont call SmallerFont()
 
 
-   " --------------------------------------------------------------------------
-   " Some non GUI settings
-   " --------------------------------------------------------------------------
-   if !has("gui_running")
-      " Changes cursor shape in visual/insert mode.
-      let &t_SI = "\e[6 q"
-      let &t_SR = "\e[4 q"
-      let &t_EI = "\e[2 q"
-      " Quickly time out on keycodes, but never time out on mappings.
-      set notimeout ttimeout ttimeoutlen=100
+"------------------------------------------------------------------------------
+" Function: GrepOperator()
+" Description: Grep the word under the cursor. Asks for the path to grep in.
+"------------------------------------------------------------------------------
+function! GrepOperator(type)
 
-      set t_Co=256
-   endif " has("gui_running")
+   let saved_unnamed_reg = @@
+   let saved_clipboard_reg = @+
 
-   " --------------------------------------------------------------------------
-   " Load autocorrect files
-   " --------------------------------------------------------------------------
-   if !exists("g:AutocorrectLoaded") && g:use_autocorrect
-      let g:AutocorrectLoaded=1
-      if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
-         so $vim_folder_path/autocorrect/autocorrect3.vim
-      endif
-      if filereadable(expand($vim_folder_path . "/autocorrect/wordlist.vim"))
-         so $vim_folder_path/autocorrect/wordlist.vim
-      endif
+   " echom a:type
+   if a:type ==# 'v'
+      " Copy the visually selected text.
+      " Moving to mark at beginning of the range, entering characterwise
+      " visual mode, moving to mark at the end of the range, yanking the
+      " visually selected text.
+      normal! `<v`>y
+   elseif a:type ==# 'char'
+      " If the operator was called from normal mode using a characterwise
+      " motion.
+      " Moving to mark at beginning of the range, entering characterwise
+      " visual mode, moving to mark at the end of the range, yanking the
+      " visually selected text.
+      " normal! `[v`]y
+      " Apply yank with a motion instead of a visual selection to not
+      " destroy the record of the most recent visual selection.
+      normal! `[y`]
+   else
+      " Ignore case of linewise/blockwise visual mode as grep doesn't
+      " search across lines.
+      return
    endif
 
+   let g:quickfix_return = winnr()
 
-   " --------------------------------------------------------------------------
-   " Setting b:comment_leader based on Filetype. This can then be used to
-   " syntax match comments or to create comments with remappings.
-   " --------------------------------------------------------------------------
-   augroup SetFiletypeComment
+   let grep_path = input("Please input relative path to grep in: ")
 
-      " If you want to clear a group, use autocmd!/au! inside the group.
-      au!
+   " Variables starting with @ are registers. The @@ is the unnamed
+   " register. The one vim places text when you yank or delete without
+   " specifying a register.
+   silent execute "grep! --exclude-dir=\".svn\" -R " . shellescape(@@) . " " . grep_path
+   botright copen
+   let g:quickfixisopen = 1
 
-      " If this is here, will not auto-comment by default.
-      au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+   silent exe "normal! \<c-w>_"
 
-      " Add filetype for extensions that don't have any
-      au BufNewFile,BufRead *.REG    set filetype=registry
-      au BufNewFile,BufRead .aliases set filetype=sh
+   setlocal nospell
 
-      " NOTE: You can get the current file filetype with :set filetype?
-      " Manually set the comment_leader for file types.
-      " Used AI to generate this list...
-      au FileType aap,alsaconf,apache,arch,art,asm,automake,autopkgtest,awk,bash,bitbake,bzl,calendar,cdrdaoconf,cfg,cgdbrc,changelog,cmake,cmakecache,codeowners,conf,config,cook,crm,crontab,csh,cucumber,cvsrc,deb822sources,debchangelog,debcontrol,debsources,denyhosts,desktop,dictconf,dictdconf,dircolors,dnsmasq,dockerfile,editorconfig,elinks,elixir,env,eterm,expect,exports,fetchmail,fish,fpcmake,fstab,fvwm,gdb,gdscript,git,gitattributes,gitcommit,gitconfig,gitignore,gitrebase,gitsendemail,goaccess,gpg,gprof,graphql,group,grub,gyp,hamster,hcl,hlsplaylist,hog,hostconf,hostsaccess,http,hurl,hyprlang,i3config,icon,indent,jproperties,jq,julia,just,kconfig,kitty,kivy,kwt,ldapconf,leex,lf,lftp,libao,limits,livebook,logcheck,loginaccess,logindefs,lynx,mailaliases,mailcap,make,manconf,mbsync,meson,modconf,mojo,mplayerconf,mrxvtrc,mss,muttrc,nanorc,neomuttrc,netrc,nginx,nickel,nim,nix,nu,objdump,octave,ondir,openvpn,org,pamconf,passwd,pbtxt,perl,pinfo,poefilter,procmail,protocols,ps1,ps1xml,pymanifest,pyrex,python,quarto,r,racc,raku,readline,remind,requirements,reva,rhelp,rmd,rnc,rnoweb,roc,routeros,rrst,ruby,screen,sed,sensors,services,setserial,sh,sieve,skhd,slpconf,slpreg,slpspi,snakemake,solution,spajson,spec,sshconfig,sshdconfig,sudoers,sway,swayconfig,sysctl,systemd,tap,tcl,tcsh,terminfo,terraform,tf,tidy,tmux,toml,treetop,tutor,uci,udevconf,udevperm,udevrules,updatedb,usd,wget,wget2,xcompose,xf86conf,xinetd,xs,yaml,zathurarc,zimbu let b:comment_leader = '#'
-      au FileType abap,help,vim                                                let b:comment_leader = '"'
-      au FileType abnf,autohotkey,bindzone,chicken,clojure,confini,dosini,dune,fennel,lisp,llvm,m17ndb,masm,msmessages,nsis,obse,registry,samba,scdoc,scheme,sexplib,ssa,tiasm,urlshortcut let b:comment_leader = ';'
-      au FileType ada,cabal,eiffel,elm,haskell,idris2,ipkg,karel,lua,luau,mysql,occam,plsql,purescript,sql,unison,vhdl let b:comment_leader = '--'
-      au FileType antlr4,arduino,asciidoc,astro,asy,bicep,bicep-params,bp,bpftrace,c,c3,cedar,ch,chatito,corn,cpp,cs,csc,cuda,dart,dax,dtrace,dts,falcon,fga,flexwiki,framescript,gdshader,gel,gleam,go,gomod,groovy,hare,ishd,java,javacc,javascript,javascriptreact,json5,jsonc,jsonnet,kdl,kerml,kotlin,lc,less,lex,mlir,objc,objcpp,odin,opencl,openscad,pascal,php,pkl,poke,pq,prisma,proto,ptx,qml,quake,rasi,rescript,rpl,rust,sass,sbt,scala,scss,shaderslang,slint,solidity,soy,squirrel,stylus,swift,swiftgyb,swig,sysml,systemverilog,thrift,typescript,typescriptreact,typst,uc,v,vdf,verilog,xkb,yacc,zig let b:comment_leader = '//'
-      au FileType aspvbs,basic,brighterscript,brightscript,freebasic,qb64,vb   let b:comment_leader = "'"
-      au FileType bst,context,erlang,initex,logtalk,lprolog,m3quake,matlab,mf,mp,plaintex,postscr,prolog,tex let b:comment_leader = '%'
-      au FileType btm                                                          let b:comment_leader = '::'
-      au FileType css,ld,lnk,lnkmap                                            let b:comment_leader = '/*'
-      au FileType docbk,dtd,html,htmlangular,markdown,mediawiki,sgml,svelte,svg,tt2html,vue,xhtml,xml,xsd,xslt let b:comment_leader = '<!--'
-      au FileType dosbatch                                                     let b:comment_leader = 'REM'
-      au FileType eruby                                                        let b:comment_leader = '<%#'
-      au FileType forth                                                        let b:comment_leader = '\'
-      au FileType fortran,xdefaults,xmodmap                                    let b:comment_leader = '!'
-      au FileType groff                                                        let b:comment_leader = '\#'
-      au FileType haml                                                         let b:comment_leader = '-#'
-      au FileType heex                                                         let b:comment_leader = '<%!--'
-      au FileType hgcommit                                                     let b:comment_leader = 'HG:'
-      au FileType htmldjango,tera,twig                                         let b:comment_leader = '{#'
-      au FileType j                                                            let b:comment_leader = 'NB.'
-      au FileType jjdescription                                                let b:comment_leader = 'JJ:'
-      au FileType jsp                                                          let b:comment_leader = '<%--'
-      au FileType leo                                                          let b:comment_leader = '@'
-      au FileType liquid                                                       let b:comment_leader = '{%'
-      au FileType m3build,mma,modula2,modula3,ocaml,sml                        let b:comment_leader = '(*'
-      au FileType m4                                                           let b:comment_leader = 'dnl'
-      au FileType mail                                                         let b:comment_leader = '>'
-      au FileType man,nroff                                                    let b:comment_leader = '.\"'
-      au FileType mermaid                                                      let b:comment_leader = '%%'
-
-      " I like to use // as comments in text files.
-      au FileType text                                                         let b:comment_leader = '//'
-      " Add comments for lean.
-      au BufNewFile,BufRead *lean.txt,*.lean                                   let b:comment_leader = '--'
-
-      " Same idea as comment_leader above but with multi-line comments.
-      au FileType c,cpp,cs,java,javascript,typescript,swift,kotlin,go,rust,php,css,scala,dart,groovy,sql,d,verilog,systemverilog,vhdl let b:multi_line_comment_start = '\/\*' | let b:multi_line_comment_end = '\*\/'
-    " au FileType python       let b:multi_line_comment_start = "'''"    | let b:multi_line_comment_end = "'''"
-      au FileType ruby         let b:multi_line_comment_start = '=begin' | let b:multi_line_comment_end = '=end'
-      au FileType perl         let b:multi_line_comment_start = '=pod'   | let b:multi_line_comment_end = '=cut'
-      au FileType html,xml     let b:multi_line_comment_start = '<!--'   | let b:multi_line_comment_end = '-->'
-      au FileType lua          let b:multi_line_comment_start = '--\[\[' | let b:multi_line_comment_end = '\]\]'
-      au FileType haskell      let b:multi_line_comment_start = '{-'     | let b:multi_line_comment_end = '-}'
-      au FileType julia        let b:multi_line_comment_start = '#='     | let b:multi_line_comment_end = '=#'
-      au FileType matlab       let b:multi_line_comment_start = '%{'     | let b:multi_line_comment_end = '%}'
-      au FileType nim          let b:multi_line_comment_start = '#\['    | let b:multi_line_comment_end = '\]#'
-      au FileType ocaml,fsharp let b:multi_line_comment_start = '(\*'    | let b:multi_line_comment_end = '\*)'
-      au FileType powershell   let b:multi_line_comment_start = '<#'     | let b:multi_line_comment_end = '#>'
-
-      au BufNewFile,BufRead *lean.txt,*.lean let b:multi_line_comment_start = '\/-' | let b:multi_line_comment_end = '-\/'
-
-      " Set spell checking variable if spell checking enable
-      au BufNewFile,BufRead *.txt let g:spell_check_en=1 | setlocal spell
-      " Apply spell checking everywhere in text files.
-      au FileType text syntax spell toplevel
-
-      " Just let vim know that I recognize these file extensions...
-      au BufNewFile,BufRead *.log,*.log.* set filetype=log
-
-   augroup END
-
-
-   " -----------------------------------------------------------------------
-   " Add filetype for extensions that don't have any and other FileType
-   " related autocmds.
-   " -----------------------------------------------------------------------
-   augroup AddFiletype
-
-      " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
-      au!
-
-      " If this is here, will not auto-comment by default.
-      au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-      " Add filetype for extensions that don't have any
-      au BufNewFile,BufRead *.REG          set filetype=registry
-      au BufNewFile,BufRead .aliases       set filetype=sh
-      au BufNewFile,BufRead *.log,*.log.*  set filetype=log
-
-      " Apply spell checking everywhere in text files.
-      au FileType text syntax spell toplevel
-   augroup END
-
-
-   " -----------------------------------------------------------------------
-   " Colors and Syntax Highlighting
-   " -----------------------------------------------------------------------
-   " NOTE: This file is responsible for loading the custom syntax
-   " highlighting groups based on the file extension whenever
-   " g:select_custom_syntax >= 2
-   " -----------------------------------------------------------------------
-   so $vim_folder_path/syntax/custom_syntax.vim
-
-
-   " -----------------------------------------------------------------------
-   " Always load file at last known cursor position
-   " -----------------------------------------------------------------------
-   augroup RestoreCursor
-      au!
-      if g:performance_mode <= 1 && g:using_encryption == 0
-         autocmd BufReadPost *
-            \ let line = line("'\"")
-            \ | if line >= 1
-            \      && line <= line("$") && &filetype !~# 'commit'
-            \      && index(['xxd', 'gitrebase', 'tutor', 'svn'], &filetype) == -1
-            \      && expand("%") !~# 'svn-commit'
-            \ |    execute "normal! g`\""
-            \ |    if len(getbufinfo({'buflisted': 1})) == 1
-            \ |       execute "redraw!"
-            \ |    endif
-            \ | endif
-      endif
-   augroup END
-
-   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-   " Used to improve scrolling performance and speed.
-   " augroup SyntaxOnCursorHold
-   "    au!
-   "    autocmd CursorHold * if g:syntax_disabled | doautocmd EnCustomSyntax BufRead | let g:syntax_disabled = 0 | endif
-   " augroup END
-
-   " Automatically Resize splits whenever a new split is opened.
-   augroup AutoResizeSplits
-       autocmd!
-       autocmd WinNew * wincmd _ | wincmd |
-   augroup END
-
+   " The yank register.
+   let @@ = saved_unnamed_reg
+   " The copy clipboard register.
+   let @+ = saved_clipboard_reg
 endfunction
 
 
 "------------------------------------------------------------------------------
-" Load large files faster by not using vimrc settings
+" Function: QuickFixToggle()
+" Description: Toggle the quickfix window.
 "------------------------------------------------------------------------------
-" Protect large files from sourcing and other overhead.
+function! QuickFixToggle()
+   if exists("g:quickfixisopen") && g:quickfixisopen
+      cclose
+      let g:quickfixisopen = 0
+      if exists("g:quickfix_return")
+         execute g:quickfix_return . "wincmd w"
+      endif
+   else
+      let g:quickfix_return = winnr()
+      botright copen
+      let g:quickfixisopen = 1
+   endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: Eatchar()
+" Description: Use to consume the space typed after an abbreviation:
+"              Add  <c-r>=Eatchar('\s')<cr>  at end of abbreviation.
+"------------------------------------------------------------------------------
+" See :helpgrep Eatchar
+"------------------------------------------------------------------------------
+function! Eatchar(pat)
+   let c = nr2char(getchar(0))
+   return (c =~ a:pat) ? '' : c
+endfun
+
+
+"------------------------------------------------------------------------------
+" Function: SynGroup()
+" Description: This will display the name of the syntax group that is being
+"              applied under the cursor. Helps you debug which syntax group is
+"              giving you issues.
+"------------------------------------------------------------------------------
+function! SynGroup()
+    return synIDattr(synID(line('.'),col('.'),1),'name') . ' ' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name')
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: s:visual_hold_reset()
+" Description: Hack fix for Vim/NeoVim on my linux not copying selections to
+"              the linux selection buffer even though I have clipboard utility
+"              installed and loaded...
+"
+"              NOTE: Also works in Windows to copy selections...
+"
+"              When the cursor moves, first stop any previous timers, then
+"              start a new timer and after 50ms copy the visual selection to
+"              the clipboard but only do this once per selection.
+"------------------------------------------------------------------------------
+function! s:visual_hold_reset()
+   if g:visual_timer != -1
+      call timer_stop(g:visual_timer)
+      let g:visual_timer = -1
+   endif
+   let l:mode = mode()
+   if (l:mode ==# 'v' || l:mode ==# 'V' || l:mode ==# "\<C-V>") && g:visual_copied == 0
+      let g:visual_timer = timer_start(50, {-> execute('normal! "*ygv')})
+      let g:visual_copied = 1
+   else
+      let g:visual_timer = -1
+      let g:visual_copied = 0
+   endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: LargeFile()
+" Description: Load large files faster by not using default settings or syntax.
+"------------------------------------------------------------------------------
 function! LargeFile()
    let g:EnteredLargeFile = 1
+   " Disable swap files
+   set noswapfile
    " No syntax highlighting etc.
-   set eventignore+=FileType
+   setlocal eventignore+=FileType
    " Save memory when other file is viewed.
    setlocal bufhidden=unload
    " Is read-only (write with :w new_filename).
    " setlocal buftype=nowrite
    " No undo possible.
    setlocal undolevels=-1
+   " Disable modelines to avoid potential security issues...
+   set nomodeline
+   " Display line numbers on the left.
+   set number
+   " Load all Mappings
+   call LoadMappings()
    " Display message.
-   autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, and most options are disabled (see LargeFile() in .vimrc for details)."
+   augroup LargeFileMsg
+      autocmd!
+      autocmd VimEnter *  echom "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, and most options are disabled (see LargeFile() in .vimrc for details)."
+   augroup END
 endfunction
 
 
 "------------------------------------------------------------------------------
-" Load vimrc settings depending on file size
+" 3. Augroups
 "------------------------------------------------------------------------------
-let f=getfsize(expand("<afile>"))
-if f >= g:LargeFile || f == -2
-   call LargeFile()
+
+"------------------------------------------------------------------------------
+" Augroup: CopyOnVisualHold
+" Description: NOTE: Vim/nvim/neovim on my linux was not copying selections to
+"              the linux selection buffer even though I have clipboard utility
+"              installed and loaded... and yet gvim did not have this problem.
+"
+"              Below works to solve this problem in vim/neovim and even works
+"              in Windows.
+"
+"              Sometimes you have to give it a second to grab the text...
+"------------------------------------------------------------------------------
+let g:hack_copy_selection=0
+if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
+   let g:visual_copied = 0
+   let g:visual_timer = -1
+   augroup CopyOnVisualHold
+      au!
+      au CursorMoved * call s:visual_hold_reset()
+   augroup END
 endif
 
-if f < g:LargeFile && !exists("g:EnteredDefaultSetting")
-   call DefaultSettings()
-endif
+
+"------------------------------------------------------------------------------
+" Augroup: BufReadPre
+" Description: Check file size, if greater than g:LargeFile, don't load
+"              DefaultSettings.
+"------------------------------------------------------------------------------
+augroup LargeFile
+
+   autocmd!
+
+   " Set common setings for Large and Default files. Set the font, the
+   " colorsheme and the dimensions of the Vim window.
+   call CommonSettings()
+
+   " Decide whether to call DefaultSettings() or LargeFile() based on the
+   " file size.
+   autocmd BufReadPre * let f=getfsize(expand("<afile>")) |
+      \ if f >= g:LargeFile || f == -2 | call LargeFile() | let g:claude_disable = 1 |
+      \ elseif !exists("g:EnteredDefaultSetting") | call DefaultSettings() |
+      \ endif
+
+   " This gets called if the file is empty and loads DefaultSettings()
+   autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |
+      \ let g:en_custom_syntax_loaded = 1 | call DefaultSettings() | endif
+augroup END
 

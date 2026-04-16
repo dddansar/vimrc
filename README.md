@@ -10,14 +10,14 @@ Contains all my vimrc settings.
 - Uses my own custom colorscheme where the user has full control over all the colors
 - Supports different syntax configuration, can select between Vim's default syntax matching or use a custom syntax highlighting for 20+ file types (default)
 - Support for both Colemak-DH and QWERTY keyboard layouts
-- Includes performance optimization features, multiple performance modes and large file handling
+- Includes performance optimization features, multiple performance modes
 - Can emulate clipboard utility and copying selections if not supported by default in Vim/NeoVim or even in Windows
 - Enables lazyredraw for improved macro execution speed
 - Includes custom mappings and abbreviations
 - Contains font and GUI customizations
 - Improved search and replace usability with mappings
-- Contains autocorrect support
-- Displays the name of the syntax group being applied under the cursor to make debugging syntax groups easier
+- Contains autocorrect and spell checking support
+- Displays the name of the syntax group being applied under the cursor to make debugging syntax groups significantly easier
 
 ## .vim/ Folder Contents
 ```
@@ -94,7 +94,7 @@ I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ub
 The unmodified Pasky Plugin for using Anthropic's Claude AI can be found at:
 https://github.com/pasky/claude.vim
 
-I made some modifications to Pasky's plugins to address some issues I was having, to make the chat experience better suit my personal preferences, to not use the claud_*_prompt.md files (I prefer default prompts), and to add additional comments.
+I made some modifications to Pasky's plugins to address some issues I was having, to make the chat experience better suit my personal preferences, to not use the claude_*_prompt.md files (I prefer default prompts), and to add additional comments.
 
 Here is a list of changes that I made with help from the Claude AI:
 - Fixed the error "executing job failed: Argument list too long".
@@ -114,9 +114,34 @@ Here is a list of changes that I made with help from the Claude AI:
 - Cleared the claud_*_prompt.md files to use Claude's default prompt settings.
 - Print g:claude_model instead of printing "Claude:"
 - Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
+- Added a disable option for the Claude API.
 
 
-## What my custom colorscheme and custom syntax matching looks like
+## Custom Colorscheme
+
+The Vim files contains it's own independent custom colorscheme file found in .vim/colors/custom_colorscheme.vim. The colorscheme is written in a clear, easy to understand and easy to modify format.
+
+The colorscheme is independent from the rest of the files and settings. If you want to enable the custom colorscheme without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the custom_colorscheme.vim file into the colors/ folder, and then load the custom_colorscheme into your .vimrc file.
+
+You can do so by adding the following line to your .vimrc file:
+
+```
+colorscheme custom_colorscheme
+```
+
+When Vim wants to load a colorscheme, Vim will first check inside the .vim/colors/ folder to see if the colorscheme exists there, and then it will look inside $VIMRUNTIME/colors/ (where most of the colorschemes are found) and see if it can find the colorscheme in that folder.
+
+If you are using NeoVim instead of Vim/GVim, then add the custom_colorscheme.vim file to the equivalent path (~/.config/nvim/colors/ in linux) and add one of the following to your init.lua file:
+
+```
+vim.cmd.colorscheme("custom_colorscheme")
+vim.cmd("colorscheme custom_colorscheme")
+vim.cmd[[colorscheme custom_colorscheme]]
+```
+
+Make sure you don't have any other colorschemes enabled overriding the custom_colorscheme.
+
+### What my custom colorscheme and custom syntax matching looks like
 
 With g:select_custom_syntax = 3
 
@@ -128,7 +153,7 @@ For C files:
 
 ![Alt Text](c_example.png)
 
-## What my custom colorscheme and Vim's default syntax matching looks like
+### What my custom colorscheme and Vim's default syntax matching looks like
 
 With g:select_custom_syntax = 1
 

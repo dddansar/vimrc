@@ -217,11 +217,6 @@ augroup EnCustomSyntax
       " NOTE Add abbreviations to shorten common and repetitive text.
       au BufNewFile,BufRead * so $vim_folder_path/abbrev.vim
 
-      " Add custom syntax for custom vim file.
-      if filereadable(expand($vim_folder_path . "/" . $custom_vim_file))
-         au BufNewFile,BufRead $custom_vim_ext so $vim_folder_path/$custom_vim_file | let g:custom_syntax_found=1
-      endif
-
       " Use default syntax for vim help documents.
       au BufNewFile,BufRead $VIMRUNTIME/doc/* let g:custom_syntax_found=0
 
@@ -230,7 +225,7 @@ augroup EnCustomSyntax
       au BufNewFile,BufRead svn-commit*.tmp let g:custom_syntax_found=1 | so  $vim_folder_path/svn.vim
 
       " Add custom syntax for claude_history.txt
-      au BufNewFile,BufRead claude_history.txt call g:SetupClaudeChatSyntax() | setlocal nospell | let g:custom_syntax_found=1
+      au BufNewFile,BufRead claude_history.txt if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif | setlocal nospell | let g:custom_syntax_found=1
 
       " NOTE: THIS WILL ADD CUSTOM SYNTAX FOR ALL FILES AFTER THE
       "       RESPECTIVE FILE SETTINGS ARE APPLIED!!!
@@ -247,7 +242,7 @@ augroup EnCustomSyntax
          " if exists('*popup_notification') && has("gui_running")
          "    au BufNewFile,BufRead * if g:custom_syntax_found==0 && &filetype != '' && &filetype != 'custom_syntax' && filereadable(expand('$VIMRUNTIME/syntax/' . &filetype . '.vim')) | syntax clear | exe 'so $VIMRUNTIME/syntax/' . &filetype . '.vim' | call popup_notification("Custom syntax file not found, loading default syntax from $VIMRUNTIME/", #{time: 3000}) | endif
          " else
-            au BufNewFile,BufRead * if g:custom_syntax_found==0 && &filetype != '' && &filetype != 'custom_syntax' && filereadable(expand('$VIMRUNTIME/syntax/' . &filetype . '.vim')) | syntax clear | exe 'so $VIMRUNTIME/syntax/' . &filetype . '.vim' | redraw | echom "Custom syntax file not found, loading default syntax from $VIMRUNTIME/" | endif
+            au BufNewFile,BufRead * if g:custom_syntax_found==0 && &filetype != '' && &filetype != 'custom_syntax' && filereadable(expand('$VIMRUNTIME') . '/syntax/' . &filetype . '.vim') | syntax clear | exe 'so $VIMRUNTIME/syntax/' . &filetype . '.vim' | call LoadColorscheme() | echom "Custom syntax file not found, loading default syntax from $VIMRUNTIME/" | redraw | endif
          " endif
       endif
 

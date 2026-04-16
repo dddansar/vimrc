@@ -37,6 +37,8 @@ if exists("b:asm_loaded")
 endif
 let g:asm_loaded = 1
 
+" Keep autoindent, but remove cindent
+set nocindent
 
 
 "------------------------------------------------------------------------------

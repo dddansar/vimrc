@@ -36,10 +36,12 @@ if exists("b:txt_loaded")
 endif
 let g:txt_loaded = 1
 
-
 " smartindent in Vim is an indentation option that provides automatic
 " indentation when starting a new line.
 setlocal nosmartindent
+
+" Keep autoindent, but remove cindent
+set nocindent
 
 " Background and Foreground that apply only to text files.
 " if g:font_style == 0

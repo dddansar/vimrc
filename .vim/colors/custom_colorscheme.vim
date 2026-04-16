@@ -242,8 +242,8 @@ hi CursorLineNr      cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=
 hi ColorColumn       cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234 guibg=grey10     guisp=NONE
 
 hi StatusLine        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15  guibg=white      guisp=NONE
-hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248 guibg=grey70     guisp=NONE
-hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248 guibg=grey70     guisp=NONE
+hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246 guibg=grey60     guisp=NONE
+hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246 guibg=grey60     guisp=NONE
 
 hi Search            cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=236 guibg=grey30     guisp=NONE
 hi CurSearch         cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=246 guibg=grey60     guisp=NONE

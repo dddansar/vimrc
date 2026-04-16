@@ -36,6 +36,8 @@ if exists("b:vhdl_loaded")
 endif
 let g:vhdl_loaded = 1
 
+" Keep autoindent, but remove cindent
+set nocindent
 
 " VHDL keywords
 hi  link    VhdlKeywords1 Define

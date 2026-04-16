@@ -37,6 +37,8 @@ if exists("b:sv_loaded")
 endif
 let g:sv_loaded = 1
 
+" Keep autoindent, but remove cindent
+set nocindent
 
 " iskeyword is an option that defines which characters are considered part of
 " a word. NOTE: Below will consider var++ one word!!!
