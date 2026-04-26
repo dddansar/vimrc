@@ -3,9 +3,10 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting and abbreviations
 "              for math text files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -54,86 +55,82 @@ if g:performance_mode <= 0
    " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
 
    " Match single chars.
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Match single character in its own word.
-   hi  link    MathSingleChar SpecialChar
-   syn match   MathSingleChar "\%(\w\)\@<![a-zA-Z]\%(\w\)\@!" contains=@NoSpell
+   " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some unicode
+   " chars while it matches others... so `ˣ` is invisible to them as a boundary
+   " marker -> use \%(\w\)\@<! instead of \< and \%(\w\)\@! instead of \>
+   " Testing \%(\<\W\?\) with containedin instead of \%(\w\)\@<! -> misses aᵐb
+   " -> testing \%(\<\|\W\) -> issues with paren...
+   " NOTE: Testing \%(\<\|[^!-~]\) -> 2x improvement!!!!! -> WARNING: don't
+   " fully work!!! -> NOTE: changed order inside custom.vim -> worked!!
+   " 16ˣ × 7ˣ
+   " ˣ16 × ˣ7
+   " aˣ × aˣ
+   " ˣa × ˣa
+   " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f s' μi e⁻ˣxᵗ⁻¹
 
-   " Unmatch s when it's inside a parenthesis like in apple(s).
-   syn match   MathNoColorS "(s)" contains=@NoSpell
+   hi  link    SpMathSingleChar Constant
+   syn match   SpMathSingleChar "
+                                 \\%(\<\|[^!-~]\)[a-zA-Z]
+                                 \\%((s\%()\)\@=\)\@<!
+                                 \\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!
+                                 \\%(\w\)\@!" contains=@NoSpell
 
-   " Unmatch d s t after a quote mark ' like in it's or can't or you'd
-   syn match   MathNoColorDST "\%('\)\@<=[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
-
+   " More efficient not to merge into SpMathSingleChar
    " Unmatch I a A as they are common 1 letter words in English.
-   syn match   MathNoColorIaA "\%(\%(\W\)\@<!\s\|^\|\%((\)\@<=\)[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=\%( \%(and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\|will\|was\|is\)\>\)\@!" contains=@NoSpell
+   syn match   SpMathNoColorIaA2 "\%(^\|[!(.?:;]\|\w\|(\)\@<=\s\?\<[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=" contains=@NoSpell
 
-   " Rematch I a A when certain logic words are before/after.
-   " hi  link    MathIaA1       SpecialChar
-   " syn match   MathIaA1       "\s\?\<[IaA]\>\%( \%(is\|and\|or\|nand\|nor\|xor\|xnor\|then\|not\|exists\|has\|to\|implies\|in\|on\)\>\)\@=" contains=@NoSpell
-
-   " hi  link    MathIaA2       SpecialChar
-   " syn match   MathIaA2       "\<[aA]\>\%( \%(will\|was\|is\)\>\)\@=" contains=@NoSpell
-   " syn match   MathIaA2       "\%(\<\%(the\|The\) \)\@=\<[IaA]\>" contains=@NoSpell
-
+   hi  link    SpMathSingleChar2 Constant
+   syn match   SpMathSingleChar2 "\s\?\<[aA] \%(\<\%(will\|was\|then\)\>\)\@=" contains=@NoSpell
+   syn match   SpMathSingleChar2 "\s\?\<[IaA] \%(\<\%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
 
    " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.
-   hi  link    MathNumInVar   Constant
-   syn match   MathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell
-   hi  link    MathVarInNum   SpecialChar
-   syn match   MathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
-
+   hi  link    SpMathNumInVar   Number
+   syn match   SpMathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum
+   hi  link    SpMathVarInNum   Constant
+   syn match   SpMathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
 
    " Match x when it mean multiplication or hex number.
-   hi  link    MathXInNum     Operator
-   syn match   MathXInNum     "x" contained contains=@NoSpell
-   hi  link    MathNumWithX   Constant
-   syn match   MathNumWithX   "\%(\w\)\@<!\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
-
-   " Match 2 char math variables.
-   " Disabled as there are too many 2 char words in English...
-   " hi  link    MathMathVar2   SpecialChar
-   " syn match   MathMathVar2   "\%(\%(^\|\w\)\s*\)\@<![A-Z][a-z]\%(\%(\s*\|'\?\)\%($\|\w\)\)\@!" contains=@NoSpell
-
-   " Match math variables such as Ax that are surrounded by non words.
-   " hi  link    MathMathVar3   SpecialChar
-   " syn match   MathMathVar3   "\%(\w\)\@<!\%([a-df-np-z][xz]\|[ac-ln-z][y]\|uv\)\%( \?\W\)\@=" contains=@NoSpell
+   hi  link    SpMathXInNum     Function
+   syn match   SpMathXInNum     "x" contained contains=@NoSpell
+   hi  link    SpMathNumWithX   Number
+   syn match   SpMathNumWithX   "\%(\<\|[^!-~]\)\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
 
    " Derivatives
-   hi  link    MathDeriv      SpecialChar
-   syn match   MathDeriv      "\%(\w\)\@<!d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
-   syn match   MathDeriv      "\%(\s\|^\)\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
+   hi  link    SpMathDeriv      Constant
+   syn match   SpMathDeriv      "\%(\<\|[^!-~]\)d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
+   syn match   SpMathDeriv      "\%(\<\|[^!-~]\)\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
 
-   hi  link    MathDeriv2     SpecialChar
-   syn match   MathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
-
+   hi  link    SpMathDeriv2     Constant
+   syn match   SpMathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
 
    " Highlight common math multi-variables.
-   hi  link    MathMultiVars1 SpecialChar
-   syn match   MathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
+   hi  link    SpMathMultiVars1 Constant
+   syn match   SpMathMultiVars1 "\%(\<\|[^!-~]\)\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
-   hi  link    MathMultiVars2 SpecialChar
-   syn match   MathMultiVars2 "\%(\w\s\?\)\@<!\([a-z][A-Za-z]\|[A-Za-z][a-z]\)\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
+   hi  link    SpMathMultiVars2 Constant
+   syn match   SpMathMultiVars2 "\%(\<\|[^!-~]\s\?\)[a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
-   hi  link    MathMultiVars3 SpecialChar
-   syn match   MathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegExRanges
-
-   " syn match   MathMultiVarsNoColor "\<\%(in\|[Ii]t\|on\|of\|ex\|ie\|vs\|to\|[oO]k\)\>" contains=@NoSpell
-   syn match   MathMultiVarsNoColor "\<\%(on\)\>" contains=@NoSpell
+   hi  link    SpMathMultiVars3 Constant
+   syn match   SpMathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
 
    " Match more functions.
-   hi  link    MathFunction   Function
-   " Matches incorrectly things like n(n-1).
-   " syn match   MathFunction   "\%(\s\|^\)[a-z][a-z0-9]*\>\%('\?(\)\@="  contains=@NoSpell,Conditional
-   syn match   MathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
+   hi  link    SpMathFunction   Function
+   syn match   SpMathFunction   "\%(\<\|[^!-~]\)[f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
 
    " Highlight math terms/functions.
-   syn match   MathFunction   "\%(\w\)\@<!\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell
-   syn match   MathFunction   "\%(\w\)\@<![0-9]*\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
-   syn match   MathFunction   "\%(\w\)\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
-   " --------------------------------------------------------------------------
+   syn match   SpMathFunction   "\%(\<\|[^!-~]\)\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathFunction   "\%(\<\|[^!-~]\)[0-9]*\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
+   syn match   SpMathFunction   "\%(\<\|[^!-~]\)\%(curl\|grad\|div\|rot\|proj\|det\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
+   "---------------------------------------------------------------------------
+
+   " Clusters
+   "---------------------------------------------------------------------------
+   syn cluster ClusterSpMath add=SpMath.*
+   "---------------------------------------------------------------------------
 endif
 
 

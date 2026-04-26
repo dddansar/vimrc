@@ -3,9 +3,10 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting and abbreviations
 "              for all bash files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -37,228 +38,17 @@ if exists("b:bash_loaded")
 endif
 let g:bash_loaded = 1
 
+hi! link shVarAssign    Operator
+" hi! link shAlias        Number
+hi! link shAlias        Define
+hi! link shLoop         Repeat
 
-" My custom syntax without any default vim settings.
-if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
-   hi  link    BashKeywords1     Statement
-   syn keyword BashKeywords1     setenv
-   syn keyword BashKeywords1     module load
+call AllPathsSingleSlashStart(1)
 
-   hi  link    BashKeywords2     Type
-   syn keyword BashKeywords2     alias vsp set unset
+hi  link    LinuxCommands2 Identifier
+syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
 
-   hi  link    BashKeywords3     Conditional
-   syn keyword BashKeywords3     status log
+" create dummy region to contain paths
+syn match ShDummyRegion "^\w\+=.*" transparent
 
-   hi  link    BashKeywords4     StorageClass
-   syn keyword BashKeywords4     topleft
-
-   hi  link    BashKeywords5     Conditional
-   syn keyword BashKeywords5     in done
-
-   " Match .
-   hi  link    BashMatches       Exception
-   syn match   BashMatches       "\."
-
-   " Match settings such as -r and --some-setting.
-   hi  link    BashSettings      Define
-   syn match   BashSettings      "\%(^\|\s\+\)\@<=-[a-z0-9A-Z_-]\+"      contains=@NoSpell
-
-   " Match '\'' and ''\'.
-   hi  link    BashSlash         Constant
-   syn match   BashSlash         "'\\''"
-   syn match   BashSlash         "''\\'"
-
-   hi  link    BashDollar        Define
-   syn match   BashDollar        "\${.\+}"          contains=@NoSpell containedin=AllPrePaths1,AllPrePaths2
-
-   " # inside ${ } is not a comment.
-   hi  link    BashNotComment    Exception
-   syn match   BashNotComment    "\%(\${.*\)\@<=#\%(.*}\)\@="
-   syn match   BashNotComment    "\%(\[.*\)\@<=#\%(.*\]\)\@="
-   syn match   BashNotComment    "\%((.*\)\@<=#\%(.*)\)\@="
-   syn match   BashNotComment    '\%(".*\)\@<=#\%(.*"\)\@='
-
-" Mix of my custom syntax and default vim settings.
-elseif g:select_custom_syntax == 2
-   " Slashes
-   hi  link    BashSpChars1    Operator
-   syn match   BashSpChars1    "\/" contained containedin=shSingleQuote
-
-   hi  link    BashSpChars2    Keyword
-   syn match   BashSpChars2    "[\\]" contained containedin=shSingleQuote
-
-   " Operators
-   hi  link    BashSpChars6    Operator
-   syn match   BashSpChars6    "\%(\/\)\@<!\*\%(\/\)\@!" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "[*]" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "[+]" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "[%^]" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "[&|]" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "[~]" contained containedin=shSingleQuote
-   syn match   BashSpChars6    "-" contained containedin=shSingleQuote
-
-   " Parenthesis/brackets
-   hi  link    BashSpParen     Function
-   syn match   BashSpParen     "[)(]" contained containedin=shSingleQuote
-
-   hi  link    BashSpSBr       StorageClass
-   syn match   BashSpSBr       "[[\]]" contained containedin=shSingleQuote
-
-   hi  link    BashSpCBr       PreProc
-   syn match   BashSpCBr       "[}{]" contained containedin=shSingleQuote
-
-   hi  link    BashSpTBr       Define
-   syn match   BashSpTBr       "[><]" contained containedin=shSingleQuote
-
-   " Equalities
-   hi  link    BashSpChars7    Define
-   syn match   BashSpChars7    "=" contained containedin=shSingleQuote
-   syn match   BashSpChars7    ">=" contained containedin=shSingleQuote
-   syn match   BashSpChars7    "<=" contained containedin=shSingleQuote
-
-   " Special characters
-   hi  link    BashSpChars9    Keyword
-   syn match   BashSpChars9    "[@]" contained containedin=shSingleQuote
-   syn match   BashSpChars9    "[#]" contained containedin=shSingleQuote
-   syn match   BashSpChars9    "[!?]" contained containedin=shSingleQuote
-   syn match   BashSpChars9    "[$]" contains=AllPreDollar contained containedin=shSingleQuote
-
-   hi  link    BashSpChars10   Keyword
-   syn match   BashSpChars10   "[:;]" contained containedin=shSingleQuote
-
-   hi  link    BashOptions   shOption
-   syn match   BashOptions   "\(\s\)\@<=-\(\w\|-\)\+" contained containedin=shSingleQuote
-
-   hi  link    BashCommands  Type
-   syn match   BashCommands  "\<\(apt\|sleep\|tmux\|history\|gvim\|nvim\|history\|ls\|echo\|find\|tkdiff\|cd\|svn\|git\|systemctl\)\>" contained containedin=shSingleQuote
-
-   " Highlight sudo keyword
-   hi  link  BashSudo  NonText
-   syn match BashSudo  "\<sudo\>" containedin=ALL
-endif
-
-
-
-"------------------------------------------------------------------------------
-"                              Bash abbreviations
-"------------------------------------------------------------------------------
-" Bash uses 2 [[ ]], posix uses 1 [ ], bash is compatible with both but bash
-" has additional functionality. For clarity best to keep $VAR in { }, but they
-" both work.
-inorea _shif      if [[ ${V} == a ]]; then<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shifel    if [[ ${V} == a ]]; then<cr>
-            \   <cr>
-            \else<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shifelif  if [[ ${V} == a ]]; then<cr>
-            \   <cr>
-            \elif<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shifelifel if [[ ${V} == a ]]; then<cr>
-            \   <cr>
-            \elif<cr>
-            \   <cr>
-            \else<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shaddvar VAR1=${V}:add1:add2<left><right><c-r>=Eatchar('\s')<cr>
-
-
-inorea _shfunc    #------------------------------------------------------------------------------<cr>
-            \# Function: function_name<cr>
-            \#<cr>
-            \#------------------------------------------------------------------------------<cr>
-            \function_name() {<cr>
-            \ <bs><cr>
-            \<bs><bs><bs>}<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shfunc2   #------------------------------------------------------------------------------<cr>
-            \# Function: function_name<cr>
-            \#<cr>
-            \#------------------------------------------------------------------------------<cr>
-            \function function_name {<cr>
-            \ <bs><cr>
-            \<bs><bs><bs>}<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shcase    case ${V} in<cr>
-            \   abc)<cr>
-            \   command0<cr>
-            \command1<cr>
-            \;;<cr>
-            \cef)<cr>
-            \   command2 ;;<cr>
-            \*)<cr>
-            \   command3<cr>
-            \command4<cr>
-            \;;<cr>
-            \esac<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shfor     for ((i = 0; i < ${V}; i++)); do<cr>
-            \   <cr>
-            \done<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shfor2    for i in LIST; do<cr>
-            \   <cr>
-            \done<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shwhile   while [[ ${V} <= a ]]; do<cr>
-            \   <cr>
-            \done<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shdo      while true; do<cr>
-            \   if [[ a >= b ]]; then<cr>
-            \   break<cr>
-            \<bs><bs><bs>fi<cr>
-            \<bs><bs><bs>done<up><up><up><up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shinfo   echo "message ${V}"<left><right><c-r>=Eatchar('\s')<cr>
-inorea _sherror  echo -e "ERROR : message ${V}"<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shalias  alias aname='command'<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shalias2 alias aname='command1 \| command2 \| command3'<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shalias3 alias aname='command1; command2; command3'<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shalias4 alias vicmd='gvim ~/file1 -c '\''vsp ~/file2 \| vsp ~/file3 \| topleft split ~/file4 \| vsp ~/file5 \| set titlestring=TITLE \| winpos 0 0 \| wincmd b \| wincmd _ \| wincmd \|'\'''<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _shvar    VAR1=1<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shvar2   VARS="%Y-%m-%d %T "<left><right><c-r>=Eatchar('\s')<cr>
-inorea _shvar3   VARD=/home/$USER/Desktop/<left><right><c-r>=Eatchar('\s')<cr>
-
-
-" Posix
-inorea _posif     if [ ${V} == a ]; then<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _posif2    if [ ${V} -eq a ]; then<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-inorea _posif3    if [ "${V}" = "string" ]; then<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _posifel   if [ ${V} == a ]; then<cr>
-            \   <cr>
-            \else<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _posifelif if [ ${V} == a ]; then<cr>
-            \   <cr>
-            \elif<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea _posifelifel if [ ${V} == a ]; then<cr>
-            \   <cr>
-            \elif<cr>
-            \   <cr>
-            \else<cr>
-            \   <cr>
-            \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
-"------------------------------------------------------------------------------
 

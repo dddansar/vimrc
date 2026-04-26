@@ -3,10 +3,11 @@
 "------------------------------------------------------------------------------
 " Description: This file adds additional highlighting groups that may get used
 "              throughout the .vim files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
-" NOTE: See also custom_colorscheme.vim.
+" NOTE: See also colors/custom_colorscheme.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -39,48 +40,6 @@ endif
 let g:colors_loaded = 1
 
 
-" Custom syntax highlighting groups
-"------------------------------------------------------------------------------
-" hi  link    AllFilesDefinesColor    Define
-" hi  link    AllFilesFuncColor       Function
-" hi  link    AllFilesDefaultColor    StorageClass
-" hi  link    AllFilesSBrColor        StorageClass
-" hi  link    AllFilesOpColor         Operator
-" hi  link    AllFilesCBrColor        PreProc
-" hi  link    AllFilesTBrColor        Define
-" hi  link    AllFilesEqualityColor   Define
-" hi  link    AllFilesPointerColor    MoreMsg
-" hi  link    AllFilesArrowsColor     Question
-" hi  link    AllFilesArrayColor      Title
-" hi  link    AllFilesWarningColor    WarningMsg
-" hi  link    AllFilesSpecialColor1   Exception
-" hi  link    AllFilesSpecialColorB   NonText
-" hi  link    AllFilesSpecialColor2   Keyword
-" hi  link    AllFilesSystemColor1    Statement
-" hi  link    AllFilesSystemColor2    Type
-" hi  link    AllFilesSystemColor3    Conditional
-" hi  link    AllFilesSystemColor4    Debug
-" hi  link    AllFilesSystemColor5    Delimiter
-" hi  link    AllFilesNumColor        Constant
-" hi  link    AllFilesCapsColor       Special
-" hi  link    AllFilesVarColor        SpecialChar
-" hi  link    AllFilesMultVarColor    HLBlue
-" hi  link    AllFilesMultOpColor     SpecialKey
-" hi  link    AllFilesCommentColor    Comment
-" hi  link    AllFilesComment2Color   SpecialComment
-" hi  link    AllFilesTimeColor       Label
-" hi  link    AllFilesQuotesColor1    String
-" hi  link    AllFilesQuotesColor2    Identifier
-" hi  link    AllFilesQuotesColor3    Character
-" hi  link    AllFilesLoopCondColor   Conditional
-" hi  link    AllFilesPathsColor1     Underlined
-" hi  link    AllFilesPathsColor2     Tag
-" hi  link    AllFilesStructColor     Structure
-" hi  link    AllFilesMidGrey         LineNr
-hi  link    AllFilesBarelyVisible   HLGrey15BgB
-"------------------------------------------------------------------------------
-
-
 " Custom highlighting groups
 "------------------------------------------------------------------------------
 hi default HLSiennaB             cterm=bold gui=bold ctermfg=130 guifg=sienna
@@ -99,7 +58,7 @@ hi default HLFuchsiaB            cterm=bold gui=bold ctermfg=201 guifg=fuchsia
 hi default HLPurpleB             cterm=bold gui=bold ctermfg=165 guifg=purple
 hi default HLPurple4B            cterm=bold gui=bold ctermfg=54  guifg=purple4
 hi default HLNavyB               cterm=bold gui=bold ctermfg=17  guifg=navy
-hi default HLBlue                                    ctermfg=20  guifg=blue
+hi default HLBlue                cterm=NONE gui=NONE ctermfg=20  guifg=blue
 hi default HLBlueB               cterm=bold gui=bold ctermfg=20  guifg=blue
 hi default HLMediumslateblueB    cterm=bold gui=bold ctermfg=99  guifg=mediumslateblue
 hi default HLDeepskyblue4B       cterm=bold gui=bold ctermfg=24  guifg=deepskyblue4
@@ -108,16 +67,16 @@ hi default HLDeepskyblueB        cterm=bold gui=bold ctermfg=45  guifg=deepskybl
 hi default HLCyanB               cterm=bold gui=bold ctermfg=51  guifg=cyan
 hi default HLYellowB             cterm=bold gui=bold ctermfg=184 guifg=yellow
 hi default HLYellowgreenB        cterm=bold gui=bold ctermfg=148 guifg=yellowgreen
-hi default HLGreen                                   ctermfg=46  guifg=green
+hi default HLGreen               cterm=NONE gui=NONE ctermfg=46  guifg=green
 hi default HLGreenB              cterm=bold gui=bold ctermfg=46  guifg=green
-hi default HLGreen3                                  ctermfg=34  guifg=green3
+hi default HLGreen3              cterm=NONE gui=NONE ctermfg=34  guifg=green3
 hi default HLGreen3B             cterm=bold gui=bold ctermfg=34  guifg=green3
-hi default HLOlive                                   ctermfg=100 guifg=olive
+hi default HLOlive               cterm=NONE gui=NONE ctermfg=100 guifg=olive
 hi default HLOliveB              cterm=bold gui=bold ctermfg=100 guifg=olive
-hi default HLKhaki4                                  ctermfg=101 guifg=khaki4
+hi default HLKhaki4              cterm=NONE gui=NONE ctermfg=101 guifg=khaki4
 hi default HLKhaki4B             cterm=bold gui=bold ctermfg=101 guifg=khaki4
 
-hi default HLGrey30                                  ctermfg=236 guifg=grey30
+hi default HLGrey30              cterm=NONE gui=NONE ctermfg=236 guifg=grey30
 hi default HLGrey30B             cterm=bold gui=bold ctermfg=236 guifg=grey30
 hi default HLGrey40B             cterm=bold gui=bold ctermfg=239 guifg=grey40
 hi default HLGrey50B             cterm=bold gui=bold ctermfg=242 guifg=grey50
@@ -139,6 +98,7 @@ hi default HLGreenBU             cterm=bold,underline gui=bold,underline ctermfg
 hi default HLDodgerblueBU        cterm=bold,underline gui=bold,underline ctermfg=33  guifg=dodgerblue
 hi default HLHotpinkBU           cterm=bold,underline gui=bold,underline ctermfg=205 guifg=hotpink
 
+hi default HLGrey10BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=234 guibg=grey10
 hi default HLGrey15BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=235 guibg=grey15
 hi default HLOrangered1BgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=202 guibg=orangered1
 hi default HLOrangeBgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=214 guibg=orange
@@ -162,13 +122,10 @@ hi default HLGreyOut                                                     ctermfg
 hi default HLStrikeThroughDefault  cterm=strikethrough gui=strikethrough
 hi default HLStrikeThroughGrey     cterm=strikethrough gui=strikethrough ctermfg=236 guifg=grey30
 
-" Background and foreground mixes
-" hi default CyanOnGrey      cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=244      guibg=#555555
-" hi default CyanOnGrey3     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=102      guibg=#888888
-" hi default CyanOnGrey2     cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=darkgrey guibg=darkgrey
-" hi default CyanOnLightGrey cterm=bold gui=bold ctermfg=cyan guifg=cyan ctermbg=grey     guibg=grey
-" hi default DarkBlueOnTeal  cterm=bold gui=bold ctermfg=20   guifg=blue ctermbg=darkcyan guibg=darkcyan
+" Highlight Links
+hi link    HLBarelyVisible         HLGrey10BgB
 "------------------------------------------------------------------------------
+
 
 "------------------------------------------------------------------------------
 " List of all possible gui options (many don't work...).

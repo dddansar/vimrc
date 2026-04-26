@@ -9,7 +9,8 @@
 " Author: Petr "Pasky" Baudis
 "------------------------------------------------------------------------------
 " Modified by: Danny Sarraf
-" NOTE: Original files can be found at: https://github.com/pasky/claude.vim
+" Original URL: https://github.com/pasky/claude.vim
+" Modified URL: https://github.com/dddansar/vimrc/tree/main/.vim/pack/pasky/start/claude.vim
 "==============================================================================
 " MIT License
 "
@@ -83,6 +84,7 @@ let b:claude_plugin_loaded=1
 " You: I asked you to show me a diff before making the changes yet you gave me an error...
 "      Unknown Claude protocol output: "{"type":"error","error":{"type":"invalid_request_error","message":"messages: text content blocks must be non-empty"},"request_id":"req_011CZwmNjfkhCsMGwEaheCjt"}"
 "      Suggest a fix for the error in claude.vim in this chat.
+" You: When I ask the claude api to compare 2 websites, I believe the final cost is a bit too high. Are there ineffiencies in the code that may be causing the issue that I'm seeing. See if you can find any issues that may cause wasteful and inefficient code.
 " ============================================================================
 
 
@@ -1169,6 +1171,8 @@ function! s:ExecuteOpenWebTool(url)
   setlocal buftype=nofile
   setlocal bufhidden=hide
   setlocal noswapfile
+  " Claude Fix — Mark web/tool buffers as unlisted so they don't get re-sent:
+  setlocal nobuflisted
 
   " execute ':r !elinks -dump ' . escape(shellescape(a:url), '%#!')
   " execute ':r !elinks -eval "set protocol.http.user_agent = \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\"" -dump ' . escape(shellescape(a:url), '%#!')
@@ -1516,16 +1520,17 @@ function! g:SetupClaudeChatSyntax()
   endif
   syntax match claudeChatYou /^You:/
   syntax match claudeChatClaude /^[Cc]laude[a-zA-Z0-9._-]*:/
-  syntax match claudeChatToolUse /^Tool use.*:/
+  syntax match claudeChatToolUse /^Tool use.*:/ nextgroup=claudeChatKeywords skipwhite
   syntax match claudeChatToolResult /^Tool result.*:/
   " syntax region claudeChatClaudeContent start=/^Claude.*:/ end=/^\S/me=s-1 contains=claudeChatClaude,@markdown,claudeChatCodeBlock
   " syntax region claudeChatToolBlock start=/^Tool.*:/ end=/^\S/me=s-1 contains=claudeChatToolUse,claudeChatToolResult
 
-  syntax match  claudeChatQuotes "[`]"
-  syntax match  claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<=`[!-_a-~ –]\{-1,}`\%(\s\|$\|[:/.,)}\]?!;]\)\@=" contains=claudeChatError
-  syntax match  claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<='[!-_a-~ –]\{-1,}'\%(\s\|$\|[:/.,)}\]?!;]\)\@=" contains=claudeChatError
-  syntax match  claudeChatQuotes '\%(\s\|^\|[{(/[:]\)\@<="[!-_a-~ –]\{-1,}"\%(\s\|$\|[:/.,)}\]?!;]\)\@=' contains=claudeChatError
-  syntax match claudeAsterixQuotes "\*\*.\{-}\*\*"
+  syntax match claudeChatQuotes "[`]"
+  syntax match claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<=`[!-_a-~ –]\{-1,}`\%(\s\|$\|[:/.,)}\]?!;]\)\@=" contains=claudeChatError
+  syntax match claudeChatQuotes "\%(\s\|^\|[{(/[:]\)\@<='[!-_a-~ –]\{-1,}'\%(\s\|$\|[:/.,)}\]?!;]\)\@=" contains=claudeChatError
+  syntax match claudeChatQuotes '\%(\s\|^\|[{(/[:]\)\@<="[!-_a-~ –]\{-1,}"\%(\s\|$\|[:/.,)}\]?!;]\)\@=' contains=claudeChatError
+  syntax match claudeChatAsterixQuotes "\*\*.\{-}\*\*"
+  syntax match claudeChatTokens "([0-9-]\+\s[0-9:]\+\s-\sToken usage.*"
 
   syntax region claudeChatCodeBlock start=/^\s*```\%($\)\@!/ end=/^\s*```\%($\)\@=/ contains=@NoSpell
 
@@ -1537,8 +1542,15 @@ function! g:SetupClaudeChatSyntax()
 
   syntax match claudeChatError "\<\%([Ee]rror\|ERROR\)\%([:'"`]\)\@=\>"
 
-  " syntax match claudeChatDiffAdd    "^\s*>.*"
-  " syntax match claudeChatDiffChange "^\s*<.*"
+  syntax match claudeChatTables "|"
+  syntax match claudeChatTables "---\+"
+
+
+  syntax match claudeChatWebLinks "\<www\.[A-Za-z0-9\-._~:/?#\[\]@!$&''()*+,;=%]\+"
+  syntax match claudeChatWebLinks '\<https\?:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&''()*+,;=%]\+'
+
+  syntax keyword claudeChatKeywords web_search open_web open shell new python
+
 
   " Don't make everything a code block;
   " only for inline markdown pieces
@@ -1547,7 +1559,7 @@ function! g:SetupClaudeChatSyntax()
   " endif
 
   if !empty(g:claude_default_system_prompt)
-    highlight default link claudeChatSystem Comment
+    " highlight default link claudeChatSystem Comment
     highlight default link claudeChatSystemKeyword Keyword
   endif
   highlight default link claudeChatYou Todo
@@ -1562,7 +1574,11 @@ function! g:SetupClaudeChatSyntax()
   highlight default link claudeChatTitles1 Define
   highlight default link claudeChatTitles2 Label
   highlight default link claudeChatTitles3 Delimiter
-  highlight default link claudeAsterixQuotes Type
+  highlight default link claudeChatAsterixQuotes Type
+  highlight default link claudeChatTokens MoreMsg
+  highlight default link claudeChatWebLinks Underlined
+  highlight default link claudeChatKeywords Keyword
+  highlight default link claudeChatTables Operator
   " highlight default link claudeChatDiffAdd DiffAdd
   " highlight default link claudeChatDiffChange DiffChange
 
@@ -1953,13 +1969,25 @@ function! s:SendChatMessage(prefix)
     let [l:messages, l:system_prompt] = s:ParseChatBuffer()
   endif
 
-  let l:buffer_contents = s:GetBuffersContent()
-  let l:content_prompt = "# Contents of open buffers\n\n"
-  for buffer in l:buffer_contents
-    let l:content_prompt .= "Buffer: " . buffer.name . "\n"
-    let l:content_prompt .= "<content>\n" . buffer.contents . "</content>\n\n"
-    let l:content_prompt .= "============================\n\n"
-  endfor
+  " Claude Fix — Only send buffer contents on the *first* user message of an interaction, not on every tool follow-up.
+  " let l:buffer_contents = s:GetBuffersContent()
+  " let l:content_prompt = "# Contents of open buffers\n\n"
+  " for buffer in l:buffer_contents
+  "   let l:content_prompt .= "Buffer: " . buffer.name . "\n"
+  "   let l:content_prompt .= "<content>\n" . buffer.contents . "</content>\n\n"
+  "   let l:content_prompt .= "============================\n\n"
+  " endfor
+  if a:prefix ==# g:claude_model . ':'
+    let l:buffer_contents = s:GetBuffersContent()
+    let l:content_prompt = "# Contents of open buffers\n\n"
+    for buffer in l:buffer_contents
+      let l:content_prompt .= "Buffer: " . buffer.name . "\n"
+      let l:content_prompt .= "<content>\n" . buffer.contents . "</content>\n\n"
+      let l:content_prompt .= "============================\n\n"
+    endfor
+  else
+    let l:content_prompt = ''
+  endif
 
   call append('$', a:prefix . " ")
   normal! G

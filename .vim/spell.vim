@@ -3,9 +3,10 @@
 "------------------------------------------------------------------------------
 " Description: This file adds spell checking settings for files that have
 "              spell checking enabled.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -43,23 +44,10 @@ let g:spell_loaded = 1
 setlocal spell
 setlocal spelllang+=en_us
 " Ignore uppercase of first word.
-setlocal spellcapcheck=
-
-
-" Need to disable rainbow_parenthesis with spell checking as there
-" is a bug where it will not spell check inside of parenthesis or
-" if matching parenthesis is not closed!!!!!!!
-if exists('*Clear_rainbow_parenthesis')
-   call Clear_rainbow_parenthesis()
-endif
-
-
-" Since we enable spell checking that means we are writing text
-" and in such cases, word'word should not match as part of a quote like
-" 'word ... word'.
-syn match SpellNoColor  "\%(\w\)\@<='\%(\w\)\@="
+" setlocal spellcapcheck=
 "------------------------------------------------------------------------------
 
+" call AllIgnoreSpellings()
 
 "------------------------------------------------------------------------------
 " Setting up a custom dictionary !!!!

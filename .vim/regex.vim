@@ -3,9 +3,10 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for all files that use
 "              regular expressions.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -38,125 +39,100 @@ endif
 let g:regex_loaded = 1
 
 
-let g:supports_regex=1
+syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString
 
-" NOTE: Inside a character class like [ ], the dot . and $ loses its special
-"       meaning and matches a literal dot . and $.
+function! RegexMatches()
+   hi  link    RegexSpChars   NonText
+   syn match   RegexSpChars   "\$"              contained containedin=@RegexContainedin
+   syn match   RegexSpChars   "\."              contained containedin=@RegexContainedin
+   syn match   RegexSpChars   "\^"              contained containedin=@RegexContainedin
+   " syn match   RegexSpChars   "-"               contained containedin=@RegexContainedin
+   syn match   RegexSpChars   "\\n"              contained containedin=@RegexContainedin
 
-" My custom syntax without any default vim settings.
-if g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
-
-   " Clear/set colors of special characters in regular expression for visibility.
-   syn match   RegexNoColor1  "[!?]"
-   syn match   RegexNoColor1  "[+%]"
-   syn match   RegexNoColor1  "[&|><]"
-
-   syn match   RegexNoColor1  "`"
-   syn match   RegexNoColor1  "[{}()]"
-   syn match   RegexNoColor1  "'" contains=AllPreNumbers3
-
-   hi  link    RegexSpChars1  Exception
-   syn match   RegexSpChars1  "\$" contains=AllPreDollar
-   syn match   RegexSpChars1  "-"
-
-   hi  link    RegexSpChars2  SpecialChar
-   syn match   RegexSpChars2  "[][]"
-
-   hi  link    RegexSpChars3  Question
-   syn match   RegexSpChars3  "*"
+   hi  link    RegexAst       Question
+   syn match   RegexAst       "*"               contained containedin=@RegexContainedin
 
    " Rematch double and/or.
-   hi  link    RegexAndOr     Operator
-   syn match   RegexAndOr     "&&"
-   syn match   RegexAndOr     "||"
+   hi  link    RegexAndOr     Delimiter
+   syn match   RegexAndOr     "&&"              contained containedin=@RegexContainedin
+   syn match   RegexAndOr     "||"              contained containedin=@RegexContainedin
 
-   if exists("b:comment_leader")
-      if b:comment_leader != '"' && exists("b:comment_second") && b:comment_second != '"'
-         syn match   RegexNoColor2        '"'
+   " Regex Ranges
+   hi  link    RegexRanges    Constant
+   syn match   RegexRanges    "\[.\{-}\\\@<!]"  contained containedin=@RegexContainedin
+
+   hi  link    RegexContinue  Exception
+   syn match   RegexContinue  "^\s*\\"          contained containedin=@RegexContainedin,vimOperParen
+
+   " WARNING: This can give incorrect matches if not set.
+   syn match   RegexNoColor   "\\\\"            contained containedin=@RegexContainedin
+   syn match   RegexNoColor   "\\[.[\]'$"~*/-]" contained containedin=@RegexContainedin
+   syn match   RegexNoColor   "\\\^"            contained containedin=@RegexContainedin
+
+   hi  link    RegexWordBndr  Number
+   syn match   RegexWordBndr  "\\<"             contained containedin=@RegexContainedin
+   syn match   RegexWordBndr  "\\>"             contained containedin=@RegexContainedin
+
+   hi  link    RegexLessThan  Constant
+   syn match   RegexLessThan  "\\<lt>.\{-}\%(>\)\@="hs=s+2 contained containedin=vimMapRhs
+
+   hi  link    RegexPatSepOr  Delimiter
+   syn match   RegexPatSepOr  "\\|"             contained containedin=@RegexContainedin
+   syn match   RegexPatSepOr  "\\\\|"           contained containedin=@RegexContainedin
+
+   hi  link    RegexPatSep    Statement
+   syn match   RegexPatSep    "\\("             contained containedin=@RegexContainedin
+   syn match   RegexPatSep    "\\%("            contained containedin=@RegexContainedin
+   syn match   RegexPatSep    "\\)"             contained containedin=@RegexContainedin
+
+   hi  link    RegexPosLook   Conditional
+   syn match   RegexPosLook   "\\@<="           contained containedin=@RegexContainedin
+   syn match   RegexPosLook   "\\@="            contained containedin=@RegexContainedin
+   syn match   RegexPosLook   "\\zs"            contained containedin=@RegexContainedin
+   syn match   RegexPosLook   "\\ze"            contained containedin=@RegexContainedin
+
+   hi  link    RegexNegLook   Question
+   syn match   RegexNegLook   "\\@<!"           contained containedin=@RegexContainedin
+   syn match   RegexNegLook   "\\@!"            contained containedin=@RegexContainedin
+
+   hi  link    RegexQuant  Question
+   syn match   RegexQuant  "\\+"                contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\?"                contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\="                contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\{[0-9]*,[0-9]\+}" contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\{[0-9]\+\%(,[0-9]*\)\?}" contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\{-}"              contained containedin=@RegexContainedin
+   syn match   RegexQuant  "\\{-[0-9],}"        contained containedin=@RegexContainedin
+
+   hi  link    RegexWildcards Identifier
+   syn match   RegexWildcards "
+              \\\[sSdDxXoOhHpPwWaAlLuUiIfF0-9]" contained containedin=@RegexContainedin
+
+   syn cluster ClusterRegex contains=Regex.*
+endfunction
+
+
+function! SpRegexSearches()
+   if g:performance_mode <= 0
+      " Match s///
+      syn match   SpRegexSearches1  "%\?s\/.\+\/.*\/[giIceErnp&]*" contains=Regex.*,vimNotation containedin=vimMapRhs,SpVimRegexLine
+      hi  link    SpRegexS11 Function
+      hi  link    SpRegexS12 Function
+      hi  link    SpRegexS13 Function
+      syn match   SpRegexS11 "%\?s\/\%(.\+\/.*\/\)\@="                 contained containedin=SpRegexSearches1
+      syn match   SpRegexS12 "\%(\\\)\@<!\/"                           contained containedin=SpRegexSearches1
+      syn match   SpRegexS13 "\%(%\?s\/.\+\/.*\/\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches1
+
+      if (!exists("b:comment_leader") || b:comment_leader != '#') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '#')
+         " Match s###g s###e
+         syn match   SpRegexSearches2  "%\?s#.\+#.*#[giIceErnp&]*" contains=Regex.*,vimNotation containedin=vimMapRhs,SpVimRegexLine
+         hi  link    SpRegexS21 Function
+         hi  link    SpRegexS22 Function
+         hi  link    SpRegexS23 Function
+         syn match   SpRegexS21 "%\?s#\%(.\+#.*#\)\@="                 contained containedin=SpRegexSearches2
+         syn match   SpRegexS22 "\%(\\\)\@<!#"                         contained containedin=SpRegexSearches2
+         syn match   SpRegexS23 "\%(%\?s#.\+#.*#\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches2
       endif
-      if b:comment_leader != '#'
-         syn match   RegexNoColor2        "#"
-      else
-         syn match   RegexNoColor2        "\%(\S.*\)\@<=#"
-      endif
-   else
-      syn match   RegexNoColor2        '"'
    endif
-endif
-
-" Ranges
-hi  link    RegexRanges    SpecialChar
-syn match   RegexRanges    "\[.\{-}\\\@<!]" contains=@NoSpell
-
-" Escaped colors
-hi  link    RegexSpChars4  Exception
-syn match   RegexSpChars4  "\^"
-syn match   RegexSpChars4  "\\"
-
-" syn match   RegexNoColor3  "\\[\.\[\]\$\\\-'\"~]"
-syn match   RegexNoColor3  "\\[\.\[\]\$\\\-''\"~]"
-syn match   RegexNoColor3  "\\\/"
-syn match   RegexNoColor3  "\\\^"
-
-hi  link    RegexSpChars5  Constant
-syn match   RegexSpChars5  "\(^\s*\)\@<!\\<"
-syn match   RegexSpChars5  "\\>"
-
-hi  link    RegexSpChars6  SpecialChar
-syn match   RegexSpChars6  "\\<lt>.\{-}>" contains=@NoSpell
-
-hi  link    RegexSpChars7  Operator
-syn match   RegexSpChars7  "\\|"
-syn match   RegexSpChars7  "\\\\|"
-
-hi  link    RegexSpChars8  Statement
-syn match   RegexSpChars8  "\\("
-syn match   RegexSpChars8  "\\%("
-syn match   RegexSpChars8  "\\)"
-
-syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\)\@="
-" Using \(\s\|\S\) because $ is causing issues as it can corrupt the next line
-" when used with containedin.
-syn match   RegexSpChars8  "\(\s\)\@<=[!?:]\(\s\|\S\)\@!"
-" syn match   RegexSpChars8  "\(\s\)\@<===#\?\(\s\)\@="
-
-hi  link    RegexSpChars9  Conditional
-syn match   RegexSpChars9  "\\@<="
-syn match   RegexSpChars9  "\\@="
-syn match   RegexSpChars9  "\\zs" contains=@NoSpell
-syn match   RegexSpChars9  "\\ze" contains=@NoSpell
-
-hi  link    RegexSpChars10 Question
-syn match   RegexSpChars10 "\\@<!"
-syn match   RegexSpChars10 "\\@!"
-
-hi  link    RegexSpChars11 Question
-syn match   RegexSpChars11 "\\+"
-syn match   RegexSpChars11 "\\?"
-syn match   RegexSpChars11 "\\="
-syn match   RegexSpChars11 "\\{[0-9]*,[0-9]\+}"
-syn match   RegexSpChars11 "\\{[0-9]\+,[0-9]*}"
-
-hi  link    RegexSpChars12 SpecialChar
-syn match   RegexSpChars12 "\(^\s*\)\@<!\\[sSdDxXoOhHpPwWaAlLuU]" contains=@NoSpell
-"
-" hi  link    RegexSpChars13 Constant
-" syn match   RegexSpChars13 "\\t" contains=@NoSpell
-" syn match   RegexSpChars13 "\\r" contains=@NoSpell
-" syn match   RegexSpChars13 "\\n" contains=@NoSpell
-" syn match   RegexSpChars13 "\\f" contains=@NoSpell
-" " Matches a control character using caret notation
-" syn match   RegexSpChars13 "\\c[A-Z]" contains=@NoSpell
-
-" Match s///
-hi  link    RegexSearches1 Operator
-syn match   RegexSearches1 "\%([a-zA-Z]\)\@<!%\?s\/\%(.\+\/.*\/\)\@="
-syn match   RegexSearches1 "\%(\%([a-zA-Z]\)\@<!%\?s\/.\+\)\@<=\/\%(.*\/\)\@="
-syn match   RegexSearches1 "\%(\%([a-zA-Z]\)\@<!%\?s\/.\+\/.*\)\@<=\/\w*"
-
-" Match s###g s###e
-hi  link    RegexSearches2 Operator
-syn match   RegexSearches2 "\%([a-zA-Z]\)\@<!%\?s#\%(.\+#.*#\)\@="
-syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+\)\@<=#\%(.*#\)\@="
-syn match   RegexSearches2 "\%(\%([a-zA-Z]\)\@<!%\?s#.\+#.*\)\@<=#\w*"
+endfunction
 

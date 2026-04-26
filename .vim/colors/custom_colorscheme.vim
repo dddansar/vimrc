@@ -4,9 +4,11 @@
 " Description: Creates a new colorscheme called custom_colorscheme. This file
 "              edits the colors of the built-in vim highlighting groups. Gets
 "              loaded by vim if the colorscheme is set to custom_colorscheme.
-" NOTE: See also colors.vim.
+" NOTE: See also more_colors.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -35,8 +37,8 @@
 if exists("b:highlightings_loaded")
   finish
 endif
-let g:colors_name = 'custom_colorscheme'
 let g:highlightings_loaded = 1
+let g:colors_name = 'custom_colorscheme'
 
 " NOTE: If you change the colors here, you change them in all files for all
 "       relevant groups.
@@ -57,9 +59,9 @@ let g:highlightings_loaded = 1
 " Type: Type names (int, char, etc.)
 " Typedef: typedef declarations
 " Identifier: Variable and function identifiers. This covers variable names:
-"             myVariable, counter, userName.
+"             myVariable, counter, userName, g:abc
 "
-" Label: Case/switch labels
+" Label: Case/switch labels, title: labels, "option": labels
 " Conditional: Conditional statements (if, else, switch)
 " Repeat: Loop constructs (for, while, do)
 " String: String literals: "hello world", 'some text', `more text`
@@ -73,8 +75,8 @@ let g:highlightings_loaded = 1
 "
 " Special: Special symbols and characters that need to stand out but don't fit
 "          elsewhere.
-" SpecialChar: Special characters within strings (\n, \t, etc.)
-" Delimiter: Delimiters like brackets, braces, parentheses
+" SpecialChar: Special characters within strings (\n, \t, %d) \%( \)
+" Delimiter: Delimiters like brackets, braces, parentheses, commas, colons, <>
 "
 " Exception: Exception keywords (try, catch, throw)
 " NonText: Characters that don't exist in the text (e.g. wrapped line markers)
@@ -82,17 +84,18 @@ let g:highlightings_loaded = 1
 " Comment: Comments
 " SpecialComment: Special comments (e.g. doxygen /** */ comments)
 "
-" StorageClass: Storage class keywords (static, register, volatile)
+" StorageClass: Storage class keywords (static, register, volatile, extern)
 " Function: A sub-group of Identifier specifically for function/method names.
 " Operator: Operators (+, -, *, /, etc.)
+"
+" Macro: A sub-group of PreProc for macro definitions and macro names. Example:
+"        #define MY_MACRO 123
+" Define: #define directives
 " PreCondit: Preprocessor conditionals (#ifdef, #endif, etc.)
 " PreProc: General preprocessor directives Examples:
 "          #include <stdio.h>   #ifdef DEBUG   #pragma once
-" Macro: A sub-group of PreProc for macro definitions and macro names. Example:
-"        #define MY_MACRO 123
-"
 " Include: #include directives
-" Define: #define directives
+"
 " Structure: struct/union/class/enum declarations
 " Underlined: Text that should be underlined (e.g. URLs)
 "
@@ -188,96 +191,94 @@ set background=dark
 " NOTE: You can see the current settings with the ":highlight" command.
 
 " Set default text and background color.
-hi Normal            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1     guisp=NONE
-hi Ignore            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1     guisp=NONE
-hi TitleBar          cterm=bold gui=bold ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1     guisp=NONE
-hi EndOfBuffer       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=233  guibg=grey5     guisp=NONE
-hi LineNr            cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=NONE guibg=NONE      guisp=NONE
+hi Normal            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
+hi Ignore            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
+hi TitleBar          cterm=bold gui=bold ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
+hi EndOfBuffer       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=233  guibg=grey5      guisp=NONE
+hi LineNr            cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Statement         cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Keyword           cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Type              cterm=bold gui=bold ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE      guisp=NONE
-hi Identifier        cterm=NONE gui=NONE ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE      guisp=NONE
+hi Statement         cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Keyword           cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Type              cterm=bold gui=bold ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Identifier        cterm=NONE gui=NONE ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Character         cterm=NONE gui=NONE ctermfg=34   guifg=green3      ctermbg=NONE guibg=NONE       guisp=NONE
+hi String            cterm=NONE gui=NONE ctermfg=34   guifg=green4      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Label             cterm=bold gui=bold ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Conditional       cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE       guisp=NONE
+hi Repeat            cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Label             cterm=bold gui=bold ctermfg=34   guifg=green4      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Conditional       cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE      guisp=NONE
-hi Repeat            cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE      guisp=NONE
-hi String            cterm=NONE gui=NONE ctermfg=28   guifg=forestgreen ctermbg=NONE guibg=NONE      guisp=NONE
-hi Character         cterm=NONE gui=NONE ctermfg=34   guifg=green3      ctermbg=NONE guibg=NONE      guisp=NONE
+hi Constant          cterm=NONE gui=NONE ctermfg=33   guifg=dodgerblue  ctermbg=NONE guibg=NONE       guisp=NONE
+hi Float             cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE       guisp=NONE
+hi Number            cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE       guisp=NONE
+hi Boolean           cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE       guisp=NONE
+hi Debug             cterm=bold gui=bold ctermfg=30   guifg=teal        ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Constant          cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Float             cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Number            cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Boolean           cterm=NONE gui=NONE ctermfg=14   guifg=cyan        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Debug             cterm=bold gui=bold ctermfg=30   guifg=teal        ctermbg=NONE guibg=NONE      guisp=NONE
+hi Special           cterm=bold gui=bold ctermfg=33   guifg=dodgerblue  ctermbg=NONE guibg=NONE       guisp=NONE
+hi SpecialChar       cterm=NONE gui=NONE ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Delimiter         cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Special           cterm=NONE gui=NONE ctermfg=33   guifg=dodgerblue  ctermbg=NONE guibg=NONE      guisp=NONE
-hi SpecialChar       cterm=NONE gui=NONE ctermfg=33   guifg=dodgerblue  ctermbg=NONE guibg=NONE      guisp=NONE
-hi Delimiter         cterm=bold gui=bold ctermfg=33   guifg=dodgerblue  ctermbg=NONE guibg=NONE      guisp=NONE
+hi Exception         cterm=NONE gui=NONE ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE       guisp=NONE
+hi NonText           cterm=bold gui=bold ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE       guisp=NONE
+hi Question          cterm=bold gui=bold ctermfg=205  guifg=hotpink     ctermbg=NONE guibg=NONE       guisp=NONE
+hi Comment           cterm=NONE gui=NONE ctermfg=201  guifg=fuchsia     ctermbg=NONE guibg=NONE       guisp=NONE
+hi SpecialComment    cterm=NONE gui=NONE ctermfg=129  guifg=purple      ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Exception         cterm=NONE gui=NONE ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE      guisp=NONE
-hi NonText           cterm=bold gui=bold ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Question          cterm=bold gui=bold ctermfg=205  guifg=hotpink     ctermbg=NONE guibg=NONE      guisp=NONE
-hi Comment           cterm=NONE gui=NONE ctermfg=201  guifg=fuchsia     ctermbg=NONE guibg=NONE      guisp=NONE
-hi SpecialComment    cterm=NONE gui=NONE ctermfg=129  guifg=purple      ctermbg=NONE guibg=NONE      guisp=NONE
+hi StorageClass      cterm=bold gui=bold ctermfg=178  guifg=orange      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Function          cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=NONE guibg=NONE       guisp=NONE
+hi Operator          cterm=bold gui=bold ctermfg=202  guifg=orangered   ctermbg=NONE guibg=NONE       guisp=NONE
+hi Macro             cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE       guisp=NONE
+hi Define            cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE       guisp=NONE
+hi PreCondit         cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE       guisp=NONE
+hi PreProc           cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE       guisp=NONE
+hi Include           cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE       guisp=NONE
+hi Typedef           cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Structure         cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE       guisp=NONE
+hi Underlined        cterm=NONE gui=NONE ctermfg=100  guifg=olive       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Tag               cterm=bold gui=bold ctermfg=101  guifg=khaki4      ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi StorageClass      cterm=bold gui=bold ctermfg=178  guifg=orange      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Function          cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=NONE guibg=NONE      guisp=NONE
-hi Macro             cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=NONE guibg=NONE      guisp=NONE
-hi Operator          cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=NONE guibg=NONE      guisp=NONE
-hi PreProc           cterm=bold gui=bold ctermfg=166  guifg=darkorange3 ctermbg=NONE guibg=NONE      guisp=NONE
+hi Cursor            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
+hi CursorColumn      cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=235  guibg=grey20     guisp=NONE
+hi CursorLine        cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=235  guibg=grey20     guisp=NONE
+hi CursorLineNr      cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE       guisp=NONE
+hi ColorColumn       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=234  guibg=grey10     guisp=NONE
 
-hi PreCondit         cterm=bold gui=bold ctermfg=202  guifg=orangered   ctermbg=NONE guibg=NONE      guisp=NONE
-hi Include           cterm=bold gui=bold ctermfg=202  guifg=orangered   ctermbg=NONE guibg=NONE      guisp=NONE
-hi Define            cterm=bold gui=bold ctermfg=202  guifg=orangered   ctermbg=NONE guibg=NONE      guisp=NONE
-hi Typedef           cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Structure         cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE      guisp=NONE
-hi Underlined        cterm=NONE gui=NONE ctermfg=100  guifg=olive       ctermbg=NONE guibg=NONE      guisp=NONE
-hi Tag               cterm=bold gui=bold ctermfg=101  guifg=khaki4      ctermbg=NONE guibg=NONE      guisp=NONE
+hi StatusLine        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
+hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
+hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
 
-hi Cursor            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15  guibg=white      guisp=NONE
-hi CursorColumn      cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=235 guibg=grey20     guisp=NONE
-hi CursorLine        cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=235 guibg=grey20     guisp=NONE
-hi CursorLineNr      cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE      guisp=NONE
-hi ColorColumn       cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234 guibg=grey10     guisp=NONE
+hi Search            cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=236  guibg=grey30     guisp=NONE
+hi CurSearch         cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=246  guibg=grey60     guisp=NONE
+hi IncSearch         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
 
-hi StatusLine        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15  guibg=white      guisp=NONE
-hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246 guibg=grey60     guisp=NONE
-hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246 guibg=grey60     guisp=NONE
+hi Pmenu             cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234  guibg=grey10     guisp=NONE
+hi PmenuSel          cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=235  guibg=grey20     guisp=NONE
+hi PmenuSbar         cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
+hi PmenuThumb        cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=46   guibg=green      guisp=NONE
 
-hi Search            cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=236 guibg=grey30     guisp=NONE
-hi CurSearch         cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=246 guibg=grey60     guisp=NONE
-hi IncSearch         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246 guibg=grey60     guisp=NONE
+hi MatchParen        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=30   guibg=teal       guisp=NONE
+hi Note              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46   guibg=green      guisp=NONE
+hi Todo              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=214  guibg=orange     guisp=NONE
+hi Error             cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=red  guibg=red2       guisp=NONE
+hi ErrorMsg          cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=red  guibg=red2       guisp=NONE
 
-hi Pmenu             cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234 guibg=grey10     guisp=NONE
-hi PmenuSel          cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=235 guibg=grey20     guisp=NONE
-hi PmenuSbar         cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=15  guibg=white      guisp=NONE
-hi PmenuThumb        cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=46  guibg=green      guisp=NONE
+hi DiffAdd           cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=48   guibg=lightgreen guisp=NONE
+hi DiffChange        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=81   guibg=skyblue    guisp=NONE
+hi DiffDelete        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=240  guibg=grey40     guisp=NONE
+hi DiffText          cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=33   guibg=dodgerblue guisp=NONE
 
-hi MatchParen        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=30  guibg=teal       guisp=NONE
-hi Note              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46  guibg=green      guisp=NONE
-hi Todo              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=184 guibg=yellow3    guisp=NONE
-hi Error             cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=red guibg=red2       guisp=NONE
-hi ErrorMsg          cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=red guibg=red2       guisp=NONE
+hi TabLine           cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=240  guibg=grey40     guisp=NONE
 
-hi DiffAdd           cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=48  guibg=lightgreen guisp=NONE
-hi DiffChange        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=81  guibg=skyblue    guisp=NONE
-hi DiffDelete        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=240 guibg=grey40     guisp=NONE
-hi DiffText          cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=33  guibg=dodgerblue guisp=NONE
+hi Conceal           cterm=NONE gui=NONE ctermfg=7    guifg=LightGrey   ctermbg=242  guibg=DarkGrey   guisp=NONE
+hi Folded            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
+hi FoldColumn        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248  guibg=grey70     guisp=NONE
+hi SignColumn        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248  guibg=grey70     guisp=NONE
 
-hi TabLine           cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=240 guibg=grey40     guisp=NONE
+hi Directory         cterm=NONE gui=NONE ctermfg=100  guifg=olive       ctermbg=NONE guibg=NONE       guisp=NONE
+hi SpecialKey        cterm=NONE gui=NONE ctermfg=20   guifg=blue        ctermbg=NONE guibg=NONE       guisp=NONE
+hi Title             cterm=bold gui=bold ctermfg=205  guifg=deeppink    ctermbg=NONE guibg=NONE       guisp=NONE
+hi MoreMsg           cterm=bold gui=bold ctermfg=203  guifg=tomato1     ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Conceal           cterm=NONE gui=NONE ctermfg=7    guifg=LightGrey   ctermbg=242 guibg=DarkGrey   guisp=NONE
-hi Folded            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15  guibg=white      guisp=NONE
-hi FoldColumn        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248 guibg=grey70     guisp=NONE
-hi SignColumn        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=248 guibg=grey70     guisp=NONE
-
-hi Directory         cterm=NONE gui=NONE ctermfg=20   guifg=blue        ctermbg=NONE guibg=NONE      guisp=NONE
-hi SpecialKey        cterm=bold gui=bold ctermfg=20   guifg=blue        ctermbg=NONE guibg=NONE      guisp=NONE
-hi Title             cterm=bold gui=bold ctermfg=205  guifg=deeppink    ctermbg=NONE guibg=NONE      guisp=NONE
-hi MoreMsg           cterm=bold gui=bold ctermfg=203  guifg=tomato1     ctermbg=NONE guibg=NONE      guisp=NONE
-
-hi Visual            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46  guibg=green1     guisp=NONE
+hi Visual            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46   guibg=green1     guisp=NONE
 hi VisualNOS cterm=bold,underline gui=bold,underline ctermfg=252 guifg=grey80 ctermbg=232 guibg=grey1 guisp=NONE
 
 hi WarningMsg        cterm=underline gui=underline ctermfg=196 guifg=red2 ctermbg=NONE guibg=NONE guisp=NONE

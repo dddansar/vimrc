@@ -3,11 +3,12 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom math mappings and symbols in insert mode.
 "              Type \ followed by a keyword to print it's unicode symbol.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 " NOTE: See also: unicode.vim
 "------------------------------------------------------------------------------
 " NOTE: Source: https://github.com/leanprover/vscode-lean/blob/master/src/abbreviation/abbreviations.json
-"               Modified by Danny Sarraf to be used in vim.
+"------------------------------------------------------------------------------
+" Modified by Danny Sarraf to be used in vim.
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: Apache License
 " Source: https://github.com/leanprover/vscode-lean/blob/master/LICENSE

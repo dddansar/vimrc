@@ -2,9 +2,10 @@
 " File: py.vim
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for all python files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -36,36 +37,10 @@ if exists("b:py_loaded")
 endif
 let g:py_loaded = 1
 
-
-hi  link    PyKeywords1 Statement
-syn keyword PyKeywords1       from __file__
-
-hi  link    PyKeywords2 Type
-syn keyword PyKeywords2       pyplot numpy pandas random rmdir self debugpy matplotlib sys csv os
-syn keyword PyKeywords2       threading time datetime chdir fsync mkdir path remove everything
-syn keyword PyKeywords2       math inspect torch dataclasses
-
-hi  link    PyKeywords2 Define
-syn keyword PyKeywords2          file
-
-syn keyword PyKeywords1          as
-syn keyword PyKeywords1          assert
-syn keyword PyKeywords1          async
-syn keyword PyKeywords1          await
-syn keyword PyKeywords1          class
-syn keyword PyKeywords1          def
-syn keyword PyKeywords1          del
-syn keyword PyKeywords1          except
-syn keyword PyKeywords1          finally
-syn keyword PyKeywords1          from
-syn keyword PyKeywords1          in
-syn keyword PyKeywords1          is
-syn keyword PyKeywords1          lambda
-syn keyword PyKeywords1          None
-syn keyword PyKeywords1          nonlocal
-syn keyword PyKeywords1          pass
-syn keyword PyKeywords1          raise
-syn keyword PyKeywords1          try
-syn keyword PyKeywords1          with
-syn keyword PyKeywords1          yield
+call AllOperators()
+call AllShiftOp()
+call AllEqualities()
+call AllParenBr()
+call AllArrows()
+call AllSeparators()
 

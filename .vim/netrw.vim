@@ -3,9 +3,10 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for the file explorer
 "              in vim (using the built-in netrw plugin in vim).
-"              Gets loaded by .vimrc in the file explorer with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -37,11 +38,23 @@ if exists("b:netrw_loaded")
 endif
 let g:netrw_loaded = 1
 
+syn clear
 
-" Color for no extension.
-hi  link     NetrwHidden   LineNr
-syn match    NetrwHidden   "\(\/\|\w\)\@<!\.[a-zA-Z0-9_-][a-zA-Z0-9_ -]*\>\(\/\|.\)\@!"
 
+" all capital words like README or LICENCE (without the extension)
+call AllCaps()
+
+
+" Files starting with .
+hi  link     NetrwHiddenFile     LineNr
+syn match    NetrwHiddenFile     "\s\.[a-zA-Z0-9_-][a-zA-Z0-9_. -]*\>"
+
+" Paths/folders
+hi  link     NetrwPaths1   Underlined
+syn match    NetrwPaths1   "\<[a-zA-Z0-9_.\-][a-zA-Z0-9._ -]\+/" contains=@NoSpell
+
+hi  link     NetrwHiddenFolder   Tag
+syn match    NetrwHiddenFolder   "\s\.[a-zA-Z0-9_-][a-zA-Z0-9_. -]*\/"
 
 
 " Microsoft Office (Open XML & Legacy Formats):
@@ -59,28 +72,7 @@ syn match    NetrwHidden   "\(\/\|\w\)\@<!\.[a-zA-Z0-9_-][a-zA-Z0-9_ -]*\>\(\/\|
 "     Visio: .vsdx (Drawing), .vsdm (Macro-enabled), .vssx (Stencil)
 
 hi  link     NetrwDocs   Debug
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.doc\>\(\\\)\@!"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.docx\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.docm\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dotx\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xls\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xlsx\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xlsm\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xlsb\>"
-
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xltx\>"
-
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ppt\>"
-
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.msg\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.one\>"
-
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vsd\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vsdx\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vsdm\>"
-
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pdf\>"
-syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pub\>"
+syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(doc\|docx\|docm\|dotx\|xls\|xlsx\|xlsm\|xlsb\|xltx\|ppt\|msg\|one\|vsd\|vsdx\|vsdm\|pdf\|pub\)\>"
 
 
 " Windows & System Files:
@@ -92,20 +84,7 @@ syn match    NetrwDocs   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pub\>"
 "     Disk Images: .iso, .img, .vhd (Virtual Hard Disk)
 
 hi  link     NetrwExe   Statement
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.exe\>"
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dll\>"
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.msi\>"
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sys\>"
-
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.bat\>"
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.cmd\>"
-
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.deb\>"
-syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.rpm\>"
-
-hi  link     NetrwOther   Statement
-syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.iso\>"
-syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.img\>"
+syn match    NetrwExe   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(exe\|dll\|msi\|sys\|bat\|cmd\|deb\|rpm\|iso\|img\)\>"
 
 
 " Common Video File Extensions:
@@ -123,23 +102,6 @@ syn match    NetrwOther   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.img\>"
 "     FLV/F4V (.flv, .f4v): Adobe Flash video, used for streaming.
 "     3GP/3G2 (.3gp, .3g2): Used in older mobile phones.
 
-hi  link     NetrwVid   Type
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mp4"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.m4v\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.m4p\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mov\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.qt\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.avi\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mkv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wmv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.asf\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.webm\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ogv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.flv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.f4v\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.3gp\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.3g2"
-
 " Common Audio File Extensions:
 "     MP3 (.mp3): The standard format for compressed, portable audio.
 "     WAV (.wav, .wave): Uncompressed, high-quality audio standard for Windows.
@@ -152,21 +114,6 @@ syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.3g2"
 "     WMA (.wma): Windows Media Audio.
 "     DSD (.dsd): Direct Stream Digital.
 
-hi  link     NetrwAud   Type
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mp3"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wav\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wave\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.m4a\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.aac\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.flac\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ogg\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.oga\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.aiff\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.aif\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wma\>"
-syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dsd\>"
-
-
 " Other Specialized Formats:
 "     MPEG (.mpg, .mpeg, .mpe): Legacy video formats.
 "     DVF/MSV (.dvf, .msv): Sony proprietary voice files.
@@ -174,15 +121,8 @@ syn match    NetrwAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dsd\>"
 "     IVF (.ivf): Indeo Video Technology.
 "     MIDI (.mid, .midi): Musical Instrument Digital Interface.
 
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mpg\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mpeg\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mpe\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.dvf\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.msv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.amv\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ivf\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.mid\>"
-syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.midi\>"
+hi  link     NetrwVidAud   Type
+syn match    NetrwVidAud   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(mp4\|m4v\|m4p\|mov\|qt\|avi\|mkv\|wmv\|asf\|webm\|ogv\|flv\|f4v\|3gp\|3g2\|mp3\|wav\|wave\|m4a\|aac\|flac\|ogg\|oga\|aiff\|aif\|wma\|dsd\|mpg\|mpeg\|mpe\|dvf\|msv\|amv\|ivf\|mid\|midi\)\>"
 
 
 " Common Raster Image Formats (Pixels):
@@ -201,31 +141,11 @@ syn match    NetrwVid   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.midi\>"
 "     .avif (AV1 Image File Format): Advanced, high-compression format.
 "     .jxl (JPEG XL): Modern, high-efficiency image format.
 
-hi  link     NetrwImg   Conditional
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jpg\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jpeg\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.png\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.gif\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.webp\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tiff\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tif\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.bmp\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.heic\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.heif\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.avif\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jxl\>"
-
-
 " Vector Image Formats (Paths):
 "     .svg (Scalable Vector Graphics): XML-based vector format for web.
 "     .ai (Adobe Illustrator): Native Adobe vector file.
 "     .eps (Encapsulated PostScript): Vector format for printing.
 "     .pdf (Portable Document Format): Can contain both vector and raster data.
-
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.svg\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ai\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.eps\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pdf\>"
 
 " Legacy/Less Common Formats:
 "     .jfif (JPEG File Interchange Format).
@@ -233,12 +153,9 @@ syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pdf\>"
 "     .wmf / .emf (Windows Metafile).
 "     .ppm / .pgm / .pbm / .pnm (Portable Anymap).
 
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.jxl\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pjp\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.wmf\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.emf\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ppm\>"
-syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pgm\>"
+hi  link     NetrwImg   Conditional
+syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(jpg\|jpeg\|png\|gif\|webp\|tiff\|tif\|bmp\|heic\|heif\|avif\|jxl\|svg\|ai\|eps\|pdf\|jxl\|pjp\|wmf\|emf\|ppm\|pgm\)\>"
+
 
 " Key Archive and Compression Formats:
 "     .zip: The most common, universally supported format.
@@ -251,111 +168,35 @@ syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pgm\>"
 "     .gz / .z: GNU gzip format, standard on Linux.
 "     .bz2: BZip2 compressed file format.
 
-hi  link     NetrwCompress   SpecialChar
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.zip\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.zipx\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.7z\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.rar\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tar\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tar.gz\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tgz\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.gz\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.z\>"
-syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.bz2\>"
+hi  link     NetrwCompress   Constant
+syn match    NetrwCompress   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(zip\|zipx\|7z\|rar\|tar\|tar.gz\|tgz\|gz\|z\|bz2\)\>"
 
 
 " Programming languages:
-hi  link     NetrwPrgm1   PreProc
-syn match    NetrwPrgm1   "\.bash[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
+hi  link     NetrwPrgm1   Define
+syn match    NetrwPrgm1   "\s\.bash[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
 syn match    NetrwPrgm1   "\<bash[a-zA-Z0-9_-][a-zA-Z0-9_ -]\+\>"
-syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sh\>"
-syn match    NetrwPrgm1   "\.cshrc[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
-syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.csh\>"
-syn match    NetrwPrgm1   "\.aliases\>"
-syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ps1"
-
-syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.reg"
-syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.REG"
+syn match    NetrwPrgm1   "\s\.cshrc[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
+syn match    NetrwPrgm1   "\s\.aliases\>"
+syn match    NetrwPrgm1   "\s\.vimrc[a-zA-Z0-9._-]*\>\(\/\)\@!"
+syn match    NetrwPrgm1   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(sh\|csh\|ps1\|reg\|REG\|vim\|tex\|lean\)\>"
 
 hi  link     NetrwPrgm2   Function
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vhd\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vhdl\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.psl\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sv\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.svh\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sv.bak\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vt\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vb\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.v\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vlib\>"
-syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vh\>"
+syn match    NetrwPrgm2   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(vhd\|vhdl\|psl\|sv\|svh\|sv.bak\|vt\|vb\|v\|vlib\|vh\|objdump\|asm\|masm\|s\|c\|cpp\|java\|pl\|pm\|py\|tcl\|f\|pl\|pm\)\>"
 
-hi  link     NetrwPrgm3   Function
-syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.objdump\>"
-syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.asm\>"
-syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.masm\>"
-syn match    NetrwPrgm3   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.s\>"
-
-hi  link     NetrwPrgm4   Function
-syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.c\>"
-syn match    NetrwPrgm4   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.cpp\>"
-
-hi  link     NetrwPrgm5   Tag
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.h\>"
-syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.hpp\>"
-
-hi  link     NetrwPrgm6   Function
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.java\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.py\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tcl\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.f\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pl\>"
-syn match    NetrwPrgm6   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.pm\>"
-
-hi  link     NetrwPrgm7   Constant
-syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.tex\>"
-syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.lean\>"
-syn match    NetrwPrgm7   ".vimrc[a-zA-Z0-9._-]*\>\(\/\)\@!"
-syn match    NetrwPrgm7   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.vim\>"
+" header files
+hi  link     NetrwPrgm5   Structure
+syn match    NetrwPrgm5   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(h\|hpp\|hh\|hxx\|inl\|tcc\|tpp\|inc\|mac\)\>"
 
 " Text files
-hi  link     NetrwText   Constant
+hi  link     NetrwText   Number
+syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(txt\|rtf\|md\|rcf\|csv\|uni\|xml\|sql\|ini\|cfg\|conf\|json\|html\php\|log\|log.[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\)\>"
 
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.rtf\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.log\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.log.[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\>"
-syn match    NetrwText   "\<transcript\>"
-
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.rcf\>"
-
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.csv\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.uni\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.xml\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.sql\>"
-
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.ini\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.cfg\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.conf\>"
-
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.json\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.html\>"
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.php\>"
-
-syn match    NetrwText   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.txt\>"
-
-" Paths/folders
-hi  link     NetrwPaths1   Underlined
-syn match    NetrwPaths1   "\%([a-zA-Z0-9_.\-]\|\\ \)\+/" contains=@NoSpell
-
-hi  link     NetrwPaths2   Underlined
-syn match    NetrwPaths2   "\.\%([a-zA-Z0-9_.\-]\|\\ \)\+/" contains=@NoSpell
 
 hi  link     NetrwExec   NonText
 syn match    NetrwExec   "*"
 
-
+" Links
 hi  link     NetrwLinks   Question
 syn match    NetrwLinks   ".*--> .*"
 

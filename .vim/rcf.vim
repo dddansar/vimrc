@@ -1,10 +1,11 @@
 "==============================================================================
-" File: latex.vim
+" File: rcf.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all latex files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
+" Description: This file adds custom syntax highlighting for all rcf files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -31,15 +32,13 @@
 
 
 " Exit if the file was already loaded
-if exists("b:latex_loaded")
+if exists("b:rcf_loaded")
   finish
 endif
-let g:latex_loaded = 1
+let g:rcf_loaded = 1
 
-" Keep autoindent, but remove cindent
-set nocindent
 
-" Match "\word"
-hi  link    LatexKeywords Statement
-syn match   LatexKeywords "\%(\\\)\@<!\\[a-zA-Z]\+" contains=@NoSpell
+hi  link  AllPreNumbers1   Number
+syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
 
+call AllDefineAt()

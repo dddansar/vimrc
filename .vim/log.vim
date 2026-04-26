@@ -38,14 +38,6 @@ let g:log_loaded = 1
 " ignore case in this file
 syn case ignore
 
-" Unmatch comments.
-if hlexists('AllPreComments')
-    syn clear AllPreComments
-endif
-if hlexists('AllPreComments2')
-    syn clear AllPreComments2
-endif
-
 " Match functions like abc()
 hi  link  LogMatches1  Operator
 syn match LogMatches1  "\<\w\+()"

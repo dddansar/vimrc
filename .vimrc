@@ -1,9 +1,11 @@
 "==============================================================================
 " File: .vimrc
 "------------------------------------------------------------------------------
-" Description: Settings that get loaded when opening any file with a vim GUI.
+" Description: Settings loaded when opening any file with Vim/GVim/NeoVim.
 "------------------------------------------------------------------------------
 " Author: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -34,8 +36,8 @@
 "------------------------------------------------------------------------------
 
 " I use the colemak-dh keyboard layout and custom mappings for this layout.
-let g:keyboard_layout = "qwerty"
-" let g:keyboard_layout = "colemak-dh"
+" let g:keyboard_layout = "qwerty"
+let g:keyboard_layout = "colemak-dh"
 
 " Selects between windows and linux OS
 let g:using_windows = 0
@@ -56,48 +58,39 @@ let mapleader="\<space>"
 " File is large if over 500MB.
 let g:LargeFile = 1024 * 1024 * 500
 
-" Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-" Used to improve scrolling performance and speed.
-" Indicates when pageup/pagedown was last used.
-" let g:syntax_disabled = 0
-
 
 " NOTE: Controls the syntax highlightings in all files.
-" If set to 0 will use the default vim syntax with the pablo colorscheme.
-" If set to 1 will use the default vim syntax with my custom colorscheme.
+" If set to 0 will use the default Vim syntax with the pablo colorscheme.
+" If set to 1 will use the default Vim syntax with my custom colorscheme.
 "             This custom colorscheme can be found in:
 "             .vim/colors/custom_colorscheme.vim
-" If set to 2 will use the default vim syntax with my custom colorscheme in
-"             addition to some of my custom syntax matching that may
-"             override and/or add onto the default vim syntax matching.
-" If set to 3 will use my custom vim syntax with my custom colorscheme and if
-"             a file-specific custom syntax file is not found then it will load
-"             the default vim syntax file for that filetype without any of the
-"             custom syntax files getting loaded.
-" if set to 4 will use my custom vim syntax with my custom colorscheme and
-"             will turn on performance mode to disable the heavy custom syntax
-"             matchings that are known to slow down performance.
+" If set to 2 will use the default Vim syntax with my custom colorscheme in
+"             addition to some of my custom syntax matching that adds
+"             additional syntax on top of the default Vim syntax matching.
+" if set to 3 will use the same settings as 2 but will turn on performance mode
+"             to disable the heavy custom syntax matchings that are known to
+"             slow down performance.
 " if set to 5 will turn syntax off entirely.
-let g:select_custom_syntax = 3
+let g:select_custom_syntax = 2
 
 
 " Will turn off additional settings and syntax matching if set to 1 or 2.
 " VINOTE: Vim provides the built-in command :syntime to profile and identify
-" which syntax matches are consuming the most time.
-" 1) Start the profiling by running the command:
-"    :syntime on
-" 2) Perform actions that typically cause performance issues, such as
-" scrolling through the file or editing the problematic sections.
-" 3) Generate and view the report with:
-"    :syntime report
-if g:select_custom_syntax == 4
+"         which syntax matches are consuming the most time.
+"         1) Start the profiling by running the command:
+"            :syntime on
+"         2) Perform actions that typically cause performance issues, such as
+"         scrolling through the file.
+"         3) Generate and view the report with:
+"            :syntime report
+if g:select_custom_syntax == 3
    let g:performance_mode = 1
 else
    let g:performance_mode = 0
 endif
 
 
-" Path to key vim folders
+" Path to key Vim folders
 if g:using_windows
    let $vim_folder_path  = '$HOME/vimfiles'
    let $vim_spell_path   = '$HOME/vimfiles/spell'
@@ -110,27 +103,26 @@ else " For Linux
    let $nvim_spell_path  = '$HOME/.config/nvim/spell'
 endif
 
-
 " NOTE: You can open multiple splits/tabs from terminal!!!
 " gvim -o *.sv   horizontal split all files
 " gvim -O *.sv   vertical split all files
 " gvim -p *.sv   tabs all files
 
-" NOTE: Link neovim to vim's .vimrc and .vim/ in linux!
-" Link the .vimrc file in neovim.
+" NOTE: Link NeoVim to Vim's .vimrc and .vim/ in linux!
+" Link the .vimrc file in NeoVim.
 " ln -s ~/.vimrc ~/.config/nvim/init.vim
-" Link the .vim/ folder in neovim.
+" Link the .vim/ folder in NeoVim.
 " ln -s ~/.vim ~/.config/nvim/.vim
-" Link the spell checking folder in neovim.
+" Link the spell checking folder in NeoVim.
 " ln -s ~/.vim/spell ~/.config/nvim/spell
-" Link the custom colorschemen in neovim.
+" Link the custom colorschemen in NeoVim.
 " ln -s ~/.vim/colors ~/.config/nvim/colors
-" Link the Pasky plugin to use Claude's API in neovim.
+" Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
 
-" NOTE: You can get a Claude API to work with gvim and vim and neovim!!!
-"       See the notes above to link neovim to vim or place everything in
-"       neovim's directory structure instead...
+" NOTE: You can get a Claude API to work with GVim and Vim and NeoVim!!!
+"       See the notes above to link NeoVim to Vim or place everything in
+"       NeoVim's directory structure instead...
 " 1) I made modifications to Pasky's Claude plugin that you can use in:
 " .vim/pack/pasky/start/claude.vim/plugin/claude.vim
 " OR
@@ -143,7 +135,7 @@ endif
 " OR add to your .bash_aliases file:
 " export API_KEY=add_api_key_here
 let g:claude_api_key=expand("$API_KEY")
-" 4) And that should be it, open a new vim window, press <leader>cc to open a
+" 4) And that should be it, open a new Vim window, press <leader>cc to open a
 "    Claude prompt, type your question or command in the prompt, press ctrl-]
 "    to send you question or command, and Claude should start replying in
 "    the prompt window.
@@ -159,6 +151,10 @@ let g:claude_map_send_chat_message = "<c-]>"
 "          To decrease costs, ask question in small (or even empty files)
 "          and all only keep the relevant code/text to the question.
 let g:claude_use_1m_context = 0
+" Allow Claude to give longer responses (max = 64k)
+let g:claude_max_tokens = 64000
+" Set the max file size for AI API to 500KB
+let g:MaxAIAPIFile = (1024 * 1024 * 1)/2
 " Prevent Claude from editing files, opening new files or searching the web or
 " using tools. Try to keep it's answers simple in the chat window... This will
 " save cost as Claude won't send 5000k lines of code or documentation from a
@@ -170,10 +166,13 @@ if g:claude_disable_tool_use
 endif
 " If set, Claude will not add indentation to it's answers.
 let g:claude_no_indent = 1
-" Set the model to use. By default this is set to claude-sonnet-4-6
-" let g:claude_model = 'claude-opus-4-6'
 " Manually save history to ~/claude_history.txt with <leader>cs
 nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
+" NOTE: Set the model to use. By default this is set to claude-sonnet-4-6
+" let g:claude_model = 'claude-sonnet-4-6'
+" let g:claude_model = 'claude-opus-4-6'
+" let g:claude_model = 'claude-sonnet-4-7'
+" let g:claude_model = 'claude-opus-4-7'
 
 
 "------------------------------------------------------------------------------
@@ -183,82 +182,35 @@ nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 "------------------------------------------------------------------------------
 " Function: CommonSettings()
 " Description: These options and commands set the font, the background, the
-"              colorsheme and the dimensions of the vim window.
+"              colorscheme, the dimensions of the Vim window, and the mappings.
 "------------------------------------------------------------------------------
 function! CommonSettings()
+   let g:EnteredCommonSetting = 1
 
+   "---------------------------------------------------------------------------
    " Enable syntax highlighting
-   if g:select_custom_syntax <= 2
+   "---------------------------------------------------------------------------
+   if g:select_custom_syntax <= 3
       syntax on
-   elseif g:select_custom_syntax >= 3 && g:select_custom_syntax < 5
-      " NOTE: Here I use my own syntax highlighting settings so turning
-      "       syntax off. See "augroup EnCustomSyntax" in custom_syntax.vim
-      "       where my custom vim syntax files are sourced.
-
-      " If syntax is off, vim's default syntax files will not be loaded.
-      "      :syntax list   Lists the syntax groups loaded.
-      "      :syntax off    Completely disables the syntax highlighting for
-      "                     all current and future buffers.
-      "      :syntax clear  Clears syntax highlighting only for the current
-      "                     buffer.
-      syntax off
-      " syntax clear
-
-      " NOTE: Each time syntax is turned on, vim will load the syntax file
-      "       it finds in ~/.vim/syntax/ and then the default syntax file in
-      "       $VIMRUNTIME/syntax/ based on the filetype detected. If you
-      "       want to prevent vim from loading $VIMRUNTIME/syntax/ you must
-      "       create a file in ~/.vim/syntax/ that sets b:current_syntax,
-      "       and if this is set, the default syntax files will exit.
-      " NOTE: Unfortunately, there is no single filename in the
-      "       ~/.vim/syntax/ directory that always gets loaded automatically
-      "       regardless of the file type. Meaning you would need to repeat
-      "       this for every single filetype.
-      " NOTE: If you try to set b:current_syntax in .vimrc instead,
-      "       b:current_syntax will get updated each time syntax is turned
-      "       on and it will get deleted each time syntax is turned off.
-      "       So having this in .vimrc can prevent vim from loading the
-      "       syntax files in $VIMRUNTIME/syntax/ at startup. But if you
-      "       ever set syntax on after that, vim will go back to loading
-      "       the filetype specific syntax files in ~/.vim/syntax/ and then
-      "       in $VIMRUNTIME/syntax/
-      " let b:current_syntax = "dummy"
-      " NOTE: This means if you ever try to turn syntax off and syntax on
-      "       again, vim will load the default syntax in $VIMRUNTIME/syntax/
-      "       instead of the custom syntax that is defined in
-      "       "augroup EnCustomSyntax" below. I have a workaround for this
-      "       by calling ":doautocmd EnCustomSyntax BufRead" instead of
-      "       using syntax on...
-
-      " NOTE: Unfortunately "filetype off" also disables b:comment_leader,
-      "       so I can't use this as a solution either...
-      " filetype off
-
-      " NOTE: Changing the runtime path to try to not load
-      " $VIMRUNTIME/syntax/ seems to cause errors when loading vim.
-      " "set runtimepath=...
-
-      " VINOTE: Found a solution below by setting filetype=custom_syntax...
-      "         and creating the file ~/.vim/syntax/custom_syntax.vim
-
-      " Due to the solution mentioned involving filetype=custom_syntax, if
-      " you add syntax on in here, it will load the default syntax first and
-      " then the custom syntax will get loaded after causing a small lag
-      " that is noticeable when loading multiple files in split windows.
-      " syntax on
    endif
 
-   " NOTE: Need to set colorscheme after syntax on.
-   " Load colorscheme before the LargeFile augroup to avoid a white flash when
-   " first opening new files.
+   "---------------------------------------------------------------------------
+   " NOTE: Need to set colorscheme after syntax on or highlight groups defined
+   "       before 'syntax on' may be partially reset.
+   " Load colorscheme before checking file size in the MainFunction augroup to
+   " avoid a white flash when first opening new files.
+   "---------------------------------------------------------------------------
    call LoadColorscheme()
 
-   " Selects between windows and linux OS
+   "---------------------------------------------------------------------------
+   " Set the font and set the dimensions of the Vim window
+   "---------------------------------------------------------------------------
    if has("gui_running")
+      " Selects between windows and linux OS
       if g:using_windows
          if !has('nvim')
             set guifont=Consolas:h13.5:cANSI
-         else " For neovim
+         else " For NeoVim
             set guifont=Consolas:h13.5:cANSI
          endif
          set lines=46          " Height
@@ -269,17 +221,18 @@ function! CommonSettings()
          if g:font_style == 0
             if !has('nvim')
                set guifont=Monospace\ 12
-               " winpos 1000 0         " Open gvim in top right by default
-            else " for neovim
+               " winpos 1000 0         " Open GVim in top right by default
+            else " for NeoVim
                set guifont=Monospace:h12
             endif
             set lines=47          " Height
             set columns=130       " Width
+            " set columns=120       " Width
          else
             if !has('nvim')
                set guifont=Monospace\ 20
-               " winpos 1000 0         " Open gvim in top right by default
-            else " For neovim
+               " winpos 1000 0         " Open GVim in top right by default
+            else " For NeoVim
                set guifont=Monospace:h20
             endif
             set lines=30          " Height
@@ -288,16 +241,20 @@ function! CommonSettings()
       endif
    endif
 
-   " Set default value for comment_leader
-   if !exists('b:comment_leader')
-      let b:comment_leader = '//'
-   endif
+   " Display line numbers on the left.
+   set number
+
+   "---------------------------------------------------------------------------
+   " Load all Mappings
+   "---------------------------------------------------------------------------
+   call LoadMappings()
+
 endfunction
 
 
 "------------------------------------------------------------------------------
 " Function: LoadColorscheme()
-" Description: Loads the selected colorshememe.
+" Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
    if g:select_custom_syntax > 0 && filereadable(expand($vim_folder_path . "/colors/custom_colorscheme.vim"))
@@ -380,7 +337,7 @@ function! DefaultSettings()
    " with # !!
    " set smartindent
    " Need to set this or I can't use >> on lines that start with # !!
-   " but this also make vim indent c style with { parenthesis }.
+   " but this also make Vim indent c style with { parenthesis }.
    " See |C-indenting|.
    " NOTE: Changing this may affect multiline abbreviations...
    " Set based on filetype? -> some of my .vim files will override this...
@@ -411,13 +368,13 @@ function! DefaultSettings()
    set statusline+=\ \ \ %{SynGroup()}
    " set statusline+=%=%p%%\ %l/%L:%v\ %t
    set statusline+=%=\ %l/%L:%v\ %p%%
-   " The update time for cursor hold, used to upadte g:status_line_var,
-   " and also sets the update time for the swap file, but i'm not using the
+   " The update time for cursor hold, used to update g:status_line_var,
+   " and also sets the update time for the swap file, but I'm not using the
    " swap file...
    " set updatetime=500
    set updatetime=200
 
-   " Turn on blinking cursor in neovim
+   " Turn on blinking cursor in NeoVim
    if has('nvim')
       set guicursor+=a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
    end
@@ -448,9 +405,6 @@ function! DefaultSettings()
    " Set the command window height (where commands such as / and : are typed).
    set cmdheight=1
 
-   " Display line numbers on the left.
-   set number
-
    " lastline: When included, as much as possible of the last line
    " in a window will be displayed. When not included, a last line
    " that doesn't fit is replaced with "@" lines.
@@ -464,8 +418,13 @@ function! DefaultSettings()
    " Quickly time out on keycodes, but never time out on mappings.
    set notimeout ttimeout ttimeoutlen=100
 
-   " If this is here, will not auto-comment by default.
-   " set formatoptions-=cro  " NOTE: Added further below.
+   " If this is here, will not auto-comment by default. This may get overriden
+   " by filetype plugins therefore using an autogroup instead.
+   " set formatoptions-=cro
+   augroup format_options
+      au!
+      au FileType * setlocal formatoptions-=cro
+   augroup END
 
    "---------------------------------------------------------------------------
    " Use 3 spaces instead of tabs. Converts tab to spaces.
@@ -488,14 +447,14 @@ function! DefaultSettings()
    " Automatically enter a new line after X characters (0 means never).
    set textwidth=0
 
-   " In gvim, 'guioptions' controls whether various GUI widgets are shown.
+   " In GVim, 'guioptions' controls whether various GUI widgets are shown.
    " Below means left/bottom scroll bar disabled, right scroll bar enabled.
    " set guioptions+=LlRrb
    " set guioptions-=LlRrb
    " set guioptions+=r
-   " Remove the toolbar (icon bar) in gvim.
-   " set guioptions-=T
    set guioptions=aegimtr
+   " Remove the toolbar (icon bar) in GVim.
+   " set guioptions-=T
 
    " Will highlight spelling mistakes in all file types if set
    " I set this in txt.vim as I don't want it enabled in most file types.
@@ -504,7 +463,7 @@ function! DefaultSettings()
    " Ignore uppercase of first word.
    " set spellcapcheck=
 
-   " When you turn on spell checking, tell vim to not check the spelling of
+   " When you turn on spell checking, tell Vim to not check the spelling of
    " text that is not explicitly covered by a syntax item.
    syntax spell notoplevel
 
@@ -628,9 +587,9 @@ function! DefaultSettings()
    " Disable modelines to avoid potential security issues...
    set nomodeline
 
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Some non GUI settings
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    if !has("gui_running")
       " Changes cursor shape in visual/insert mode.
       let &t_SI = "\e[6 q"
@@ -638,18 +597,13 @@ function! DefaultSettings()
       let &t_EI = "\e[2 q"
 
       " set t_Co=256
-   endif " has("gui_running")
+   endif
 
-   " --------------------------------------------------------------------------
-   " Load all Mappings
-   " --------------------------------------------------------------------------
-   call LoadMappings()
 
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Load autocorrect files
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    if !exists("g:AutocorrectLoaded") && g:use_autocorrect
-      " echo "autocorrect"
       let g:AutocorrectLoaded=1
       if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
          so $vim_folder_path/autocorrect/autocorrect3.vim
@@ -660,41 +614,26 @@ function! DefaultSettings()
    endif
 
 
-   " --------------------------------------------------------------------------
-   " Add filetype for extensions that don't have any and other FileType
-   " related autocmds.
-   " --------------------------------------------------------------------------
-   augroup AddFiletype
 
-      " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
-      au!
-
-      " If this is here, will not auto-comment by default.
-      au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-      " Add filetype for extensions that don't have any
-      au BufNewFile,BufRead *.REG         set filetype=registry
-      au BufNewFile,BufRead .aliases      set filetype=sh
-      au BufNewFile,BufRead *.log,*.log.* set filetype=log
-
-      " Apply spell checking everywhere in text files.
-      au FileType text syntax spell toplevel
-   augroup END
-
-
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Colors and Syntax Highlighting
-   " --------------------------------------------------------------------------
-   " NOTE: This file is responsible for loading the custom syntax
+   "---------------------------------------------------------------------------
+   " NOTE: This file is responsible for loading additional custom syntax
    " highlighting groups based on the file extension whenever
    " g:select_custom_syntax >= 2.
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    so $vim_folder_path/syntax/custom_syntax.vim
+   "---------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
 
 
-   " --------------------------------------------------------------------------
+
+   "---------------------------------------------------------------------------
    " Always load file at last known cursor position
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    augroup RestoreCursor
       au!
       if g:performance_mode <= 1 && g:using_encryption == 0
@@ -712,18 +651,18 @@ function! DefaultSettings()
       endif
    augroup END
 
-   " --------------------------------------------------------------------------
-   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-   " Used to improve scrolling performance and speed.
-   " --------------------------------------------------------------------------
-   " augroup SyntaxOnCursorHold
+   "---------------------------------------------------------------------------
+   " Change cursor color in insert mode.
+   "---------------------------------------------------------------------------
+   " augroup CursorInsert
    "    au!
-   "    autocmd CursorHold * if g:syntax_disabled | doautocmd EnCustomSyntax BufRead | let g:syntax_disabled = 0 | endif
+   "    autocmd InsertEnter * highlight Cursor guibg=grey50
+   "    autocmd InsertLeave * highlight Cursor guibg=white
    " augroup END
 
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    " Automatically Resize splits whenever a new split is opened.
-   " --------------------------------------------------------------------------
+   "---------------------------------------------------------------------------
    augroup AutoResizeSplits
       autocmd!
       " WinEnter will prevent keeping 2 splits equal length for comparison.
@@ -756,12 +695,12 @@ endfunction
 function! LoadMappings()
 
    "---------------------------------------------------------------------------
-   " Make vim similar to windows (save, copy, paste, select, ...)
+   " Make Vim similar to windows (save, copy, paste, select, ...)
    "---------------------------------------------------------------------------
 
    " Update jump list with m' on cut, copy and paste (you can use <c-o>
-   " and <c-i> to jump to past locations). NOTE: gvim requires an extra
-   " <c-o> to do the first jump but neovim does not seem to require it...
+   " and <c-i> to jump to past locations). NOTE: GVim requires an extra
+   " <c-o> to do the first jump but NeoVim does not seem to require it...
    if g:using_windows
       " <c-c> to copy and <c-x> to paste using "set clipboard".
       nnoremap yy m'V"+y$
@@ -937,11 +876,6 @@ function! LoadMappings()
 
    endif
 
-   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-   " Used to improve scrolling performance and speed.
-   " nnoremap <pageup>   :let g:syntax_disabled = 1<cr>:syntax clear<cr><pageup>
-   " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
-
    " Uppercase / capitalize / lowercase case of word.
    if g:keyboard_layout == "colemak-dh"
       nnoremap <c-u> viwU
@@ -952,12 +886,10 @@ function! LoadMappings()
    " Toggle / uppercase / capitalize / lowercase word under cursor.
    nnoremap <c-`> viw~
 
-
    " Append next line to end of current line.
    " See help :join   - J without g will insert up to 2 spaces (variable).
    nnoremap <a-j> <down>0i<space><esc>kg<s-j>
    vnoremap <a-j> <s-j>
-
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
@@ -1143,7 +1075,7 @@ function! LoadMappings()
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
    if g:keyboard_layout == "colemak-dh"
-      " Move btw split screens. The $/0 combo helps vim to go to the
+      " Move btw split screens. The $/0 combo helps Vim to go to the
       " last horizontal split when switching between vertical splits.
       nnoremap <c-,>    $<c-w>j<c-w><bar><c-w>_0zz
       nnoremap <c-e>    $<c-w>k<c-w><bar><c-w>_0zz
@@ -1180,7 +1112,6 @@ function! LoadMappings()
    " In multi-split windows, will full-size current file.
    nnoremap <c-space> <c-w><bar><c-w>_zz
 
-
    " Zoom in/out.
    nnoremap <c-middlemouse> :LargerFont<cr>
    nnoremap <s-middlemouse> :SmallerFont<cr>
@@ -1206,6 +1137,14 @@ function! LoadMappings()
    nnoremap <silent> <expr> gc "_i<c-r>=b:comment_leader<cr> <esc>"
    nnoremap <silent> <expr> gs "_vf <del>"
 
+   " Adds the comment ~~ (similar to //) that will highlight the line as a
+   " gray strikethrough if strikethrough.vim is loaded. Also works on ranges
+   " in the same line by adding a second pair of ~~.
+   nnoremap gr _i~~ <esc>
+   vnoremap gr <esc>`<i~~<esc>`>lla~~<esc>
+   " Remove 2 sets of ~~ starting from current line.
+   nnoremap <leader>gu 0/\~\~<cr>xxnxx:noh<cr>
+
    " Load help for word under cursor.
    " <c-r><c-w> pastes word under cursor into command line!
    nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
@@ -1213,11 +1152,8 @@ function! LoadMappings()
 
    " Reload the custom syntax highlighting groups without using syntax on
    " and without resourcing .vimrc by reloading EnCustomSyntax instead.
-   if !has('nvim')
-      nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=3<cr>:bufdo set filetype=custom_syntax<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=1<cr>:doautocmd EnCustomSyntax BufRead<cr>:call LoadColorscheme()<cr>
-   else " For neovim
-      nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=3<cr>:let g:custom_syntax_found=1<cr>:bufdo set filetype=custom_syntax<cr>:bufdo doautocmd EnCustomSyntax BufRead<cr>:execute 'buffer ' . g:orig_buf<cr>:call LoadColorscheme()<cr>
-   endif
+   let g:previous_custom_syntax=g:select_custom_syntax
+   nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=g:previous_custom_syntax<cr>:syntax on<cr>:bufdo doautocmd EnCustomSyntax BufRead<cr>:execute 'buffer ' . g:orig_buf<cr>:doautocmd EnCustomSyntax BufRead<cr>:call LoadColorscheme()<cr>
    " Loads the default syntax highlighting
    nnoremap <silent> <leader>sa :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=1<cr>:bufdo set filetype=<cr>:bufdo filetype detect<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr>:call LoadColorscheme()<cr>
 
@@ -1234,7 +1170,7 @@ function! LoadMappings()
    " % matches entire file.
    " \< matches start of a word.
    " . matches the first char of a word (replaced with [a-z]).
-   " \u tells vim to uppercase the following character in the substitution
+   " \u tells Vim to uppercase the following character in the substitution
    "    string (&).
    " & means substitute whatever was matched on the left hand side.
    " \(A\|B\) means match a group of alternatives, aka match A or B.
@@ -1287,16 +1223,12 @@ function! LoadMappings()
    nnoremap <leader>fS :%sort u<cr>
 
 
-   " Re-source .vimrc file without reloading file, then update all windows.
-   " nnoremap <a-g> :unlet! g:EnteredDefaultSetting<cr>:unlet! g:EnteredSmallFile<cr>:unlet! g:AutocorrectLoaded<cr>:so $MYVIMRC<cr>:windo e<cr>
-
-
    " NOTE: Execute shell script on current/selected line and print/replace
    "       over the lines.
    nnoremap <leader>fp :.!sh<cr>
    vnoremap <leader>fp :.!sh<cr>
    " NOTE: Execute shell script on current/selected line and print inside
-   "       the vim output.
+   "       the Vim output.
    nnoremap <leader>fl :.w !sh<cr>
    vnoremap <leader>fl :.w !sh<cr>
    " For example, have this on it's own line: echo $(( 1 + 200 / 2))
@@ -1364,6 +1296,7 @@ function! LoadMappings()
    nnoremap <leader>tsp :topleft<space>split<cr><c-w><bar><c-w>_
    nnoremap <leader>bsp :botright<space>split<cr><c-w><bar><c-w>_
 
+
    " Buffers
    " Next/previous
    nnoremap <leader>bn :bn<cr>
@@ -1375,22 +1308,7 @@ function! LoadMappings()
    nnoremap <leader>bf :bfirst<cr>
    nnoremap <leader>bl :blast<cr>
 
-   " grep the word or WORD under the cursor.
-   " First we set the operatorfunc option to our function then we run g@
-   " which calls this function as an operator.
-   nnoremap <leader>gw viW:<c-u>call GrepOperator(visualmode())<cr>
-   nnoremap <leader>gg viw:<c-u>call GrepOperator(visualmode())<cr>
-   " When you type : in visual mode, vim inserts '<,'> automatically but we
-   " don't want that here, so we use <c-u> to say delete from the cursor to
-   " the beginning of the line.
-   " visualmode() returns a one character string representing the last type
-   " of visual mode used. v for characterwise, V for linewise, c-v for
-   " blockwise grep the selected text.
-   vnoremap <leader>gw :<c-u>call GrepOperator(visualmode())<cr>
-   vnoremap <leader>gg :<c-u>call GrepOperator(visualmode())<cr>
 
-   " Toggle the quickfix window when grep is used.
-   nnoremap <leader>gq :call QuickFixToggle()<cr><c-w>_
 endfunction
 
 
@@ -1424,79 +1342,6 @@ command! SmallerFont call SmallerFont()
 
 
 "------------------------------------------------------------------------------
-" Function: GrepOperator()
-" Description: Grep the word under the cursor. Asks for the path to grep in.
-"------------------------------------------------------------------------------
-function! GrepOperator(type)
-
-   let saved_unnamed_reg = @@
-   let saved_clipboard_reg = @+
-
-   " echom a:type
-   if a:type ==# 'v'
-      " Copy the visually selected text.
-      " Moving to mark at beginning of the range, entering characterwise
-      " visual mode, moving to mark at the end of the range, yanking the
-      " visually selected text.
-      normal! `<v`>y
-   elseif a:type ==# 'char'
-      " If the operator was called from normal mode using a characterwise
-      " motion.
-      " Moving to mark at beginning of the range, entering characterwise
-      " visual mode, moving to mark at the end of the range, yanking the
-      " visually selected text.
-      " normal! `[v`]y
-      " Apply yank with a motion instead of a visual selection to not
-      " destroy the record of the most recent visual selection.
-      normal! `[y`]
-   else
-      " Ignore case of linewise/blockwise visual mode as grep doesn't
-      " search across lines.
-      return
-   endif
-
-   let g:quickfix_return = winnr()
-
-   let grep_path = input("Please input relative path to grep in: ")
-
-   " Variables starting with @ are registers. The @@ is the unnamed
-   " register. The one vim places text when you yank or delete without
-   " specifying a register.
-   silent execute "grep! --exclude-dir=\".svn\" -R " . shellescape(@@) . " " . grep_path
-   botright copen
-   let g:quickfixisopen = 1
-
-   silent exe "normal! \<c-w>_"
-
-   setlocal nospell
-
-   " The yank register.
-   let @@ = saved_unnamed_reg
-   " The copy clipboard register.
-   let @+ = saved_clipboard_reg
-endfunction
-
-
-"------------------------------------------------------------------------------
-" Function: QuickFixToggle()
-" Description: Toggle the quickfix window.
-"------------------------------------------------------------------------------
-function! QuickFixToggle()
-   if exists("g:quickfixisopen") && g:quickfixisopen
-      cclose
-      let g:quickfixisopen = 0
-      if exists("g:quickfix_return")
-         execute g:quickfix_return . "wincmd w"
-      endif
-   else
-      let g:quickfix_return = winnr()
-      botright copen
-      let g:quickfixisopen = 1
-   endif
-endfunction
-
-
-"------------------------------------------------------------------------------
 " Function: Eatchar()
 " Description: Use to consume the space typed after an abbreviation:
 "              Add  <c-r>=Eatchar('\s')<cr>  at end of abbreviation.
@@ -1526,6 +1371,11 @@ endfunction
 "              the linux selection buffer even though I have clipboard utility
 "              installed and loaded...
 "
+"              Below works to solve this problem in Vim/NeoVim and even works
+"              in Windows.
+"
+"              Sometimes you have to give it a second to grab the text...
+"
 "              NOTE: Also works in Windows to copy selections...
 "
 "              When the cursor moves, first stop any previous timers, then
@@ -1547,12 +1397,22 @@ function! s:visual_hold_reset()
    endif
 endfunction
 
+let g:hack_copy_selection=1
+if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
+   let g:visual_copied = 0
+   let g:visual_timer = -1
+   augroup CopyOnVisualHold
+      au!
+      au CursorMoved * call s:visual_hold_reset()
+   augroup END
+endif
+
 
 "------------------------------------------------------------------------------
-" Function: LargeFile()
+" Function: LargeFileSettings()
 " Description: Load large files faster by not using default settings or syntax.
 "------------------------------------------------------------------------------
-function! LargeFile()
+function! LargeFileSettings()
    let g:EnteredLargeFile = 1
    " Disable swap files
    set noswapfile
@@ -1566,61 +1426,42 @@ function! LargeFile()
    setlocal undolevels=-1
    " Disable modelines to avoid potential security issues...
    set nomodeline
-   " Display line numbers on the left.
-   set number
-   " Load all Mappings
-   call LoadMappings()
    " Display message.
    augroup LargeFileMsg
       autocmd!
-      autocmd VimEnter *  echom "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, and most options are disabled (see LargeFile() in .vimrc for details)."
+      autocmd VimEnter *  echom "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, and most options are disabled (see LargeFileSettings() in .vimrc for details)."
    augroup END
 endfunction
 
 
 "------------------------------------------------------------------------------
-" 3. Augroups
+" 3. Main Code
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
-" Augroup: CopyOnVisualHold
-" Description: NOTE: Vim/nvim/neovim on my linux was not copying selections to
-"              the linux selection buffer even though I have clipboard utility
-"              installed and loaded... and yet gvim did not have this problem.
-"
-"              Below works to solve this problem in vim/neovim and even works
-"              in Windows.
-"
-"              Sometimes you have to give it a second to grab the text...
+" Augroup: MainFunction
+" Description: This is basically the equivalent of main() in C. MainFunction
+"              loads everything else in this file. First check the file size,
+"              if less than g:LargeFile, load DefaultSettings() otherwise
+"              load LargeFileSettings().
 "------------------------------------------------------------------------------
-let g:hack_copy_selection=0
-if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
-   let g:visual_copied = 0
-   let g:visual_timer = -1
-   augroup CopyOnVisualHold
-      au!
-      au CursorMoved * call s:visual_hold_reset()
-   augroup END
-endif
-
-
-"------------------------------------------------------------------------------
-" Augroup: BufReadPre
-" Description: Check file size, if greater than g:LargeFile, don't load
-"              DefaultSettings.
-"------------------------------------------------------------------------------
-augroup LargeFile
+augroup MainFunction
 
    autocmd!
 
    " Set common setings for Large and Default files. Set the font, the
    " colorsheme and the dimensions of the Vim window.
-   call CommonSettings()
+   if !exists("g:EnteredCommonSetting")
+      call CommonSettings()
+   endif
 
-   " Decide whether to call DefaultSettings() or LargeFile() based on the
+   " Set max file size for AI API
+   autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f >= g:MaxAIAPIFile | let g:claude_disable = 1 | endif
+
+   " Decide whether to call DefaultSettings() or LargeFileSettings() based on the
    " file size.
    autocmd BufReadPre * let f=getfsize(expand("<afile>")) |
-      \ if f >= g:LargeFile || f == -2 | call LargeFile() | let g:claude_disable = 1 |
+      \ if f >= g:LargeFile || f == -2 | call LargeFileSettings() | let g:claude_disable = 1 |
       \ elseif !exists("g:EnteredDefaultSetting") | call DefaultSettings() |
       \ endif
 

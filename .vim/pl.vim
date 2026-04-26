@@ -2,9 +2,10 @@
 " File: pl.vim
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for all perl files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -36,9 +37,23 @@ if exists("b:pl_loaded")
 endif
 let g:pl_loaded = 1
 
-hi  link  PlKeywords1 Statement
-syn keyword PlKeywords1    sub my use
+" hi  link  PlKeywords1 Statement
+" syn keyword PlKeywords1    sub my use
+"
+" hi  link  PlKeywords2 Statement
+" syn keyword PlKeywords2    printf print exists
 
-hi  link  PlKeywords2 Type
-syn keyword PlKeywords2    printf print exists
+call AllParenBr()
+call AllEqualities()
+" call AllOperators()
+" call AllArrows()
+" call AllDefineDollar()
+" call AllDefineAt()
+" call RegexMatches()
+
+hi  link    PlEquality    Operator
+syn match   PlEquality    "=\%(pod\|cut\)\@!"
+
+hi  link    PlDefineAnd   Function
+syn match   PlDefineAnd   "^\s*&\w\+"
 

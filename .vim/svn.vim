@@ -5,6 +5,8 @@
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
+"------------------------------------------------------------------------------
 " Copyright: MIT License
 "
 " Copyright (c) 2026 Danny Sarraf
@@ -35,22 +37,10 @@ if exists("b:svn_loaded")
 endif
 let g:svn_loaded = 1
 
-" clear previous highlightings
-syn clear
-
-hi  link    SvnComments    Comment
-syn region  SvnComments    start="--This line, and those below, will be ignored--" end=+\%$+
-
-hi  link    SvnNew         Define
-syn match   SvnNew         "\%(^\)\@<=A.*" contained containedin=SvnComments
-
-hi  link    SvnModified    Function
-syn match   SvnModified    "\%(^\)\@<=M.*" contained containedin=SvnComments
-
-hi  link    SvnDeleted     SpecialChar
-syn match   SvnDeleted     "\%(^\)\@<=D.*" contained containedin=SvnComments
-
-hi  link    SvnReplaced    Conditional
-syn match   SvnReplaced    "\%(^\)\@<=R.*" contained containedin=SvnComments
-
+hi! link svnDelimiter   Comment
+hi! link svnModified    Function
+hi! link svnAdded       Operator
+hi! link svnRemoved     Constant
+hi! link svnRenamed     Conditional
+hi! link svnSummary     Normal
 

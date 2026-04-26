@@ -6,13 +6,12 @@ Contains all my vimrc settings.
 
 - Works in GVim, Vim and NeoVim
 - Supports both Windows and Linux OS
-- Includes AI Integration with a plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6)
+- Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6 and the latest 4.7 (should support future versions as well...))
 - Uses my own custom colorscheme where the user has full control over all the colors
-- Supports different syntax configuration, can select between Vim's default syntax matching or use a custom syntax highlighting for 20+ file types (default)
+- Supports different syntax configurations, can select between Vim's default syntax matching or add some of my custom syntax matching on top of the default Vim syntax matching (default)
 - Support for both Colemak-DH and QWERTY keyboard layouts
-- Includes performance optimization features, multiple performance modes
+- Includes performance optimization features and multiple performance modes
 - Can emulate clipboard utility and copying selections if not supported by default in Vim/NeoVim or even in Windows
-- Enables lazyredraw for improved macro execution speed
 - Includes custom mappings and abbreviations
 - Contains font and GUI customizations
 - Improved search and replace usability with mappings
@@ -24,77 +23,95 @@ Contains all my vimrc settings.
 ├── abbrevlist.vim          # Abbreviations list for thesaurus lookup
 ├── abbrev.vim              # Common abbreviations and shortcuts
 ├── all_colors.vim          # Shows all the available colors in Vim, useful for picking colors
-├── all_post.vim            # Applies global custom syntax highlighting after all the respective file settings have been applied
-├── all_pre.vim             # Applies global custom syntax highlighting before all the respective file settings have been applied
 ├── asm.vim                 # Assembly custom syntax highlighting
 ├── bash.vim                # Bash/shell custom syntax highlighting
 ├── c.vim                   # C/C++ custom syntax highlighting
-├── colors.vim              # Adds additional highlighting groups
-├── colors/                 # Contains the custom colorscheme
+├── colors/...              # Contains the custom colorscheme
 ├── java.vim                # Java custom syntax highlighting
-├── latex.vim               # LaTeX custom syntax highlighting
-├── lean.vim                # Lean custom syntax highlighting
-├── log.vim                 # Log file custom syntax highlighting
+├── lean.vim                # Lean math prover custom syntax highlighting
 ├── math.vim                # Math custom syntax highlighting and abbreviations
 ├── math_mappings.vim       # Math/Unicode mappings from VSCode/Lean
+├── md.vim                  # Markdown custom syntax highlighting
+├── more_colors.vim         # Adds additional highlighting groups and colors
 ├── netrw.vim               # File browser custom syntax highlighting
-├── pack/pasky/start/       # Contains the files for Pasky's plugin for using Anthropic's Claude AI via an API
+├── pack/pasky/start/...    # Contains the files for Pasky's plugin for using Anthropic's Claude AI via an API
 ├── pl.vim                  # Perl custom syntax highlighting
 ├── py.vim                  # Python custom syntax highlighting
-├── rainbow_parenthesis.vim # Highlights each matching set of parenthesis in different colors
 ├── regex.vim               # Regular expression custom syntax highlighting
 ├── spell.vim               # Spell checking configurations
 ├── strikethrough.vim       # Text strikethrough effects
 ├── sv.vim                  # SystemVerilog custom syntax highlighting
 ├── svn.vim                 # SVN custom syntax highlighting
-├── syntax/                 # Responsible for loading the custom syntax highlighting groups based on file extension
+├── syntax/...              # Responsible for loading the custom syntax highlighting groups based on file extension
+├── syntax_library.vim      # Contains a library of syntax highlighting functions for use in all filetypes
 ├── tcl.vim                 # TCL custom syntax highlighting
 ├── txt.vim                 # Plain text custom syntax highlighting
 ├── unicode.vim             # Unicode support and abbreviations
-├── vhdl.vim                # VHDL custom syntax highlighting
 └── vim.vim                 # Vim custom syntax highlighting
 ```
 
 ## Getting Started
 
-To use, first install GVim, Vim or NeoVim on linux or Windows (GVim being my main editor), and then place the .vim files in the appropriate location.
-- For linux, place the .vimrc file and the .vim/ folder in ~/ (aka $HOME/ or /home/username/) then open any file with GVim and the settings should all be loaded.
+To use, first install GVim, Vim or NeoVim on Linux or Windows (GVim being my main editor), and then place the .vim files in the appropriate location.
+- For Linux, place the .vimrc file and the .vim/ folder in ~/ (aka $HOME/ or /home/username/) then open any file with GVim and the settings should all be loaded.
 - For Windows, place the .vimrc file and the .vim/ folder under C:\Users\username\ (but rename the .vim folder to vimfiles in Windows) then open any file with GVim and the settings should all be loaded.
 
 
 ## NeoVim
 
-You can get all the vimrc settings to work in NeoVim by placing the files in the proper NeoVim directories or by linking NeoVim to Vim's .vimrc and .vim/ in linux!
+NeoVim uses different configuration directories than Vim. You can get all the vimrc settings to work in NeoVim by 1) placing the files in the proper NeoVim directories and loading the Vim settings through the init.lua file or option 2) by linking NeoVim to Vim's .vimrc and .vim/ in Linux.
 
-This can depend on the specific locations that NeoVim uses in your OS. Below is what works for me in Ubuntu/Mint Linux.
+
+### Option 2) Linking NeoVim to Vim
+
+Option 2) Linking NeoVim to Vim, can depend on the specific locations that NeoVim uses in your OS. Below is what works for me in Ubuntu/Mint Linux.
 
 Link Vim's .vimrc and .vim/ files in NeoVim.
 ```
 ln -s ~/.vimrc ~/.config/nvim/init.vim
 ln -s ~/.vim ~/.config/nvim/.vim
 ```
+
 Link the custom colorscheme in NeoVim.
 ```
 ln -s ~/.vim/colors ~/.config/nvim/colors
 ```
+
 Link Vim's spell checking folder in NeoVim.
 ```
 ln -s ~/.vim/spell ~/.config/nvim/spell
 ```
+
 Link Pasky's plugin for using Anthropic's Claude AI in NeoVim.
 ```
 ln -s ~/.vim/pack ~/.config/nvim/pack
 ```
 
+Now when I open a file with NeoVim, it gets the same settings as when I load the file with GVim.
+
 
 ## Pasky's Plugin for using Anthropic's Claude AI
 
-I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ubuntu/Mint Linux OS and I also got it working on my Windows OS using GVim (I have not tried NeoVim on Windows). I don't own a MAC machine so I could not test it there.
+I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ubuntu/Mint Linux OS and I also got it working on my Windows OS using GVim (I have not tried NeoVim on Windows). The plugin works with the latest versions of Claude Sonnet and Opus (Once a new version comes out simply update the "g:claude_model" variable).
 
-The unmodified Pasky Plugin for using Anthropic's Claude AI can be found at:
-https://github.com/pasky/claude.vim
+To get the Claude API to work, follow these steps:
+1) Download the Pasky Plugin and place in you .vim folder
+    A) I made modifications to Pasky's Claude API plugin that you can find in:
+    .vim/pack/pasky/start/claude.vim/plugin/claude.vim
+    OR
+    B) You can download Pasky's Original Claude API plugin from:
+    https://github.com/pasky/claude.vim
+    and add it to your .vim/pack/pasky/start/claude.vim/
+2) To confirm the plugin works for you, open a new vim window (ideally with an empty or a small file just to test it out), press <leader>cc to open a Claude prompt, type your question or command in the prompt, press ctrl-] to send you question or command, and Claude should start replying in the prompt window.
+If you don't have an API key yet, you should get an error stating: "message":"x-api-key header is required"
+3) Get an API key from https://platform.claude.com
+4) Add the API key in g:claude_api_key in your .vimrc file:
+```
+let g:claude_api_key='add_api_key_here'
+```
+5) Try step 2 again and hopefully it works for you now.
 
-I made some modifications to Pasky's plugins to address some issues I was having, to make the chat experience better suit my personal preferences, to not use the claude_*_prompt.md files (I prefer default prompts), and to add additional comments.
+NOTE: I made some modifications to Pasky's plugins (the May 2025 version) to address some issues I was having, to add my own improvements to the plugin, to make the chat experience better suit my personal preferences, to not use the claude\_\*\_prompt.md files (I prefer default prompts), to add additional comments.
 
 Here is a list of changes that I made with help from the Claude AI:
 - Fixed the error "executing job failed: Argument list too long".
@@ -108,13 +125,12 @@ Here is a list of changes that I made with help from the Claude AI:
 - Increased 'max_tokens' to allow Claude AI to give longer responses before cutting off. See g:claude_max_tokens.
 - Add fix for elinks "Update your browser Your browser isn't supported anymore".
 - Set g:claude_map_cancel_response = "<c-c>" and have it only affect the Claude chat window.
-- Tell Claude to answer from it's knowledge directly and to be very brief.
 - Added settings to disable tool and web usage by default. I prefer to keep everything in the chat window, to not let Claude directly edit my files and to keep costs down by not opening large files/websites. Set g:claude_disable_tool_use=0 if you want to enable them.
 - Removed automatic indentation in Claude's responses. See g:claude_no_indent.
-- Cleared the claud_*_prompt.md files to use Claude's default prompt settings.
+- Cleared the claude\_\*\_prompt.md files to use Claude's default prompt settings.
 - Print g:claude_model instead of printing "Claude:"
 - Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
-- Added a disable option for the Claude API.
+- Fix for buffers getting resent during tool usage causing significant increase in usage cost.
 
 
 ## Custom Colorscheme
@@ -129,9 +145,7 @@ You can do so by adding the following line to your .vimrc file:
 colorscheme custom_colorscheme
 ```
 
-When Vim wants to load a colorscheme, Vim will first check inside the .vim/colors/ folder to see if the colorscheme exists there, and then it will look inside $VIMRUNTIME/colors/ (where most of the colorschemes are found) and see if it can find the colorscheme in that folder.
-
-If you are using NeoVim instead of Vim/GVim, then add the custom_colorscheme.vim file to the equivalent path (~/.config/nvim/colors/ in linux) and add one of the following to your init.lua file:
+If you are using NeoVim instead of Vim/GVim, then add the custom_colorscheme.vim file to the equivalent path (~/.config/nvim/colors/ in Linux) and add one of the following to your init.lua file:
 
 ```
 vim.cmd.colorscheme("custom_colorscheme")
@@ -141,9 +155,12 @@ vim.cmd[[colorscheme custom_colorscheme]]
 
 Make sure you don't have any other colorschemes enabled overriding the custom_colorscheme.
 
-### What my custom colorscheme and custom syntax matching looks like
+### Comparison with/without my custom syntax matching.
 
-With g:select_custom_syntax = 3
+Both images below use my custom_colorscheme.vim file. The image on the left shows the default syntax matching and the image on the right adds my custom syntax matching on top.
+
+Left  image: With g:select_custom_syntax = 1
+Right image: With g:select_custom_syntax = 2
 
 For vim files:
 
@@ -152,18 +169,4 @@ For vim files:
 For C files:
 
 ![Alt Text](c_example.png)
-
-### What my custom colorscheme and Vim's default syntax matching looks like
-
-With g:select_custom_syntax = 1
-
-For vim files:
-
-![Alt Text](vimrc_example_default_syntax.png)
-
-For C files:
-
-![Alt Text](c_example_default_syntax.png)
-
-
 

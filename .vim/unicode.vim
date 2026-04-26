@@ -3,10 +3,11 @@
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting and abbreviations
 "              for all files that use unicode symbols.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 " NOTE: See also: math_mappings.vim
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -108,13 +109,12 @@ call setcellwidths([
 hi  link    UnicodeSetsColor     Question
 hi  link    UnicodeBCColor       Question
 hi  link    UnicodeBColor        TitleBar
-hi  link    UnicodeCColor        SpecialKey
+hi  link    UnicodeCColor        HLBlueB
 hi  link    UnicodeDBColor       Statement
 hi  link    UnicodeMColor        StorageClass
-hi  link    UnicodeVarColor      SpecialChar
-hi  link    UnicodeBsColor       Define
+hi  link    UnicodeVarColor      Constant
+hi  link    UnicodeBsColor       PreProc
 
-" My custom syntax without any default vim settings.
 syn keyword UnicodeSetsColor     UnicodeSetsColor
 syn keyword UnicodeBCColor       UnicodeBCColor
 syn keyword UnicodeBColor        UnicodeBColor
@@ -126,23 +126,23 @@ syn keyword UnicodeBsColor       UnicodeBsColor
 
 
 " Do not spell check any of the special characters in the whole unicode range!!
-" -----------------------------------------------------------------------------
+"------------------------------------------------------------------------------
 if g:performance_mode <= 0
-   " Don't spell check any word followed by unicode:
-   " hi  link     UnicodeCommentColor   AllPreComments
-   " syn match    UnicodeCommentColor  "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell contained containedin=.*Comment.*
+   " Don't spell check any unicode chars in comments:
+   hi  link     UnicodeCommentColor   AllComments
+   syn match    UnicodeCommentColor  "[a-zA-Z]*[^ -~]\%(\S\)*"   contains=@NoSpell contained containedin=.*Comment.*
    " syn match    UnicodeNoColor1      "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell
 
    " Set default color for all unicode chars outside of the main ASCII range:
    " hi  link     UnicodeDefault   StorageClass
-   " syn match    UnicodeCommentColor  "[^ -~]"  contains=@NoSpell contained containedin=.*Comment.*
-   " syn match    UnicodeDefault   "[^ -~]"  contains=@NoSpell containedin=.*Comment.*
+   " syn match    UnicodeCommentColor  "[^ -~]"  contains=@NoSpell contained containedin=AllComment.*
+   " syn match    UnicodeDefault   "[^ -~]"  contains=@NoSpell containedin=AllComment.*
 
    " Highlight chars that you don't want used such as tabs:
    hi  link     UnicodeDontUse NonText
-   syn match    UnicodeDontUse "[‘-‟−—–∣]" contains=@NoSpell containedin=RegExRanges
+   syn match    UnicodeDontUse "[‘-‟−—–∣]" contains=@NoSpell containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 endif
-" -----------------------------------------------------------------------------
+"------------------------------------------------------------------------------
 
 
 " NOTE: To add more ASCII/unicode symbols use (i)c-v  :help i_CTRL-V_digit
@@ -275,13 +275,13 @@ inorea <buffer> e_light       🗲<left><right><c-r>=Eatchar('\s')<cr>
 
 
 " hi  link    UnicodeRandom StorageClass
-" syn match   UnicodeRandom "[✓✓✗✗™©®®¤€£₤¥₱₹₽₿♂♀☼§§§¶¶¿‰⅌⁇⁈‽‽‼⁉𝄉№⋯…øØ⅋∶¡‡†⋱⊺♯♩♮‾♥❤♡☯♲⚖⚔☮☀⋔✂☺☻☹‣•]" contains=@NoSpell  containedin=RegExRanges
-syn match   UnicodeRandom "[𝄉]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeRandom "[✓✓✗✗™©®®¤€£₤¥₱₹₽₿♂♀☼§§§¶¶¿‰⅌⁇⁈‽‽‼⁉𝄉№⋯…øØ⅋∶¡‡†⋱⊺♯♩♮‾♥❤♡☯♲⚖⚔☮☀⋔✂☺☻☹‣•]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeRandom "[𝄉]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 " hi  link    UnicodeLightning Statement
-" syn match   UnicodeLightning "[🗲]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeLightning "[🗲]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " hi  link    UnicodeImportant NonText
-" syn match   UnicodeImportant "[≝≟⚠☣☢⚛⯑☡]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeImportant "[≝≟⚠☣☢⚛⯑☡]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 
@@ -325,7 +325,7 @@ inorea <buffer> _lfsl      ⧸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _lbsl      ⧹<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLines UnicodeDBColor
-syn match   UnicodeLines "[∠∡∢∟∥᜶°∤∦‖॥᱾᱿ᐦ⧸⧹¦≬]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLines "[∠∡∢∟∥᜶°∤∦‖॥᱾᱿ᐦ⧸⧹¦≬]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> _tri       △<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_tri      ∆<left><right><c-r>=Eatchar('\s')<cr>
@@ -402,7 +402,7 @@ inorea <buffer> _2tri     ⟁<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2jsq     ⧉<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeShapes  Operator
-syn match   UnicodeShapes  "[△∆□□▭◊⬠⬡○⬯★✯☆⭑⋆◆◈◇■▣▢◫✧✦✶✴✹▱▰◁▷▽△◀▶▼▲▹▿▵◃▸▾◂▴●◌◯▪▪▬▯▮∎⟁⧉]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeShapes  "[△∆□□▭◊⬠⬡○⬯★✯☆⭑⋆◆◈◇■▣▢◫✧✦✶✴✹▱▰◁▷▽△◀▶▼▲▹▿▵◃▸▾◂▴●◌◯▪▪▬▯▮∎⟁⧉]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Operators
@@ -419,7 +419,7 @@ inorea <buffer> _~~        ∼<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __\|       ∣<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOperators1 Operator
-syn match   UnicodeOperators1 "[±∓÷∗∼]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeOperators1 "[±∓÷∗∼]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "
 inorea <buffer> _neg       −<left><right><c-r>=Eatchar('\s')<cr>
@@ -505,11 +505,11 @@ inorea <buffer> _divx      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _xdiv      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOperators2 Operator
-syn match   UnicodeOperators2 "[∘∗×⨯⋅✖☓𐌗⨉⋇⋄⬝⋉⋊⋈⊹∔]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeOperators2 "[∘∗×⨯⋅✖☓𐌗⨉⋇⋄⬝⋉⋊⋈⊹∔]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " syn match   UnicodeOperators2 "/" contains=@NoSpell
 hi  link    UnicodeOShapes StorageClass
-syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚◎⊜⨀𐌏⦾⦷🟗🟕⧁⧀⍟⊞⊟⊠⊡⚀⊘⦸⦶⦰ⵁ⊛⎊]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚◎⊜⨀𐌏⦾⦷🟗🟕⧁⧀⍟⊞⊟⊠⊡⚀⊘⦸⦶⦰ⵁ⊛⎊]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Sets
@@ -531,7 +531,7 @@ inorea <buffer> _because   ∵<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _bc        ∵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets0 UnicodeSetsColor
-syn match   UnicodeSets0 "[∀∃∄∴∵]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSets0 "[∀∃∄∴∵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Empty set, null set
 inorea <buffer> _null     ∅<left><right><c-r>=Eatchar('\s')<cr>
@@ -584,10 +584,10 @@ inorea <buffer> _ncontains ∌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _ncnt      ∌<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets1 UnicodeSetsColor
-syn match   UnicodeSets1 "[∩∪⋃⋂⋒⋓⊎⊍⨄⨃∈∉∋∌∍]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSets1 "[∩∪⋃⋂⋒⋓⊎⊍⨄⨃∈∉∋∌∍]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeSetsO UnicodeSetsColor
-syn match   UnicodeSetsO "[∁⟆⋌⋋≀]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSetsO "[∁⟆⋌⋋≀]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Subsets/superset
 inorea <buffer> _sub       ⊂<left><right><c-r>=Eatchar('\s')<cr>
@@ -619,7 +619,7 @@ inorea <buffer> _lcoset   ⧏<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _rcoset   ⧐<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets2 UnicodeSetsColor
-syn match   UnicodeSets2 "[⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊊⊋⋐⋑⊲⊴⋪⋬⊳⊵⋫⋭⧏⧐∖⊸]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSets2 "[⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊊⊋⋐⋑⊲⊴⋪⋬⊳⊵⋫⋭⧏⧐∖⊸]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Squared include/union/subset/superset
 inorea <buffer> _sin       ⊓<left><right><c-r>=Eatchar('\s')<cr>
@@ -635,7 +635,7 @@ inorea <buffer> _snsube    ⋢<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _snsupe    ⋣<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeSets3 UnicodeSetsColor
-syn match   UnicodeSets3 "[⊓⨅⊔⊑⊏⊒⊐⨆⋢⋣]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSets3 "[⊓⨅⊔⊑⊏⊒⊐⨆⋢⋣]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -654,7 +654,7 @@ inorea <buffer> _cor       ⋎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _cand      ⋏<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLogic  Operator
-syn match   UnicodeLogic "[∧∨¬⊻⊕⊙⊼⊽!⋎⋏]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLogic "[∧∨¬⊻⊕⊙⊼⊽⋎⋏]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "
 inorea <buffer> _!=        ≠<left><right><c-r>=Eatchar('\s')<cr>
@@ -734,8 +734,8 @@ inorea <buffer> _geomeq    ≎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2bump     ≎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Bumped    ≎<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeEquality   Define
-syn match   UnicodeEquality   "[≁≠≡≃≄≅≋≊⋍≌∽≣≕≗∻≔∺∷≓≒≂∹≑≐∸≘≙≚≍≛≜≜≖≏≎]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeEquality   PreProc
+syn match   UnicodeEquality   "[≁≠≡≃≄≅≋≊⋍≌∽≣≕≗∻≔∺∷≓≒≂∹≑≐∸≘≙≚≍≛≜≜≖≏≎]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> _le        ≤<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _el        ⋜<left><right><c-r>=Eatchar('\s')<cr>
@@ -777,8 +777,8 @@ inorea <buffer> _mg        ≫<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3g        ⋙<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3l        ⋘<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeInEquality Define
-syn match   UnicodeInEquality "[≤⋜≥⋝≰≱≈≉≮≯≢≇≦≲⋚≶⋦≨≧⋧≩≳⋛≷≴≵⋖⋗⩿⪀≪≪≫≫⋙⋘]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeInEquality PreProc
+syn match   UnicodeInEquality "[≤⋜≥⋝≰≱≈≉≮≯≢≇≦≲⋚≶⋦≨≧⋧≩≳⋛≷≴≵⋖⋗⩿⪀≪≪≫≫⋙⋘]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Preceding
 inorea <buffer> _pc        ≺<left><right><c-r>=Eatchar('\s')<cr>
@@ -798,8 +798,8 @@ inorea <buffer> _nsce      ⋡<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _scae      ≿<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _scnae     ⋩<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeCeding Define
-syn match   UnicodeCeding "[≿≽⋩≻≾≼⋨≺⋞⋠⊀⋡⊁⋟]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeCeding PreProc
+syn match   UnicodeCeding "[≿≽⋩≻≾≼⋨≺⋞⋠⊀⋡⊁⋟]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Arrows
@@ -844,7 +844,7 @@ inorea <buffer> _nrta      ↛<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _vlra      ⇹<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows1 Question
-syn match   UnicodeArrows1 "[→←↑↓↖↗↘↙⤡⤢↔↕↚↮↛⇹]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows1 "[→←↑↓↖↗↘↙⤡⤢↔↕↚↮↛⇹]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Double/long arrow
 inorea <buffer> _drta     ⟶<left><right><c-r>=Eatchar('\s')<cr>
@@ -864,7 +864,7 @@ inorea <buffer> _llra      🡘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _luda      🡙<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows2 Question
-syn match   UnicodeArrows2 "[⟶⟵⟷🡒🡐🡑🡓🡔🡕🡖🡗🡘🡙]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows2 "[⟶⟵⟷🡒🡐🡑🡓🡔🡕🡖🡗🡘🡙]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> _rta2      ⇒<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _lfa2      ⇐<left><right><c-r>=Eatchar('\s')<cr>
@@ -887,7 +887,7 @@ inorea <buffer> _dna4     ⟱<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _upa4     ⟰<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows3 Question
-syn match   UnicodeArrows3 "[⇒⇐⇑⇓⇕⇗⇖⇘⇙⇔⇏⇍⇎⇚⇛⟱⟰]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows3 "[⇒⇐⇑⇓⇕⇗⇖⇘⇙⇔⇏⇍⇎⇚⇛⟱⟰]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> _2lra      ⇆<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2rla      ⇄<left><right><c-r>=Eatchar('\s')<cr>
@@ -902,7 +902,7 @@ inorea <buffer> _3lfa      ⬱<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3rta      ⇶<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows4 Question
-syn match   UnicodeArrows4 "[⇆⇄⇇⇉⇈⇊⇅⇵⬱⇶]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows4 "[⇆⇄⇇⇉⇈⇊⇅⇵⬱⇶]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Top/bot/right/left harpoon arrow
 inorea <buffer> _rtha      ⇀<left><right><c-r>=Eatchar('\s')<cr>
@@ -918,7 +918,7 @@ inorea <buffer> _ltrbha    ⇋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _rbltha    ⇌<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows5 Question
-syn match   UnicodeArrows5 "[⇀⇁↼↽↿↾⇃⇂⇋⇌]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows5 "[⇀⇁↼↽↿↾⇃⇂⇋⇌]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Hollow
 inorea <buffer> _hlfa      ⇦<left><right><c-r>=Eatchar('\s')<cr>
@@ -933,7 +933,7 @@ inorea <buffer> _hlra      ⬄<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _huda      ⇳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows6 Question
-syn match   UnicodeArrows6 "[⇦⇨⇧⇩⬁⬀⬂⬃⬄⇳]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows6 "[⇦⇨⇧⇩⬁⬀⬂⬃⬄⇳]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Full
 inorea <buffer> _flfa      ⬅<left><right><c-r>=Eatchar('\s')<cr>
@@ -948,7 +948,7 @@ inorea <buffer> _flra      ⬌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _fuda      ⬍<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows7 Question
-syn match   UnicodeArrows7 "[⬅➡⬆⬇⬉⬈⬊⬋⬌⬍]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows7 "[⬅➡⬆⬇⬉⬈⬊⬋⬌⬍]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " 2 headed
 inorea <buffer> _2hda      ↡<left><right><c-r>=Eatchar('\s')<cr>
@@ -974,8 +974,8 @@ inorea <buffer> a_upa      ꜛ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_dna      ꜜ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows8 Question
-syn match   UnicodeArrows8 "[↡↟↞↠˿ꜛꜜ↧↥↨↤↦]" contains=@NoSpell  containedin=RegExRanges
-syn match   UnicodeArrows8 "[⟹⟸⟺]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows8 "[↡↟↞↠˿ꜛꜜ↧↥↨↤↦]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeArrows8 "[⟹⟸⟺]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Squiggle
 inorea <buffer> _leadsto   ⇝<left><right><c-r>=Eatchar('\s')<cr>
@@ -997,7 +997,7 @@ inorea <buffer> _lfwa      ↜<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _lrtwa     ⤳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeArrows9 Question
-syn match   UnicodeArrows9 "[⇝⇜↫↬↢↜↣↝↭⤳]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeArrows9 "[⇝⇜↫↬↢↜↣↝↭⤳]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " L arrow
@@ -1025,7 +1025,7 @@ inorea <buffer> _crta2    ⟲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _clfa2    ⟳<left><right><c-r>=Eatchar('\s')<cr>
 
 " hi  link    UnicodeArrows10 Question
-" syn match   UnicodeArrows10 "[↰↱↲↳⬐⬎⬑⬏↩↪↶↷↻↺⥀⥁⟲⟳]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeArrows10 "[↰↱↲↳⬐⬎⬑⬏↩↪↶↷↻↺⥀⥁⟲⟳]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bot/top corners
 inorea <buffer> _blc       ⌞<left><right><c-r>=Eatchar('\s')<cr>
@@ -1051,7 +1051,7 @@ inorea <buffer> _dlq        „<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _slq        ‚<left><right><c-r>=Eatchar('\s')<cr>
 
 " hi  link    UnicodeEdges Function
-" syn match   UnicodeEdges "[⌞⌟⌜⌝˻˼˹˺⁀‿⁐]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeEdges "[⌞⌟⌜⌝˻˼˹˺⁀‿⁐]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Fractions
@@ -1072,8 +1072,8 @@ inorea <buffer> _f56       ⅚<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _f58       ⅝<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _f78       ⅞<left><right><c-r>=Eatchar('\s')<cr>
 
-" hi  link    UnicodeFractions  Constant
-" syn match   UnicodeFractions  "[½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞]" contains=@NoSpell  containedin=RegExRanges
+" hi  link    UnicodeFractions  Number
+" syn match   UnicodeFractions  "[½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Brackets/parenthesis
@@ -1112,8 +1112,8 @@ inorea <buffer> _rfloor    ⌋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2laq      «<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2raq      »<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link  UnicodeTBrk  Define
-syn match UnicodeTBrk  "[⟨⟩⟪⟫«»❬❮❰❭❯❱《》]" contains=@NoSpell  containedin=RegExRanges
+hi  link  UnicodeTBrk  PreProc
+syn match UnicodeTBrk  "[⟨⟩⟪⟫«»❬❮❰❭❯❱《》]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> d_lpa      ⟦<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_rpa      ⟧<left><right><c-r>=Eatchar('\s')<cr>
@@ -1121,7 +1121,7 @@ inorea <buffer> d_lcb      ⦃<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_rcb      ⦄<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link  UnicodeDbParen   UnicodeDBColor
-syn match UnicodeDbParen   "[⟦⟧⦃⦄]" contains=@NoSpell  containedin=RegExRanges
+syn match UnicodeDbParen   "[⟦⟧⦃⦄]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> _topp     ︵<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _botp     ︶<left><right><c-r>=Eatchar('\s')<cr>
@@ -1130,7 +1130,7 @@ inorea <buffer> _botp     ︶<left><right><c-r>=Eatchar('\s')<cr>
 " ◜◝◟◞︵︶()⎛⎞⎝⎠⎧ ⎫⎩ ⎭⎰╰ ╯╮╭‾᭴⦦⦧⦢⦣⦟⼈㇏𝈺𝈻 ⼃⵰৴ノ𝀎Ꜥᜆ⎎
 " ⁀‿◠◡ ◠ ◡ ∿ ~∼/\⊃⊂／＼⨜∫⳽
 " hi  link    UnicodeCurves  Operator
-" syn match   UnicodeCurves  "[◜◝◟◞╰╯╭╮⨜᭴⦦⦧⦢⦣⦟⳽⵰⼈⼃৴ノ𝀎Ꜥᜆ⎎㇏𝈺𝈻◠◡／＼]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeCurves  "[◜◝◟◞╰╯╭╮⨜᭴⦦⦧⦢⦣⦟⳽⵰⼈⼃৴ノ𝀎Ꜥᜆ⎎㇏𝈺𝈻◠◡／＼]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Box drawings: u2500->u257F
 " ┌───┬───┐ ┏━━━┳━━━┓ ╔═══╦═══╗
@@ -1205,7 +1205,7 @@ inorea <buffer> d_boxr   ╔══════╗<cr>║      ║<cr>╚══�
 inorea <buffer> d_boxl   ╔══════╗<cr>║      ║<cr>╚══════╝<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeBoxDrawings  StorageClass
-syn match   UnicodeBoxDrawings  "[┌└┐┘│─┬┼┴├┤┏┗┓┛┃━┳╋┻┣┫╔╚╗╝║═╦╬╩╠╣]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeBoxDrawings  "[┌└┐┘│─┬┼┴├┤┏┗┓┛┃━┳╋┻┣┫╔╚╗╝║═╦╬╩╠╣]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " Multi-line parenthesis, square/curly brackets
@@ -1225,13 +1225,13 @@ inorea <buffer> _2cbrack2     ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<c
 inorea <buffer> _2cbracket2   ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeMultiParen Function
-syn match   UnicodeMultiParen "[︵︶⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeMultiParen "[︵︶⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeMultiSBrk Function
-syn match   UnicodeMultiSBrk "[⎡⎤⎢⎥⎣⎦⌈⌊⌉⌋]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeMultiSBrk "[⎡⎤⎢⎥⎣⎦⌈⌊⌉⌋]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link    UnicodeMultiCBrk PreProc
-syn match   UnicodeMultiCBrk "[⎧⎫⎪⎨⎬⎩⎭⎰⎱]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeMultiCBrk Define
+syn match   UnicodeMultiCBrk "[⎧⎫⎪⎨⎬⎩⎭⎰⎱]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Tees
@@ -1273,7 +1273,7 @@ inorea <buffer> _2tee2    ⊫<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3tee     ⊪<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeTees UnicodeSetsColor
-syn match   UnicodeTees "[⊦⊢⊬⊣⊤⊥⟂⟙丅⟘丄ᗮ⊨⊧⊭⊩⊮⊫⊯⊪]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeTees "[⊦⊢⊬⊣⊤⊥⟂⟙丅⟘丄ᗮ⊨⊧⊭⊩⊮⊫⊯⊪]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -1318,10 +1318,10 @@ inorea <buffer> _intc      ∲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _inta      ∳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link   UnicodeAlgebra     Operator
-syn match  UnicodeAlgebra     "[∂𝜕∫∮∯∯∰∰∲∳∬∭′‵]" contains=@NoSpell  containedin=RegExRanges
+syn match  UnicodeAlgebra     "[∂𝜕∫∮∯∯∰∰∲∳∬∭′‵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link   UnicodeAlgebraNary SpecialKey
-syn match  UnicodeAlgebraNary "[∏∐∑⋀⋁]" contains=@NoSpell  containedin=RegExRanges
+hi  link   UnicodeAlgebraNary HLBlueB
+syn match  UnicodeAlgebraNary "[∏∐∑⋀⋁]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -1344,15 +1344,15 @@ inorea <buffer> _prop      ∝<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _sine      ∿<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOther   Operator
-syn match   UnicodeOther   "[∿∝ħⅇ]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeOther   "[∿∝ħⅇ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeOperators3 Operator
-syn match   UnicodeOperators3 "[√∛∜]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeOperators3 "[√∛∜]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link    UnicodeInfinity   Constant
-syn match   UnicodeInfinity   "[∞]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeInfinity   Number
+syn match   UnicodeInfinity   "[∞]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-" syn match   UnicodeInfinityPlus   "[∞]\+[A-Z0-9]\+" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeInfinityPlus   "[∞]\+[A-Z0-9]\+" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Circled digits/alphabet
@@ -1531,10 +1531,10 @@ inorea <buffer> o_z       ⓩ<left><right><c-r>=Eatchar('\s')<cr>
 
 
 " hi  link    UnicodeEnumNumbers   Question
-" syn match   UnicodeEnumNumbers "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeEnumNumbers "[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " hi  link    UnicodeEnumLetters   Operator
-" syn match   UnicodeEnumLetters "[🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]" contains=@NoSpell  containedin=RegExRanges
+" syn match   UnicodeEnumLetters "[🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -1600,7 +1600,7 @@ inorea <buffer> _Nabla     𝞩<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Na        𝞩<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUNorm UnicodeVarColor
-syn match   UnicodeGreekUNorm "[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩᴨФᴪ𝞩Ω]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekUNorm "[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩᴨФᴪ𝞩Ω]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Cursive
 inorea <buffer> c_Alpha    𝛢<left><right><c-r>=Eatchar('\s')<cr>
@@ -1653,7 +1653,7 @@ inorea <buffer> c_Nabla    𝛻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_Na       𝛻<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUC UnicodeCColor
-syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Greek
 inorea <buffer> _alpha     α<left><right><c-r>=Eatchar('\s')<cr>
@@ -1712,7 +1712,7 @@ inorea <buffer> _nabla     ∇<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _na        ∇<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLNorm UnicodeVarColor
-syn match   UnicodeGreekLNorm "[αβγɣδεζηθικλμνξοπρςστυφχψω∇µф]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekLNorm "[αβγɣδεζηθικλμνξοπρςστυφχψω∇µф]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Cursive
 inorea <buffer> c_alpha    𝛼<left><right><c-r>=Eatchar('\s')<cr>
@@ -1765,7 +1765,7 @@ inorea <buffer> c_omega    𝜔<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_om       𝜔<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLC UnicodeCColor
-syn match   UnicodeGreekLC "[𝛼𝛽𝛾𝛿𝜀𝜁𝜂𝜃𝜄𝜅𝜆𝜇𝜈𝜉𝜊𝜋𝜌𝜍𝜎𝜏𝜐𝜑𝜙𝜒𝜓𝜔]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekLC "[𝛼𝛽𝛾𝛿𝜀𝜁𝜂𝜃𝜄𝜅𝜆𝜇𝜈𝜉𝜊𝜋𝜌𝜍𝜎𝜏𝜐𝜑𝜙𝜒𝜓𝜔]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold cursive
 inorea <buffer> bc_Alpha   𝜜<left><right><c-r>=Eatchar('\s')<cr>
@@ -1820,7 +1820,7 @@ inorea <buffer> bc_Nabla   𝜵<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bc_Na      𝜵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUBC UnicodeBCColor
-syn match   UnicodeGreekUBC "[𝜜𝜝𝜞𝜟𝞓𝜠𝜡𝜢𝜣𝜤𝜥𝜦𝜧𝜨𝜩𝜪𝜫𝜬𝜭𝜮𝜯𝜰𝜱𝜲𝜳𝜴𝜵]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekUBC "[𝜜𝜝𝜞𝜟𝞓𝜠𝜡𝜢𝜣𝜤𝜥𝜦𝜧𝜨𝜩𝜪𝜫𝜬𝜭𝜮𝜯𝜰𝜱𝜲𝜳𝜴𝜵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold cursive
 inorea <buffer> bc_alpha   𝜶<left><right><c-r>=Eatchar('\s')<cr>
@@ -1873,7 +1873,7 @@ inorea <buffer> bc_omega   𝝎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bc_om      𝝎<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLBC UnicodeBCColor
-syn match   UnicodeGreekLBC "[𝜶𝜷𝜸𝜹𝜺𝜻𝜼𝜽𝜾𝜿𝝀𝝁𝝂𝝃𝝄𝝅𝝆𝝇𝝈𝝉𝝊𝝋𝝌𝝍𝝎𝝓]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekLBC "[𝜶𝜷𝜸𝜹𝜺𝜻𝜼𝜽𝜾𝜿𝝀𝝁𝝂𝝃𝝄𝝅𝝆𝝇𝝈𝝉𝝊𝝋𝝌𝝍𝝎𝝓]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold
 inorea <buffer> b_Alpha    𝚨<left><right><c-r>=Eatchar('\s')<cr>
@@ -1930,7 +1930,7 @@ inorea <buffer> b_Nabla    𝛁<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_Na       𝛁<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekUB UnicodeBColor
-syn match   UnicodeGreekUB "[𝚨𝚩𝚪𝚫𝝙𝚬𝚭𝚮𝚯𝚰𝚱𝚲𝚳𝚴𝚵𝚶𝚷𝚸𝚹𝚺𝚻𝚼𝚽𝚾𝚿𝛀𝛁𝛟]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekUB "[𝚨𝚩𝚪𝚫𝝙𝚬𝚭𝚮𝚯𝚰𝚱𝚲𝚳𝚴𝚵𝚶𝚷𝚸𝚹𝚺𝚻𝚼𝚽𝚾𝚿𝛀𝛁𝛟]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold
 inorea <buffer> b_alpha    𝛂<left><right><c-r>=Eatchar('\s')<cr>
@@ -1981,7 +1981,7 @@ inorea <buffer> b_omega    𝛚<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_om       𝛚<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLB UnicodeBColor
-syn match   UnicodeGreekLB "[𝛂𝛃𝛄𝛅𝛆𝛇𝛈𝛉𝛊𝛋𝛌𝛍𝛎𝛏𝛐𝛑𝛒𝛓𝛔𝛕𝛖𝛗𝛘𝛙𝛚]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeGreekLB "[𝛂𝛃𝛄𝛅𝛆𝛇𝛈𝛉𝛊𝛋𝛌𝛍𝛎𝛏𝛐𝛑𝛒𝛓𝛔𝛕𝛖𝛗𝛘𝛙𝛚]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
 " Combined
@@ -2023,7 +2023,7 @@ inorea <buffer> c_y        𝑦<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_z        𝑧<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLC UnicodeCColor
-syn match   UnicodeLatinLC "[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝘩𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLC "[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝘩𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " Bold
@@ -2055,7 +2055,7 @@ inorea <buffer> b_y        𝐲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_z        𝐳<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLB UnicodeBColor
-syn match   UnicodeLatinLB "[𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLB "[𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " Bold, cursive
@@ -2087,7 +2087,7 @@ inorea <buffer> bc_y       𝒚<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bc_z       𝒛<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLBC UnicodeBCColor
-syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Cursive
 inorea <buffer> c_A        𝐴<left><right><c-r>=Eatchar('\s')<cr>
@@ -2118,7 +2118,7 @@ inorea <buffer> c_Y        𝑌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_Z        𝑍<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUC UnicodeCColor
-syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold
 inorea <buffer> b_A        𝐀<left><right><c-r>=Eatchar('\s')<cr>
@@ -2149,7 +2149,7 @@ inorea <buffer> b_Y        𝐘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_Z        𝐙<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUB UnicodeBColor
-syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " Bold cursive
@@ -2181,7 +2181,7 @@ inorea <buffer> bc_Y       𝒀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bc_Z       𝒁<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUBC UnicodeBCColor
-syn match   UnicodeLatinUBC "[𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUBC "[𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Mathematical bold script
 inorea <buffer> bs_a       𝓪<left><right><c-r>=Eatchar('\s')<cr>
@@ -2212,7 +2212,7 @@ inorea <buffer> bs_y       𝔂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bs_z       𝔃<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLBS UnicodeBsColor
-syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 " Mathematical bold script
@@ -2244,7 +2244,7 @@ inorea <buffer> bs_Y       𝓨<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bs_Z       𝓩<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUBS UnicodeBsColor
-syn match   UnicodeLatinUBS "[𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUBS "[𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Mathematical Fraktur
 inorea <buffer> f_A        𝔄<left><right><c-r>=Eatchar('\s')<cr>
@@ -2275,7 +2275,7 @@ inorea <buffer> f_Y        𝔜<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> f_Z        ℨ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUF UnicodeMColor
-syn match   UnicodeLatinUF "[𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUF "[𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> f_a        𝔞<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> f_b        𝔟<left><right><c-r>=Eatchar('\s')<cr>
@@ -2305,7 +2305,7 @@ inorea <buffer> f_y        𝔶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> f_z        𝔷<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLF UnicodeMColor
-syn match   UnicodeLatinLF "[𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLF "[𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Mathematical Script
 inorea <buffer> s_A        𝒜<left><right><c-r>=Eatchar('\s')<cr>
@@ -2336,7 +2336,7 @@ inorea <buffer> s_Y        𝒴<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> s_Z        𝒵<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUS UnicodeMColor
-syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 inorea <buffer> s_a        𝒶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> s_b        𝒷<left><right><c-r>=Eatchar('\s')<cr>
@@ -2367,7 +2367,7 @@ inorea <buffer> s_y        𝓎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> s_z        𝓏<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinLS UnicodeMColor
-syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Double
 inorea <buffer> d_nP       ℙ̶<left><right><c-r>=Eatchar('\s')<cr>
@@ -2430,8 +2430,8 @@ inorea <buffer> d_pi        ℼ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_Pi        ℿ<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinD UnicodeDBColor
-syn match   UnicodeLatinD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell  containedin=RegExRanges
-syn match   UnicodeLatinD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeLatinD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeLatinD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -2699,22 +2699,22 @@ inorea <buffer> __x        ˣ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __y        ʸ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __z        ᶻ<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSPNum Constant
-syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛᴺᵀ]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSPNum Number
+syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛᴺᵀ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeSPOps Operator
-syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 hi  link    UnicodeSPParen Function
-syn match   UnicodeSPParen "[⁽⁾]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodeSPParen "[⁽⁾]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link    UnicodeSPLatinL Constant
-syn match   UnicodeSPLatinL "[ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᕐʳˢᵗᵘᵛᵚˣʸᶻ]" contains=@NoSpell  containedin=RegExRanges
-" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ᵗʰ" contains=@NoSpell  containedin=RegExRanges
-" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ˢᵗ" contains=@NoSpell  containedin=RegExRanges
-" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ⁿᵈ" contains=@NoSpell  containedin=RegExRanges
-" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ʳᵈ" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSPLatinL Number
+syn match   UnicodeSPLatinL "[ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᕐʳˢᵗᵘᵛᵚˣʸᶻ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ᵗʰ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ˢᵗ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ⁿᵈ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+" syn match   UnicodeSPLatinL "[0-9a-zA-Z]\+ʳᵈ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " NOTE no C F Q S
 " ʷʿ꜂ 𞥅ᒼ𓎭ᶜ⸇⸄⸁ᶠᣵ𝆍ᶳᔆᕁᕽ𝁂꭛ʸᶣ𐨗ᔾ⸃⸂ᶽᶻ𝆎ᙆᙇ ً𝆎⌕𑱔
@@ -2827,8 +2827,8 @@ inorea <buffer> __X        ᕽ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __Y        𐨗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __Z        ᙆ<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSPLatinU Constant
-syn match   UnicodeSPLatinU "[ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴼᴾᴿᵁⱽᵂᒼ⸁⌕ᔆᕽ𐨗ᙆ]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSPLatinU Number
+syn match   UnicodeSPLatinU "[ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴼᴾᴿᵁⱽᵂᒼ⸁⌕ᔆᕽ𐨗ᙆ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Subscript
 inorea <buffer> z_0        ₀<left><right><c-r>=Eatchar('\s')<cr>
@@ -3087,8 +3087,8 @@ inorea <buffer> _mnx      ₋ₓ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mny      ₋ᵧ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnz      ₋⳾<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSBLatinL Constant
-syn match   UnicodeSBLatinL "[ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ᙮ⱃ꜀𑚤ғﻣ𖾟⳾ꮷ]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSBLatinL Number
+syn match   UnicodeSBLatinL "[ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ᙮ⱃ꜀𑚤ғﻣ𖾟⳾ꮷ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " NOTE no uppercase subscripts!!
 " ៰ꜟ៲៴៱៷｡𐫶𔗐𛱈𐼦ࡘ𐼈៳𖾕𖾛𐼜ₚ𐼦ﻣﻪ ཱર𖾗𑇁៴⌄˯ ̬𖾓𖾙𐺜꛵ₓ᙮𝄪𝅃⸼𐺔𝀘
@@ -3203,20 +3203,20 @@ inorea <buffer> _mnY      ₋𐽀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnZ      ₋𛲟<left><right><c-r>=Eatchar('\s')<cr>
 
 
-hi  link    UnicodeSBLatinU Constant
-syn match   UnicodeSBLatinU "[ₓ៷៱𐫶𐼦ᇀꜰ𛱖ԋ៲𐼈𖾘៳៰𐼜ﻪ𑇁𐮀꛵៴𐺔𐽀𛲟]" contains=@NoSpell  containedin=RegExRanges
-syn match   UnicodeSBLatinU " ཱ" contains=@NoSpell  containedin=RegExRanges
-syn match   UnicodeSBLatinU " ྻ" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSBLatinU Number
+syn match   UnicodeSBLatinU "[ₓ៷៱𐫶𐼦ᇀꜰ𛱖ԋ៲𐼈𖾘៳៰𐼜ﻪ𑇁𐮀꛵៴𐺔𐽀𛲟]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeSBLatinU " ཱ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeSBLatinU " ྻ" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodaSBOps Operator
-syn match   UnicodaSBOps "[₊₋₌៸‹›𝅃ᶺ․｡⁎៶˷ꜟ˱˲˯˰꜁꜆꜇]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodaSBOps "[₊₋₌៸‹›𝅃ᶺ․｡⁎៶˷ꜟ˱˲˯˰꜁꜆꜇]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 hi  link    UnicodaSBParen Function
-syn match   UnicodaSBParen "[₍₎]" contains=@NoSpell  containedin=RegExRanges
+syn match   UnicodaSBParen "[₍₎]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link    UnicodeSBNum Constant
-syn match   UnicodeSBNum "[₀₁₂₃₄₅₆₇₈₉𝆗]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSBNum Number
+syn match   UnicodeSBNum "[₀₁₂₃₄₅₆₇₈₉𝆗]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Greek superscript
 " Many were missing!
@@ -3354,8 +3354,8 @@ inorea <buffer> __mnps     ⁻ᶭ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnom     ⁻ᐜ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnna     ⁻▿<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSPGreekL Constant
-syn match   UnicodeSPGreekL "[ᵅᵝᵞᵟᵋᶼᶯᶱᵠᵡᶷᶿᶲꭟᣔᘁᶳꟸᶮᣖᣙ𑁮ᶭᐜ𝇉▿]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSPGreekL Number
+syn match   UnicodeSPGreekL "[ᵅᵝᵞᵟᵋᶼᶯᶱᵠᵡᶷᶿᶲꭟᣔᘁᶳꟸᶮᣖᣙ𑁮ᶭᐜ𝇉▿]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " ˹ᣘᣴ𝆌⌜⸀ᅀᐞ꒫ᣔᶺ⌃𞄺˄ˆᐪ⸆𐩥𝇉ꚜᴯꚝ⏷
 " ³ะཇaᄐᕑaᶧ𐣾𒑋 ̐ˠ ّ ࣘ౻ ඁ ྂ⫝꒴꒶ꣲ ꤪ𐦽𐹪𘡩𝄌 𞥉𞲬
@@ -3486,8 +3486,8 @@ inorea <buffer> __mnPs     ⁻ꣲ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnOm     ⁻ᵜ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnNa     ⁻🢓<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSPGreekU Constant
-syn match   UnicodeSPGreekU "[ᣕᣘᐞ⌃ᶧᵜᄐꣲ🢓ᶽ]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSPGreekU Number
+syn match   UnicodeSPGreekU "[ᣕᣘᐞ⌃ᶧᵜᄐꣲ🢓ᶽ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Greek subscript
 " ᵤ៵ﻌﻪ 𖾜ₑₔ𖽞៹ࡘㆴ₏ₙ⁁𐽑𐬓 𐴟 𐮀𐮪 𐴟 ៴⌄˯ ̬⌵ࡘ𐺝 ࣣ𖽚𖾙 ̫𖾟𛱠𛱝𛱜𐼚𐼦 ۭꮄ༝
@@ -3618,8 +3618,8 @@ inorea <buffer> _mnps     ₋ഄ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnom     ₋𖾟<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnna     ₋𝅎<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSBGreekL Constant
-syn match   UnicodeSBGreekL "[ᵦᵧᵨᵩᵪ៵𖾜𖽞៹𛱝𐽑𐮪៴ࡘ₏𖽚𖾙ഄ𝅎]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSBGreekL Number
+syn match   UnicodeSBGreekL "[ᵦᵧᵨᵩᵪ៵𖾜𖽞៹𛱝𐽑𐮪៴ࡘ₏𖽚𖾙ഄ𝅎]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " ៱‸ꞈ𐽑𝅈𐺆𓐆𝍢𛱜᭦𐫭₏𖾕𐺝𑀙𐳲ₐ᭦ﻌᢦ𐺉𝅎▿𖾖𝅏
 " inorea <buffer> z_Alpha    ៱<left><right><c-r>=Eatchar('\s')<cr>
@@ -3749,8 +3749,8 @@ inorea <buffer> _mnPs     ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnOm     ₋ﻌ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnNa     ₋𐺉<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeSBGreekU Constant
-syn match   UnicodeSBGreekU "[៱𖾖𐺆ᇀ𛲟𛱜៲‸៳𓐆៰𖾕𐼜𐺝𖾓𐽀𐳲ᵪﻌ𐺉]" contains=@NoSpell  containedin=RegExRanges
+hi  link    UnicodeSBGreekU Number
+syn match   UnicodeSBGreekU "[៱𖾖𐺆ᇀ𛲟𛱜៲‸៳𓐆៰𖾕𐼜𐺝𖾓𐽀𐳲ᵪﻌ𐺉]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 inorea <buffer> ith        iᵗʰ<left><right><c-r>=Eatchar('\s')<cr>
@@ -4108,15 +4108,25 @@ inorea <buffer> zuv_x   ₓ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> zuv_y   ᵧ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
+" Vectors in comments
+hi  link   UnicodeVectorsCom  AllComments
+syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comments.*
+syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comments.*
+syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comments.*
+
 " Vectors
-hi  link       MathVectors  Directory
-syn match      MathVectors  "d\?\%(.⃗\)" contains=@NoSpell  containedin=RegExRanges
-syn match      MathVectors  "\%(d⃗\)" contains=@NoSpell  containedin=RegExRanges
-syn match      MathVectors  "\%(.̂\)" contains=@NoSpell  containedin=RegExRanges
+hi  link      UnicodeVectors  HLBlue
+syn match     UnicodeVectors  "d\?\%(.⃗\)" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match     UnicodeVectors  "\%(d⃗\)"    contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Negation in comments
+hi  link   UnicodeNotLogicCom AllComments
+syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comments.*
 
 " Negation
-hi  link       MathNotLogic SpecialChar
-syn match      MathNotLogic "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegExRanges
+hi  link      UnicodeNotLogic Constant
+syn match     UnicodeNotLogic "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " You could also use other combining unicode chars such as the overline used
 " for not (u0305).
@@ -4350,4 +4360,9 @@ inorea <buffer> o_wbri  ⃩<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 " U+A6F0  ◌꛰  Bamum Combining Mark Koqndon
 " U+A6F1  ◌꛱  Bamum Combining Mark Tukwentis
+
+" Clusters
+"------------------------------------------------------------------------------
+syn cluster ClusterUnicode add=Unicode.*
+"------------------------------------------------------------------------------
 

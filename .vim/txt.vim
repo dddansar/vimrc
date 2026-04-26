@@ -2,9 +2,10 @@
 " File: txt.vim
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for all txt files.
-"              Gets loaded by .vimrc when opening select files with a vim GUI.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
+"------------------------------------------------------------------------------
+" URL: https://github.com/dddansar/vimrc
 "------------------------------------------------------------------------------
 " Copyright: MIT License
 "
@@ -50,6 +51,16 @@ set nocindent
 "    hi Normal   guifg=grey90   guibg=grey5
 " endif
 
+" Match parenthesis
+hi  link    TxtParen     Function
+syn match   TxtParen     "[)(]"
+
+hi  link    TxtSBr       StorageClass
+syn match   TxtSBr       "[[\]]"
+
+hi  link    TxtCBr       Define
+syn match   TxtCBr       "[}{]"
+
 
 " Match (+) (-) (~)
 "------------------------------------------------------------------------------
@@ -57,7 +68,7 @@ hi  link    TxtPlusParen      StorageClass
 syn match   TxtPlusParen      "(+)"
 hi  link    TxtMinusParen     Function
 syn match   TxtMinusParen     "(-)"
-hi  link    TxtTildaParen     PreProc
+hi  link    TxtTildaParen     Define
 syn match   TxtTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 
@@ -65,12 +76,12 @@ syn match   TxtTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 " Start of line, one or more spaces followed by 0 or 1 "(" followed by
 " number/letter and ")".
-hi  link    TxtNumberParen    Question
-hi  link    TxtLetterParen    Operator
-syn match   TxtNumberParen    "\%(^\s*-\?\s*\)\@<=(\?[0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "\%(^\s*-\?\s*\)\@<=(\?[A-Z])" contains=@NoSpell
-syn match   TxtNumberParen    "\%(\s\+\)\@<=([0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "\%(\s\+\)\@<=([A-Z])" contains=@NoSpell
+hi  link    TxtNumberParen    Function
+hi  link    TxtLetterParen    Question
+syn match   TxtNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
+syn match   TxtNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "\s\+([A-Z])" contains=@NoSpell
 "------------------------------------------------------------------------------
 
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
@@ -87,9 +98,32 @@ syn match Tealbg              "\<P8\>" contains=@NoSpell
 syn match Blue2bg             "\<P9\>" contains=@NoSpell
 
 " Make lines beginning with # as titles
-syntax match AllPostTitles1 "^\s*# .*"
-syntax match AllPostTitles2 "^\s*## .*"
-syntax match AllPostTitles3 "^\s*### .*"
-syntax match AllPostTitles4 "^\s*#### .*"
-syntax match AllPostTitles5 "^\s*##### .*"
+hi link TxtTitles1 AllTitles1
+hi link TxtTitles2 AllTitles2
+hi link TxtTitles3 AllTitles3
+hi link TxtTitles4 AllTitles4
+hi link TxtTitles5 AllTitles5
+syntax match TxtTitles1 "^\s*# .*"
+syntax match TxtTitles2 "^\s*## .*"
+syntax match TxtTitles3 "^\s*### .*"
+syntax match TxtTitles4 "^\s*#### .*"
+syntax match TxtTitles5 "^\s*##### .*"
+
+hi  link    TxtSlash    Operator
+syn match   TxtSlash    "/"
+
+" Call syntax functions
+if !exists("b:all_pre_loaded")
+   call AllOperators()
+   call AllEqualities()
+   call AllArrows()
+   call AllSeparators2()
+   call AllParenBr()
+   " call AllWebsites(0)
+   call AllLabel()
+   call AllNumbers()
+endif
+call AllSlashes()
+call AllCommentLeader()
+call AllHLWords()
 

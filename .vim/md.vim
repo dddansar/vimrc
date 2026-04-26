@@ -1,7 +1,8 @@
 "==============================================================================
-" File: strikethrough.vim
+" File: md.vim
 "------------------------------------------------------------------------------
-" Description: This file adds strikethrough syntax highlighting.
+" Description: This file adds custom syntax highlighting and abbreviations
+"              for all markdown files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,22 +33,45 @@
 
 
 " Exit if the file was already loaded
-if exists("b:strikethrough_loaded")
+if exists("b:txt_loaded")
   finish
 endif
-let g:strikethrough_loaded = 1
+let g:txt_loaded = 1
+
+setlocal spell
 
 
-" Add strikethrough and greyout/grey-out, match ~~ or ;; or ::
-"------------------------------------------------------------------------------
-hi link StrikeoutMatch HLStrikeThroughGrey
-syntax match StrikeoutMatch "\~\~.*"  contains=@NoSpell
-syntax match StrikeoutMatch "\~\~.*\~\~"  contains=@NoSpell
-" hi link StrikeoutMatch2 HLStrikeThroughDefault
-" syntax match StrikeoutMatch2 "::.*"  contains=@NoSpell
-" syntax match StrikeoutMatch2 "::.*::"  contains=@NoSpell
-" hi link GreyOutMatch HLGreyOut
-" syntax match GreyOutMatch ";;.*"  contains=@NoSpell
-" syntax match GreyOutMatch ";;.*;;"  contains=@NoSpell
-"------------------------------------------------------------------------------
+hi! link markdownCodeBlock StorageClass
+hi! link markdownItalic LineNr
+
+if hlexists('markdownError')
+   syn clear markdownError
+endif
+
+" Make lines beginning with # as titles
+hi link TxtTitles1 AllTitles1
+hi link TxtTitles2 AllTitles2
+hi link TxtTitles3 AllTitles3
+hi link TxtTitles4 AllTitles4
+hi link TxtTitles5 AllTitles5
+syntax match TxtTitles1 "^\s*# .*"
+syntax match TxtTitles2 "^\s*## .*"
+syntax match TxtTitles3 "^\s*### .*"
+syntax match TxtTitles4 "^\s*#### .*"
+syntax match TxtTitles5 "^\s*##### .*"
+
+" Call syntax functions
+if !exists("b:all_pre_loaded")
+   " call AllOperators()
+   call AllEqualities()
+   call AllArrows()
+   call AllSeparators2()
+   call AllParenBr()
+   " call AllWebsites(0)
+   " call AllEmails(0)
+   call AllLabel()
+   call AllNumbers()
+endif
+" call AllSlashes()
+" call AllHLWords()
 
