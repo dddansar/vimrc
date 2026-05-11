@@ -1,0 +1,3 @@
+[submodule ".vim/pack/pasky/start/claude.vim"]
+	path = .vim/pack/pasky/start/claude.vim
+	url = https://github.com/dddansar/claude.vim
