@@ -57,7 +57,6 @@ let g:colors_name = 'custom_colorscheme'
 " Statement: General programming statements (if, for, return, etc.)
 " Keyword: Language keywords
 " Type: Type names (int, char, etc.)
-" Typedef: typedef declarations
 " Identifier: Variable and function identifiers. This covers variable names:
 "             myVariable, counter, userName, g:abc
 "
@@ -96,6 +95,7 @@ let g:colors_name = 'custom_colorscheme'
 "          #include <stdio.h>   #ifdef DEBUG   #pragma once
 " Include: #include directives
 "
+" Typedef: typedef declarations
 " Structure: struct/union/class/enum declarations
 " Underlined: Text that should be underlined (e.g. URLs)
 "

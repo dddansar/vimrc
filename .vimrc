@@ -165,14 +165,16 @@ let g:ai_map_send_chat_message = "<c-]>"
 let g:ai_map_implement = "<leader>ci"
 " Cancel the response at any time.
 let g:ai_map_cancel_response = "<c-c>"
+" If set, AI will not add indentation to it's answers.
+let g:ai_no_indent = 1
 " Allow AI to give longer responses (max = 64k for Claude 4.6)
 let g:ai_max_output_tokens = 64000
 " Turns tools off to prevent AI from editing files, opening new files,
 " searching the web... This will save cost as AI won't send 5000+ lines of code
 " or documentation from a file or website it decided to open...
 " I usually just turn tools on manually if/when I need them...
-let g:ai_disable_tool_use = 1
-if g:ai_disable_tool_use
+let g:ai_enable_tool_use = 0
+if g:ai_enable_tool_use == 0
    " let g:ai_tools_list = ""
    let g:ai_tools_list = []
 endif
@@ -181,6 +183,7 @@ endif
 let g:ai_web_search_api_key=$BRAVE_API_KEY
 "------------------------------------------------------------------------------
 
+
 " Settings for Claude models:
 "------------------------------------------------------------------------------
 " Increase input token limit from 200k to 1m tokens
@@ -188,8 +191,6 @@ let g:ai_web_search_api_key=$BRAVE_API_KEY
 " question in small (or even empty) files and all only keep the relevant
 " code/text to the question.
 let g:claude_use_1m_context = 0
-" If set, Claude will not add indentation to it's answers.
-let g:claude_no_indent = 1
 " Manually save history to ~/claude_history.txt with <leader>cs
 nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 " NOTE: You can see all the current session's token usages with :messages.
@@ -197,7 +198,8 @@ nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 let g:claude_batch_api = 0
 "------------------------------------------------------------------------------
 
-" NOTE: Also supports interacting with Ollama/Qwen (local and free AI)!!!
+
+" NOTE: Also supports interacting with Qwen (local and free AI)!!!
 " 1) Install ollama
 " curl -fsSL https://ollama.com/install.sh | sh
 " 2) Download and run the desired model with ollama (ex: qwen3:8b)
@@ -212,6 +214,7 @@ let g:ollama_num_ctx = 4096
 " let g:ollama_num_ctx = 32768
 " let g:ollama_num_ctx = 262144
 "------------------------------------------------------------------------------
+
 
 " Select the model to use. By default this is set to claude-sonnet-4-6
 "------------------------------------------------------------------------------
