@@ -120,59 +120,116 @@ endif
 " Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
 
-" NOTE: You can get a Claude API to work with GVim and Vim and NeoVim!!!
-"       See the notes above to link NeoVim to Vim or place everything in
-"       NeoVim's directory structure instead...
-" 1) I made modifications to Pasky's Claude plugin that you can use in:
-" .vim/pack/pasky/start/claude.vim/plugin/claude.vim
-" OR
-" 1) You can download Pasky's Original Claude plugin from:
-" https://github.com/pasky/claude.vim
-" and add it to .vim/pack/pasky/start/claude.vim/
-" 2) Get an API key from https://platform.claude.com
-" 3) Add API key in g:claude_api_key
+" NOTE: How Plugins are Loaded
+" Gvim uses a Runtime Path (rtp), which is a list of directories it searches for configuration and script files.
+" Startup loading: Any .vim script placed in the plugin/ subdirectory of your runtime path is automatically executed when you open gVim. In Vim 8+, You can organize plugins in a standard folder structure (pack/anyname/start/) and gVim will handle the path management for you.
+
+
+"=================================== AI API ===================================
+"------------------------------------------------------------------------------
+" NOTE: You can get an AI API (Claude Sonnet/Opus/Haiku, Google's Gemini,
+" OpenAI/ChatGPT, Ollama/Qwen) to work with Vim/GVim/NeoVim!!!
+" 1) Grab the AI plugin and place in your .vim/pack/.../start/ folder.
+" Although initially intended just for Claude AIs, I made modifications to
+" Pasky's Claude plugin to address bugs I was seeing and to add support for
+" additional AIs that you can find in:
+"    .vim/pack/pasky/start/claude.vim/plugin/claude.vim
+" 2) Get an API key from https://platform.claude.com or from one of the other
+" AI platforms (NOTE: Gemini and ChatGPT will let you use a limited number of
+" tokens for free if you just want to test it out...)
+" 3a) Add API key in g:claude_api_key
 " let g:claude_api_key='add_api_key_here'
-" OR add to your .bash_aliases file:
+" OR
+" 3b) add to your .bash_aliases file:
 " export API_KEY=add_api_key_here
-let g:claude_api_key=expand("$API_KEY")
-" 4) And that should be it, open a new Vim window, press <leader>cc to open a
-"    Claude prompt, type your question or command in the prompt, press ctrl-]
-"    to send you question or command, and Claude should start replying in
-"    the prompt window.
-" Claude settings and mappings:
-let g:claude_map_implement = "<leader>ci"
-let g:claude_map_open_chat = "<leader>cc"
-let g:claude_map_cancel_response = "<c-c>"
-" let g:claude_map_cancel_response = "<c-c>"
-" (<C-]> here only affects Claude window, not tags jumping)
-let g:claude_map_send_chat_message = "<c-]>"
-" Increase limit from 200k to 1m tokens
-" WARNING: Using 1m tokens can easily increase costs. Only use if necessary!
-"          To decrease costs, ask question in small (or even empty files)
-"          and all only keep the relevant code/text to the question.
-let g:claude_use_1m_context = 0
-" Allow Claude to give longer responses (max = 64k)
-let g:claude_max_tokens = 64000
-" Set the max file size for AI API to 500KB
-let g:MaxAIAPIFile = (1024 * 1024 * 1)/2
-" Prevent Claude from editing files, opening new files or searching the web or
-" using tools. Try to keep it's answers simple in the chat window... This will
-" save cost as Claude won't send 5000k lines of code or documentation from a
-" file or website it decided to open...
-let g:claude_disable_tool_use = 1
-if g:claude_disable_tool_use
-   " let g:claude_tools = ""
-   let g:claude_tools = []
+" and use the following line to get the value from API_KEY
+let g:claude_api_key=$CLAUDE_API_KEY
+let g:gemini_api_key=$GEMINI_API_KEY
+let g:openai_api_key=$GPT_API_KEY
+" 4) Set the model to use in g:ai_model. Defaults to claude-sonnet-4-6
+" 5) To confirm it works, open a new Vim window, press <leader>cc
+" (g:ai_map_open_chat) to open a Claude prompt, type your question or command
+" in the prompt, press ctrl-] to send you question or command, and the AI
+" should start replying in the prompt window.
+"------------------------------------------------------------------------------
+
+" Settings for all AI models:
+"------------------------------------------------------------------------------
+" Open a Chat to start chatting with AI
+let g:ai_map_open_chat = "<leader>cc"
+" Once you type your question or command in the chat window, you can use this
+" mapping to send the message. <C-]> only affects AI window, not tags jumping.
+let g:ai_map_send_chat_message = "<c-]>"
+" The implement key sends just the selection instead of the entire file. May
+" result in a vimdiff operation.
+let g:ai_map_implement = "<leader>ci"
+" Cancel the response at any time.
+let g:ai_map_cancel_response = "<c-c>"
+" Allow AI to give longer responses (max = 64k for Claude 4.6)
+let g:ai_max_output_tokens = 64000
+" Turns tools off to prevent AI from editing files, opening new files,
+" searching the web... This will save cost as AI won't send 5000+ lines of code
+" or documentation from a file or website it decided to open...
+" I usually just turn tools on manually if/when I need them...
+let g:ai_disable_tool_use = 1
+if g:ai_disable_tool_use
+   " let g:ai_tools_list = ""
+   let g:ai_tools_list = []
 endif
+" API key used for the web search tool. You can get a free api key from
+" https://brave.com/search/api/
+let g:ai_web_search_api_key=$BRAVE_API_KEY
+"------------------------------------------------------------------------------
+
+" Settings for Claude models:
+"------------------------------------------------------------------------------
+" Increase input token limit from 200k to 1m tokens
+" NOTE: Using 1m tokens can easily increase costs. To decrease costs, ask
+" question in small (or even empty) files and all only keep the relevant
+" code/text to the question.
+let g:claude_use_1m_context = 0
 " If set, Claude will not add indentation to it's answers.
 let g:claude_no_indent = 1
 " Manually save history to ~/claude_history.txt with <leader>cs
 nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
-" NOTE: Set the model to use. By default this is set to claude-sonnet-4-6
-" let g:claude_model = 'claude-sonnet-4-6'
-" let g:claude_model = 'claude-opus-4-6'
-" let g:claude_model = 'claude-sonnet-4-7'
-" let g:claude_model = 'claude-opus-4-7'
+" NOTE: You can see all the current session's token usages with :messages.
+" Enable batch mode. Results come back later (most complete within an hour, results are guaranteed within 24 hours). Uses a polling mechanism to retrieve results (every 30 seconds by default). No tool use during batch. A 50% cost discount is applied during batch mode.
+let g:claude_batch_api = 0
+"------------------------------------------------------------------------------
+
+" NOTE: Also supports interacting with Ollama/Qwen (local and free AI)!!!
+" 1) Install ollama
+" curl -fsSL https://ollama.com/install.sh | sh
+" 2) Download and run the desired model with ollama (ex: qwen3:8b)
+" ollama run qwen3:8b
+"------------------------------------------------------------------------------
+let g:ollama_base_url = 'http://localhost:11434'
+" Increase or decrease ollama context number of tokens limit.
+" NOTE: These values actually affect how long a response will take...
+" let g:ollama_num_ctx = 2048
+let g:ollama_num_ctx = 4096
+" let g:ollama_num_ctx = 8192
+" let g:ollama_num_ctx = 32768
+" let g:ollama_num_ctx = 262144
+"------------------------------------------------------------------------------
+
+" Select the model to use. By default this is set to claude-sonnet-4-6
+"------------------------------------------------------------------------------
+let g:ai_model = 'claude-sonnet-4-6'
+" let g:ai_model = 'claude-opus-4-6'
+" let g:ai_model = 'claude-opus-4-7'
+" let g:ai_model = 'claude-haiku-4-5'
+" let g:ai_model = 'gemini-2.5-flash-lite'
+" let g:ai_model = 'gemini-2.5-flash'
+" let g:ai_model = 'gemini-3.1-flash-lite-preview'
+" let g:ai_model = 'gpt-5.4-mini'
+" let g:ai_model = 'gpt-5.4'
+" let g:ai_model = 'gpt-5.5'
+" let g:ai_model = 'qwen2.5-coder:32b'
+" let g:ai_model = 'qwen3:8b'
+" let g:ai_model = 'qwen3-coder:30b'
+"------------------------------------------------------------------------------
+"==============================================================================
 
 
 "------------------------------------------------------------------------------
@@ -453,7 +510,7 @@ function! DefaultSettings()
    " set guioptions-=LlRrb
    " set guioptions+=r
    set guioptions=aegimtr
-   " Remove the toolbar (icon bar) in GVim.
+   " Remove the toolbar menu (icon bar) in GVim.
    " set guioptions-=T
 
    " Will highlight spelling mistakes in all file types if set
@@ -587,6 +644,9 @@ function! DefaultSettings()
    " Disable modelines to avoid potential security issues...
    set nomodeline
 
+   " Remove the dashes "----------..." from the gvimdiff filler lines.
+   set fillchars+=diff:\ " Fill with space instead
+
    "---------------------------------------------------------------------------
    " Some non GUI settings
    "---------------------------------------------------------------------------
@@ -604,15 +664,14 @@ function! DefaultSettings()
    " Load autocorrect files
    "---------------------------------------------------------------------------
    if !exists("g:AutocorrectLoaded") && g:use_autocorrect
-      let g:AutocorrectLoaded=1
       if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
          so $vim_folder_path/autocorrect/autocorrect3.vim
       endif
       if filereadable(expand($vim_folder_path . "/autocorrect/wordlist.vim"))
          so $vim_folder_path/autocorrect/wordlist.vim
       endif
+      let g:AutocorrectLoaded=1
    endif
-
 
 
    "---------------------------------------------------------------------------
@@ -624,11 +683,13 @@ function! DefaultSettings()
    " highlighting groups based on the file extension whenever
    " g:select_custom_syntax >= 2.
    "---------------------------------------------------------------------------
-   so $vim_folder_path/syntax/custom_syntax.vim
+   if !exists("g:SyntaxLoaded")
+      so $vim_folder_path/syntax/custom_syntax.vim
+      let g:SyntaxLoaded=1
+   end
    "---------------------------------------------------------------------------
    "---------------------------------------------------------------------------
    "---------------------------------------------------------------------------
-
 
 
    "---------------------------------------------------------------------------
@@ -964,10 +1025,10 @@ function! LoadMappings()
    " NOTE: On Linux, the "*y command yanks text to the selection register
    "       (for middle-click paste), while the "+y command yanks text to the
    "       clipboard register (for standard CTRL+V paste).
-   nnoremap <c-leftmouse>  <leftmouse>viw"*y<esc>k$/<middlemouse><cr>
-   nnoremap <c-rightmouse> <leftmouse>viw"*y<esc>k$/\<<middlemouse>\><cr>
-   nnoremap <s-leftmouse>  <leftmouse>viw"*y<esc>k$/\V\c<middlemouse><cr>
-   nnoremap <s-rightmouse> <leftmouse>viw"*y<esc>k$/\V\c\<<middlemouse>\><cr>
+   nnoremap <c-leftmouse>  <leftmouse>viw"*yk$/<middlemouse><cr>
+   nnoremap <c-rightmouse> <leftmouse>viw"*yk$/\<<middlemouse>\><cr>
+   nnoremap <s-leftmouse>  <leftmouse>viw"*yk$/\V\c<middlemouse><cr>
+   nnoremap <s-rightmouse> <leftmouse>viw"*yk$/\V\c\<<middlemouse>\><cr>
 
    " Invert the lazyredraw setting.
    nnoremap <leader>@ :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
@@ -978,15 +1039,15 @@ function! LoadMappings()
    " <a-backspace> will go to previous char even if on previous line.
    if g:using_windows
       " Search for characters being selected (same as <c-/>).
-      vnoremap / "+y<esc>`<<a-backspace>/\V\c<middlemouse><cr>
+      vnoremap / "+y`<<a-backspace>/\V\c<middlemouse><cr>
 
       " Search for characters being selected.
-      vnoremap <c-/> "+y<esc>`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-8> "+y<esc>`<<a-backspace>/\<<middlemouse>\><cr>
+      vnoremap <c-/> "+y`<<a-backspace>/\V\c<middlemouse><cr>
+      vnoremap <c-8> "+y`<<a-backspace>/\<<middlemouse>\><cr>
 
       " Add another word to the existing search!
-      vnoremap ? "+y<esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
-      vnoremap * "+y<esc>`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
+      vnoremap ? "+y`<<a-backspace>/<up>\\|<middlemouse><cr>
+      vnoremap * "+y`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
 
       " Search for word under the cursor.
       nnoremap <c-/> viw"+y<a-backspace>/\V\c<middlemouse><cr>
@@ -994,8 +1055,8 @@ function! LoadMappings()
 
       " Add another word to the existing search!
       " NOTE: "?" was used to search backwards but I can just use <s-n>.
-      nnoremap ? viw"+y<esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
-      nnoremap * viw"+y<esc>`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
+      nnoremap ? viw"+y`<<a-backspace>/<up>\\|<middlemouse><cr>
+      nnoremap * viw"+y`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
 
    else " For Linux
       " Search for characters being selected.
@@ -1033,16 +1094,16 @@ function! LoadMappings()
    " NOTE: <c-r><c-w> can be used in the command-line mode to insert the
    "       word currently under the cursor.
    " Replace next word.
-   nnoremap <leader>rn :.,$s/\C<c-r><c-w>/<c-r><c-w><space><bs>/gc\|1,''-&&
+   nnoremap <leader>rn viw"*y:.,$s/\C<middlemouse>/<middlemouse><space><bs>/gc\|1,''-&&
    vnoremap <leader>rn :<bs><bs><bs><bs><bs>.,$s/\C<middlemouse>/<middlemouse>/gc\|1,''-&&
    " Replace next word exact match.
-   nnoremap <leader>re :.,$s/\C\<<c-r><c-w>\>/<c-r><c-w><space><bs>/gc\|1,''-&&
+   nnoremap <leader>re viw"*y:.,$s/\C\<<middlemouse>\>/<middlemouse><space><bs>/gc\|1,''-&&
    vnoremap <leader>re :<bs><bs><bs><bs><bs>.,$s/\C\<<middlemouse>\>/<middlemouse>/gc\|1,''-&&
    " Replace ALL words.
-   nnoremap <leader>ra m':%s/\C<c-r><c-w>/<c-r><c-w>/g<left><left><space><bs>
+   nnoremap <leader>ra m'viw"*y:%s/\C<middlemouse>/<middlemouse>/g<left><left><space><bs>
    vnoremap <leader>ra <esc>m'gv:<bs><bs><bs><bs><bs>%s/\C<middlemouse>/<middlemouse>/g<left><left><space><bs>
    " Replace ALL words exact match.
-   nnoremap <leader>rr m':%s/\C\<<c-r><c-w>\>/<c-r><c-w>/g<left><left><space><bs>
+   nnoremap <leader>rr m'viw"*y:%s/\C\<<middlemouse>\>/<middlemouse>/g<left><left><space><bs>
    vnoremap <leader>rr <esc>m'gv:<bs><bs><bs><bs><bs>%s/\C\<<middlemouse>\>/<middlemouse>/g<left><left><space><bs>
 
 
@@ -1080,8 +1141,20 @@ function! LoadMappings()
       nnoremap <c-,>    $<c-w>j<c-w><bar><c-w>_0zz
       nnoremap <c-e>    $<c-w>k<c-w><bar><c-w>_0zz
       " NOTE" \<lt> maps to <
-      nnoremap <silent> <c-.>     :exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
-      nnoremap <silent> <c-h>     :exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
+      nnoremap <silent> <c-.> :exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
+      nnoremap <silent> <c-h> :exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
+
+      " Terminal mode: Exit terminal mode first, then move between splits
+      tnoremap <c-,>    <c-\><c-n>$<c-w>j<c-w><bar><c-w>_
+      tnoremap <c-e>    <c-\><c-n>$<c-w>k<c-w><bar><c-w>_
+      tnoremap <silent> <c-.> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
+      tnoremap <silent> <c-h> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
+
+      " move to another split but don't resize
+      nnoremap <a-,>    $<c-w>j
+      nnoremap <a-e>    $<c-w>k
+      nnoremap <silent> <a-.> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
+      nnoremap <silent> <a-h> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
    else " For qwerty
       " Move btw split screens.
       nnoremap <c-j> $<c-w>j<c-w><bar><c-w>_0zz
@@ -1089,12 +1162,28 @@ function! LoadMappings()
       " NOTE" \<lt> maps to <
       nnoremap <silent> <c-l> :exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
       nnoremap <silent> <c-h> :exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
+
+      " Terminal mode: Exit terminal mode first, then move between splits
+      tnoremap <c-j>    <c-\><c-n>$<c-w>j<c-w><bar><c-w>_
+      tnoremap <c-k>    <c-\><c-n>$<c-w>k<c-w><bar><c-w>_
+      tnoremap <silent> <c-l> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
+      tnoremap <silent> <c-h> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
+
+      " move to another split but don't resize
+      nnoremap <a-j> $<c-w>j
+      nnoremap <a-k> $<c-w>k
+      nnoremap <silent> <a-l> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
+      nnoremap <silent> <a-h> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
    endif
    " Same "move btw split screens" as above but using the arrow keys.
    nnoremap <c-down> $<c-w>j<c-w><bar><c-w>_0zz
    nnoremap <c-up>   $<c-w>k<c-w><bar><c-w>_0zz
    nnoremap <silent> <c-right> :exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
    nnoremap <silent> <c-left>  :exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_zz"<cr>
+   nnoremap <a-down> $<c-w>j
+   nnoremap <a-up>   $<c-w>k
+   nnoremap <silent> <a-right> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
+   nnoremap <silent> <a-left>  :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
 
 
    " Move window to a new position.
@@ -1108,6 +1197,19 @@ function! LoadMappings()
    nnoremap <a-8> :winpos 700 0<cr>
    nnoremap <a-9> :winpos 800 0<cr>
    nnoremap <a-0> :winpos 900 0<cr>
+
+   " Key mappings for termdebug debugger
+   nnoremap <leader>dd :packadd termdebug<cr>:Termdebug
+   nnoremap <leader>dr :Run<cr>
+   nnoremap <leader>dc :Continue<cr>
+   nnoremap <leader>db :Break<cr>
+   nnoremap <leader>dl :Clear<cr>
+   nnoremap <leader>de :Evaluate<cr>
+   nnoremap <leader>ds :Step<cr>
+   nnoremap <leader>do :Over<cr>
+   nnoremap <leader>df :Finish<cr>
+   nnoremap <leader>dp :Stop<cr>
+   nnoremap <leader>dq :Gdb<cr>iquit<cr>
 
    " In multi-split windows, will full-size current file.
    nnoremap <c-space> <c-w><bar><c-w>_zz
@@ -1440,10 +1542,10 @@ endfunction
 
 "------------------------------------------------------------------------------
 " Augroup: MainFunction
-" Description: This is basically the equivalent of main() in C. MainFunction
-"              loads everything else in this file. First check the file size,
-"              if less than g:LargeFile, load DefaultSettings() otherwise
-"              load LargeFileSettings().
+" Description: This is basically the equivalent of main() in C. MainFunction()
+"              loads everything else in this file. First loads CommonSettings()
+"              then checks the file size, and if less than g:LargeFile, load
+"              DefaultSettings() otherwise load LargeFileSettings().
 "------------------------------------------------------------------------------
 augroup MainFunction
 
@@ -1456,14 +1558,13 @@ augroup MainFunction
    endif
 
    " Set max file size for AI API
-   autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f >= g:MaxAIAPIFile | let g:claude_disable = 1 | endif
+   " autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f >= g:MaxAIAPIFile | let g:claude_disable = 1 | endif
 
    " Decide whether to call DefaultSettings() or LargeFileSettings() based on the
    " file size.
    autocmd BufReadPre * let f=getfsize(expand("<afile>")) |
       \ if f >= g:LargeFile || f == -2 | call LargeFileSettings() | let g:claude_disable = 1 |
-      \ elseif !exists("g:EnteredDefaultSetting") | call DefaultSettings() |
-      \ endif
+      \ else | call DefaultSettings() | endif
 
    " This gets called if the file is empty and loads DefaultSettings()
    autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |

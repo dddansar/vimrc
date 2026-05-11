@@ -72,18 +72,6 @@ hi  link    TxtTildaParen     Define
 syn match   TxtTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 
-" Match 1) A) (2) (B)...
-"------------------------------------------------------------------------------
-" Start of line, one or more spaces followed by 0 or 1 "(" followed by
-" number/letter and ")".
-hi  link    TxtNumberParen    Function
-hi  link    TxtLetterParen    Question
-syn match   TxtNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
-syn match   TxtNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "\s\+([A-Z])" contains=@NoSpell
-"------------------------------------------------------------------------------
-
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
 " P1/P2/P3 for Priorities
 syn match Whitebg             "\<P0\>" contains=@NoSpell
@@ -126,4 +114,16 @@ endif
 call AllSlashes()
 call AllCommentLeader()
 call AllHLWords()
+
+" Match 1) A) (2) (B)...
+"------------------------------------------------------------------------------
+" Start of line, one or more spaces followed by 0 or 1 "(" followed by
+" number/letter and ")".
+hi  link    TxtNumberParen    Function
+hi  link    TxtLetterParen    Question
+syn match   TxtNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
+syn match   TxtNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
+syn match   TxtLetterParen    "\s\+([A-Z])" contains=@NoSpell
+"------------------------------------------------------------------------------
 

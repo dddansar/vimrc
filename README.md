@@ -131,6 +131,9 @@ Here is a list of changes that I made with help from the Claude AI:
 - Print g:claude_model instead of printing "Claude:"
 - Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
 - Fix for buffers getting resent during tool usage causing significant increase in usage cost.
+- Added batch mode option where response is delayed but cost is 50% discounted.
+- Added support for qwen (a locally running AI)
+- Added support for OpenAI/ChatGPT and Gemini AI!
 
 
 ## Custom Colorscheme

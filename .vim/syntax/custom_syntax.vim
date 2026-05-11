@@ -221,7 +221,7 @@ augroup EnCustomSyntax
 
       " NOTE: all_colors.vim contains a list of all colors colorized!
       " Moved deliberately at the end as I want to clear all syntax first.
-      au BufNewFile,BufRead all_colors.vim so $vim_folder_path/all_colors.vim
+      au BufNewFile,BufRead all_colors.vim so $vim_folder_path/colors/all_colors.vim
 
       " Add custom syntax for claude_history.txt
       au BufNewFile,BufRead claude_history.txt if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif | setlocal nospell

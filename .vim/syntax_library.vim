@@ -320,13 +320,13 @@ endfunction
 function! AllLabel()
    " Matches word: if first word on line
    hi  link    AllLabel   PreProc
-   syn match   AllLabel   "^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=" contains=@NoSpell contains=AllOperators
+   syn match   AllLabel   "^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
-   syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=" contains=@NoSpell contains=AllOperators
+   syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
    " Matches Word1 Word2 ... WordN: if every word is capitalized.
    hi  link    AllLabel3  PreProc
-   syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=" contains=@NoSpell contains=AllOperators
+   syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
 endfunction
 
 " Labels in Comments
@@ -457,14 +457,14 @@ function! AllWebsites(contained_en)
 
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
-   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&''()*+,;=%]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
+   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&()*+,;=%]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
 endfunction
 
 
 function! AllEmails(contained_en)
    " Match emails like abcd@efg.com
    hi  link     AllEmails  Tag
-   execute 'syn match AllEmails "\<[a-zA-Z][a-zA-Z0-9_.-]\+@[a-zA-Z0-9_-]\+\.[a-zA-Z0-9_.-]\+\%(''\)\@<!" contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.*,.*String.*'
+   execute 'syn match AllEmails "\<[a-zA-Z][a-zA-Z0-9_.-]\+@[a-zA-Z0-9_-]\+\.[a-zA-Z0-9_.-]\+" contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.*,.*String.*'
 endfunction
 "------------------------------------------------------------------------------
 
@@ -517,7 +517,7 @@ endfunction
 
 "------------------------------------------------------------------------------
 function! AllTime()
-   " Matches 34ns 34ps 34fs 34us 34ms 34s
+   " Matches 34ns 34ps 34fs 34us 34ms 34s 3ns 4us
    " Matches 34sec 34min 34hr
    " Matches 34.23ns 34.23ps 34.23fs 34.23us 34.23ms 34.23s
    " Matches 34.23sec 34.23min 34.23hr
@@ -588,53 +588,15 @@ function! AllHLWords()
    hi  link    AllHLError       Exception
  " hi  link    AllHLError       HLRedBgB
 
-   " NOTE: needs to be match, not keyword, so that AllHLExclamations can work.
-   syn match AllHLTodo    "\<TODO\>"    containedin=.*Comment.*
-   syn match AllHLNote    "\<NOTE\>"    containedin=.*Comment.*
-   syn match AllHLViNote  "\<VINOTE\>"  containedin=.*Comment.*
-   syn match AllHLViTodo  "\<VITODO\>"  containedin=.*Comment.*
-   syn match AllHLWarning "\<WARNING\>" containedin=.*Comment.*
-   syn match AllHLWarning "\<DO NOT\>"  containedin=.*Comment.*
-   syn match AllHLTodo    "\<FIXME\>"   containedin=.*Comment.*
-   syn match AllHLTodo    "\<HACK\>"    containedin=.*Comment.*
-   syn match AllHLError   "\<ERROR\>"   containedin=.*String.*
-endfunction
-
-" Highlights '!!!' and '???' if they follow one of the AllHLWords.
-" Like in NOTE: ... !!! or TODO: ... ??? or WARNING: ... !!!
-" Does not work well with comment titles/labels like in:
-" NOTE: ... !!! -> syn clear vimCommentTitle
-function! AllHLExclamations()
-   if g:performance_mode <= 0
-
-      hi  link   SpAllHLNote        HLGreen3BgB
-      hi  link   SpAllHLViNote      HLGreen1BgB
-      hi  link   SpAllHLTodo        HLOrangeBgB
-      hi  link   SpAllHLViTodo      HLYellow3BgB
-      hi  link   SpAllHLWarning     HLOrangered1BgB
-      hi  link   SpAllHLError       HLRedBgB
-
-      if hlexists('vimCommentTitle')
-         syn clear vimCommentTitle
-      endif
-
-      syn match  SpAllHLNoteNC    ".\<NOTE\>.\{-}!!!*"     contains=SpAllHLNote,AllHLNote       contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLViNoteNC  ".\<VINOTE\>.\{-}!!!*"   contains=SpAllHLViNote,AllHLViNote   contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLTodoNC    ".\<TODO\>.\{-}!!!*"     contains=SpAllHLTodo,AllHLTodo       contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLViTodoNC  ".\<VITODO\>.\{-}!!!*"   contains=SpAllHLViTodo,AllHLViTodo   contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLWarningNC ".\<WARNING\>.\{-}!!!*"  contains=SpAllHLWarning,AllHLWarning contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLWarningNC ".\<DO NOT\>.\{-}!!!*"   contains=SpAllHLWarning,AllHLWarning contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLTodoNC    ".\<TODO\>.\{-}???*"     contains=SpAllHLTodo,AllHLTodo       contained containedin=.*Comment,vimLineComment transparent
-      syn match  SpAllHLViTodoNC  ".\<VITODO\>.\{-}???*"   contains=SpAllHLViTodo,AllHLViTodo   contained containedin=.*Comment,vimLineComment transparent
-
-      syn match  SpAllHLNote    "!!!*" contained containedin=SpAllHLNoteNC
-      syn match  SpAllHLViNote  "!!!*" contained containedin=SpAllHLViNoteNC
-      syn match  SpAllHLTodo    "!!!*" contained containedin=SpAllHLTodoNC
-      syn match  SpAllHLViTodo  "!!!*" contained containedin=SpAllHLViTodoNC
-      syn match  SpAllHLWarning "!!!*" contained containedin=SpAllHLWarningNC
-      syn match  SpAllHLTodo    "???*" contained containedin=SpAllHLTodoNC
-      syn match  SpAllHLViTodo  "???*" contained containedin=SpAllHLViTodoNC
-   endif
+   syn match AllHLTodo    "\<TODO\>"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLNote    "\<NOTE\>"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLViNote  "\<VINOTE\>"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLViTodo  "\<VITODO\>"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLWarning "\<WARNING\>" contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLWarning "\<DO NOT\>"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLTodo    "\<FIXME\>"   contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLTodo    "\<HACK\>"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLError   "\<ERROR\>"   contains=@NoSpell containedin=.*String.*
 endfunction
 "------------------------------------------------------------------------------
 
@@ -677,6 +639,34 @@ function! AllTitles()
       endif
    endif
 endfunction
+" Same as AllTitles() but matches in textfiles where there are no comments
+" and therefor have no need for contained...
+function! AllTitlesNotContained()
+   if g:performance_mode <= 0
+      if exists("b:comment_leader")
+         hi  link  AllTitles1   Statement
+         execute 'syn match AllTitles1 ''\%(^\s*\)[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         hi  link  AllTitles2   Operator
+         execute 'syn match AllTitles2 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         hi  link  AllTitles3   Label
+         execute 'syn match AllTitles3 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         hi  link  AllTitles4   Special
+         execute 'syn match AllTitles4 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         hi  link  AllTitles5   Title
+         execute 'syn match AllTitles5 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " hi  link  AllTitles6   Debug
+       " execute 'syn match AllTitles6 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " hi  link  AllTitles7   MoreMsg
+       " execute 'syn match AllTitles7 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " hi  link  AllTitles8   String
+       " execute 'syn match AllTitles8 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " hi  link  AllTitles9   Number
+       " execute 'syn match AllTitles9 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " hi  link  AllTitles0  Structure
+       " execute 'syn match AllTitles0 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+      endif
+   endif
+endfunction
 "------------------------------------------------------------------------------
 
 
@@ -703,7 +693,6 @@ function! AllFilesDefaultSyntax ()
       call AllEmails(1)
    endif
    call AllHLWords()
-   call AllHLExclamations()
    call AllTitles()
    call AllSudo()
 endfunction
