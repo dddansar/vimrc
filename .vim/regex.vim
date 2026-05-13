@@ -38,8 +38,11 @@ if exists("b:regex_loaded")
 endif
 let g:regex_loaded = 1
 
-
-syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString
+if !has('nvim')
+   syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString
+else " For NeoVim
+   syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody
+endif
 
 function! RegexMatches()
    hi  link    RegexSpChars   NonText
