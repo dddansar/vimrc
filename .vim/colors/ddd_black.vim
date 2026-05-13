@@ -190,6 +190,7 @@ set background=dark
 " NOTE: See ":help highlight-groups" for all the default highlighting groups.
 " NOTE: You can see the current settings with the ":highlight" command.
 
+" Using #00FF00 instead of green as the color is different in Vim and NeoVim...
 " Set default text and background color.
 hi Normal            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
 hi Ignore            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
@@ -199,11 +200,11 @@ hi LineNr            cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=
 
 hi Statement         cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
 hi Keyword           cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
-hi Type              cterm=bold gui=bold ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
-hi Identifier        cterm=NONE gui=NONE ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Type              cterm=bold gui=bold ctermfg=46   guifg=#00FF00     ctermbg=NONE guibg=NONE       guisp=NONE
+hi Identifier        cterm=NONE gui=NONE ctermfg=46   guifg=#00FF00     ctermbg=NONE guibg=NONE       guisp=NONE
 hi Character         cterm=NONE gui=NONE ctermfg=34   guifg=green3      ctermbg=NONE guibg=NONE       guisp=NONE
 hi String            cterm=NONE gui=NONE ctermfg=34   guifg=green4      ctermbg=NONE guibg=NONE       guisp=NONE
-hi Label             cterm=bold gui=bold ctermfg=46   guifg=green       ctermbg=NONE guibg=NONE       guisp=NONE
+hi Label             cterm=bold gui=bold ctermfg=46   guifg=#00FF00     ctermbg=NONE guibg=NONE       guisp=NONE
 hi Conditional       cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE       guisp=NONE
 hi Repeat            cterm=bold gui=bold ctermfg=22   guifg=darkgreen   ctermbg=NONE guibg=NONE       guisp=NONE
 
@@ -243,20 +244,20 @@ hi CursorLineNr      cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=
 hi ColorColumn       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=234  guibg=grey10     guisp=NONE
 
 hi StatusLine        cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=240  guibg=grey40     guisp=NONE
-hi StatusLineNC      cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=232  guibg=grey20     guisp=NONE
-hi VertSplit         cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=232  guibg=grey20     guisp=NONE
+hi StatusLineNC      cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=235  guibg=grey20     guisp=NONE
+hi VertSplit         cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=235  guibg=grey20     guisp=NONE
 
-hi Search            cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=232  guibg=grey20     guisp=NONE
+hi Search            cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=235  guibg=grey20     guisp=NONE
 hi CurSearch         cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=240  guibg=grey40     guisp=NONE
 hi IncSearch         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=240  guibg=grey40     guisp=NONE
 
 hi Pmenu             cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234  guibg=grey10     guisp=NONE
 hi PmenuSel          cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=235  guibg=grey20     guisp=NONE
 hi PmenuSbar         cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
-hi PmenuThumb        cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=46   guibg=green      guisp=NONE
+hi PmenuThumb        cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=46   guibg=#00FF00    guisp=NONE
 
 hi MatchParen        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=30   guibg=teal       guisp=NONE
-hi Note              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46   guibg=green      guisp=NONE
+hi Note              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46   guibg=#00FF00    guisp=NONE
 hi Todo              cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=214  guibg=orange     guisp=NONE
 hi Error             cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=red  guibg=red2       guisp=NONE
 hi ErrorMsg          cterm=bold gui=bold ctermfg=15   guifg=white       ctermbg=red  guibg=red2       guisp=NONE
