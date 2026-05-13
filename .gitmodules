@@ -1,3 +1,6 @@
 [submodule ".vim/pack/pasky/start/claude.vim"]
 	path = .vim/pack/pasky/start/claude.vim
 	url = https://github.com/dddansar/claude.vim
+[submodule ".vim/colors/ddd"]
+	path = .vim/colors/ddd
+	url = https://github.com/dddansar/colorschemes
