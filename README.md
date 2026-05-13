@@ -6,8 +6,8 @@ Contains all my vimrc settings.
 
 - Works in GVim, Vim and NeoVim
 - Supports both Windows and Linux OS
-- Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6 and the latest 4.7 (should support future versions as well...))
-- Uses my own custom colorscheme where the user has full control over all the colors
+- Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6 and the latest 4.7 (should support future versions as well...)) (Now also works with OpenAI/ChatGPT, Google's Gemini and Qwen with Ollama!!!)
+- Uses my own custom colorscheme where the user has full control over all the colors. Multiple custom colorschemes are available.
 - Supports different syntax configurations, can select between Vim's default syntax matching or add some of my custom syntax matching on top of the default Vim syntax matching (default)
 - Support for both Colemak-DH and QWERTY keyboard layouts
 - Includes performance optimization features and multiple performance modes
@@ -26,7 +26,7 @@ Contains all my vimrc settings.
 ├── asm.vim                 # Assembly custom syntax highlighting
 ├── bash.vim                # Bash/shell custom syntax highlighting
 ├── c.vim                   # C/C++ custom syntax highlighting
-├── colors/...              # Contains the custom colorscheme
+├── colors/...              # Contains the custom colorschemes
 ├── java.vim                # Java custom syntax highlighting
 ├── lean.vim                # Lean math prover custom syntax highlighting
 ├── math.vim                # Math custom syntax highlighting and abbreviations
@@ -72,7 +72,7 @@ ln -s ~/.vimrc ~/.config/nvim/init.vim
 ln -s ~/.vim ~/.config/nvim/.vim
 ```
 
-Link the custom colorscheme in NeoVim.
+Link the custom colorschemes in NeoVim.
 ```
 ln -s ~/.vim/colors ~/.config/nvim/colors
 ```
@@ -138,29 +138,29 @@ Here is a list of changes that I made with help from the Claude AI:
 
 ## Custom Colorscheme
 
-The Vim files contains it's own independent custom colorscheme file found in .vim/colors/custom_colorscheme.vim. The colorscheme is written in a clear, easy to understand and easy to modify format.
+The Vim files contains it's own independent custom colorscheme file found in .vim/colors/. The colorschemes are written in a clear, easy to understand and easy to modify format.
 
-The colorscheme is independent from the rest of the files and settings. If you want to enable the custom colorscheme without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the custom_colorscheme.vim file into the colors/ folder, and then load the custom_colorscheme into your .vimrc file.
+The colorschemes are independent from the rest of the files and settings. If you want to enable the custom colorscheme without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the colorscheme files into the colors/ folder, and then load the colorscheme into your .vimrc file.
 
 You can do so by adding the following line to your .vimrc file:
 
 ```
-colorscheme custom_colorscheme
+colorscheme ddd_black
 ```
 
-If you are using NeoVim instead of Vim/GVim, then add the custom_colorscheme.vim file to the equivalent path (~/.config/nvim/colors/ in Linux) and add one of the following to your init.lua file:
+If you are using NeoVim instead of Vim/GVim, then add the ddd_black.vim file to the equivalent path (~/.config/nvim/colors/ in Linux) and add one of the following to your init.lua file:
 
 ```
-vim.cmd.colorscheme("custom_colorscheme")
-vim.cmd("colorscheme custom_colorscheme")
-vim.cmd[[colorscheme custom_colorscheme]]
+vim.cmd.colorscheme("ddd_black")
+vim.cmd("colorscheme ddd_black")
+vim.cmd[[colorscheme ddd_black]]
 ```
 
-Make sure you don't have any other colorschemes enabled overriding the custom_colorscheme.
+Make sure you don't have any other colorschemes enabled overriding the custom colorscheme.
 
 ### Comparison with/without my custom syntax matching.
 
-Both images below use my custom_colorscheme.vim file. The image on the left shows the default syntax matching and the image on the right adds my custom syntax matching on top.
+Both images below use my ddd_black.vim file. The image on the left shows the default syntax matching and the image on the right adds my custom syntax matching on top.
 
 Left  image: With g:select_custom_syntax = 1
 Right image: With g:select_custom_syntax = 2

@@ -63,7 +63,7 @@ let g:LargeFile = 1024 * 1024 * 500
 " If set to 0 will use the default Vim syntax with the pablo colorscheme.
 " If set to 1 will use the default Vim syntax with my custom colorscheme.
 "             This custom colorscheme can be found in:
-"             .vim/colors/custom_colorscheme.vim
+"             .vim/colors/
 " If set to 2 will use the default Vim syntax with my custom colorscheme in
 "             addition to some of my custom syntax matching that adds
 "             additional syntax on top of the default Vim syntax matching.
@@ -115,7 +115,7 @@ endif
 " ln -s ~/.vim ~/.config/nvim/.vim
 " Link the spell checking folder in NeoVim.
 " ln -s ~/.vim/spell ~/.config/nvim/spell
-" Link the custom colorschemen in NeoVim.
+" Link the custom colorscheme in NeoVim.
 " ln -s ~/.vim/colors ~/.config/nvim/colors
 " Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
@@ -317,9 +317,27 @@ endfunction
 " Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
-   if g:select_custom_syntax > 0 && filereadable(expand($vim_folder_path . "/colors/custom_colorscheme.vim"))
-      " The custom colorscheme is in .vim/colors/custom_colorscheme.vim
-      colorscheme custom_colorscheme
+   if g:select_custom_syntax > 0 && filereadable(expand($vim_folder_path . "/colors/ddd_black.vim"))
+      " The custom colorschemes are in .vim/colors/
+      colorscheme ddd_black
+      " colorscheme ddd_darkgrey
+      " colorscheme ddd_darkgrey2
+      " colorscheme ddd_navy
+      " colorscheme ddd_darkgreen
+      " colorscheme ddd_black_grey
+      " colorscheme ddd_black_pink
+      " colorscheme ddd_black_fuchsia
+      " colorscheme ddd_black_navy
+      " colorscheme ddd_black_chocolate
+      " colorscheme ddd_black_darkgreen
+      " colorscheme ddd_black_teal
+
+      " colorscheme ddd_white
+      " colorscheme ddd_lightgrey
+      " colorscheme ddd_mocca
+      " colorscheme ddd_palegreen
+      " colorscheme ddd_aqua
+      " colorscheme ddd_lightpink
    else
       " Use one of the default colorschemes
       colorscheme pablo
@@ -734,6 +752,22 @@ function! DefaultSettings()
       autocmd WinNew * if &buftype == '' | wincmd _ | exe "wincmd |" | endif
    augroup END
 
+   "---------------------------------------------------------------------------
+   " Set VimDiff to wrap by default.
+   "---------------------------------------------------------------------------
+   augroup VimDiff
+      autocmd!
+      autocmd VimEnter * call IfDiff()
+   augroup END
+
+endfunction
+
+function! IfDiff()
+   if &diff
+      " windo set wrap
+      set columns=9999
+      wincmd =
+   endif
 endfunction
 
 
@@ -1555,7 +1589,7 @@ augroup MainFunction
    autocmd!
 
    " Set common setings for Large and Default files. Set the font, the
-   " colorsheme and the dimensions of the Vim window.
+   " colorscheme and the dimensions of the Vim window.
    if !exists("g:EnteredCommonSetting")
       call CommonSettings()
    endif

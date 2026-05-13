@@ -1,9 +1,9 @@
 "==============================================================================
-" File: custom_colorscheme.vim
+" File: ddd_black_pink.vim
 "------------------------------------------------------------------------------
-" Description: Creates a new colorscheme called custom_colorscheme. This file
+" Description: Creates a new colorscheme called ddd_black_pink. This file
 "              edits the colors of the built-in vim highlighting groups. Gets
-"              loaded by vim if the colorscheme is set to custom_colorscheme.
+"              loaded by vim if the colorscheme is set to ddd_black_pink.
 " NOTE: See also more_colors.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
@@ -38,7 +38,7 @@ if exists("b:highlightings_loaded")
   finish
 endif
 let g:highlightings_loaded = 1
-let g:colors_name = 'custom_colorscheme'
+let g:colors_name = 'ddd_black_pink'
 
 " NOTE: If you change the colors here, you change them in all files for all
 "       relevant groups.
@@ -191,11 +191,11 @@ set background=dark
 " NOTE: You can see the current settings with the ":highlight" command.
 
 " Set default text and background color.
-hi Normal            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
-hi Ignore            cterm=NONE gui=NONE ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
+hi Normal            cterm=NONE gui=NONE ctermfg=198  guifg=deeppink    ctermbg=232  guibg=grey1      guisp=NONE
+hi Ignore            cterm=NONE gui=NONE ctermfg=198  guifg=deeppink    ctermbg=232  guibg=grey1      guisp=NONE
 hi TitleBar          cterm=bold gui=bold ctermfg=252  guifg=grey80      ctermbg=232  guibg=grey1      guisp=NONE
-hi EndOfBuffer       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=233  guibg=grey5      guisp=NONE
-hi LineNr            cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=NONE guibg=NONE       guisp=NONE
+hi EndOfBuffer       cterm=NONE gui=NONE ctermfg=198  guifg=deeppink    ctermbg=233  guibg=grey5      guisp=NONE
+hi LineNr            cterm=NONE gui=NONE ctermfg=198  guifg=deeppink    ctermbg=NONE guibg=NONE       guisp=NONE
 
 hi Statement         cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
 hi Keyword           cterm=bold gui=bold ctermfg=184  guifg=yellow      ctermbg=NONE guibg=NONE       guisp=NONE
@@ -219,8 +219,8 @@ hi Delimiter         cterm=bold gui=bold ctermfg=208  guifg=darkorange  ctermbg=
 
 hi Exception         cterm=NONE gui=NONE ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE       guisp=NONE
 hi NonText           cterm=bold gui=bold ctermfg=196  guifg=red2        ctermbg=NONE guibg=NONE       guisp=NONE
-hi Question          cterm=bold gui=bold ctermfg=205  guifg=hotpink     ctermbg=NONE guibg=NONE       guisp=NONE
-hi Comment           cterm=NONE gui=NONE ctermfg=201  guifg=fuchsia     ctermbg=NONE guibg=NONE       guisp=NONE
+hi Question          cterm=bold gui=bold ctermfg=201  guifg=fuchsia     ctermbg=NONE guibg=NONE       guisp=NONE
+hi Comment           cterm=NONE gui=NONE ctermfg=205  guifg=hotpink     ctermbg=NONE guibg=NONE       guisp=NONE
 hi SpecialComment    cterm=NONE gui=NONE ctermfg=129  guifg=purple      ctermbg=NONE guibg=NONE       guisp=NONE
 
 hi StorageClass      cterm=bold gui=bold ctermfg=178  guifg=orange      ctermbg=NONE guibg=NONE       guisp=NONE
@@ -242,13 +242,13 @@ hi CursorLine        cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=
 hi CursorLineNr      cterm=bold gui=bold ctermfg=130  guifg=sienna      ctermbg=NONE guibg=NONE       guisp=NONE
 hi ColorColumn       cterm=NONE gui=NONE ctermfg=236  guifg=grey30      ctermbg=234  guibg=grey10     guisp=NONE
 
-hi StatusLine        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=15   guibg=white      guisp=NONE
-hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
-hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
+hi StatusLine        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=198  guibg=deeppink   guisp=NONE
+hi StatusLineNC      cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=205  guibg=hotpink    guisp=NONE
+hi VertSplit         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=205  guibg=hotpink    guisp=NONE
 
-hi Search            cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=236  guibg=grey30     guisp=NONE
-hi CurSearch         cterm=NONE gui=NONE ctermfg=NONE guifg=NONE        ctermbg=246  guibg=grey60     guisp=NONE
-hi IncSearch         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=246  guibg=grey60     guisp=NONE
+hi Search            cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=198  guibg=deeppink   guisp=NONE
+hi CurSearch         cterm=NONE gui=NONE ctermfg=16   guifg=black       ctermbg=205  guibg=hotpink    guisp=NONE
+hi IncSearch         cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=205  guibg=hotpink    guisp=NONE
 
 hi Pmenu             cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=234  guibg=grey10     guisp=NONE
 hi PmenuSel          cterm=NONE gui=NONE ctermfg=15   guifg=white       ctermbg=235  guibg=grey20     guisp=NONE
@@ -275,10 +275,10 @@ hi SignColumn        cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=
 
 hi Directory         cterm=NONE gui=NONE ctermfg=100  guifg=olive       ctermbg=NONE guibg=NONE       guisp=NONE
 hi SpecialKey        cterm=NONE gui=NONE ctermfg=20   guifg=blue        ctermbg=NONE guibg=NONE       guisp=NONE
-hi Title             cterm=bold gui=bold ctermfg=205  guifg=deeppink    ctermbg=NONE guibg=NONE       guisp=NONE
+hi Title             cterm=bold gui=bold ctermfg=198  guifg=deeppink    ctermbg=NONE guibg=NONE       guisp=NONE
 hi MoreMsg           cterm=bold gui=bold ctermfg=203  guifg=tomato1     ctermbg=NONE guibg=NONE       guisp=NONE
 
-hi Visual            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=46   guibg=green1     guisp=NONE
+hi Visual            cterm=bold gui=bold ctermfg=16   guifg=black       ctermbg=198  guibg=deeppink   guisp=NONE
 hi VisualNOS cterm=bold,underline gui=bold,underline ctermfg=252 guifg=grey80 ctermbg=232 guibg=grey1 guisp=NONE
 
 hi WarningMsg        cterm=underline gui=underline ctermfg=196 guifg=red2 ctermbg=NONE guibg=NONE guisp=NONE
