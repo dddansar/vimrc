@@ -167,9 +167,14 @@ Right image: With g:select_custom_syntax = 2
 
 For vim files:
 
-![Alt Text](vimrc_example.png)
+![Alt Text](https://raw.githubusercontent.com/dddansar/vimrc/assets/vimrc_example.png)
 
 For C files:
 
-![Alt Text](c_example.png)
+![Alt Text](https://raw.githubusercontent.com/dddansar/vimrc/assets/c_example.png)
+
+### More Colorschemes
+
+For a complete list of other colorschemes I have available, check out:
+https://github.com/dddansar/colorschemes
 
