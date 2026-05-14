@@ -7,7 +7,7 @@ Contains all my vimrc settings.
 - Works in GVim, Vim and NeoVim
 - Supports both Windows and Linux OS
 - Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6 and the latest 4.7 (should support future versions as well...)) (Now also works with OpenAI/ChatGPT, Google's Gemini and Qwen with Ollama!!!)
-- Uses my own custom colorscheme where the user has full control over all the colors. Multiple custom colorschemes are available.
+- Uses my own custom colorschemes where the user has full control over all the colors. Multiple custom colorschemes are available.
 - Supports different syntax configurations, can select between Vim's default syntax matching or add some of my custom syntax matching on top of the default Vim syntax matching (default)
 - Support for both Colemak-DH and QWERTY keyboard layouts
 - Includes performance optimization features and multiple performance modes
@@ -138,9 +138,9 @@ Here is a list of changes that I made with help from the Claude AI:
 
 ## Custom Colorscheme
 
-The Vim files contains it's own independent custom colorscheme file found in .vim/colors/. The colorschemes are written in a clear, easy to understand and easy to modify format.
+The Vim files contains it's own independent custom colorscheme files found in .vim/colors/. The colorschemes are written in a clear, easy to understand and easy to modify format.
 
-The colorschemes are independent from the rest of the files and settings. If you want to enable the custom colorscheme without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the colorscheme files into the colors/ folder, and then load the colorscheme into your .vimrc file.
+The colorschemes are independent from the rest of the files and settings. If you want to enable the custom colorschemes without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the colorscheme files into the colors/ folder, and then load the colorscheme into your .vimrc file.
 
 You can do so by adding the following line to your .vimrc file:
 

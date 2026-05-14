@@ -1,9 +1,9 @@
 "==============================================================================
-" File: colors.vim
+" File: more_colors.vim
 "------------------------------------------------------------------------------
 " Description: This file adds additional highlighting groups that may get used
 "              throughout the .vim files.
-" NOTE: See also colors/custom_colorscheme.vim.
+" NOTE: For the main colorschemes, see also colors/ddd_*.vim.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -34,10 +34,10 @@
 
 
 " Exit if the file was already loaded
-if exists("b:colors_loaded")
+if exists("b:more_colors_loaded")
   finish
 endif
-let g:colors_loaded = 1
+let g:more_colors_loaded = 1
 
 
 " Custom highlighting groups
