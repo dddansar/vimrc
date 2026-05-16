@@ -36,8 +36,8 @@
 "------------------------------------------------------------------------------
 
 " I use the colemak-dh keyboard layout and custom mappings for this layout.
-" let g:keyboard_layout = "qwerty"
-let g:keyboard_layout = "colemak-dh"
+let g:keyboard_layout = "qwerty"
+" let g:keyboard_layout = "colemak-dh"
 
 " Selects between windows and linux OS
 let g:using_windows = 0
