@@ -36,7 +36,7 @@
 if exists("b:linux_loaded")
   finish
 endif
-let g:linux_loaded = 1
+let b:linux_loaded = 1
 
 
 " compgen -c " List all the linux commands you could run.

@@ -196,7 +196,7 @@
 if exists("b:math_mappings_loaded")
   finish
 endif
-let g:math_mappings_loaded = 1
+let b:math_mappings_loaded = 1
 
 
 " NOTE: Using   <c-r>=Eatchar('\s')<cr>   to consume the space typed after an

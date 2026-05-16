@@ -35,7 +35,7 @@
 if exists("b:syntax_library_loaded")
   finish
 endif
-let g:syntax_library_loaded = 1
+let b:syntax_library_loaded = 1
 
 " Just in case another file has it set to ignore...
 syn case match

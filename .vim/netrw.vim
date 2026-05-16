@@ -36,11 +36,11 @@
 if exists("b:netrw_loaded")
   finish
 endif
-let g:netrw_loaded = 1
+let b:netrw_loaded = 1
 
 syn clear
 
-if !exists("g:syntax_library_loaded")
+if !exists("b:syntax_library_loaded")
    so $vim_folder_path/syntax_library.vim
 endif
 " all capital words like README or LICENCE (without the extension)

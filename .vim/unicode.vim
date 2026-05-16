@@ -37,15 +37,15 @@
 if exists("b:unicode_loaded")
   finish
 endif
-let g:unicode_loaded = 1
+let b:unicode_loaded = 1
 
 
 if !has('nvim')
-   if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
+   if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
       setlocal spelllang+=math
    endif
 else
-   if exists("g:spell_check_en") && filereadable(expand($nvim_spell_path . "/math.utf-8.spl"))
+   if exists("b:spell_check_en") && filereadable(expand($nvim_spell_path . "/math.utf-8.spl"))
       setlocal spelllang+=math
    endif
 endif

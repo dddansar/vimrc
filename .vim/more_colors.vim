@@ -37,7 +37,7 @@
 if exists("b:more_colors_loaded")
   finish
 endif
-let g:more_colors_loaded = 1
+let b:more_colors_loaded = 1
 
 
 " Custom highlighting groups

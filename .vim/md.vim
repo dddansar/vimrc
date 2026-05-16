@@ -36,7 +36,7 @@
 if exists("b:txt_loaded")
   finish
 endif
-let g:txt_loaded = 1
+let b:txt_loaded = 1
 
 setlocal spell
 

@@ -36,7 +36,7 @@
 if exists("b:abbrev_loaded")
   finish
 endif
-let g:abbrev_loaded = 1
+let b:abbrev_loaded = 1
 
 
 " NOTE: To make sure a Vim abbreviation does not trigger existing mappings,

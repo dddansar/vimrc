@@ -35,7 +35,7 @@
 if exists("b:strikethrough_loaded")
   finish
 endif
-let g:strikethrough_loaded = 1
+let b:strikethrough_loaded = 1
 
 
 " Add strikethrough and greyout/grey-out, match ~~ or ;; or ::

@@ -35,15 +35,15 @@
 if exists("b:lean_loaded")
   finish
 endif
-let g:lean_loaded = 1
+let b:lean_loaded = 1
 
 
 if !has('nvim')
-   if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
+   if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
       setlocal spelllang+=lean
    endif
 else
-   if exists("g:spell_check_en") && filereadable(expand($nvim_spell_path . "/lean.utf-8.spl"))
+   if exists("b:spell_check_en") && filereadable(expand($nvim_spell_path . "/lean.utf-8.spl"))
       setlocal spelllang+=lean
    endif
 endif

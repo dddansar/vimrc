@@ -35,7 +35,7 @@
 if exists("b:py_loaded")
   finish
 endif
-let g:py_loaded = 1
+let b:py_loaded = 1
 
 call AllOperators()
 call AllShiftOp()

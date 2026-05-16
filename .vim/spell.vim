@@ -36,10 +36,10 @@
 if exists("b:spell_loaded")
   finish
 endif
-let g:spell_loaded = 1
+let b:spell_loaded = 1
 
 
-" Enable spell checking if g:spell_check_en is set.
+" Enable spell checking if b:spell_check_en is set.
 "------------------------------------------------------------------------------
 setlocal spell
 setlocal spelllang+=en_us
@@ -66,7 +66,7 @@ setlocal spelllang+=en_us
 
 " Will highlight spelling mistakes, NOTE: spellcheck != autocorrect
 " 1)
-" if exists("g:spell_check_en") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
+" if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
 "    setlocal spelllang+=custom_spell
 " endif
 

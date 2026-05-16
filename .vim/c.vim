@@ -36,7 +36,7 @@
 if exists("b:c_loaded")
   finish
 endif
-let g:c_loaded = 1
+let b:c_loaded = 1
 
 
 hi  link  CKeywords     Statement

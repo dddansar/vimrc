@@ -35,7 +35,7 @@
 if exists("b:svn_loaded")
   finish
 endif
-let g:svn_loaded = 1
+let b:svn_loaded = 1
 
 hi! link svnDelimiter   Comment
 hi! link svnModified    Function

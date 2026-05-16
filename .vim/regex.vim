@@ -36,7 +36,7 @@
 if exists("b:regex_loaded")
   finish
 endif
-let g:regex_loaded = 1
+let b:regex_loaded = 1
 
 if !has('nvim')
    syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString

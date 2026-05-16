@@ -36,7 +36,7 @@
 if exists("b:bash_loaded")
   finish
 endif
-let g:bash_loaded = 1
+let b:bash_loaded = 1
 
 hi! link shVarAssign    Operator
 " hi! link shAlias        Number

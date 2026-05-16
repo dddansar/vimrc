@@ -36,7 +36,7 @@
 if exists("b:sv_loaded")
   finish
 endif
-let g:sv_loaded = 1
+let b:sv_loaded = 1
 
 " Keep autoindent, but remove cindent
 " set nocindent

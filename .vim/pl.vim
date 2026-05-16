@@ -35,7 +35,7 @@
 if exists("b:pl_loaded")
   finish
 endif
-let g:pl_loaded = 1
+let b:pl_loaded = 1
 
 " hi  link  PlKeywords1 Statement
 " syn keyword PlKeywords1    sub my use

@@ -109,7 +109,7 @@ augroup SetFiletypeComment
    au BufNewFile,BufRead *lean.txt,*.lean let b:multi_line_comment_start = '\/-' | let b:multi_line_comment_end = '-\/'
 
    " Set spell checking variable if spell checking enable
-   au BufNewFile,BufRead *.txt,*.rtf,*.tex let g:spell_check_en=1 | setlocal spell
+   au BufNewFile,BufRead *.txt,*.rtf,*.tex let b:spell_check_en=1 | setlocal spell
 
    " Apply spell checking everywhere in text files.
    au FileType text syntax spell toplevel

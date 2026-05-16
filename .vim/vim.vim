@@ -36,7 +36,7 @@
 if exists("b:vim_loaded")
   finish
 endif
-let g:vim_loaded = 1
+let b:vim_loaded = 1
 
 
 " Update the Colors of some syntax groups
@@ -190,89 +190,89 @@ syn keyword TabPanelFill      TabPanelFill      contained containedin=@ClusterCo
 " to and throughout the .vim files.
 "------------------------------------------------------------------------------
 " Custom syntax groups
-syn keyword HLSiennaB             HLSiennaB                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLBrownB              HLBrownB                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLRed2B               HLRed2B                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOrangeredB          HLOrangeredB             contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDarkorange3B        HLDarkorange3B           contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDarkorangeB         HLDarkorangeB            contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOrangeB             HLOrangeB                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLTomato1B            HLTomato1B               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLHotpinkB            HLHotpinkB               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDeeppinkB           HLDeeppinkB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDeeppink4B          HLDeeppink4B             contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLMagenta4B           HLMagenta4B              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLFuchsiaB            HLFuchsiaB               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLPurpleB             HLPurpleB                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLPurple4B            HLPurple4B               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLNavyB               HLNavyB                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLBlue                HLBlue                   contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLBlueB               HLBlueB                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLMediumslateblueB    HLMediumslateblueB       contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDeepskyblue4B       HLDeepskyblue4B          contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDodgerblueB         HLDodgerblueB            contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDeepskyblueB        HLDeepskyblueB           contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLCyanB               HLCyanB                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLYellowB             HLYellowB                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLYellowgreenB        HLYellowgreenB           contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreen               HLGreen                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreenB              HLGreenB                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreen3              HLGreen3                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreen3B             HLGreen3B                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOlive               HLOlive                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOliveB              HLOliveB                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLKhaki4              HLKhaki4                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLKhaki4B             HLKhaki4B                contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLSiennaB             HLSiennaB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLBrownB              HLBrownB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLRed2B               HLRed2B                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOrangeredB          HLOrangeredB             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDarkorange3B        HLDarkorange3B           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDarkorangeB         HLDarkorangeB            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOrangeB             HLOrangeB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLTomato1B            HLTomato1B               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLHotpinkB            HLHotpinkB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDeeppinkB           HLDeeppinkB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDeeppink4B          HLDeeppink4B             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLMagenta4B           HLMagenta4B              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLFuchsiaB            HLFuchsiaB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLPurpleB             HLPurpleB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLPurple4B            HLPurple4B               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLNavyB               HLNavyB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLBlue                HLBlue                   contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLBlueB               HLBlueB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLMediumslateblueB    HLMediumslateblueB       contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDeepskyblue4B       HLDeepskyblue4B          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDodgerblueB         HLDodgerblueB            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDeepskyblueB        HLDeepskyblueB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLCyanB               HLCyanB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLYellowB             HLYellowB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLYellowgreenB        HLYellowgreenB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreen               HLGreen                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreenB              HLGreenB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreen3              HLGreen3                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreen3B             HLGreen3B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOlive               HLOlive                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOliveB              HLOliveB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLKhaki4              HLKhaki4                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLKhaki4B             HLKhaki4B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 
-syn keyword HLGrey30              HLGrey30                 contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGrey30B             HLGrey30B                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGrey40B             HLGrey40B                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGrey50B             HLGrey50B                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLWhiteB              HLWhiteB                 contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLGrey30              HLGrey30                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey30B             HLGrey30B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey40B             HLGrey40B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey50B             HLGrey50B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLWhiteB              HLWhiteB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 
-syn keyword HLGrey60B             HLGrey60B                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLLightmagentaB       HLLightmagentaB          contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSkyblueB            HLSkyblueB               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLMediumaquamarineB   HLMediumaquamarineB      contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpringgreenB        HLSpringgreenB           contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLKhakiB              HLKhakiB                 contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLGrey60B             HLGrey60B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLLightmagentaB       HLLightmagentaB          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSkyblueB            HLSkyblueB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLMediumaquamarineB   HLMediumaquamarineB      contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpringgreenB        HLSpringgreenB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLKhakiB              HLKhakiB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 syn keyword HLTan1B               HLTan1B
-syn keyword HLSalmonB             HLSalmonB                contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLSalmonB             HLSalmonB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 
-syn keyword HLRedBU               HLRedBU                  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLYellowBU            HLYellowBU               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreenBU             HLGreenBU                contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLRedBU               HLRedBU                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLYellowBU            HLYellowBU               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreenBU             HLGreenBU                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 
-syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreen3BgB           HLGreen3BgB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLGreen1BgB           HLGreen1BgB              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLRedBgB              HLRedBgB                 contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreen3BgB           HLGreen3BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreen1BgB           HLGreen1BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLRedBgB              HLRedBgB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 "------------------------------------------------------------------------------
 " Strikethrough
-syn keyword HLGreyOut              HLGreyOut               contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLStrikeThroughDefault HLStrikeThroughDefault  contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLStrikeThroughGrey    HLStrikeThroughGrey     contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLBarelyVisible        HLBarelyVisible         contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLGreyOut              HLGreyOut               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLStrikeThroughDefault HLStrikeThroughDefault  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLStrikeThroughGrey    HLStrikeThroughGrey     contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLBarelyVisible        HLBarelyVisible         contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 "------------------------------------------------------------------------------
 " List of all possible gui options (many may not work...).
-syn keyword HLSpecial1             HLSpecial1              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial2             HLSpecial2              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial3             HLSpecial3              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial4             HLSpecial4              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial5             HLSpecial5              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial6             HLSpecial6              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial7             HLSpecial7              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial8             HLSpecial8              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial9             HLSpecial9              contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial10            HLSpecial10             contained containedin=vimSynKeyRegion,vimHiLink
-syn keyword HLSpecial11            HLSpecial11             contained containedin=vimSynKeyRegion,vimHiLink
+syn keyword HLSpecial1             HLSpecial1              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial2             HLSpecial2              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial3             HLSpecial3              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial4             HLSpecial4              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial5             HLSpecial5              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial6             HLSpecial6              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial7             HLSpecial7              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial8             HLSpecial8              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial9             HLSpecial9              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial10            HLSpecial10             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial11            HLSpecial11             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 "------------------------------------------------------------------------------
 
 

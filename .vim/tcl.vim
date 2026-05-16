@@ -35,7 +35,7 @@
 if exists("b:tcl_loaded")
   finish
 endif
-let g:tcl_loaded = 1
+let b:tcl_loaded = 1
 
 call AllDefineDollar()
 call AllOperators()

@@ -35,7 +35,7 @@
 if exists("b:rcf_loaded")
   finish
 endif
-let g:rcf_loaded = 1
+let b:rcf_loaded = 1
 
 
 hi  link  AllPreNumbers1   Number

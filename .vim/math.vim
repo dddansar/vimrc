@@ -36,7 +36,7 @@
 if exists("b:math_loaded")
   finish
 endif
-let g:math_loaded = 1
+let b:math_loaded = 1
 
 
 " NOTE: See also math_mappings.vim for unicode math mappings from leanprover

@@ -35,7 +35,7 @@
 if exists("b:java_loaded")
   finish
 endif
-let g:java_loaded = 1
+let b:java_loaded = 1
 
 
 hi  link    JavaKeywords Statement
