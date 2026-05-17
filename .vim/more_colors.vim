@@ -98,6 +98,7 @@ hi default HLGreenBU             cterm=bold,underline gui=bold,underline ctermfg
 hi default HLDodgerblueBU        cterm=bold,underline gui=bold,underline ctermfg=33  guifg=dodgerblue
 hi default HLHotpinkBU           cterm=bold,underline gui=bold,underline ctermfg=205 guifg=hotpink
 
+hi default HLGrey80BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=252 guibg=grey80
 hi default HLGrey10BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=234 guibg=grey10
 hi default HLGrey15BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=235 guibg=grey15
 hi default HLOrangered1BgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=202 guibg=orangered1
@@ -123,7 +124,17 @@ hi default HLStrikeThroughDefault  cterm=strikethrough gui=strikethrough
 hi default HLStrikeThroughGrey     cterm=strikethrough gui=strikethrough ctermfg=236 guifg=grey30
 
 " Highlight Links
-hi link    HLBarelyVisible         HLGrey10BgB
+" hi link    HLBarelyVisible         HLGrey10BgB
+augroup HLBarelyVisible
+   autocmd!
+   autocmd VimEnter * if g:colors_name == 'ddd_darkgrey' |
+      \ hi link HLBarelyVisible HLGrey15BgB |
+      \ elseif &background == 'dark' |
+      \ hi link HLBarelyVisible HLGrey10BgB |
+      \ else |
+      \ hi link HLBarelyVisible HLGrey80BgB |
+      \ endif
+augroup END
 "------------------------------------------------------------------------------
 
 

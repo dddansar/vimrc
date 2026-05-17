@@ -67,24 +67,16 @@ NeoVim uses different configuration directories than Vim. You can get all the vi
 Option 2) Linking NeoVim to Vim, can depend on the specific locations that NeoVim uses in your OS. Below is what works for me in Ubuntu/Mint Linux.
 
 Link Vim's .vimrc and .vim/ files in NeoVim.
-```
-ln -s ~/.vimrc ~/.config/nvim/init.vim
-ln -s ~/.vim ~/.config/nvim/.vim
-```
-
-Link the custom colorschemes in NeoVim.
-```
+```bash
 ln -s ~/.vim/colors ~/.config/nvim/colors
-```
-
-Link Vim's spell checking folder in NeoVim.
-```
 ln -s ~/.vim/spell ~/.config/nvim/spell
+ln -s ~/.vim/pack ~/.config/nvim/pack
 ```
 
-Link Pasky's plugin for using Anthropic's Claude AI in NeoVim.
-```
-ln -s ~/.vim/pack ~/.config/nvim/pack
+And add to ~/.config/nvim/init.lua
+```Lua
+-- Source existing vimrc for shared config
+vim.cmd('source ~/.vimrc')
 ```
 
 Now when I open a file with NeoVim, it gets the same settings as when I load the file with GVim.
@@ -96,9 +88,13 @@ I was able to get Pasky's Claude AI API working in GVim, Vim and NeoVim on my Ub
 
 To get the Claude API to work, follow these steps:
 1) Download the Pasky Plugin and place in you .vim folder
+
     A) I made modifications to Pasky's Claude API plugin that you can find in:
-    .vim/pack/pasky/start/claude.vim/plugin/claude.vim
+    https://github.com/dddansar/claude.vim
+    and add it to your .vim/pack/pasky/start/claude.vim/
+
     OR
+
     B) You can download Pasky's Original Claude API plugin from:
     https://github.com/pasky/claude.vim
     and add it to your .vim/pack/pasky/start/claude.vim/
@@ -111,30 +107,10 @@ let g:claude_api_key='add_api_key_here'
 ```
 5) Try step 2 again and hopefully it works for you now.
 
-NOTE: I made some modifications to Pasky's plugins (the May 2025 version) to address some issues I was having, to add my own improvements to the plugin, to make the chat experience better suit my personal preferences, to not use the claude\_\*\_prompt.md files (I prefer default prompts), to add additional comments.
+NOTE: I made some modifications to Pasky's plugins (the May 2025 version) to address some issues I was having, to add new features and capabilities, to add my own improvements to the plugin, to make the chat experience better suit my personal preferences, to not use the claude\_\*\_prompt.md files (I prefer default prompts)...
 
-Here is a list of changes that I made with help from the Claude AI:
-- Fixed the error "executing job failed: Argument list too long".
-- Allow the context window to increase from 200k to 1m. See g:claude_use_1m_context (default set to 200k).
-- Updated the claude_model version to use Claude Sonnet 4.6.
-- Asked Claude to add a lot of comments.
-- Disabled automatic chat folding. See g:claude_enable_folding.
-- Print the token usage and cost in the chat after each answer.
-- Fix for the printed token usage as it was not always accurate.
-- Modified the system prompt to only have the "You:" line. See g:claude_default_system_prompt.
-- Increased 'max_tokens' to allow Claude AI to give longer responses before cutting off. See g:claude_max_tokens.
-- Add fix for elinks "Update your browser Your browser isn't supported anymore".
-- Set g:claude_map_cancel_response = "<c-c>" and have it only affect the Claude chat window.
-- Added settings to disable tool and web usage by default. I prefer to keep everything in the chat window, to not let Claude directly edit my files and to keep costs down by not opening large files/websites. Set g:claude_disable_tool_use=0 if you want to enable them.
-- Removed automatic indentation in Claude's responses. See g:claude_no_indent.
-- Cleared the claude\_\*\_prompt.md files to use Claude's default prompt settings.
-- Print g:claude_model instead of printing "Claude:"
-- Fix for "invalid_request_error" "messages: text content blocks must be non-empty"
-- Fix for buffers getting resent during tool usage causing significant increase in usage cost.
-- Added batch mode option where response is delayed but cost is 50% discounted.
-- Added support for qwen (a locally running AI)
-- Added support for OpenAI/ChatGPT and Gemini AI!
-
+Visit the following link for details:
+https://github.com/dddansar/claude.vim
 
 ## Custom Colorscheme
 
@@ -144,16 +120,16 @@ The colorschemes are independent from the rest of the files and settings. If you
 
 You can do so by adding the following line to your .vimrc file:
 
-```
+```Vim
 colorscheme ddd_black
 ```
 
 If you are using NeoVim instead of Vim/GVim, then add the ddd_black.vim file to the equivalent path (~/.config/nvim/colors/ in Linux) and add one of the following to your init.lua file:
 
-```
+```NeoVim
 vim.cmd.colorscheme("ddd_black")
-vim.cmd("colorscheme ddd_black")
-vim.cmd[[colorscheme ddd_black]]
+" vim.cmd("colorscheme ddd_black") " Also works
+" vim.cmd[[colorscheme ddd_black]] " Also works
 ```
 
 Make sure you don't have any other colorschemes enabled overriding the custom colorscheme.

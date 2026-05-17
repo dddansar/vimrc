@@ -153,6 +153,7 @@ let g:openai_api_key=$GPT_API_KEY
 " should start replying in the prompt window.
 "------------------------------------------------------------------------------
 
+
 " Settings for all AI models:
 "------------------------------------------------------------------------------
 " Open a Chat to start chatting with AI
@@ -196,6 +197,30 @@ nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 " NOTE: You can see all the current session's token usages with :messages.
 " Enable batch mode. Results come back later (most complete within an hour, results are guaranteed within 24 hours). Uses a polling mechanism to retrieve results (every 30 seconds by default). No tool use during batch. A 50% cost discount is applied during batch mode.
 let g:claude_batch_api = 0
+" Prompt caching: 0 = disabled, 1 = 5-minute TTL, 2 = 1-hour TTL
+" Caching reduces costs by reusing the system prompt and conversation history
+" across API calls. 5-minute TTL (default): cache write tokens cost 1.25× base
+" input price; cache read tokens cost 0.1× (10%). 1-hour TTL (extended): cache
+" write tokens cost 2× base input price; still 0.1× for reads
+" NOTE: caching only activates when the cached prefix meets the model's
+" minimum token threshold (typically 1024–4096 tokens depending on model).
+" NOTE: The plugin sends: system prompt → buffer contents → message history.
+"       - The system prompt is very stable — it'll cache on the first call and
+"       hit every subsequent call in the session. This is always a win.
+"       - The buffer contents are prepended to the system prompt as one block.
+"       If you edit a file between messages, that block changes and busts the
+"       cache for everything downstream.
+"       - The message history grows with every turn. The plugin puts
+"       cache_control on the last user message, which means the cache point
+"       moves forward with each exchange — the whole prior conversation gets
+"       cached and the model only pays full price for the new message.
+" The API only allows 4 cache breakpoints per request total. We're already
+" using one on the last user message (conversation history). So you have 3 left
+" to distribute across system prompt + buffers. If you have more than 3 files
+" open, you'd need to group the least-edited ones together into a single block
+" without a breakpoint, and put breakpoints only on the last 3 or so. The
+" system prompt would share a breakpoint with the oldest files.
+" let g:claude_caching = 1
 "------------------------------------------------------------------------------
 
 

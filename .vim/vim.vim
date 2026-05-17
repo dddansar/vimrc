@@ -246,6 +246,7 @@ syn keyword HLGreenBU             HLGreenBU                contained containedin
 syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 
+syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
 syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
