@@ -74,7 +74,7 @@ ln -s ~/.vim/pack ~/.config/nvim/pack
 ```
 
 And add to ~/.config/nvim/init.lua
-```Lua
+```lua
 -- Source existing vimrc for shared config
 vim.cmd('source ~/.vimrc')
 ```
@@ -102,7 +102,7 @@ To get the Claude API to work, follow these steps:
 If you don't have an API key yet, you should get an error stating: "message":"x-api-key header is required"
 3) Get an API key from https://platform.claude.com
 4) Add the API key in g:claude_api_key in your .vimrc file:
-```
+```vim
 let g:claude_api_key='add_api_key_here'
 ```
 5) Try step 2 again and hopefully it works for you now.
@@ -120,13 +120,13 @@ The colorschemes are independent from the rest of the files and settings. If you
 
 You can do so by adding the following line to your .vimrc file:
 
-```Vim
+```vim
 colorscheme ddd_black
 ```
 
 If you are using NeoVim instead of Vim/GVim, then add the ddd_black.vim file to the equivalent path (~/.config/nvim/colors/ in Linux) and add one of the following to your init.lua file:
 
-```NeoVim
+```lua
 vim.cmd.colorscheme("ddd_black")
 " vim.cmd("colorscheme ddd_black") " Also works
 " vim.cmd[[colorscheme ddd_black]] " Also works

@@ -32,10 +32,10 @@
 
 
 " Exit if the file was already loaded
-if exists("b:svn_loaded")
-  finish
-endif
-let b:svn_loaded = 1
+" if exists("b:svn_loaded")
+"   finish
+" endif
+" let b:svn_loaded = 1
 
 hi! link svnDelimiter   Comment
 hi! link svnModified    Function

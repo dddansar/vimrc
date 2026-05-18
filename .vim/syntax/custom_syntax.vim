@@ -181,6 +181,7 @@ augroup EnCustomSyntax
 
       " Add custom syntax for SVN.
       au BufNewFile,BufRead svn-commit*.tmp so $vim_folder_path/svn.vim
+      au Syntax svn so $vim_folder_path/svn.vim
 
       " Add custom syntax for files that use math symbols.
       au BufNewFile,BufRead math_mappings.vim,*.lean so $vim_folder_path/math_mappings.vim
