@@ -78,7 +78,6 @@ syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
 "------------------------------------------------------------------------------
 " Vim default groups
 syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
-syn keyword Note              Note              contained containedin=@ClusterColorCI
 syn keyword Comment           Comment           contained containedin=@ClusterColorCI
 syn keyword Constant          Constant          contained containedin=@ClusterColorCI
 syn keyword String            String            contained containedin=@ClusterColorCI

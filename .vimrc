@@ -192,7 +192,7 @@ let g:ai_web_search_api_key=$BRAVE_API_KEY
 " question in small (or even empty) files and all only keep the relevant
 " code/text to the question.
 let g:claude_use_1m_context = 0
-" Manually save history to ~/claude_history.txt with <leader>cs
+" Manually save (append) history to ~/claude_history.txt with <leader>cs
 nnoremap <leader>cs :w >> ~/claude_history.txt<cr>
 " NOTE: You can see all the current session's token usages with :messages.
 " Enable batch mode. Results come back later (most complete within an hour, results are guaranteed within 24 hours). Uses a polling mechanism to retrieve results (every 30 seconds by default). No tool use during batch. A 50% cost discount is applied during batch mode.
@@ -204,15 +204,15 @@ let g:claude_batch_api = 0
 " write tokens cost 2× base input price; still 0.1× for reads
 " NOTE: caching only activates when the cached prefix meets the model's
 " minimum token threshold (typically 1024–4096 tokens depending on model).
-" NOTE: The plugin sends: system prompt → buffer contents → message history.
-"       - The system prompt is very stable — it'll cache on the first call and
+" NOTE: The plugin sends: system prompt -> buffer contents -> message history.
+"       - The system prompt is very stable - it'll cache on the first call and
 "       hit every subsequent call in the session. This is always a win.
 "       - The buffer contents are prepended to the system prompt as one block.
 "       If you edit a file between messages, that block changes and busts the
 "       cache for everything downstream.
 "       - The message history grows with every turn. The plugin puts
 "       cache_control on the last user message, which means the cache point
-"       moves forward with each exchange — the whole prior conversation gets
+"       moves forward with each exchange - the whole prior conversation gets
 "       cached and the model only pays full price for the new message.
 " The API only allows 4 cache breakpoints per request total. We're already
 " using one on the last user message (conversation history). So you have 3 left
@@ -223,21 +223,21 @@ let g:claude_batch_api = 0
 let g:claude_caching = 0
 " When enabled, Claude dynamically decides when and how much to use extended
 " thinking based on task complexity. Supported on Opus 4.7, Opus 4.6,
-" Sonnet 4.6 (and Opus 4.5 with a beta header — handled automatically).
+" Sonnet 4.6 (and Opus 4.5 with a beta header - handled automatically).
 " Note: switching thinking on/off invalidates message-level cache breakpoints;
 " system prompt and tool definition caches remain unaffected.
 let g:claude_thinking = 0
 " Effort level for adaptive thinking.
-"   "low"   — fast, minimal thinking; good for simple/chat tasks
-"   "medium" — balanced speed, cost, and quality; Anthropic's recommended
+"   "low"    - fast, minimal thinking; good for simple/chat tasks
+"   "medium" - balanced speed, cost, and quality; Anthropic's recommended
 "              default for Sonnet 4.6 agentic/coding workflows
-"   "high"  — deep reasoning; the API default on Opus 4.6 and Sonnet 4.6
-"   "xhigh" — between high and max; available on Opus 4.7 only
-"   "max"   — maximum reasoning depth; available on Opus 4.6 only
+"   "high"   - deep reasoning; the API default on Opus 4.6 and Sonnet 4.6
+"   "xhigh"  - between high and max; available on Opus 4.7 only
+"   "max"    - maximum reasoning depth; available on Opus 4.6 only
 let g:claude_thinking_effort = 'high'
-"   "summarized" — default; returns a condensed summary of Claude's reasoning.
+"   "summarized" - default; returns a condensed summary of Claude's reasoning.
 "                  You are billed for full thinking tokens, not summary tokens.
-"   "omitted"    — no thinking text returned (lower bandwidth, same quality).
+"   "omitted"    - no thinking text returned (lower bandwidth, same quality).
 let g:claude_thinking_display = 'summarized'
 "------------------------------------------------------------------------------
 
@@ -323,10 +323,10 @@ function! CommonSettings()
          " Select btw font styles
          if g:font_style == 0
             if !has('nvim')
-               set guifont=Monospace\ 12
+               set guifont=Monospace\ 14
                " winpos 1000 0         " Open GVim in top right by default
             else " for NeoVim
-               set guifont=Monospace:h12
+               set guifont=Monospace:h14
             endif
             set lines=47          " Height
             set columns=130       " Width
@@ -407,6 +407,12 @@ function! DefaultSettings()
 
    " Enable title if titlestring is set
    set title
+   " Show only filename in the titlebar
+   " set titlestring=%t
+   " Show relative path
+   " set titlestring=%f
+   " Show filename + modified flag
+   set titlestring=%t\ %m
 
    "---------------------------------------------------------------------------
    " Allows you to switch from an unsaved buffer without saving it first.
@@ -570,10 +576,8 @@ function! DefaultSettings()
 
    " In GVim, 'guioptions' controls whether various GUI widgets are shown.
    " Below means left/bottom scroll bar disabled, right scroll bar enabled.
-   " set guioptions+=LlRrb
-   " set guioptions-=LlRrb
-   " set guioptions+=r
-   set guioptions=aegimtr
+   " Default: aegimrLtT
+   set guioptions=aegimrtT
    " Remove the toolbar menu (icon bar) in GVim.
    " set guioptions-=T
 
@@ -720,6 +724,10 @@ function! DefaultSettings()
       let &t_SR = "\e[4 q"
       let &t_EI = "\e[2 q"
 
+      " Enable true color support
+      if has('termguicolors') && $COLORTERM =~# 'truecolor\|24bit'
+        set termguicolors
+      endif
       " set t_Co=256
    endif
 
@@ -1279,6 +1287,7 @@ function! LoadMappings()
    nnoremap <a-0> :winpos 900 0<cr>
 
    " Key mappings for termdebug debugger
+   " See plugin in $VIMRUNTIME/pack/dist/opt/termdebug/plugin/termdebug.vim
    nnoremap <leader>dd :packadd termdebug<cr>:Termdebug
    nnoremap <leader>dr :Run<cr>
    nnoremap <leader>dc :Continue<cr>
@@ -1290,6 +1299,9 @@ function! LoadMappings()
    nnoremap <leader>df :Finish<cr>
    nnoremap <leader>dp :Stop<cr>
    nnoremap <leader>dq :Gdb<cr>iquit<cr>
+   " NOTE: you can change the color of breakpoints with:
+   " highlight debugBreakpoint guibg=green guifg=white
+   " highlight debugBreakpointDisabled guibg=blue guifg=white
 
    " In multi-split windows, will full-size current file.
    nnoremap <c-space> <c-w><bar><c-w>_zz

@@ -671,7 +671,9 @@ endfunction
 
 
 function! AllFilesDefaultSyntax ()
-   call AllTabsAndSpaces()
+   if &filetype !=# 'help'
+      call AllTabsAndSpaces()
+   endif
    if (&filetype != 'csv')
       call AllCaps()
    endif
