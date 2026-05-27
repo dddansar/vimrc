@@ -33,10 +33,19 @@
 
 
 " Exit if the file was already loaded
-if exists("b:c_loaded")
+if exists("b:c_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:c_loaded")
   finish
 endif
 let b:c_loaded = 1
+" echom "C syntax file loaded"
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+call AllFilesDefaultSyntax()
 
 
 hi  link  CKeywords     Statement

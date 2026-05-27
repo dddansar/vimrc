@@ -32,17 +32,33 @@
 "==============================================================================
 
 
+" WARNING: Having this guard will cause the colors to not update...
 " Exit if the file was already loaded
-if exists("b:netrw_loaded")
-  finish
-endif
-let b:netrw_loaded = 1
+" if exists("b:netrw_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" " if exists("b:netrw_loaded")
+"   finish
+" endif
+" let b:netrw_loaded = 1
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+" source $vim_folder_path/regex.vim
+" source $vim_folder_path/abbrev.vim
+
+" call AllFilesDefaultSyntax()
+
+" Prevent these files from getting loaded as they are not needed
+let b:more_colors_loaded=1
+let b:syntax_library_loaded=1
+let b:regex_loaded=1
+let b:AllFilesDefaultSyntax_loaded=1
+let b:abbrev_loaded=1
 
 syn clear
 
-if !exists("b:syntax_library_loaded")
-   so $vim_folder_path/syntax_library.vim
-endif
+" if !exists("b:syntax_library_loaded")
+"    so $vim_folder_path/syntax_library.vim
+" endif
 " all capital words like README or LICENCE (without the extension)
 call AllCaps()
 

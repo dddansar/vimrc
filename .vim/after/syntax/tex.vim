@@ -1,7 +1,7 @@
 "==============================================================================
-" File: strikethrough.vim
+" File: tex.vim
 "------------------------------------------------------------------------------
-" Description: This file adds strikethrough syntax highlighting.
+" Description: This file adds custom syntax highlighting for all tex files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,24 +32,19 @@
 
 
 " Exit if the file was already loaded
-if exists("b:strikethrough_loaded")
+if exists("b:tex_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:tex_loaded")
   finish
 endif
-let b:strikethrough_loaded = 1
+let b:tex_loaded = 1
 
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+source $vim_folder_path/after/syntax/shared/spell.vim
+" Apply spell checking everywhere in text files.
+syntax spell toplevel
 
-" Add strikethrough and greyout/grey-out, match ~~ or ;; or ::
-"------------------------------------------------------------------------------
-function! StrikeoutEn()
-   hi link StrikeoutMatch HLStrikeThroughGrey
-   syntax match StrikeoutMatch "\~\~.*"  contains=@NoSpell
-   syntax match StrikeoutMatch "\~\~.*\~\~"  contains=@NoSpell
-   " hi link StrikeoutMatch2 HLStrikeThroughDefault
-   " syntax match StrikeoutMatch2 "::.*"  contains=@NoSpell
-   " syntax match StrikeoutMatch2 "::.*::"  contains=@NoSpell
-   " hi link GreyOutMatch HLGreyOut
-   " syntax match GreyOutMatch ";;.*"  contains=@NoSpell
-   " syntax match GreyOutMatch ";;.*;;"  contains=@NoSpell
-endfunction
-"------------------------------------------------------------------------------
+call AllFilesDefaultSyntax()
 

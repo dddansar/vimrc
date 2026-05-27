@@ -55,6 +55,18 @@ syn case match
 " meaning and matches a literal dot and $. Otherwise . means any charater
 " and $ means end of line and ^ means start of file
 
+"------------------------------------------------------------------------------
+" https://vimdoc.sourceforge.net/htmldoc/syntax.html
+" The :syntax commands that define syntax items take a number of arguments.
+" Not all commands accept all arguments.  This table shows which arguments
+" can not be used for all commands:
+"                    contains    oneline  fold  display  extend   concealends  contained  containedin
+" :syntax keyword    -           -        -     -        -        -            yes        yes
+" :syntax match      yes         -        yes   yes      yes      -            yes        yes
+" :syntax region     yes         yes      yes   yes      yes      yes          yes        yes
+" NOTE: Can't use "syntax keyword" with "contains=@NoSpell".
+"------------------------------------------------------------------------------
+
 
 "------------------------------------------------------------------------------
 function! AllTabsAndSpaces()
@@ -320,13 +332,13 @@ endfunction
 function! AllLabel()
    " Matches word: if first word on line
    hi  link    AllLabel   PreProc
-   syn match   AllLabel   "^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
+   syn match   AllLabel   "^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
-   syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
+   syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
    " Matches Word1 Word2 ... WordN: if every word is capitalized.
    hi  link    AllLabel3  PreProc
-   syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=" contains=@NoSpell,AllOperators
+   syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell
 endfunction
 
 " Labels in Comments
@@ -454,7 +466,6 @@ function! AllWebsites(contained_en)
    " Match links like www.vim.org
    hi  link     AllWebLinks1  Underlined
    execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9.?!\-_=\/~@()]\+"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
-
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
    execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&()*+,;=%]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
@@ -551,6 +562,9 @@ hi  link    AllCommentsMultiLine Comment
 
 " cluster ClusterAllCommentsCS is empty?
 function! AllCommentLeader()
+   if !exists('b:SetFiletypeComment_loaded')
+      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
+   endif
    if exists("b:comment_leader")
       " Matches comments if it's the first character on the line.
       execute 'syn match AllCommentsLine  +^\s*' . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
@@ -561,6 +575,9 @@ endfunction
 
 " Matches comments starting from anywhere on the line.
 function! AllCommentLeaderTop()
+   if !exists('b:SetFiletypeComment_loaded')
+      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
+   endif
    if exists("b:comment_leader")
       execute 'syn match AllComments      +'     . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
    endif
@@ -568,6 +585,9 @@ endfunction
 
 " Multi-line Comments.
 function! AllMultiLineComment()
+   if !exists('b:SetFiletypeComment_loaded')
+      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
+   endif
    if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
       " Matches multi-line comments if it's the first character on the line.
       execute 'syn region AllCommentsMultiLine start="^\s*' . b:multi_line_comment_start .  '" end="' . b:multi_line_comment_end . '"    contains=@ClusterAllCommentsCS'
@@ -670,7 +690,8 @@ endfunction
 "------------------------------------------------------------------------------
 
 
-function! AllFilesDefaultSyntax ()
+function! AllFilesDefaultSyntax()
+   let b:AllFilesDefaultSyntax_loaded = 1
    if &filetype !=# 'help'
       call AllTabsAndSpaces()
    endif

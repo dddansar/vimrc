@@ -33,10 +33,19 @@
 
 
 " Exit if the file was already loaded
-if exists("b:vim_loaded")
+if exists("b:vim_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:vim_loaded")
   finish
 endif
 let b:vim_loaded = 1
+" echom "Vim syntax file loaded"
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+call AllFilesDefaultSyntax()
 
 
 " Update the Colors of some syntax groups

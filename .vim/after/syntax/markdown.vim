@@ -1,7 +1,8 @@
 "==============================================================================
-" File: svn.vim
+" File: markdown.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting svn.
+" Description: This file adds custom syntax highlighting and abbreviations
+"              for all markdown files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,15 +33,52 @@
 
 
 " Exit if the file was already loaded
-" if exists("b:svn_loaded")
-"   finish
-" endif
-" let b:svn_loaded = 1
+if exists("b:markdown_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:markdown_loaded")
+  finish
+endif
+let b:markdown_loaded = 1
 
-hi! link svnDelimiter   Comment
-hi! link svnModified    Function
-hi! link svnAdded       Operator
-hi! link svnRemoved     Constant
-hi! link svnRenamed     Conditional
-hi! link svnSummary     Normal
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+source $vim_folder_path/after/syntax/shared/spell.vim
+" Apply spell checking everywhere in text files.
+syntax spell toplevel
+
+call AllFilesDefaultSyntax()
+
+
+hi! link markdownCodeBlock StorageClass
+hi! link markdownItalic LineNr
+
+if hlexists('markdownError')
+   syn clear markdownError
+endif
+
+" Make lines beginning with # as titles
+hi link TxtTitles1 AllTitles1
+hi link TxtTitles2 AllTitles2
+hi link TxtTitles3 AllTitles3
+hi link TxtTitles4 AllTitles4
+hi link TxtTitles5 AllTitles5
+syntax match TxtTitles1 "^\s*# .*"
+syntax match TxtTitles2 "^\s*## .*"
+syntax match TxtTitles3 "^\s*### .*"
+syntax match TxtTitles4 "^\s*#### .*"
+syntax match TxtTitles5 "^\s*##### .*"
+
+" Call syntax functions
+" call AllOperators()
+call AllEqualities()
+call AllArrows()
+call AllSeparators2()
+call AllParenBr()
+" call AllWebsites(0)
+" call AllEmails(0)
+call AllLabel()
+call AllNumbers()
+" call AllSlashes()
+" call AllHLWords()
 

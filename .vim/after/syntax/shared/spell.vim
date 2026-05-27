@@ -38,16 +38,14 @@ if exists("b:spell_loaded")
 endif
 let b:spell_loaded = 1
 
-
-" Enable spell checking if b:spell_check_en is set.
 "------------------------------------------------------------------------------
 setlocal spell
 setlocal spelllang+=en_us
 " Ignore uppercase of first word.
-" setlocal spellcapcheck=
+setlocal spellcapcheck=
 "------------------------------------------------------------------------------
 
-" call AllIgnoreSpellings()
+call AllIgnoreSpellings()
 
 "------------------------------------------------------------------------------
 " Setting up a custom dictionary !!!!
@@ -66,7 +64,7 @@ setlocal spelllang+=en_us
 
 " Will highlight spelling mistakes, NOTE: spellcheck != autocorrect
 " 1)
-" if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
+" if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/custom_spell.utf-8.spl"))
 "    setlocal spelllang+=custom_spell
 " endif
 

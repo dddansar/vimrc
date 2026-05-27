@@ -41,11 +41,11 @@ let b:unicode_loaded = 1
 
 
 if !has('nvim')
-   if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
+   if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
       setlocal spelllang+=math
    endif
 else
-   if exists("b:spell_check_en") && filereadable(expand($nvim_spell_path . "/math.utf-8.spl"))
+   if exists("b:spell_loaded") && filereadable(expand($nvim_spell_path . "/math.utf-8.spl"))
       setlocal spelllang+=math
    endif
 endif
@@ -129,14 +129,9 @@ syn keyword UnicodeBsColor       UnicodeBsColor
 "------------------------------------------------------------------------------
 if g:performance_mode <= 0
    " Don't spell check any unicode chars in comments:
-   hi  link     UnicodeCommentColor   AllComments
+   hi  link     UnicodeCommentColor   Comment
    syn match    UnicodeCommentColor  "[a-zA-Z]*[^ -~]\%(\S\)*"   contains=@NoSpell contained containedin=.*Comment.*
    " syn match    UnicodeNoColor1      "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell
-
-   " Set default color for all unicode chars outside of the main ASCII range:
-   " hi  link     UnicodeDefault   StorageClass
-   " syn match    UnicodeCommentColor  "[^ -~]"  contains=@NoSpell contained containedin=AllComment.*
-   " syn match    UnicodeDefault   "[^ -~]"  contains=@NoSpell containedin=AllComment.*
 
    " Highlight chars that you don't want used such as tabs:
    hi  link     UnicodeDontUse NonText
@@ -4109,7 +4104,7 @@ inorea <buffer> zuv_y   ᵧ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Vectors in comments
-hi  link   UnicodeVectorsCom  AllComments
+hi  link   UnicodeVectorsCom  Comment
 syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comments.*
 syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comments.*
 syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comments.*
@@ -4121,7 +4116,7 @@ syn match     UnicodeVectors  "\%(d⃗\)"    contains=@NoSpell  containedin=Rege
 syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Negation in comments
-hi  link   UnicodeNotLogicCom AllComments
+hi  link   UnicodeNotLogicCom Comment
 syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comments.*
 
 " Negation

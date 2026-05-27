@@ -1,7 +1,8 @@
 "==============================================================================
-" File: strikethrough.vim
+" File: sh.vim
 "------------------------------------------------------------------------------
-" Description: This file adds strikethrough syntax highlighting.
+" Description: This file adds custom syntax highlighting and abbreviations
+"              for all sh/bash files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,24 +33,33 @@
 
 
 " Exit if the file was already loaded
-if exists("b:strikethrough_loaded")
+if exists("b:sh_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:sh_loaded")
   finish
 endif
-let b:strikethrough_loaded = 1
+let b:sh_loaded = 1
 
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+source $vim_folder_path/after/syntax/shared/linux.vim
 
-" Add strikethrough and greyout/grey-out, match ~~ or ;; or ::
-"------------------------------------------------------------------------------
-function! StrikeoutEn()
-   hi link StrikeoutMatch HLStrikeThroughGrey
-   syntax match StrikeoutMatch "\~\~.*"  contains=@NoSpell
-   syntax match StrikeoutMatch "\~\~.*\~\~"  contains=@NoSpell
-   " hi link StrikeoutMatch2 HLStrikeThroughDefault
-   " syntax match StrikeoutMatch2 "::.*"  contains=@NoSpell
-   " syntax match StrikeoutMatch2 "::.*::"  contains=@NoSpell
-   " hi link GreyOutMatch HLGreyOut
-   " syntax match GreyOutMatch ";;.*"  contains=@NoSpell
-   " syntax match GreyOutMatch ";;.*;;"  contains=@NoSpell
-endfunction
-"------------------------------------------------------------------------------
+call AllFilesDefaultSyntax()
+
+hi! link shVarAssign    Operator
+" hi! link shAlias        Number
+hi! link shAlias        Define
+hi! link shLoop         Repeat
+
+call AllPathsSingleSlashStart(1)
+
+hi  link    LinuxCommands2 Identifier
+syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
+
+" create dummy region to contain paths
+syn match ShDummyRegion "^\w\+=.*" transparent
+
+" invisible/transparent group...
+syn keyword LinuxCommands tmux containedin=shIf
 

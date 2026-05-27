@@ -1,5 +1,5 @@
 "==============================================================================
-" File: sv.vim
+" File: verilog.vim
 "------------------------------------------------------------------------------
 " Description: This file adds custom syntax highlighting for all verilog and
 "              system verilog files.
@@ -33,10 +33,18 @@
 
 
 " Exit if the file was already loaded
-if exists("b:sv_loaded")
+if exists("b:verilog_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:verilog_loaded")
   finish
 endif
-let b:sv_loaded = 1
+let b:verilog_loaded = 1
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+call AllFilesDefaultSyntax()
 
 " Keep autoindent, but remove cindent
 " set nocindent

@@ -32,18 +32,30 @@
 
 
 " Exit if the file was already loaded
-if exists("b:lean_loaded")
+if exists("b:lean_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:lean_loaded")
   finish
 endif
 let b:lean_loaded = 1
+" echom "Lean syntax file loaded"
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+source $vim_folder_path/after/syntax/shared/math_mappings.vim
+source $vim_folder_path/after/syntax/shared/unicode.vim
+
+call AllFilesDefaultSyntax()
 
 
 if !has('nvim')
-   if exists("b:spell_check_en") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
+   if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
       setlocal spelllang+=lean
    endif
 else
-   if exists("b:spell_check_en") && filereadable(expand($nvim_spell_path . "/lean.utf-8.spl"))
+   if exists("b:spell_loaded") && filereadable(expand($nvim_spell_path . "/lean.utf-8.spl"))
       setlocal spelllang+=lean
    endif
 endif
@@ -99,25 +111,23 @@ syn keyword LeanKeywords12    contradiction rfl let tauto simp_rw rwa
 syn keyword LeanKeywords12    squeeze_simp calc by
 
 
-if !exists("b:all_pre_loaded")
-   call AllOperators()
-   call AllEqualities()
-   call AllArrows()
-   call AllSpecial()
-   call AllSeparators()
-   call AllSlashes()
-   call AllParenBr()
-   call AllCaps()
-   call AllDefineHash()
-   call AllDefineDollar()
-   call AllDefineTick()
-   call AllDefineAt()
-   call AllLabel()
-   call AllSpecifiersInQuotes()
-   call AllNumbers()
-   call AllTime()
-   call AllTruth()
-   call AllCommentLeaderTop()
-   call AllMultiLineComment()
-endif
+call AllOperators()
+call AllEqualities()
+call AllArrows()
+call AllSpecial()
+call AllSeparators()
+call AllSlashes()
+call AllParenBr()
+call AllCaps()
+call AllDefineHash()
+call AllDefineDollar()
+call AllDefineTick()
+call AllDefineAt()
+call AllLabel()
+call AllSpecifiersInQuotes()
+call AllNumbers()
+call AllTime()
+call AllTruth()
+call AllCommentLeaderTop()
+call AllMultiLineComment()
 

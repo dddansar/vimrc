@@ -1,8 +1,7 @@
 "==============================================================================
-" File: bash.vim
+" File: svn.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting and abbreviations
-"              for all bash files.
+" Description: This file adds custom syntax highlighting svn.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,23 +31,32 @@
 "==============================================================================
 
 
+" WARNING: Having this guard will cause the colors to not update...
 " Exit if the file was already loaded
-if exists("b:bash_loaded")
-  finish
-endif
-let b:bash_loaded = 1
+" if exists("b:svn_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" " if exists("b:svn_loaded")
+"   finish
+" endif
+" let b:svn_loaded = 1
 
-hi! link shVarAssign    Operator
-" hi! link shAlias        Number
-hi! link shAlias        Define
-hi! link shLoop         Repeat
+" source $vim_folder_path/more_colors.vim
+" source $vim_folder_path/syntax_library.vim
+" source $vim_folder_path/regex.vim
+" source $vim_folder_path/abbrev.vim
 
-call AllPathsSingleSlashStart(1)
+" call AllFilesDefaultSyntax()
 
-hi  link    LinuxCommands2 Identifier
-syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
+" Prevent these files from getting loaded as they are not needed
+let b:more_colors_loaded=1
+let b:syntax_library_loaded=1
+let b:regex_loaded=1
+let b:AllFilesDefaultSyntax_loaded=1
+let b:abbrev_loaded=1
 
-" create dummy region to contain paths
-syn match ShDummyRegion "^\w\+=.*" transparent
-
+hi! link svnDelimiter   Comment
+hi! link svnModified    Function
+hi! link svnAdded       Operator
+hi! link svnRemoved     Constant
+hi! link svnRenamed     Conditional
+hi! link svnSummary     Normal
 

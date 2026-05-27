@@ -1,7 +1,7 @@
 "==============================================================================
-" File: pl.vim
+" File: tcl.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all perl files.
+" Description: This file adds custom syntax highlighting for all tcl files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,28 +32,24 @@
 
 
 " Exit if the file was already loaded
-if exists("b:pl_loaded")
+if exists("b:tcl_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:tcl_loaded")
   finish
 endif
-let b:pl_loaded = 1
+let b:tcl_loaded = 1
 
-" hi  link  PlKeywords1 Statement
-" syn keyword PlKeywords1    sub my use
-"
-" hi  link  PlKeywords2 Statement
-" syn keyword PlKeywords2    printf print exists
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
 
-call AllParenBr()
+call AllFilesDefaultSyntax()
+
+call AllDefineDollar()
+call AllOperators()
+call AllShiftOp()
 call AllEqualities()
-" call AllOperators()
-" call AllArrows()
-" call AllDefineDollar()
-" call AllDefineAt()
-" call RegexMatches()
-
-hi  link    PlEquality    Operator
-syn match   PlEquality    "=\%(pod\|cut\)\@!"
-
-hi  link    PlDefineAnd   Function
-syn match   PlDefineAnd   "^\s*&\w\+"
+call AllParenBr()
+call AllArrows()
+call AllSeparators()
 

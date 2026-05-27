@@ -1,7 +1,7 @@
 "==============================================================================
-" File: py.vim
+" File: rcf.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all python files.
+" Description: This file adds custom syntax highlighting for all rcf files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,15 +32,21 @@
 
 
 " Exit if the file was already loaded
-if exists("b:py_loaded")
+if exists("b:rcf_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:rcf_loaded")
   finish
 endif
-let b:py_loaded = 1
+let b:rcf_loaded = 1
 
-call AllOperators()
-call AllShiftOp()
-call AllEqualities()
-call AllParenBr()
-call AllArrows()
-call AllSeparators()
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
 
+call AllFilesDefaultSyntax()
+
+
+hi  link  AllPreNumbers1   Number
+syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
+
+call AllDefineAt()

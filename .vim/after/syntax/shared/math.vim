@@ -715,5 +715,3 @@ inorea <buffer> _lnxa      ln∣(x+a)/(x-a)∣<left><right><c-r>=Eatchar('\s')<c
 " Alligation is a method of calculating weighted averages
 inorea <buffer> _allig     w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _weight    w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
-
-

@@ -1,7 +1,8 @@
 "==============================================================================
-" File: rcf.vim
+" File: csh.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all rcf files.
+" Description: This file adds custom syntax highlighting and abbreviations
+"              for all csh files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -32,13 +33,11 @@
 
 
 " Exit if the file was already loaded
-if exists("b:rcf_loaded")
+if exists("b:csh_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:csh_loaded")
   finish
 endif
-let b:rcf_loaded = 1
+let b:csh_loaded = 1
 
+source $vim_folder_path/after/syntax/sh.vim
 
-hi  link  AllPreNumbers1   Number
-syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
-
-call AllDefineAt()

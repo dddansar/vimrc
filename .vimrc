@@ -58,6 +58,9 @@ let mapleader="\<space>"
 " File is large if over 500MB.
 let g:LargeFile = 1024 * 1024 * 500
 
+" Disable generation of the .netrwhist file when opening a folder
+let g:netrw_dirhistmax = 0
+
 
 " NOTE: Controls the syntax highlightings in all files.
 " If set to 0 will use the default Vim syntax with the pablo colorscheme.
@@ -330,7 +333,6 @@ function! CommonSettings()
             endif
             set lines=47          " Height
             set columns=130       " Width
-            " set columns=120       " Width
          else
             if !has('nvim')
                set guifont=Monospace\ 20
@@ -549,8 +551,8 @@ function! DefaultSettings()
    " by filetype plugins therefore using an autogroup instead.
    " set formatoptions-=cro
    augroup format_options
-      au!
-      au FileType * setlocal formatoptions-=cro
+      autocmd!
+      autocmd FileType * setlocal formatoptions-=cro
    augroup END
 
    "---------------------------------------------------------------------------
@@ -737,10 +739,10 @@ function! DefaultSettings()
    "---------------------------------------------------------------------------
    if !exists("g:AutocorrectLoaded") && g:use_autocorrect
       if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
-         so $vim_folder_path/autocorrect/autocorrect3.vim
+         source $vim_folder_path/autocorrect/autocorrect3.vim
       endif
       if filereadable(expand($vim_folder_path . "/autocorrect/wordlist.vim"))
-         so $vim_folder_path/autocorrect/wordlist.vim
+         source $vim_folder_path/autocorrect/wordlist.vim
       endif
       let g:AutocorrectLoaded=1
    endif
@@ -756,7 +758,7 @@ function! DefaultSettings()
    " g:select_custom_syntax >= 2.
    "---------------------------------------------------------------------------
    if !exists("g:SyntaxLoaded")
-      so $vim_folder_path/syntax/custom_syntax.vim
+      source $vim_folder_path/syntax/custom_syntax.vim
       let g:SyntaxLoaded=1
    end
    "---------------------------------------------------------------------------
@@ -768,7 +770,7 @@ function! DefaultSettings()
    " Always load file at last known cursor position
    "---------------------------------------------------------------------------
    augroup RestoreCursor
-      au!
+      autocmd!
       if g:performance_mode <= 1 && g:using_encryption == 0
          autocmd BufReadPost *
             \ let g:line = line("'\"")
@@ -788,7 +790,7 @@ function! DefaultSettings()
    " Change cursor color in insert mode.
    "---------------------------------------------------------------------------
    " augroup CursorInsert
-   "    au!
+   "    autocmd!
    "    autocmd InsertEnter * highlight Cursor guibg=grey50
    "    autocmd InsertLeave * highlight Cursor guibg=white
    " augroup END
@@ -1273,7 +1275,6 @@ function! LoadMappings()
    nnoremap <silent> <a-right> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
    nnoremap <silent> <a-left>  :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
 
-
    " Move window to a new position.
    nnoremap <a-1> :winpos 0 0<cr>
    nnoremap <a-2> :winpos 100 0<cr>
@@ -1285,6 +1286,9 @@ function! LoadMappings()
    nnoremap <a-8> :winpos 700 0<cr>
    nnoremap <a-9> :winpos 800 0<cr>
    nnoremap <a-0> :winpos 900 0<cr>
+
+   " In multi-split windows, will full-size current file.
+   nnoremap <c-space> <c-w><bar><c-w>_zz
 
    " Key mappings for termdebug debugger
    " See plugin in $VIMRUNTIME/pack/dist/opt/termdebug/plugin/termdebug.vim
@@ -1302,9 +1306,6 @@ function! LoadMappings()
    " NOTE: you can change the color of breakpoints with:
    " highlight debugBreakpoint guibg=green guifg=white
    " highlight debugBreakpointDisabled guibg=blue guifg=white
-
-   " In multi-split windows, will full-size current file.
-   nnoremap <c-space> <c-w><bar><c-w>_zz
 
    " Zoom in/out.
    nnoremap <c-middlemouse> :LargerFont<cr>
@@ -1475,8 +1476,8 @@ function! LoadMappings()
    nnoremap <leader>j5 83%
 
    " Enable disable spell checking.
-   nnoremap <leader>sc  :so ~/.vim/spell.vim<cr>:syntax spell notoplevel<cr>
-   nnoremap <leader>ss  :so ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sc  :source ~/.vim/spell.vim<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>ss  :source ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
    nnoremap <leader>sn :setlocal nospell<cr>
 
 
@@ -1555,7 +1556,11 @@ endfun
 "              giving you issues.
 "------------------------------------------------------------------------------
 function! SynGroup()
-    return synIDattr(synID(line('.'),col('.'),1),'name') . ' ' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name')
+   " l:synID gives you the actual syntax group name, even if transparent.
+   let l:synID = synID(line('.'), col('.'), 0)
+    " l:transID follows the syntax groups to get the effective highlight group.
+   let l:transID = synID(line('.'), col('.'), 1)
+   return synIDattr(l:synID, 'name') . ' ' . synIDattr(synIDtrans(l:transID), 'name')
 endfunction
 
 
@@ -1596,8 +1601,8 @@ if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_select
    let g:visual_copied = 0
    let g:visual_timer = -1
    augroup CopyOnVisualHold
-      au!
-      au CursorMoved * call s:visual_hold_reset()
+      autocmd!
+      autocmd CursorMoved * call s:visual_hold_reset()
    augroup END
 endif
 
@@ -1662,4 +1667,10 @@ augroup MainFunction
    autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |
       \ let g:en_custom_syntax_loaded = 1 | call DefaultSettings() | endif
 augroup END
+
+" Adding this to prevent premature loading of files in .vim/syntax/after/
+" Files in .vim/syntax/after/ were getting double loaded. But I need to
+" block out the first loading before vimrc is loaded otherwise some syntax
+" settings from sourced functions were not being applied properly.
+let g:vimrc_loaded=1
 

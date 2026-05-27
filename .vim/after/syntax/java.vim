@@ -32,10 +32,18 @@
 
 
 " Exit if the file was already loaded
-if exists("b:java_loaded")
+if exists("b:java_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:java_loaded")
   finish
 endif
 let b:java_loaded = 1
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+call AllFilesDefaultSyntax()
 
 
 hi  link    JavaKeywords Statement

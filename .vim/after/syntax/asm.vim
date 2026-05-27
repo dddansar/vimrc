@@ -33,10 +33,19 @@
 
 
 " Exit if the file was already loaded
-if exists("b:asm_loaded")
+if exists("b:asm_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:asm_loaded")
   finish
 endif
 let b:asm_loaded = 1
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+call AllFilesDefaultSyntax()
+
 
 " Keep autoindent, but remove cindent
 set nocindent
@@ -163,18 +172,6 @@ syn keyword AsmArithm  b j jal jr syscall
 " Conditional Control Flow Instructions
 syn keyword AsmArithm  beq bne blt ble bgt bge bltu bleu bgtu bgeu
 "-----------------------------------------------------------
-
-
-
-
-
-"------------------------------------------------------------------------------
-" Intel instruction set list
-" https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-instruction-set-reference-manual-325383.pdf
-" https://en.wikipedia.org/wiki/X86_instruction_listings
-" https://cs.wellesley.edu/~cs342/fall12/papers/isa.pdf
-" https://docs.oracle.com/cd/E53394_01/html/E54851/ennbz.html
-"------------------------------------------------------------------------------
 
 
 "------------------------------------------------------------------------------
@@ -969,4 +966,8 @@ syn match AsmLabel "\.\w\+\>" contains=@NoSpell
 
 hi  link    AsmMain NonText
 syn keyword AsmMain main Main
+
+" Highlight Note keyword
+hi  link    AsmNote  AllHLNote
+syn keyword AsmNote  NOTE Note containedin=.*Comment.*
 

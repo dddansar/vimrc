@@ -32,17 +32,33 @@
 
 
 " Exit if the file was already loaded
-if exists("b:txt_loaded")
+if exists("b:txt_loaded") || !exists("g:vimrc_loaded") " prevent double load
+" if exists("b:txt_loaded")
   finish
 endif
 let b:txt_loaded = 1
+" echom "Text syntax file loaded"
+
+source $vim_folder_path/more_colors.vim
+source $vim_folder_path/syntax_library.vim
+source $vim_folder_path/regex.vim
+source $vim_folder_path/abbrev.vim
+
+source $vim_folder_path/strikethrough.vim
+source $vim_folder_path/after/syntax/shared/spell.vim
+" Apply spell checking everywhere in text files.
+syntax spell toplevel
+
+call AllFilesDefaultSyntax()
+
 
 " smartindent in Vim is an indentation option that provides automatic
 " indentation when starting a new line.
 setlocal nosmartindent
 
 " Keep autoindent, but remove cindent
-set nocindent
+setlocal nocindent
+
 
 " Match parenthesis
 hi  link    TxtParen     Function
@@ -90,11 +106,11 @@ syntax match TxtTitles3 "^\s*### .*"
 syntax match TxtTitles4 "^\s*#### .*"
 syntax match TxtTitles5 "^\s*##### .*"
 
-hi  link    TxtSlash    Operator
-syn match   TxtSlash    "/"
+hi  link    TxtOperators    Operator
+syn match   TxtOperators    "[$–]"
 
 " Call syntax functions
-if !exists("b:all_pre_loaded")
+" if !exists("b:all_pre_loaded")
    call AllOperators()
    call AllEqualities()
    call AllArrows()
@@ -103,10 +119,12 @@ if !exists("b:all_pre_loaded")
    " call AllWebsites(0)
    call AllLabel()
    call AllNumbers()
-endif
+" endif
 call AllSlashes()
+call StrikeoutEn()
 call AllCommentLeader()
 call AllHLWords()
+call AllTitlesNotContained()
 
 " Match 1) A) (2) (B)...
 "------------------------------------------------------------------------------
