@@ -32,9 +32,16 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:linux_loaded")
-  finish
+" if exists("b:linux_loaded")
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "linux.vim syntax file loaded"
 endif
 let b:linux_loaded = 1
 

@@ -32,19 +32,28 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:verilog_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:verilog_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "verilog.vim syntax file loaded"
 endif
 let b:verilog_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "verilog"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
+endif
 
 " Keep autoindent, but remove cindent
 " set nocindent
@@ -69,13 +78,16 @@ syn keyword SvKeywords4 constraint weight goal comment at_least auto_bin_max cro
 hi  link    SvKeywords5 Structure
 syn keyword SvKeywords5  struct union enum
 
-call AllTime()
-call AllOperators()
-call AllShiftOp()
-call AllEqualities()
-call AllParenBr()
-call AllArrows()
-call AllSeparators()
-call AllDefineTick()
-call AllLabel()
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "verilog"
+   call AllTime()
+   call AllOperators()
+   call AllShiftOp()
+   call AllEqualities()
+   call AllParenBr()
+   call AllArrows()
+   call AllSeparators()
+   call AllDefineTick()
+   call AllLabel()
+endif
 

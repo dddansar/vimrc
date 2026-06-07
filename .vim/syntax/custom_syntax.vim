@@ -93,11 +93,6 @@ augroup SetFiletypeComment
    autocmd FileType man,nroff                                                    let b:comment_leader = '.\"'
    autocmd FileType mermaid                                                      let b:comment_leader = '%%'
 
-   " I like to use // as comments in text files.
-   autocmd FileType text                                                         let b:comment_leader = '//'
-   " Add comments for lean.
-   autocmd BufNewFile,BufRead *lean.txt,*.lean                                   let b:comment_leader = '--'
-
    " Same idea as comment_leader above but with multi-line comments.
    autocmd FileType c,cpp,cs,java,javascript,typescript,swift,kotlin,go,rust,php,css,scala,dart,groovy,sql,d,verilog,systemverilog,vhdl let b:multi_line_comment_start = '\/\*' | let b:multi_line_comment_end = '\*\/'
  " autocmd FileType python       let b:multi_line_comment_start = "'''"    | let b:multi_line_comment_end = "'''"
@@ -111,14 +106,6 @@ augroup SetFiletypeComment
    autocmd FileType nim          let b:multi_line_comment_start = '#\['    | let b:multi_line_comment_end = '\]#'
    autocmd FileType ocaml,fsharp let b:multi_line_comment_start = '(\*'    | let b:multi_line_comment_end = '\*)'
    autocmd FileType powershell   let b:multi_line_comment_start = '<#'     | let b:multi_line_comment_end = '#>'
-
-   autocmd BufNewFile,BufRead *lean.txt,*.lean let b:multi_line_comment_start = '\/-' | let b:multi_line_comment_end = '-\/'
-
-   " Set spell checking variable if spell checking enable
-   " autocmd BufNewFile,BufRead *.txt,*.rtf,*.tex let b:spell_loaded=1 | setlocal spell
-
-   " Apply spell checking everywhere in text files.
-   " autocmd FileType text syntax spell toplevel
 
    autocmd FileType * let b:SetFiletypeComment_loaded = 1
 
@@ -145,10 +132,6 @@ augroup EnCustomSyntax
    " NOTE: Vim determines which syntax file to load based on the file:
    "       $VIMRUNTIME/filetype.vim
 
-   " WARNING: A delay may be noticed after setting "syntax on". This delay is
-   "          the disk I/O time spent sourcing the selected files below.
-
-
    if g:select_custom_syntax >= 2 && g:select_custom_syntax < 5
 
       " Apply these settings to all files by default
@@ -159,9 +142,6 @@ augroup EnCustomSyntax
       " Contains a library of syntax functions.
       autocmd BufNewFile,BufRead * if !exists("b:syntax_library_loaded") | source $vim_folder_path/syntax_library.vim | endif
 
-      " Contains a library or regular expressions functions.
-      autocmd BufNewFile,BufRead * if !exists("b:regex_loaded") | source $vim_folder_path/regex.vim | endif
-
       " Adds additional syntax matching for various filetypes.
       autocmd BufNewFile,BufRead * if !exists("b:AllFilesDefaultSyntax_loaded") | if exists('*AllFilesDefaultSyntax') | call AllFilesDefaultSyntax() | endif | endif
 
@@ -169,25 +149,10 @@ augroup EnCustomSyntax
       autocmd BufNewFile,BufRead * if !exists("b:abbrev_loaded") | source $vim_folder_path/abbrev.vim | endif
       "---------------------------------------------------------------------
 
-      " Add custom syntax for files that use math symbols.
-      autocmd BufNewFile,BufRead math_mappings.vim source $vim_folder_path/after/syntax/shared/math_mappings.vim
-
-      " Add custom syntax for files that use unicode chars.
-      " autocmd BufNewFile,BufRead math_mappings.vim,math.vim,unicode.vim,*.uni.txt source $vim_folder_path/after/syntax/shared/unicode.vim
-
-      " Add custom syntax for files that use math symbols.
-      " autocmd BufNewFile,BufRead *.uni.txt source $vim_folder_path/after/syntax/shared/math.vim
-
-      " NOTE: all_colors.vim contains a list of all colors colorized!
-      " Moved deliberately at the end as I want to clear all syntax first.
-      autocmd BufNewFile,BufRead all_colors.vim source $vim_folder_path/colors/all_colors.vim
-
-      " Add custom syntax for claude_history.txt
-      autocmd BufNewFile,BufRead claude_history*.txt if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif | setlocal nospell
-
    endif
-
    "===========================================================================
 
 augroup END
+
+let b:custom_syntax_loaded = 1
 

@@ -31,14 +31,27 @@
 "==============================================================================
 
 
+" NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
+" Common containedin cluster for all path matches
+syn cluster ClusterAllPathsCI contains=.*Comment.*,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,SpVimString1,SpVimString2,cshSnglQuote
+
+" NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
+hi  link    AllCommentsLine      Comment
+hi  link    AllComments          Comment
+hi  link    AllCommentsMulti     Comment
+hi  link    AllCommentsMultiLine Comment
+
+" Just in case another file has it set to ignore (like with markdown files)...
+syn case match
+
+
+" NOTE: had to remove otherwise syn cluster ClusterAllPathsCI was not working
 " Exit if the file was already loaded
 if exists("b:syntax_library_loaded")
-  finish
+   finish
 endif
 let b:syntax_library_loaded = 1
-
-" Just in case another file has it set to ignore...
-syn case match
+" echom "syntax library file loaded"
 
 
 " NOTE:
@@ -265,7 +278,7 @@ endfunction
 "------------------------------------------------------------------------------
 
 
-" Match CAPITAL words.
+" Match UPPERCASE words.
 "------------------------------------------------------------------------------
 function! AllCaps()
    if g:performance_mode <= 1
@@ -356,19 +369,15 @@ endfunction
 
 " Match paths
 "------------------------------------------------------------------------------
-
-" Common containedin cluster for all path matches
-syn cluster ClusterAllPathsCI contains=.*Comment.*,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,SpVimString1,SpVimString2,cshSnglQuote
-
+" Matches paths that start with / or ./ or ../ or ~/
 function! AllPaths1(contained_en)
    " NOTE: using \n insead of $ fixes an issue of matches extending comments
    " to the next line...
 
    " NOTE: added a cluster so that I can add specific groups later!
-   " Match ~/path/file or /path/file or ./$path/file or ../path/ or /a/b or
-   " ~/path/file.ext or /path/file.ext or ./$path/file.ext or /a/b/c/d/e/f.g
-   " Match ~/path/file/ or /path/file/ or ./$path/file/ or ../path/ or /a/b/ or
-   " ~/path/file.ext/ or /path/file.ext/ or ./$path/file.ext/ or /a/b/c/d/e/f.g/
+   " Match ~/path/file or /path/file or ./$path/file or ../path/file or /a/b or
+   " ~/path/file.ext or /path/file.ext or ./$path/file.ext or /a/b/c/d/e/f.g or
+   " ~/path/path/ or /path/path/ or ./$path/path/ or ../path/path/ or /a/b/c/d/
    " Don't match /word or /2 or /(2/32) but match /2/32 and /2(2/32)
    " The [!#-&*-+--.0-9?-Z^-z~] matches all ASCII characters except \ / ' " , ; : = | <> () {} []
    " The [!#-&(-+--.0-9?-[\]-z~] matches all ASCII characters except \ / ' " , ; : = <> {}
@@ -388,9 +397,9 @@ function! AllPaths1(contained_en)
    endif
 endfunction
 
-" AllPaths2 has the worst performance profiling of all the paths functions...
-" and that because it can match almost any ASCII character at the start whereas
-" others have a fixed number of starting options...
+" WARNING: AllPaths2 has the worst performance profiling of all the paths
+" functions... and that is because it can match almost any ASCII character at
+" the start whereas others have a fixed number of starting options...
 function! AllPaths2(contained_en)
    " No ~/ or / or ./ at start as that is covered in AllPaths1 but must end with
    " a file extension like in $USER/path/file.ext or a/b/c.txt or a slash like
@@ -555,16 +564,8 @@ endfunction
 
 " Add comments for files that don't have any.
 "------------------------------------------------------------------------------
-hi  link    AllCommentsLine      Comment
-hi  link    AllComments          Comment
-hi  link    AllCommentsMulti     Comment
-hi  link    AllCommentsMultiLine Comment
-
 " cluster ClusterAllCommentsCS is empty?
 function! AllCommentLeader()
-   if !exists('b:SetFiletypeComment_loaded')
-      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
-   endif
    if exists("b:comment_leader")
       " Matches comments if it's the first character on the line.
       execute 'syn match AllCommentsLine  +^\s*' . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
@@ -575,9 +576,6 @@ endfunction
 
 " Matches comments starting from anywhere on the line.
 function! AllCommentLeaderTop()
-   if !exists('b:SetFiletypeComment_loaded')
-      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
-   endif
    if exists("b:comment_leader")
       execute 'syn match AllComments      +'     . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
    endif
@@ -585,9 +583,6 @@ endfunction
 
 " Multi-line Comments.
 function! AllMultiLineComment()
-   if !exists('b:SetFiletypeComment_loaded')
-      doautocmd SetFiletypeComment BufNewFile,BufRead,FileType
-   endif
    if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
       " Matches multi-line comments if it's the first character on the line.
       execute 'syn region AllCommentsMultiLine start="^\s*' . b:multi_line_comment_start .  '" end="' . b:multi_line_comment_end . '"    contains=@ClusterAllCommentsCS'

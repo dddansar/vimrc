@@ -63,16 +63,20 @@ let g:netrw_dirhistmax = 0
 
 
 " NOTE: Controls the syntax highlightings in all files.
-" If set to 0 will use the default Vim syntax with the pablo colorscheme.
-" If set to 1 will use the default Vim syntax with my custom colorscheme.
-"             This custom colorscheme can be found in:
-"             .vim/colors/
+" If set to 0 will use the default Vim syntax with the pablo colorscheme in
+"             addition to some of my custom syntax matching that adds
+"             additional syntax on top of the default Vim syntax matching.
+" if set to 1 will use the same settings as 0 but will turn on performance mode
+"             to disable the heavy custom syntax matchings that are known to
+"             slow down performance.
 " If set to 2 will use the default Vim syntax with my custom colorscheme in
 "             addition to some of my custom syntax matching that adds
 "             additional syntax on top of the default Vim syntax matching.
 " if set to 3 will use the same settings as 2 but will turn on performance mode
 "             to disable the heavy custom syntax matchings that are known to
 "             slow down performance.
+" If set to 4 will disable Vim's default syntax matching and will instead rely
+"             entirely on source $vim_folder_path/syntax/custom_syntax.vim
 " if set to 5 will turn syntax off entirely.
 let g:select_custom_syntax = 2
 
@@ -86,7 +90,7 @@ let g:select_custom_syntax = 2
 "         scrolling through the file.
 "         3) Generate and view the report with:
 "            :syntime report
-if g:select_custom_syntax == 3
+if g:select_custom_syntax == 3 || g:select_custom_syntax == 1
    let g:performance_mode = 1
 else
    let g:performance_mode = 0
@@ -225,22 +229,21 @@ let g:claude_batch_api = 0
 " system prompt would share a breakpoint with the oldest files.
 let g:claude_caching = 0
 " When enabled, Claude dynamically decides when and how much to use extended
-" thinking based on task complexity. Supported on Opus 4.7, Opus 4.6,
-" Sonnet 4.6 (and Opus 4.5 with a beta header - handled automatically).
+" thinking based on task complexity.
 " Note: switching thinking on/off invalidates message-level cache breakpoints;
 " system prompt and tool definition caches remain unaffected.
 let g:claude_thinking = 0
 " Effort level for adaptive thinking.
 "   "low"    - fast, minimal thinking; good for simple/chat tasks
 "   "medium" - balanced speed, cost, and quality; Anthropic's recommended
-"              default for Sonnet 4.6 agentic/coding workflows
-"   "high"   - deep reasoning; the API default on Opus 4.6 and Sonnet 4.6
-"   "xhigh"  - between high and max; available on Opus 4.7 only
-"   "max"    - maximum reasoning depth; available on Opus 4.6 only
-let g:claude_thinking_effort = 'high'
+"              default for agentic/coding workflows
+"   "high"   - deep reasoning; the API default
+"   "xhigh"  - between high and max
+"   "max"    - maximum reasoning depth
+let g:claude_thinking_effort = 'medium'
 "   "summarized" - default; returns a condensed summary of Claude's reasoning.
 "                  You are billed for full thinking tokens, not summary tokens.
-"   "omitted"    - no thinking text returned (lower bandwidth, same quality).
+"   "omitted"    - no thinking text returned.
 let g:claude_thinking_display = 'summarized'
 "------------------------------------------------------------------------------
 
@@ -297,7 +300,8 @@ function! CommonSettings()
    " Enable syntax highlighting
    "---------------------------------------------------------------------------
    if g:select_custom_syntax <= 3
-      syntax on
+      " syntax on
+      syntax enable
    endif
 
    "---------------------------------------------------------------------------
@@ -307,6 +311,7 @@ function! CommonSettings()
    " avoid a white flash when first opening new files.
    "---------------------------------------------------------------------------
    call LoadColorscheme()
+
 
    "---------------------------------------------------------------------------
    " Set the font and set the dimensions of the Vim window
@@ -362,7 +367,7 @@ endfunction
 " Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
-   if g:select_custom_syntax > 0 && filereadable(expand($vim_folder_path . "/colors/ddd_black.vim"))
+   if g:select_custom_syntax > 1 && filereadable(expand($vim_folder_path . "/colors/ddd_black.vim"))
       " The custom colorschemes are in .vim/colors/
       colorscheme ddd_black
       " colorscheme ddd_darkgrey
@@ -414,7 +419,9 @@ function! DefaultSettings()
    " Show relative path
    " set titlestring=%f
    " Show filename + modified flag
-   set titlestring=%t\ %m
+   if &titlestring ==# ''
+      set titlestring=%t\ %m
+   endif
 
    "---------------------------------------------------------------------------
    " Allows you to switch from an unsaved buffer without saving it first.
@@ -494,7 +501,8 @@ function! DefaultSettings()
    " %l: display line number, %L: display total line numbers.
    set statusline=%f%m%r
    " set statusline+=\ \ \ %{g:status_line_var}
-   set statusline+=\ \ \ %{SynGroup()}
+   " set statusline+=\ \ \ %{SynGroup()}
+   set statusline+=\ \ \ %{SynStackGroup()}
    " set statusline+=%=%p%%\ %l/%L:%v\ %t
    set statusline+=%=\ %l/%L:%v\ %p%%
    " The update time for cursor hold, used to update g:status_line_var,
@@ -599,7 +607,7 @@ function! DefaultSettings()
    " above the cursor.
    set scrolloff=2
 
-   " Automatically reloads file if it was changed in another file.
+   " Automatically reloads file if it was changed in another window.
    set autoread
 
    " Disable swap files (used to restore changes made to buffer in case of
@@ -757,9 +765,8 @@ function! DefaultSettings()
    " highlighting groups based on the file extension whenever
    " g:select_custom_syntax >= 2.
    "---------------------------------------------------------------------------
-   if !exists("g:SyntaxLoaded")
+   if !exists("b:custom_syntax_loaded")
       source $vim_folder_path/syntax/custom_syntax.vim
-      let g:SyntaxLoaded=1
    end
    "---------------------------------------------------------------------------
    "---------------------------------------------------------------------------
@@ -822,7 +829,6 @@ function! IfDiff()
       wincmd =
    endif
 endfunction
-
 
 "------------------------------------------------------------------------------
 " Function: LoadMappings()
@@ -1072,9 +1078,9 @@ function! LoadMappings()
       noremap gh [sz=1<cr><cr>
       noremap g. ]sz=1<cr><cr>
 
-      " Add next/prev spell error to dictionary.
-      noremap zh [szg
-      noremap z. ]szg
+      " Open a spelling suggestion drop down
+      noremap zh [sEa<c-x>s
+      noremap z. ]sEa<c-x>s
    else " For qwerty
       " Go to next/prev spell error.
       nnoremap gH [s
@@ -1084,9 +1090,9 @@ function! LoadMappings()
       noremap gh [sz=1<cr><cr>
       noremap gl ]sz=1<cr><cr>
 
-      " Add next/prev spell error to dictionary.
-      noremap zl [szg
-      noremap zh ]szg
+      " Open a spelling suggestion drop down
+      noremap zl [sEa<c-x>s
+      noremap zh ]sEa<c-x>s
    endif
 
    " Autocorrect word to first match.
@@ -1275,6 +1281,12 @@ function! LoadMappings()
    nnoremap <silent> <a-right> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
    nnoremap <silent> <a-left>  :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
 
+   " In multi-split windows, will full-size current file.
+   nnoremap <c-space> <c-w><bar><c-w>_zz
+   " Will set all horizontal or vertical splits the same size.
+   nnoremap <leader>\| <c-w>=<c-w>_
+   nnoremap <leader>_ <c-w>=<c-w>\|
+
    " Move window to a new position.
    nnoremap <a-1> :winpos 0 0<cr>
    nnoremap <a-2> :winpos 100 0<cr>
@@ -1286,9 +1298,6 @@ function! LoadMappings()
    nnoremap <a-8> :winpos 700 0<cr>
    nnoremap <a-9> :winpos 800 0<cr>
    nnoremap <a-0> :winpos 900 0<cr>
-
-   " In multi-split windows, will full-size current file.
-   nnoremap <c-space> <c-w><bar><c-w>_zz
 
    " Key mappings for termdebug debugger
    " See plugin in $VIMRUNTIME/pack/dist/opt/termdebug/plugin/termdebug.vim
@@ -1476,8 +1485,8 @@ function! LoadMappings()
    nnoremap <leader>j5 83%
 
    " Enable disable spell checking.
-   nnoremap <leader>sc  :source ~/.vim/spell.vim<cr>:syntax spell notoplevel<cr>
-   nnoremap <leader>ss  :source ~/.vim/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sc  :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>ss  :source ~/.vim/after/syntax/shared/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
    nnoremap <leader>sn :setlocal nospell<cr>
 
 
@@ -1556,13 +1565,27 @@ endfun
 "              giving you issues.
 "------------------------------------------------------------------------------
 function! SynGroup()
-   " l:synID gives you the actual syntax group name, even if transparent.
+   " synID({lnum}, {col}, {trans})
+   " l:synID gives you the syntax group's number under the cursor.
+   " When {trans} is set to 0, the syntax group's number is returned, even if
+   " transparent. When {trans} is 1, any transparent groups are reduced to the
+   " underlying syntax group.
    let l:synID = synID(line('.'), col('.'), 0)
-    " l:transID follows the syntax groups to get the effective highlight group.
-   let l:transID = synID(line('.'), col('.'), 1)
-   return synIDattr(l:synID, 'name') . ' ' . synIDattr(synIDtrans(l:transID), 'name')
+   " let l:transID = synID(line('.'), col('.'), 1)
+   " if l:transFlag is 1, the syntax group under the cursor is transparent.
+   let l:transFlag = (l:synID != 0 && l:synID == synIDtrans(l:synID)) ? 1 : 0
+   " Returns the names of the syntax and highlight groups under the cursor, and
+   " also prints 1 if the syntax group under the cursor is transparent.
+   " synIDtrans() follows the syntax links to get the highlight group number.
+   " Then synIDattr() returns the group name associated with the numbers.
+   return synIDattr(l:synID, 'name') . ' ' . synIDattr(synIDtrans(l:synID), 'name') . ' ' . l:transFlag
 endfunction
-
+" Similar to SynGroup() but returns all syntax group names under the cursor.
+function! SynStackGroup()
+   " synstack() return a list of all the syntax group numbers under the cursor.
+   let l:stack = synstack(line('.'), col('.'))
+   return join(map(l:stack, 'synIDattr(v:val, "name")'), ' ') . ' ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 0)), "name")
+endfunction
 
 "------------------------------------------------------------------------------
 " Function: s:visual_hold_reset()
@@ -1665,12 +1688,6 @@ augroup MainFunction
 
    " This gets called if the file is empty and loads DefaultSettings()
    autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |
-      \ let g:en_custom_syntax_loaded = 1 | call DefaultSettings() | endif
+      \ call DefaultSettings() | endif
 augroup END
-
-" Adding this to prevent premature loading of files in .vim/syntax/after/
-" Files in .vim/syntax/after/ were getting double loaded. But I need to
-" block out the first loading before vimrc is loaded otherwise some syntax
-" settings from sourced functions were not being applied properly.
-let g:vimrc_loaded=1
 

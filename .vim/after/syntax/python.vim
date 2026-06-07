@@ -31,26 +31,35 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:python_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:python_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "python.vim syntax file loaded"
 endif
 let b:python_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "python"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
 
-call AllOperators()
-call AllShiftOp()
-call AllEqualities()
-call AllParenBr()
-call AllArrows()
-call AllSeparators()
+   call AllOperators()
+   call AllShiftOp()
+   call AllEqualities()
+   call AllParenBr()
+   call AllArrows()
+   call AllSeparators()
+endif
 
 hi  link    PythonNote  AllHLNote
 syn keyword PythonNote  NOTE containedin=.*Comment.*

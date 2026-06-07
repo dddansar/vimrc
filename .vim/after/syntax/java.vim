@@ -31,19 +31,28 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:java_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:java_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "java.vim syntax file loaded"
 endif
 let b:java_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "java"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
+endif
 
 
 hi  link    JavaKeywords Statement
@@ -64,10 +73,13 @@ syn keyword JavaConcurrent BlockingDeque BlockingQueue Callable CompletableFutur
 hi  link    JavaIO Statement
 syn keyword JavaIO Closeable DataInput DataOutput Externalizable FileFilter FilenameFilter Flushable ObjectInput ObjectInputValidation ObjectOutput ObjectStreamConstants Serializable BufferedOutputStream BufferedReader BufferedWriter ByteArrayInputStream ByteArrayOutputStream CharArrayReader CharArrayWriter Console DataInputStream DataOutputStream File FileDescriptor FileInputStream FileOutputStream FilePermission FileReader FileWriter FilterInputStream FilterOutputStream FilterReader FilterWriter InputStream InputStreamReader LineNumberInputStreamDeprecated LineNumberReader ObjectInputStream ObjectOutputStream ObjectStreamClass ObjectStreamField OutputStream OutputStreamWriter PipedInputStream PipedOutputStream PipedReader PipedWriter PrintStream PrintWriter PushbackInputStream PushbackReader RandomAccessFile Reader SequenceInputStream SerializablePermission StreamTokenizer StringBufferInputStreamDeprecated StringReader StringWriter Writer EOFException FileNotFoundException InterruptedIOException InvalidClassException InvalidObjectException IOException NotActiveException NotSerializableException ObjectStreamException OptionalDataException StreamCorruptedException SyncFailedException UncheckedIOException UnsupportedEncodingException UTFDataFormatException WriteAbortedException IOError
 
-call AllOperators()
-call AllShiftOp()
-call AllEqualities()
-call AllParenBr()
-call AllArrows()
-call AllSeparators()
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "java"
+   call AllOperators()
+   call AllShiftOp()
+   call AllEqualities()
+   call AllParenBr()
+   call AllArrows()
+   call AllSeparators()
+endif
 

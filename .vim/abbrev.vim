@@ -34,7 +34,7 @@
 
 " Exit if the file was already loaded
 if exists("b:abbrev_loaded")
-  finish
+   finish
 endif
 let b:abbrev_loaded = 1
 

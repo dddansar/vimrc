@@ -32,22 +32,31 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:markdown_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:markdown_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "markdown.vim syntax file loaded"
 endif
 let b:markdown_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
-source $vim_folder_path/after/syntax/shared/spell.vim
-" Apply spell checking everywhere in text files.
-syntax spell toplevel
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "markdown"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/after/syntax/shared/spell.vim
+   " Apply spell checking everywhere in text files.
+   syntax spell toplevel
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
+endif
 
 
 hi! link markdownCodeBlock StorageClass
@@ -69,16 +78,18 @@ syntax match TxtTitles3 "^\s*### .*"
 syntax match TxtTitles4 "^\s*#### .*"
 syntax match TxtTitles5 "^\s*##### .*"
 
-" Call syntax functions
-" call AllOperators()
-call AllEqualities()
-call AllArrows()
-call AllSeparators2()
-call AllParenBr()
-" call AllWebsites(0)
-" call AllEmails(0)
-call AllLabel()
-call AllNumbers()
-" call AllSlashes()
-" call AllHLWords()
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "markdown"
+   " call AllOperators()
+   call AllEqualities()
+   call AllArrows()
+   call AllSeparators2()
+   call AllParenBr()
+   " call AllWebsites(0)
+   " call AllEmails(0)
+   call AllLabel()
+   call AllNumbers()
+   " call AllSlashes()
+   " call AllHLWords()
+endif
 

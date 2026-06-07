@@ -31,23 +31,34 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:lean_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:lean_loaded")
-  finish
+"    finish
+" endif
+if exists("g:debug_syntax")
+   echom "lean.vim syntax file loaded"
 endif
 let b:lean_loaded = 1
-" echom "Lean syntax file loaded"
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+if !exists("b:current_syntax") || b:current_syntax == ""
+   let b:current_syntax = "lean"
+endif
 
-source $vim_folder_path/after/syntax/shared/math_mappings.vim
-source $vim_folder_path/after/syntax/shared/unicode.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "lean"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   source $vim_folder_path/after/syntax/shared/math_mappings.vim
+   source $vim_folder_path/after/syntax/shared/unicode.vim
+
+   let b:comment_leader = '--'
+   let b:multi_line_comment_end = '-\/'
+   call AllFilesDefaultSyntax()
+endif
 
 
 if !has('nvim')
@@ -111,23 +122,26 @@ syn keyword LeanKeywords12    contradiction rfl let tauto simp_rw rwa
 syn keyword LeanKeywords12    squeeze_simp calc by
 
 
-call AllOperators()
-call AllEqualities()
-call AllArrows()
-call AllSpecial()
-call AllSeparators()
-call AllSlashes()
-call AllParenBr()
-call AllCaps()
-call AllDefineHash()
-call AllDefineDollar()
-call AllDefineTick()
-call AllDefineAt()
-call AllLabel()
-call AllSpecifiersInQuotes()
-call AllNumbers()
-call AllTime()
-call AllTruth()
-call AllCommentLeaderTop()
-call AllMultiLineComment()
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "lean"
+   call AllOperators()
+   call AllEqualities()
+   call AllArrows()
+   call AllSpecial()
+   call AllSeparators()
+   call AllSlashes()
+   call AllParenBr()
+   call AllCaps()
+   call AllDefineHash()
+   call AllDefineDollar()
+   call AllDefineTick()
+   call AllDefineAt()
+   call AllLabel()
+   call AllSpecifiersInQuotes()
+   call AllNumbers()
+   call AllTime()
+   call AllTruth()
+   call AllCommentLeaderTop()
+   call AllMultiLineComment()
+endif
 

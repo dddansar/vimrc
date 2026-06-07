@@ -31,13 +31,18 @@
 "==============================================================================
 
 
-" WARNING: Having this guard will cause the colors to not update...
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-" if exists("b:svn_loaded") || !exists("g:vimrc_loaded") " prevent double load
-" " if exists("b:svn_loaded")
-"   finish
+" if exists("b:svn_loaded")
+"    finish
 " endif
-" let b:svn_loaded = 1
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "svn.vim syntax file loaded"
+endif
+let b:svn_loaded = 1
 
 " source $vim_folder_path/more_colors.vim
 " source $vim_folder_path/syntax_library.vim

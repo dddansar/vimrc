@@ -31,22 +31,33 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:rcf_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:rcf_loaded")
-  finish
+"    finish
+" endif
+if exists("g:debug_syntax")
+   echom "rcf.vim syntax file loaded"
 endif
 let b:rcf_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+if !exists("b:current_syntax") || b:current_syntax == ""
+   let b:current_syntax = "rcf"
+endif
 
-call AllFilesDefaultSyntax()
+
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "rcf"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
+
+   call AllFilesDefaultSyntax()
+   call AllDefineAt()
+endif
 
 
 hi  link  AllPreNumbers1   Number
 syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
 
-call AllDefineAt()

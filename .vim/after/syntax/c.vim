@@ -32,20 +32,29 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:c_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:c_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "c.vim syntax file loaded"
 endif
 let b:c_loaded = 1
 " echom "C syntax file loaded"
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "c"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
+endif
 
 
 hi  link  CKeywords     Statement
@@ -83,10 +92,15 @@ syn match   CppStd      "\<\%(std::\)\?\%(string\|vector\|map\|variant\|optional
 syn match   CppStd      "::"
 
 
-call AllOperators()
-call AllShiftOp()
-call AllEqualities()
-call AllParenBr()
-call AllArrows()
-call AllSeparators()
+
+
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "c"
+   call AllOperators()
+   call AllShiftOp()
+   call AllEqualities()
+   call AllParenBr()
+   call AllArrows()
+   call AllSeparators()
+endif
 

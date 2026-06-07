@@ -32,27 +32,36 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:sh_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:sh_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "sh.vim syntax file loaded"
 endif
 let b:sh_loaded = 1
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
-source $vim_folder_path/after/syntax/shared/linux.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax == "csh")
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/after/syntax/shared/linux.vim
 
-call AllFilesDefaultSyntax()
+   call AllFilesDefaultSyntax()
+   call AllPathsSingleSlashStart(1)
+endif
 
 hi! link shVarAssign    Operator
 " hi! link shAlias        Number
 hi! link shAlias        Define
 hi! link shLoop         Repeat
 
-call AllPathsSingleSlashStart(1)
 
 hi  link    LinuxCommands2 Identifier
 syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote

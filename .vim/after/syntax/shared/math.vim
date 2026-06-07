@@ -32,9 +32,16 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:math_loaded")
-  finish
+" if exists("b:math_loaded")
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "math.vim syntax file loaded"
 endif
 let b:math_loaded = 1
 
@@ -715,3 +722,5 @@ inorea <buffer> _lnxa      ln∣(x+a)/(x-a)∣<left><right><c-r>=Eatchar('\s')<c
 " Alligation is a method of calculating weighted averages
 inorea <buffer> _allig     w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _weight    w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
+
+

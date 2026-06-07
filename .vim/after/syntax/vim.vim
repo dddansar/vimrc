@@ -32,20 +32,50 @@
 "==============================================================================
 
 
+syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
+
+
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:vim_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:vim_loaded")
-  finish
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "vim.vim syntax file loaded"
 endif
 let b:vim_loaded = 1
-" echom "Vim syntax file loaded"
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "vim"
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   " NOTE: Moving these here to re-source on file/syntax reload.
+   if expand('%:t') =~ '^math_mappings\.vim$'
+      source $vim_folder_path/after/syntax/shared/math_mappings.vim
+   endif
+   if expand('%:t') =~# '\(math_mappings\|math\|unicode\)\.vim$'
+      source $vim_folder_path/after/syntax/shared/unicode.vim
+   endif
+   if expand('%:t') =~ '^all_colors\.vim$'
+      source $vim_folder_path/colors/all_colors.vim
+      finish
+   endif
+
+   " if !exists("b:AllFilesDefaultSyntax_loaded")
+   call AllFilesDefaultSyntax()
+   " endif
+
+   let b:regex_enabled = 1
+   call AllDefineAt()
+   call RegexMatches()
+   call SpRegexSearches()
+endif
 
 
 " Update the Colors of some syntax groups
@@ -59,11 +89,6 @@ hi! link vimBracket        Normal
 hi! link vimMapMod         Normal
 hi! link vimMapLeader      Normal
 hi! link vimVar            Identifier
-
-let b:regex_enabled = 1
-call AllDefineAt()
-call RegexMatches()
-call SpRegexSearches()
 
 hi  link    VimEquality  Operator
 syn match   VimEquality  "==#\?"                  contained containedin=vimMapRhs
@@ -86,7 +111,6 @@ syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
 
 "------------------------------------------------------------------------------
 " Vim default groups
-syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
 syn keyword Comment           Comment           contained containedin=@ClusterColorCI
 syn keyword Constant          Constant          contained containedin=@ClusterColorCI
 syn keyword String            String            contained containedin=@ClusterColorCI

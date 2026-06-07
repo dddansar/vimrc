@@ -33,10 +33,11 @@
 "==============================================================================
 
 
+" NOTE: removed guard as NOTE was not getting highlighted
 " Exit if the file was already loaded
-if exists("b:more_colors_loaded")
-  finish
-endif
+" if exists("b:more_colors_loaded")
+"    finish
+" endif
 let b:more_colors_loaded = 1
 
 

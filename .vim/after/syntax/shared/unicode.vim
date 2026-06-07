@@ -33,9 +33,16 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:unicode_loaded")
-  finish
+" if exists("b:unicode_loaded")
+"    finish
+" endif
+if exists("b:disable_after_syntax")
+   finish
+endif
+if exists("g:debug_syntax")
+   echom "unicode.vim syntax file loaded"
 endif
 let b:unicode_loaded = 1
 
@@ -131,7 +138,6 @@ if g:performance_mode <= 0
    " Don't spell check any unicode chars in comments:
    hi  link     UnicodeCommentColor   Comment
    syn match    UnicodeCommentColor  "[a-zA-Z]*[^ -~]\%(\S\)*"   contains=@NoSpell contained containedin=.*Comment.*
-   " syn match    UnicodeNoColor1      "[a-z]\+\%([^ -~]\)\@="   contains=@NoSpell
 
    " Highlight chars that you don't want used such as tabs:
    hi  link     UnicodeDontUse NonText
@@ -4105,9 +4111,9 @@ inorea <buffer> zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Vectors in comments
 hi  link   UnicodeVectorsCom  Comment
-syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comments.*
-syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comments.*
-syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comments.*
+syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comment.*
+syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comment.*
+syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comment.*
 
 " Vectors
 hi  link      UnicodeVectors  HLBlue
@@ -4117,7 +4123,7 @@ syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=Regex
 
 " Negation in comments
 hi  link   UnicodeNotLogicCom Comment
-syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comments.*
+syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comment.*
 
 " Negation
 hi  link      UnicodeNotLogic Constant

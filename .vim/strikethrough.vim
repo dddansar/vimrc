@@ -33,7 +33,7 @@
 
 " Exit if the file was already loaded
 if exists("b:strikethrough_loaded")
-  finish
+   finish
 endif
 let b:strikethrough_loaded = 1
 

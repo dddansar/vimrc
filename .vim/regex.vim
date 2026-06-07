@@ -32,17 +32,19 @@
 "==============================================================================
 
 
-" Exit if the file was already loaded
-if exists("b:regex_loaded")
-  finish
-endif
-let b:regex_loaded = 1
-
 if !has('nvim')
    syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString
 else " For NeoVim
    syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody
 endif
+
+
+" Exit if the file was already loaded
+if exists("b:regex_loaded")
+   finish
+endif
+let b:regex_loaded = 1
+
 
 function! RegexMatches()
    hi  link    RegexSpChars   NonText

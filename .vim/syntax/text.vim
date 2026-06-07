@@ -31,26 +31,48 @@
 "==============================================================================
 
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-if exists("b:txt_loaded") || !exists("g:vimrc_loaded") " prevent double load
 " if exists("b:txt_loaded")
-  finish
+"    finish
+" endif
+if exists("g:debug_syntax")
+   echom "text.vim syntax file loaded"
 endif
 let b:txt_loaded = 1
-" echom "Text syntax file loaded"
 
-source $vim_folder_path/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-source $vim_folder_path/regex.vim
-source $vim_folder_path/abbrev.vim
+if !exists("b:current_syntax") || b:current_syntax == ""
+   let b:current_syntax = "text"
+endif
 
-source $vim_folder_path/strikethrough.vim
-source $vim_folder_path/after/syntax/shared/spell.vim
-" Apply spell checking everywhere in text files.
-syntax spell toplevel
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "text"
+   let b:comment_leader = '//'
+   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/syntax_library.vim
+   source $vim_folder_path/regex.vim
+   source $vim_folder_path/abbrev.vim
 
-call AllFilesDefaultSyntax()
+   source $vim_folder_path/strikethrough.vim
+   source $vim_folder_path/after/syntax/shared/spell.vim
+   " Apply spell checking everywhere in text files.
+   syntax spell toplevel
 
+   " NOTE: Moving these here to re-source on file/syntax reload.
+   if expand('%:t') =~# '\.uni\.txt$'
+      source $vim_folder_path/after/syntax/shared/unicode.vim
+   endif
+   if expand('%:t') =~ '\.uni\.txt$'
+      source $vim_folder_path/after/syntax/shared/math.vim
+   endif
+   if expand('%:t') =~# '^claude_history.*\.txt$'
+      if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
+      " let b:current_syntax = "text"
+      setlocal nospell
+   endif
+
+   call AllFilesDefaultSyntax()
+endif
 
 " smartindent in Vim is an indentation option that provides automatic
 " indentation when starting a new line.
@@ -109,8 +131,9 @@ syntax match TxtTitles5 "^\s*##### .*"
 hi  link    TxtOperators    Operator
 syn match   TxtOperators    "[$–]"
 
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
-" if !exists("b:all_pre_loaded")
+if exists("b:current_syntax") && b:current_syntax == "text"
    call AllOperators()
    call AllEqualities()
    call AllArrows()
@@ -119,12 +142,12 @@ syn match   TxtOperators    "[$–]"
    " call AllWebsites(0)
    call AllLabel()
    call AllNumbers()
-" endif
-call AllSlashes()
-call StrikeoutEn()
-call AllCommentLeader()
-call AllHLWords()
-call AllTitlesNotContained()
+   call AllSlashes()
+   call StrikeoutEn()
+   call AllCommentLeader()
+   call AllHLWords()
+   call AllTitlesNotContained()
+endif
 
 " Match 1) A) (2) (B)...
 "------------------------------------------------------------------------------
@@ -137,4 +160,32 @@ syn match   TxtLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
 syn match   TxtNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
 syn match   TxtLetterParen    "\s\+([A-Z])" contains=@NoSpell
 "------------------------------------------------------------------------------
+
+" if hlexists('SpAllHLNoteNC')
+"    syn clear SpAllHLNoteNC
+"    syn clear SpAllHLViNoteNC
+"    syn clear SpAllHLTodoNC
+"    syn clear SpAllHLViTodoNC
+"    syn clear SpAllHLWarningNC
+"    syn clear SpAllHLWarningNC
+"    syn clear SpAllHLTodoNC
+"    syn clear SpAllHLViTodoNC
+" endif
+" syn match SpAllHLNoteNC    "\%(^\|.\)\<NOTE\>.\+!!!*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLNote,AllHLNote       transparent
+" syn match SpAllHLViNoteNC  "\%(^\|.\)\<VINOTE\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViNote,AllHLViNote   transparent
+" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+!!!*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLTodo,AllHLTodo       transparent
+" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViTodo,AllHLViTodo   transparent
+" syn match SpAllHLWarningNC "\%(^\|.\)\<WARNING\>.\+!!!*" contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLWarning,AllHLWarning transparent
+" syn match SpAllHLWarningNC "\%(^\|.\)\<DO NOT\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLWarning,AllHLWarning transparent
+" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+???*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLTodo,AllHLTodo       transparent
+" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+???*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViTodo,AllHLViTodo   transparent
+
+" syn match SpAllHLNoteNC    "\%(^\|.\)\<NOTE\>.\+!!!*"    contains=ALL,AllOperators
+" syn match SpAllHLViNoteNC  "\%(^\|.\)\<VINOTE\>.\+!!!*"  contains=ALL,AllOperators
+" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+!!!*"    contains=ALL,AllOperators
+" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+!!!*"  contains=ALL,AllOperators
+" syn match SpAllHLWarningNC "\%(^\|.\)\<WARNING\>.\+!!!*" contains=ALL,AllOperators
+" syn match SpAllHLWarningNC "\%(^\|.\)\<DO NOT\>.\+!!!*"  contains=ALL,AllOperators
+" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+???*"    contains=ALL,AllOperators
+" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+???*"  contains=ALL,AllOperators
 
