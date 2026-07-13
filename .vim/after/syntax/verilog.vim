@@ -40,6 +40,12 @@
 if exists("b:disable_after_syntax")
    finish
 endif
+if !exists("g:syntax_on")
+   finish
+endif
+if !isdirectory(expand($vim_folder_path))
+   finish
+endif
 if exists("g:debug_syntax")
    echom "verilog.vim syntax file loaded"
 endif

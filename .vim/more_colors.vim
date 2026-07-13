@@ -128,12 +128,14 @@ hi default HLStrikeThroughGrey     cterm=strikethrough gui=strikethrough ctermfg
 " hi link    HLBarelyVisible         HLGrey10BgB
 augroup HLBarelyVisible
    autocmd!
-   autocmd VimEnter * if g:colors_name == 'ddd_darkgrey' |
-      \ hi link HLBarelyVisible HLGrey15BgB |
+   autocmd VimEnter * if exists('g:colors_name') |
+      \ if g:colors_name == 'ddd_darkgrey' |
+      \   hi link HLBarelyVisible HLGrey15BgB |
       \ elseif &background == 'dark' |
-      \ hi link HLBarelyVisible HLGrey10BgB |
+      \   hi link HLBarelyVisible HLGrey10BgB |
       \ else |
-      \ hi link HLBarelyVisible HLGrey80BgB |
+      \   hi link HLBarelyVisible HLGrey80BgB |
+      \ endif |
       \ endif
 augroup END
 "------------------------------------------------------------------------------

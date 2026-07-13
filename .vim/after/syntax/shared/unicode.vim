@@ -41,6 +41,12 @@
 if exists("b:disable_after_syntax")
    finish
 endif
+if !exists("g:syntax_on")
+   finish
+endif
+if !isdirectory(expand($vim_folder_path))
+   finish
+endif
 if exists("g:debug_syntax")
    echom "unicode.vim syntax file loaded"
 endif
@@ -64,39 +70,39 @@ endif
 " width: The desired display width for characters within this range (typically
 "        1 or 2). Does not work with 3!
 call setcellwidths([
-                  \ [0x1100, 0x115f, 1],
-                  \ [0x2102, 0x211d, 2],
-                  \ [0x2123, 0x2134, 2],
-                  \ [0x2160, 0x218f, 2],
-                  \ [0x2205, 0x2205, 2],
-                  \ [0x22a2, 0x22af, 2],
-                  \ [0x22bf, 0x22c1, 2],
-                  \ [0x2460, 0x24ff, 2],
-                  \ [0x2776, 0x2793, 2],
-                  \ [0x27c0, 0x27c4, 2],
-                  \ [0x27c8, 0x27de, 2],
-                  \ [0x27f0, 0x27ff, 2],
-                  \ [0x29b0, 0x29f4, 2],
-                  \ [0x2a01, 0x2a04, 2],
-                  \ [0x2a07, 0x2a0c, 2],
-                  \ [0x2b1f, 0x2b2d, 2],
-                  \ [0x2d30, 0x2d32, 2],
-                  \ [0x2d37, 0x2d67, 2],
-                  \ [0x3008, 0x300b, 2],
-                  \ [0xa4e5, 0xa4e6, 2],
-                  \ [0xd7b0, 0xe090, 2],
-                  \ [0xe200, 0xec0f, 2],
-                  \ [0xfe50, 0xfe6b, 1],
-                  \ [0x10300, 0x1037f, 2],
-                  \ [0x1d109, 0x1d10a, 2],
-                  \ [0x1d360, 0x1d7ff, 2],
-                  \ [0x1f110, 0x1f16f, 2],
-                  \ [0x1f568, 0x1f5ff, 2],
-                  \ [0x1f700, 0x1f7d7, 2],
-                  \ [0x1f850, 0x1f850, 2],
-                  \ [0x1f852, 0x1f852, 2],
-                  \ [0x1f858, 0x1f858, 2],
-                  \])
+         \ [0x1100, 0x115f, 1],
+         \ [0x2102, 0x211d, 2],
+         \ [0x2123, 0x2134, 2],
+         \ [0x2160, 0x218f, 2],
+         \ [0x2205, 0x2205, 2],
+         \ [0x22a2, 0x22af, 2],
+         \ [0x22bf, 0x22c1, 2],
+         \ [0x2460, 0x24ff, 2],
+         \ [0x2776, 0x2793, 2],
+         \ [0x27c0, 0x27c4, 2],
+         \ [0x27c8, 0x27de, 2],
+         \ [0x27f0, 0x27ff, 2],
+         \ [0x29b0, 0x29f4, 2],
+         \ [0x2a01, 0x2a04, 2],
+         \ [0x2a07, 0x2a0c, 2],
+         \ [0x2b1f, 0x2b2d, 2],
+         \ [0x2d30, 0x2d32, 2],
+         \ [0x2d37, 0x2d67, 2],
+         \ [0x3008, 0x300b, 2],
+         \ [0xa4e5, 0xa4e6, 2],
+         \ [0xd7b0, 0xe090, 2],
+         \ [0xe200, 0xec0f, 2],
+         \ [0xfe50, 0xfe6b, 1],
+         \ [0x10300, 0x1037f, 2],
+         \ [0x1d109, 0x1d10a, 2],
+         \ [0x1d360, 0x1d7ff, 2],
+         \ [0x1f110, 0x1f16f, 2],
+         \ [0x1f568, 0x1f5ff, 2],
+         \ [0x1f700, 0x1f7d7, 2],
+         \ [0x1f850, 0x1f850, 2],
+         \ [0x1f852, 0x1f852, 2],
+         \ [0x1f858, 0x1f858, 2],
+         \])
 " See also :help ambiwidth
 " The ambiwidth option in Vim controls how ambiguous-width characters are
 " displayed. (such as Euro, Registered Sign, Copyright Sign, Greek letters,

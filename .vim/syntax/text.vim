@@ -30,6 +30,12 @@
 " SOFTWARE.
 "==============================================================================
 
+if !exists("g:syntax_on")
+  finish
+endif
+if !isdirectory(expand($vim_folder_path))
+   finish
+endif
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
@@ -38,6 +44,9 @@
 " endif
 if exists("g:debug_syntax")
    echom "text.vim syntax file loaded"
+endif
+if !exists("g:syntax_on")
+  finish
 endif
 let b:txt_loaded = 1
 
@@ -64,11 +73,6 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    endif
    if expand('%:t') =~ '\.uni\.txt$'
       source $vim_folder_path/after/syntax/shared/math.vim
-   endif
-   if expand('%:t') =~# '^claude_history.*\.txt$'
-      if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
-      " let b:current_syntax = "text"
-      setlocal nospell
    endif
 
    call AllFilesDefaultSyntax()
@@ -147,6 +151,12 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllCommentLeader()
    call AllHLWords()
    call AllTitlesNotContained()
+
+   if expand('%:t') =~# '^claude_history.*\.txt$'
+      if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
+      " let b:current_syntax = "text"
+      setlocal nospell
+   endif
 endif
 
 " Match 1) A) (2) (B)...

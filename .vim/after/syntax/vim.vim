@@ -31,9 +31,9 @@
 " SOFTWARE.
 "==============================================================================
 
-
-syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
-
+if !exists("g:syntax_on")
+   finish
+endif
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
@@ -41,6 +41,9 @@ syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList
 "    finish
 " endif
 if exists("b:disable_after_syntax")
+   finish
+endif
+if !isdirectory(expand($vim_folder_path))
    finish
 endif
 if exists("g:debug_syntax")
@@ -67,14 +70,12 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
       finish
    endif
 
-   " if !exists("b:AllFilesDefaultSyntax_loaded")
    call AllFilesDefaultSyntax()
-   " endif
 
-   let b:regex_enabled = 1
    call AllDefineAt()
    call RegexMatches()
    call SpRegexSearches()
+   call AllPathsSingleSlashStart(1)
 endif
 
 
@@ -111,6 +112,7 @@ syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
 
 "------------------------------------------------------------------------------
 " Vim default groups
+syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
 syn keyword Comment           Comment           contained containedin=@ClusterColorCI
 syn keyword Constant          Constant          contained containedin=@ClusterColorCI
 syn keyword String            String            contained containedin=@ClusterColorCI

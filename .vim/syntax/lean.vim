@@ -39,6 +39,12 @@
 if exists("g:debug_syntax")
    echom "lean.vim syntax file loaded"
 endif
+if !exists("g:syntax_on")
+  finish
+endif
+if !isdirectory(expand($vim_folder_path))
+   finish
+endif
 let b:lean_loaded = 1
 
 if !exists("b:current_syntax") || b:current_syntax == ""

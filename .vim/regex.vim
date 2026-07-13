@@ -31,6 +31,10 @@
 " SOFTWARE.
 "==============================================================================
 
+if !exists("g:syntax_on")
+  finish
+endif
+
 
 if !has('nvim')
    syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString

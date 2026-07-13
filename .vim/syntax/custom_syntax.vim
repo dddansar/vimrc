@@ -31,7 +31,6 @@
 " SOFTWARE.
 "==============================================================================
 
-
 "------------------------------------------------------------------------------
 " Setting b:comment_leader based on Filetype. This can then be used to
 " syntax match comments or to create comments with remappings.
@@ -111,12 +110,17 @@ augroup SetFiletypeComment
 
 augroup END
 
+if !exists("g:syntax_on")
+  finish
+endif
+if !isdirectory(expand($vim_folder_path))
+   finish
+endif
 
 "------------------------------------------------------------------------------
 " Colors and Syntax Highlighting
 "------------------------------------------------------------------------------
-" This will load all the custom syntax highlightings for all files based
-" on the file extension.
+" This will load custom syntax matching for all files.
 augroup EnCustomSyntax
 
    " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
@@ -143,7 +147,7 @@ augroup EnCustomSyntax
       autocmd BufNewFile,BufRead * if !exists("b:syntax_library_loaded") | source $vim_folder_path/syntax_library.vim | endif
 
       " Adds additional syntax matching for various filetypes.
-      autocmd BufNewFile,BufRead * if !exists("b:AllFilesDefaultSyntax_loaded") | if exists('*AllFilesDefaultSyntax') | call AllFilesDefaultSyntax() | endif | endif
+      " autocmd BufNewFile,BufRead * if !exists("b:AllFilesDefaultSyntax_loaded") | if exists('*AllFilesDefaultSyntax') | call AllFilesDefaultSyntax() | endif | endif
 
       " Add abbreviations to shorten common and repetitive text.
       autocmd BufNewFile,BufRead * if !exists("b:abbrev_loaded") | source $vim_folder_path/abbrev.vim | endif

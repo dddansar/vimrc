@@ -30,6 +30,10 @@
 " SOFTWARE.
 "==============================================================================
 
+if !exists("g:syntax_on")
+  finish
+endif
+
 
 " NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
 " Common containedin cluster for all path matches
@@ -53,6 +57,13 @@ endif
 let b:syntax_library_loaded = 1
 " echom "syntax library file loaded"
 
+" Some of the functions in this file require comment_leader to be set and this
+" file may get loaded before the SetFiletypeComment filetype autocommands
+" triggers and after filetype already got defined!
+if !exists("b:custom_syntax_loaded")
+   source $vim_folder_path/syntax/custom_syntax.vim
+end
+doautocmd SetFiletypeComment FileType
 
 " NOTE:
 " \< means beginning of word.
@@ -360,8 +371,10 @@ function! AllComLabel()
       " Matches Word1 Word2: if every word is capitalized in a comment.
       " hs=s+1 defines the highlight start for the match. hs means highlight
       " start, s start of the match, +1 offset by 1 character forward.
+      " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
+      "       not match a word ending if it's followed by :!
       hi  link    AllComLabel  PreProc
-      execute 'syn match   AllComLabel  +' . b:comment_leader . '\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+hs=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+      execute 'syn match   AllComLabel  +' . b:comment_leader . '\%(\s*\<[A-Z][a-zA-Z0-9_-]*\%(\>\|:\@=\)\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+hs=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -435,13 +448,13 @@ function! AllPathsWin(contained_en)
 endfunction
 
 function! AllPathsSingleSlashStart(contained_en)
-   " Must start with / or ~/ or ./ or ../. Identical to AllPaths1 but
-   " only matches a single slash like in ./word or /2 or ~/path or ../path.
+   " Must start with ~/ or ./ or ../. Identical to AllPaths1 but
+   " only matches a single slash like in ./word or ~/path or ../path or ~/.bash_history
    if g:performance_mode <= 0
       hi  link     AllPathsS1 Underlined
       execute 'syn match AllPathsS1 "' .
           \ '\%(^\|\s\|\%(["''(={[:;<>]\)\@<=\)' .
-          \ '\%(\~\|\.\.\?\)\?\/' .
+          \ '\%(\~\|\.\.\?\)\/' .
           \ '\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-~]\|\\ \)*' .
           \ '\%([)}\]>]\)\@<!' .
           \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" contains=@NoSpell' .
@@ -603,15 +616,17 @@ function! AllHLWords()
    hi  link    AllHLError       Exception
  " hi  link    AllHLError       HLRedBgB
 
-   syn match AllHLTodo    "\<TODO\>"    contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLNote    "\<NOTE\>"    contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLViNote  "\<VINOTE\>"  contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLViTodo  "\<VITODO\>"  contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLWarning "\<WARNING\>" contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLWarning "\<DO NOT\>"  contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLTodo    "\<FIXME\>"   contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLTodo    "\<HACK\>"    contains=@NoSpell containedin=.*Comment.*
-   syn match AllHLError   "\<ERROR\>"   contains=@NoSpell containedin=.*String.*
+   " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
+   "       not match a word ending if it's followed by :!
+   syn match AllHLTodo    "\<TODO\%(\>\|:\@=\)"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLNote    "\<NOTE\%(\>\|:\@=\)"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLViNote  "\<VINOTE\%(\>\|:\@=\)"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLViTodo  "\<VITODO\%(\>\|:\@=\)"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLWarning "\<WARNING\%(\>\|:\@=\)" contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLWarning "\<DO NOT\%(\>\|:\@=\)"  contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLTodo    "\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLTodo    "\<HACK\%(\>\|:\@=\)"    contains=@NoSpell containedin=.*Comment.*
+   syn match AllHLError   "\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*
 endfunction
 "------------------------------------------------------------------------------
 

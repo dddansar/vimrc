@@ -240,7 +240,7 @@ let g:claude_thinking = 0
 "   "high"   - deep reasoning; the API default
 "   "xhigh"  - between high and max
 "   "max"    - maximum reasoning depth
-let g:claude_thinking_effort = 'medium'
+let g:claude_thinking_effort = 'low'
 "   "summarized" - default; returns a condensed summary of Claude's reasoning.
 "                  You are billed for full thinking tokens, not summary tokens.
 "   "omitted"    - no thinking text returned.
@@ -267,10 +267,11 @@ let g:ollama_num_ctx = 4096
 
 " Select the model to use. By default this is set to claude-sonnet-4-6
 "------------------------------------------------------------------------------
+" let g:ai_model = 'claude-sonnet-5'
 let g:ai_model = 'claude-sonnet-4-6'
-" let g:ai_model = 'claude-opus-4-6'
-" let g:ai_model = 'claude-opus-4-7'
+" let g:ai_model = 'claude-opus-4-8'
 " let g:ai_model = 'claude-haiku-4-5'
+" let g:ai_model = 'claude-fable-5'
 " let g:ai_model = 'gemini-2.5-flash-lite'
 " let g:ai_model = 'gemini-2.5-flash'
 " let g:ai_model = 'gemini-3.1-flash-lite-preview'
@@ -824,7 +825,7 @@ endfunction
 
 function! IfDiff()
    if &diff
-      " windo set wrap
+      windo set wrap
       set columns=9999
       wincmd =
    endif
@@ -884,6 +885,9 @@ function! LoadMappings()
       " Paste over entire word.
       nnoremap <c-p> viwpgvy
    endif
+
+   " diff obtain entire file
+   nnoremap dO :%diffget<cr>
 
    " Paste last selected without using mouse.
    cnoremap <a-p>   <middlemouse>
@@ -1353,13 +1357,6 @@ function! LoadMappings()
    " <c-r><c-w> pastes word under cursor into command line!
    nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
 
-
-   " Reload the custom syntax highlighting groups without using syntax on
-   " and without resourcing .vimrc by reloading EnCustomSyntax instead.
-   let g:previous_custom_syntax=g:select_custom_syntax
-   nnoremap <silent> <leader>sr :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=g:previous_custom_syntax<cr>:syntax on<cr>:bufdo doautocmd EnCustomSyntax BufRead<cr>:execute 'buffer ' . g:orig_buf<cr>:doautocmd EnCustomSyntax BufRead<cr>:call LoadColorscheme()<cr>
-   " Loads the default syntax highlighting
-   nnoremap <silent> <leader>sa :let g:orig_buf=bufnr('%')<cr>:syntax clear<cr>:let g:select_custom_syntax=1<cr>:bufdo set filetype=<cr>:bufdo filetype detect<cr>:execute 'buffer ' . g:orig_buf<cr>:let g:custom_syntax_found=0<cr>:syntax on<cr>:call LoadColorscheme()<cr>
 
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
    if g:keyboard_layout == "colemak-dh"
