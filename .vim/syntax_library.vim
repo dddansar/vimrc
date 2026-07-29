@@ -34,16 +34,17 @@ if !exists("g:syntax_on")
   finish
 endif
 
+" NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
+" NOTE: These need to be above ClusterAllPathsCI or else they will not get
+"       added to the cluster since they don't exist yet!!
+hi  link    AllCommentLineStart           Comment
+hi  link    AllCommentAnywhere            Comment
+hi  link    AllMultiLineCommentLineStart  Comment
+hi  link    AllMultiLineCommentAnywhere   Comment
 
 " NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
 " Common containedin cluster for all path matches
-syn cluster ClusterAllPathsCI contains=.*Comment.*,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,SpVimString1,SpVimString2,cshSnglQuote
-
-" NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
-hi  link    AllCommentsLine      Comment
-hi  link    AllComments          Comment
-hi  link    AllCommentsMulti     Comment
-hi  link    AllCommentsMultiLine Comment
+syn cluster ClusterAllPathsCI contains=.*Comment.*,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,shFunctionExpr,shDerefPattern,SpVimString1,SpVimString2,cshSnglQuote,AllQuotes,AllQuotesLookbehind,RegexPatSepPerl
 
 " Just in case another file has it set to ignore (like with markdown files)...
 syn case match
@@ -116,14 +117,14 @@ function! AllIgnoreSpellings()
    if g:performance_mode <= 0
       " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
       hi  link     AllSpellCommColor1  Comment
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]\+\([0-9]\|[._-]\)[a-zA-Z0-9._-]*\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]*\([0-9]\|[._-]\)[a-zA-Z0-9._-]\+\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
-      syn match    AllSpellNoColor1    "\<[a-zA-Z]*\([0-9]\|[._-]\)[a-zA-Z0-9._-]*\>\('\)\@!" contains=TOP
+      syn match    AllSpellCommColor1  "\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+      syn match    AllSpellCommColor1  "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+      syn match    AllSpellNoColor1    "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on words with capital letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
-      syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-]\+\([A-Z]\)[a-zA-Z0-9._-]*\>\('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
-      syn match    AllSpellNoColor2    "\<[a-zA-Z0-9._-]\+\([A-Z]\)[a-zA-Z0-9._-]*\>\('\)\@!" contains=TOP
+      syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=.*Comment.*
+      syn match    AllSpellNoColor2    "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on functions () followed by () or arrays [] followed by [].
       " No need to match dashes or numbers or capitals as that is covered above...
@@ -256,7 +257,7 @@ function! AllSlashes()
    " messes with perl /
    if (!exists("b:comment_leader") || b:comment_leader[0] != '/') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '/')
       hi  link    AllSpChars1    Operator
-      syn match   AllSpChars1    "/"
+      syn match   AllSpChars1    "\/"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '\\') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '\\')
@@ -314,8 +315,8 @@ endfunction
 " Matches $myVariable123 and ${myVariable123}
 function! AllDefineDollar()
    hi  link    AllDefineDollar   Define
-   syn match   AllDefineDollar   "[$][a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=tclVarRef
-   syn match   AllDefineDollar   "\${[a-zA-Z0-9_]\+}"  contains=@NoSpell
+   syn match   AllDefineDollar   "\$[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=tclVarRef,shDoubleQuote,shSingleQuote,RegexPatSepPerl
+   syn match   AllDefineDollar   "\${[a-zA-Z0-9_]\+}" contains=@NoSpell
 endfunction
 
 " Matches `abc123
@@ -350,9 +351,9 @@ endfunction
 "------------------------------------------------------------------------------
 
 
-" Matches: Labels
+" Matches: Titles/Labels
 "------------------------------------------------------------------------------
-" Labels outside Comments
+" Titles/Labels outside Comments
 function! AllLabel()
    " Matches word: if first word on line
    hi  link    AllLabel   PreProc
@@ -365,7 +366,7 @@ function! AllLabel()
    syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell
 endfunction
 
-" Labels in Comments
+" Titles/Labels in Comments
 function! AllComLabel()
    if exists("b:comment_leader")
       " Matches Word1 Word2: if every word is capitalized in a comment.
@@ -374,7 +375,10 @@ function! AllComLabel()
       " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
       "       not match a word ending if it's followed by :!
       hi  link    AllComLabel  PreProc
-      execute 'syn match   AllComLabel  +' . b:comment_leader . '\%(\s*\<[A-Z][a-zA-Z0-9_-]*\%(\>\|:\@=\)\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+hs=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+      execute 'syn match   AllComLabel  +' . b:comment_leader .
+         \ '\%(\s*\%(\<[A-Z][a-zA-Z0-9_-]*\|[&/]\)\%(\>\|[a-zA-Z0-9_]\@<=:\@=\|[&/]\@<=:\@!\)\)\+:' .
+         \ '\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+hs=s+' .
+         \ len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -394,19 +398,21 @@ function! AllPaths1(contained_en)
    " Don't match /word or /2 or /(2/32) but match /2/32 and /2(2/32)
    " The [!#-&*-+--.0-9?-Z^-z~] matches all ASCII characters except \ / ' " , ; : = | <> () {} []
    " The [!#-&(-+--.0-9?-[\]-z~] matches all ASCII characters except \ / ' " , ; : = <> {}
+   " \%([)}\]>]\)\@<! is needed to not close on parenthesis which messes with
+   " bash causing matches to incorrectly continue on the following lines.
+   " NOTE: Removed {} as that can be problematic with bash when ":-\?" is used.
    if g:performance_mode <= 0
       hi  link     AllPaths1 Underlined
       execute 'syn match AllPaths1 "' .
-          \ '\%(^\|\s\|\%(["''(={[:;<>]\)\@<=\)' .
-          \ '\%(\~\|\.\.\?\)\?\/' .
-          \ '\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*' .
-          \ '\%(\/\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*\)\+' .
-          \ '\%(\/\)\?' .
-          \ '\%([)}\]>]\)\@<!' .
-          \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" ' .
-          \ 'contains=@NoSpell ' .
-          \ (a:contained_en ? 'contained ' : '') .
-          \ 'containedin=@ClusterAllPathsCI'
+         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%(\~\|\.\.\?\)\?' .
+         \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\{2,}\/\?' .
+         \ '\%([)}\]>]\)\@<!' .
+         \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" ' .
+         \ 'contains=@NoSpell ' .
+         \ (a:contained_en ? 'contained ' : '') .
+         \ 'containedin=@ClusterAllPathsCI'
+
    endif
 endfunction
 
@@ -422,18 +428,15 @@ function! AllPaths2(contained_en)
    " Don't match /word or 1/2 or 2/(2/32)
    if g:performance_mode <= 0
       hi  link     AllPaths2 Underlined
-      execute 'syn match    AllPaths2 "' .
-          \ '\%(^\|\s\|\%(["''(={[:;<>]\)\@<=\)' .
-          \ '\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*' .
-          \ '\%(\/\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*\)\+' .
-          \ '\%(\/\|\%([''"]\%(\W\|\n\)\)\@=\)' .
-          \ '\%(\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*\%(\.\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)*\|\%([''"]\%(\W\|\n\)\)\@=\)\)\?' .
-          \ '\%(\.\.\?\)\?' .
-          \ '\%(\.\.\.\|[)}\]>]\)\@<!' .
-          \ '\%(\s\|\n\|["''),}\]:;<>]\)\@="' .
-          \ '  contains=@NoSpell' .
-          \ (a:contained_en ? ' contained' : '') .
-          \ ' containedin=@ClusterAllPathsCI'
+      execute 'syn match AllPaths2 "' .
+         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\/\)\{2,}' .
+         \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\.[a-zA-Z0-9]\+\)\?' .
+         \ '\%([)}\]>]\)\@<!' .
+         \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" ' .
+         \ 'contains=@NoSpell ' .
+         \ (a:contained_en ? 'contained ' : '') .
+         \ 'containedin=@ClusterAllPathsCI'
    endif
 endfunction
 
@@ -448,35 +451,39 @@ function! AllPathsWin(contained_en)
 endfunction
 
 function! AllPathsSingleSlashStart(contained_en)
-   " Must start with ~/ or ./ or ../. Identical to AllPaths1 but
-   " only matches a single slash like in ./word or ~/path or ../path or ~/.bash_history
+   " Must start with ~/ or ./ or ../. (but not / by itself). Similar to
+   " AllPaths1 but only matches a single slash like in:
+   " ./word or ~/path or ../path or ~/.bash_history
    if g:performance_mode <= 0
       hi  link     AllPathsS1 Underlined
       execute 'syn match AllPathsS1 "' .
-          \ '\%(^\|\s\|\%(["''(={[:;<>]\)\@<=\)' .
-          \ '\%(\~\|\.\.\?\)\/' .
-          \ '\%([!#-&*-+--.0-9?-Z^-z~]\|\\ \)\%([!#-&(-+--.0-9?-[\]-~]\|\\ \)*' .
-          \ '\%([)}\]>]\)\@<!' .
-          \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" contains=@NoSpell' .
-          \ (a:contained_en ? ' contained' : '') .
-          \ ' containedin=@ClusterAllPathsCI'
+         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%(\~\|\.\.\?\)\/' .
+         \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\/\?' .
+         \ '\%([)}\]>]\)\@<!' .
+         \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" ' .
+         \ 'contains=@NoSpell ' .
+         \ (a:contained_en ? 'contained ' : '') .
+         \ 'containedin=@ClusterAllPathsCI'
    endif
 endfunction
 
 function! AllPathsDollar(contained_en)
    " Identicial to AllPaths2, but must start with $path.
    " Matches $path/file or $path/path2/file.txt or $USER/path/
+   " $(path)/file, $path/$file
+   " not these? ${path}/file.txt, ${path}/${file}
    if g:performance_mode <= 0
-      hi  link    AllPathsDollar2 Underlined
-      execute 'syn match   AllPathsDollar2 "' .
-          \ '\%(^\|\s\|\%(["''(={[:;<>]\)\@<=\)\$' .
-          \ '\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)\+' .
-          \ '\%(\/\%([!#-&(-+--.0-9?-[\]-z~]\|\\ \)\+\)\+' .
-          \ '\%(\/\?\)' .
-          \ '\%(\s\|\n\|["''),}\]:;<>]\)\@="' .
-          \ '  contains=@NoSpell' .
-          \ (a:contained_en ? ' contained' : '') .
-          \ ' containedin=@ClusterAllPathsCI'
+      hi  link    AllPathsDollar Underlined
+      execute 'syn match AllPathsDollar "' .
+         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\${\?' .
+         \ '\%([a-zA-Z0-9_.-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)' .
+         \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\+\/\?' .
+         \ '\%([)}\]>]\)\@<!' .
+         \ '\%(\s\|\n\|["''),}\]:;<>]\)\@=" ' .
+         \ 'contains=@NoSpell ' .
+         \ (a:contained_en ? 'contained ' : '') .
+         \ 'containedin=@ClusterAllPathsCI'
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -485,19 +492,56 @@ endfunction
 " Match websites and emails.
 "------------------------------------------------------------------------------
 function! AllWebsites(contained_en)
+   " Valid Website Characters
+   " Alphanumeric:              All lowercase letters (a-z), uppercase letters (A-Z), and digits (0-9).
+   " Special Symbols:           Hyphen (-), Underscore (_), Period (.), and Tilde (~)
+   " Path & Query Delimiters:   / ? # Separates paths, starts query strings, or marks fragment anchors.
+   " Sub-component Delimiters:  & = + Separates and assigns key-value pairs in query parameters.
+   " Authority Delimiters:      : @   Separates ports from hostnames, or credentials from domains.
+   " Formatting & Brackets:     [ ] [ ] , ; $ ! * ' ( ) Used for IPv6 addresses, array data, or legacy sub-delimiters.
+   " Unsafe Website Characters
+   " Spaces:                    Must be encoded as %20 or +.
+   " Control / Non-ASCII:       Quotes ("), brackets (< > { }), symbols (^, \, |, `), and all non-ASCII characters.
+
    " Match links like www.vim.org
    hi  link     AllWebLinks1  Underlined
-   execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9.?!\-_=\/~@()]\+"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
+   execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
+
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
-   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[A-Za-z0-9\-._~:/?#\[\]@!$&()*+,;=%]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
+   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=.*Comment.*,.*String.*'
 endfunction
 
 
 function! AllEmails(contained_en)
+   " Valid email characters
+   " 1. Local Part (Before the @)
+   "    Letters & Numbers: a-z, A-Z, 0-9
+   "    Special: ! # \$ % & ' * + / = ? ^ _ ` { | } ~ -
+   "    Period: Period "." can't be the first/last char or repeat consecutively
+   " 2. Domain Part (After the @)
+   "    Letters & Numbers: a-z, A-Z, 0-9
+   "    Hyphen: Hyphens "-" can't be the first or last character
+   "    Period: Period "." can't be the first/last char or repeat consecutively
+   "    Top-Level Domain: After the last "." no hyphens or numbers allowed.
+
    " Match emails like abcd@efg.com
    hi  link     AllEmails  Tag
-   execute 'syn match AllEmails "\<[a-zA-Z][a-zA-Z0-9_.-]\+@[a-zA-Z0-9_-]\+\.[a-zA-Z0-9_.-]\+" contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.*,.*String.*'
+   execute 'syn match AllEmails "' .
+      \ '\%(^\|\s\)' .
+      \ '\%([a-zA-Z0-9!#$%&''*+/=?^_`{|}~-]\+\.\?\)\+@' .
+      \ '\%([a-zA-Z0-9]\+\%(\%(\-\?[a-zA-Z0-9]\+\)\+\)\?\.\)\+[a-zA-Z]\+" ' .
+      \ 'contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.*,.*String.*'
+
+   " Valid Emails:
+   " simple@example.com, abc.def.123@domain.org, user+mailbox@gmail.com,
+   " admin_panel@sub.company.net, x@y.z, admin@s-u-b-c-o-m-p-a-n-y.net
+   " #!$%&'*+-/=?^_{|}~@example.org: Technically valid but rarely used.
+   " Invalid Emails:
+   " Contains a space: abc def@example.com, abc.def@exam ple.com, abcdef @example.com
+   " Missing Local or Domain part: abc.def@example, @domain.com, abc.def@:
+   " Incorrect period usage: abc..def@example.com, .abc@example.com, abc@example..com
+   " Domain part starts/ends with a hyphen: abc@example-.com, abc@-example.com
 endfunction
 "------------------------------------------------------------------------------
 
@@ -567,6 +611,18 @@ function! AllTruth()
    syn keyword AllKeywords  true TRUE false FALSE null NULL
 endfunction
 
+function! AllCopyright()
+   " Common Keywords
+   hi  link    AllCopyright Statement
+   syn match   AllCopyright "Copyright"         containedin=.*Comment.*
+   syn match   AllCopyright "Copyright\s*(c).*" containedin=.*Comment.*
+   syn match   AllCopyright "MIT LICENSE"       containedin=.*Comment.*
+   syn match   AllCopyright "MIT License"       containedin=.*Comment.*
+   syn match   AllCopyright "Apache License"    containedin=.*Comment.*
+   syn match   AllCopyright "Creative Commons"  containedin=.*Comment.*
+   syn match   AllCopyright "©"                 containedin=.*Comment.*
+endfunction
+
 function! AllSudo()
    " Highlight sudo keyword
    hi  link    AllSudo      NonText
@@ -575,31 +631,54 @@ endfunction
 "------------------------------------------------------------------------------
 
 
+" Quotes/Strings
+"------------------------------------------------------------------------------
+" Match Quotes
+" keepend needed to prevent regex from extending match region!
+function! AllQuotes(contained_en)
+   " Match quotes with region (region is non-greedy by default).
+   hi link    AllQuotes String
+   execute 'syn region AllQuotes start=+\%(\s\|^\)"+ms=e skip=+""+ end=+"+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.* keepend'
+   execute 'syn region AllQuotes start=+\%(\s\|^\)''+ms=e skip=+''''+ end=+''+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.* keepend'
+endfunction
+
+" Can't match ='quote' or other characters with AllQuotes() if the '=' is
+" already matched from elsewhere -> Need to use lookbehind to match instead.
+function! AllQuotesLookbehind(contained_en)
+   hi link    AllQuotesLookbehind String
+   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.* keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+''''+ end=+''+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=.*Comment.* keepend'
+endfunction
+"------------------------------------------------------------------------------
+
+
 " Add comments for files that don't have any.
 "------------------------------------------------------------------------------
-" cluster ClusterAllCommentsCS is empty?
-function! AllCommentLeader()
+" Matches comments if it's the first non-space character on the line.
+function! AllCommentLineStart()
    if exists("b:comment_leader")
-      " Matches comments if it's the first character on the line.
-      execute 'syn match AllCommentsLine  +^\s*' . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
-      " Matches comments anywhere on the line as long as it is contained.
-      execute 'syn match AllComments      +'     . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS contained'
+      execute 'syn match AllCommentLineStart +^\s*' . b:comment_leader . '.*+'
    endif
 endfunction
 
 " Matches comments starting from anywhere on the line.
-function! AllCommentLeaderTop()
+function! AllCommentAnywhere()
    if exists("b:comment_leader")
-      execute 'syn match AllComments      +'     . b:comment_leader . '.*+    contains=@ClusterAllCommentsCS'
+      execute 'syn match AllCommentAnywhere +' . b:comment_leader . '.*+'
    endif
 endfunction
 
-" Multi-line Comments.
-function! AllMultiLineComment()
+" Matches multi-line comments if it's the first non-space character on the line.
+function! AllMultiLineCommentLineStart()
    if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
-      " Matches multi-line comments if it's the first character on the line.
-      execute 'syn region AllCommentsMultiLine start="^\s*' . b:multi_line_comment_start .  '" end="' . b:multi_line_comment_end . '"    contains=@ClusterAllCommentsCS'
-      " execute 'syn region AllCommentsMulti start="' . b:multi_line_comment_start .  '" end="' . b:multi_line_comment_end . '"    contains=@ClusterAllCommentsCS'
+      execute 'syn region AllMultiLineCommentLineStart start="^\s*' . b:multi_line_comment_start . '" end="' . b:multi_line_comment_end . '"'
+   endif
+endfunction
+
+" Matches multi-line comments starting from anywhere on the line.
+function! AllMultiLineCommentAnywhere()
+   if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
+      execute 'syn region AllMultiLineCommentAnywhere start="' . b:multi_line_comment_start . '" end="' . b:multi_line_comment_end . '"'
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -616,6 +695,7 @@ function! AllHLWords()
    hi  link    AllHLError       Exception
  " hi  link    AllHLError       HLRedBgB
 
+   " NOTE: needs to be match, not keyword, so that AllHLExclamations can work.
    " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
    "       not match a word ending if it's followed by :!
    syn match AllHLTodo    "\<TODO\%(\>\|:\@=\)"    contains=@NoSpell containedin=.*Comment.*
@@ -627,6 +707,28 @@ function! AllHLWords()
    syn match AllHLTodo    "\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*Comment.*
    syn match AllHLTodo    "\<HACK\%(\>\|:\@=\)"    contains=@NoSpell containedin=.*Comment.*
    syn match AllHLError   "\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*
+endfunction
+
+" Highlights '!!!' and '???' if they follow one of the AllHLWords.
+" Like in NOTE: ... !!! or TODO: ... ??? or WARNING: ... !!!
+function! AllHLExclamations()
+   if g:performance_mode <= 0
+
+      hi  link   SpAllHLNote        HLGreen3BgB
+      hi  link   SpAllHLViNote      HLGreen1BgB
+      hi  link   SpAllHLTodo        HLOrangeBgB
+      hi  link   SpAllHLViTodo      HLYellow3BgB
+      hi  link   SpAllHLWarning     HLOrangered1BgB
+      hi  link   SpAllHLError       HLRedBgB
+
+
+      syn match   SpAllHLNote        "\%(\<NOTE\%(:\|\>\)\@=.*\)\@<=!!!*" containedin=.*Comment.*
+      syn match   SpAllHLViNote      "\%(\<VINOTE\%(:\|\>\)\@=.*\)\@<=!!!*" containedin=.*Comment.*
+      syn match   SpAllHLTodo        "\%(\<TODO\%(:\|\>\)\@=.*\)\@<=\%(!!!*\|???*\)" containedin=.*Comment.*
+      syn match   SpAllHLViTodo      "\%(\<VITODO\%(:\|\>\)\@=.*\)\@<=\%(!!!*\|???*\)" containedin=.*Comment.*
+      syn match   SpAllHLWarning     "\%(\<WARNING\%(:\|\>\)\@=.*\)\@<=!!!*" containedin=.*Comment.*
+      syn match   SpAllHLWarning     "\%(\<DO NOT\%(:\|\>\)\@=.*\)\@<=!!!*" containedin=.*Comment.*
+   endif
 endfunction
 "------------------------------------------------------------------------------
 
@@ -647,25 +749,25 @@ function! AllTitles()
    if g:performance_mode <= 0
       if exists("b:comment_leader")
          hi  link  AllTitles1   Statement
-         execute 'syn match AllTitles1 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+         execute 'syn match AllTitles1 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
          hi  link  AllTitles2   Operator
-         execute 'syn match AllTitles2 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+         execute 'syn match AllTitles2 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
          hi  link  AllTitles3   Label
-         execute 'syn match AllTitles3 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+         execute 'syn match AllTitles3 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
          hi  link  AllTitles4   Special
-         execute 'syn match AllTitles4 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+         execute 'syn match AllTitles4 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
          hi  link  AllTitles5   Title
-         execute 'syn match AllTitles5 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+         execute 'syn match AllTitles5 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
        " hi  link  AllTitles6   Debug
-       " execute 'syn match AllTitles6 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles6 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
        " hi  link  AllTitles7   MoreMsg
-       " execute 'syn match AllTitles7 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles7 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
        " hi  link  AllTitles8   String
-       " execute 'syn match AllTitles8 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles8 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
        " hi  link  AllTitles9   Number
-       " execute 'syn match AllTitles9 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles9 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
        " hi  link  AllTitles0  Structure
-       " execute 'syn match AllTitles0 ''\%(' . b:comment_leader . '\s\+\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles0 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.*'
       endif
    endif
 endfunction
@@ -675,25 +777,25 @@ function! AllTitlesNotContained()
    if g:performance_mode <= 0
       if exists("b:comment_leader")
          hi  link  AllTitles1   Statement
-         execute 'syn match AllTitles1 ''\%(^\s*\)[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         execute 'syn match AllTitles1 ''^\s*[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
          hi  link  AllTitles2   Operator
-         execute 'syn match AllTitles2 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         execute 'syn match AllTitles2 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
          hi  link  AllTitles3   Label
-         execute 'syn match AllTitles3 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         execute 'syn match AllTitles3 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
          hi  link  AllTitles4   Special
-         execute 'syn match AllTitles4 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         execute 'syn match AllTitles4 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
          hi  link  AllTitles5   Title
-         execute 'syn match AllTitles5 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+         execute 'syn match AllTitles5 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
        " hi  link  AllTitles6   Debug
-       " execute 'syn match AllTitles6 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " execute 'syn match AllTitles6 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
        " hi  link  AllTitles7   MoreMsg
-       " execute 'syn match AllTitles7 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " execute 'syn match AllTitles7 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
        " hi  link  AllTitles8   String
-       " execute 'syn match AllTitles8 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " execute 'syn match AllTitles8 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
        " hi  link  AllTitles9   Number
-       " execute 'syn match AllTitles9 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " execute 'syn match AllTitles9 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
        " hi  link  AllTitles0  Structure
-       " execute 'syn match AllTitles0 ''\%(^\s*\)[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
+       " execute 'syn match AllTitles0 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'' contains=@NoSpell'
       endif
    endif
 endfunction
@@ -710,12 +812,12 @@ function! AllFilesDefaultSyntax()
    endif
    call AllComLabel()
    if (&filetype == 'text' || &filetype == 'markdown')
-      call AllPaths1(0)
-      call AllPathsWin(0)
-      call AllPathsDollar(0)
+      " call AllPaths1(0) " moved inside the files
+      " call AllPathsWin(0)
+      " call AllPathsDollar(0)
       call AllWebsites(0)
       call AllEmails(0)
-   elseif (&filetype == 'html')
+   elseif (&filetype == 'html' || &filetype == 'sh')
       call AllWebsites(1)
       call AllEmails(1)
    else
@@ -726,8 +828,10 @@ function! AllFilesDefaultSyntax()
       call AllEmails(1)
    endif
    call AllHLWords()
+   " call AllHLExclamations()
    call AllTitles()
    call AllSudo()
+   call AllCopyright()
 endfunction
 
 

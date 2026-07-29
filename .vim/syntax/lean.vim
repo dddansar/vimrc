@@ -53,6 +53,9 @@ endif
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "lean"
+   let b:comment_leader = '--'
+   let b:multi_line_comment_start = '/-'
+   let b:multi_line_comment_end = '-/'
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
@@ -61,8 +64,11 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    source $vim_folder_path/after/syntax/shared/math_mappings.vim
    source $vim_folder_path/after/syntax/shared/unicode.vim
 
-   let b:comment_leader = '--'
-   let b:multi_line_comment_end = '-\/'
+   hi  link    LeanSlash    Operator
+   syn match   LeanSlash    "\/"
+
+   call AllCommentAnywhere()
+   call AllMultiLineCommentAnywhere()
    call AllFilesDefaultSyntax()
 endif
 
@@ -147,7 +153,5 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    call AllNumbers()
    call AllTime()
    call AllTruth()
-   call AllCommentLeaderTop()
-   call AllMultiLineComment()
 endif
 

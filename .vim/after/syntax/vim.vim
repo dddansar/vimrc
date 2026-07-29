@@ -73,8 +73,9 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
    call AllFilesDefaultSyntax()
 
    call AllDefineAt()
-   call RegexMatches()
-   call SpRegexSearches()
+   call RegexMatches(1)
+   call SpRegexSearches(1)
+   call RegexMatchesVim(0)
    call AllPathsSingleSlashStart(1)
 endif
 
@@ -109,6 +110,9 @@ syn match   VimStatement  ":[a-zA-Z][a-zA-Z0-9]\+\>" contained containedin=vimMa
 
 hi  link    VimEatChar  Type
 syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
+
+hi  link    VimLtCSA  Constant
+syn match   VimLtCSA  "\\<lt>[^>]*>"hs=s+2,he=e-1 contained containedin=vimMapRhs
 
 "------------------------------------------------------------------------------
 " Vim default groups
@@ -152,6 +156,7 @@ syn keyword ColorColumn       ColorColumn       contained containedin=@ClusterCo
 syn keyword Conceal           Conceal           contained containedin=@ClusterColorCI
 syn keyword Cursor            Cursor            contained containedin=@ClusterColorCI
 syn keyword lCursor           lCursor           contained containedin=@ClusterColorCI
+syn match   lCursor          "lCursor\%(:\)\@=" contained containedin=vimLineComment
 syn keyword CursorIM          CursorIM          contained containedin=@ClusterColorCI
 syn keyword CursorColumn      CursorColumn      contained containedin=@ClusterColorCI
 syn keyword CursorLine        CursorLine        contained containedin=@ClusterColorCI
@@ -219,95 +224,106 @@ syn keyword PmenuMatchSel     PmenuMatchSel     contained containedin=@ClusterCo
 syn keyword TabPanel          TabPanel          contained containedin=@ClusterColorCI
 syn keyword TabPanelFill      TabPanelFill      contained containedin=@ClusterColorCI
 
+" NeoVim only
+syn keyword NormalNC          NormalNC          contained containedin=@ClusterColorCI
+syn keyword WinSeparator      WinSeparator      contained containedin=@ClusterColorCI
+syn keyword WinBar            WinBar            contained containedin=@ClusterColorCI
+syn keyword WinBarNC          WinBarNC          contained containedin=@ClusterColorCI
+syn keyword Substitute        Substitute        contained containedin=@ClusterColorCI
+syn keyword FloatBorder       FloatBorder       contained containedin=@ClusterColorCI
+syn keyword FloatTitle        FloatTitle        contained containedin=@ClusterColorCI
+syn keyword FloatFooter       FloatFooter       contained containedin=@ClusterColorCI
+
 "------------------------------------------------------------------------------
 " This will color the highlighting group names with the color they are mapped
 " to and throughout the .vim files.
 "------------------------------------------------------------------------------
 " Custom syntax groups
-syn keyword HLSiennaB             HLSiennaB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLBrownB              HLBrownB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLRed2B               HLRed2B                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOrangeredB          HLOrangeredB             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDarkorange3B        HLDarkorange3B           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDarkorangeB         HLDarkorangeB            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOrangeB             HLOrangeB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLTomato1B            HLTomato1B               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLHotpinkB            HLHotpinkB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDeeppinkB           HLDeeppinkB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDeeppink4B          HLDeeppink4B             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLMagenta4B           HLMagenta4B              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLFuchsiaB            HLFuchsiaB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLPurpleB             HLPurpleB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLPurple4B            HLPurple4B               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLNavyB               HLNavyB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLBlue                HLBlue                   contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLBlueB               HLBlueB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLMediumslateblueB    HLMediumslateblueB       contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDeepskyblue4B       HLDeepskyblue4B          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDodgerblueB         HLDodgerblueB            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDeepskyblueB        HLDeepskyblueB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLCyanB               HLCyanB                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLYellowB             HLYellowB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLYellowgreenB        HLYellowgreenB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreen               HLGreen                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreenB              HLGreenB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreen3              HLGreen3                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreen3B             HLGreen3B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOlive               HLOlive                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOliveB              HLOliveB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLKhaki4              HLKhaki4                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLKhaki4B             HLKhaki4B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn cluster ClusterColorCSG contains=vimSynKeyRegion,vimHiGroup,vimHiLink,vimHiKeyList,vimLineComment
+syn keyword HLSiennaB             HLSiennaB                contained containedin=@ClusterColorCSG
+syn keyword HLBrownB              HLBrownB                 contained containedin=@ClusterColorCSG
+syn keyword HLRed2B               HLRed2B                  contained containedin=@ClusterColorCSG
+syn keyword HLOrangeredB          HLOrangeredB             contained containedin=@ClusterColorCSG
+syn keyword HLDarkorange3B        HLDarkorange3B           contained containedin=@ClusterColorCSG
+syn keyword HLDarkorangeB         HLDarkorangeB            contained containedin=@ClusterColorCSG
+syn keyword HLOrangeB             HLOrangeB                contained containedin=@ClusterColorCSG
+syn keyword HLTomato1B            HLTomato1B               contained containedin=@ClusterColorCSG
+syn keyword HLHotpinkB            HLHotpinkB               contained containedin=@ClusterColorCSG
+syn keyword HLDeeppinkB           HLDeeppinkB              contained containedin=@ClusterColorCSG
+syn keyword HLDeeppink4B          HLDeeppink4B             contained containedin=@ClusterColorCSG
+syn keyword HLMagenta4B           HLMagenta4B              contained containedin=@ClusterColorCSG
+syn keyword HLFuchsiaB            HLFuchsiaB               contained containedin=@ClusterColorCSG
+syn keyword HLPurpleB             HLPurpleB                contained containedin=@ClusterColorCSG
+syn keyword HLPurple4B            HLPurple4B               contained containedin=@ClusterColorCSG
+syn keyword HLNavyB               HLNavyB                  contained containedin=@ClusterColorCSG
+syn keyword HLBlue                HLBlue                   contained containedin=@ClusterColorCSG
+syn keyword HLBlueB               HLBlueB                  contained containedin=@ClusterColorCSG
+syn keyword HLMediumslateblueB    HLMediumslateblueB       contained containedin=@ClusterColorCSG
+syn keyword HLDeepskyblue4B       HLDeepskyblue4B          contained containedin=@ClusterColorCSG
+syn keyword HLDodgerblueB         HLDodgerblueB            contained containedin=@ClusterColorCSG
+syn keyword HLDeepskyblueB        HLDeepskyblueB           contained containedin=@ClusterColorCSG
+syn keyword HLCyanB               HLCyanB                  contained containedin=@ClusterColorCSG
+syn keyword HLYellowB             HLYellowB                contained containedin=@ClusterColorCSG
+syn keyword HLYellowgreenB        HLYellowgreenB           contained containedin=@ClusterColorCSG
+syn keyword HLGreen               HLGreen                  contained containedin=@ClusterColorCSG
+syn keyword HLGreenB              HLGreenB                 contained containedin=@ClusterColorCSG
+syn keyword HLGreen3              HLGreen3                 contained containedin=@ClusterColorCSG
+syn keyword HLGreen3B             HLGreen3B                contained containedin=@ClusterColorCSG
+syn keyword HLOlive               HLOlive                  contained containedin=@ClusterColorCSG
+syn keyword HLOliveB              HLOliveB                 contained containedin=@ClusterColorCSG
+syn keyword HLKhaki4              HLKhaki4                 contained containedin=@ClusterColorCSG
+syn keyword HLKhaki4B             HLKhaki4B                contained containedin=@ClusterColorCSG
 
-syn keyword HLGrey30              HLGrey30                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGrey30B             HLGrey30B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGrey40B             HLGrey40B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGrey50B             HLGrey50B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLWhiteB              HLWhiteB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey30              HLGrey30                 contained containedin=@ClusterColorCSG
+syn keyword HLGrey30B             HLGrey30B                contained containedin=@ClusterColorCSG
+syn keyword HLGrey40B             HLGrey40B                contained containedin=@ClusterColorCSG
+syn keyword HLGrey50B             HLGrey50B                contained containedin=@ClusterColorCSG
+syn keyword HLWhiteB              HLWhiteB                 contained containedin=@ClusterColorCSG
 
-syn keyword HLGrey60B             HLGrey60B                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLLightmagentaB       HLLightmagentaB          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSkyblueB            HLSkyblueB               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLMediumaquamarineB   HLMediumaquamarineB      contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpringgreenB        HLSpringgreenB           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLKhakiB              HLKhakiB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey60B             HLGrey60B                contained containedin=@ClusterColorCSG
+syn keyword HLLightmagentaB       HLLightmagentaB          contained containedin=@ClusterColorCSG
+syn keyword HLSkyblueB            HLSkyblueB               contained containedin=@ClusterColorCSG
+syn keyword HLMediumaquamarineB   HLMediumaquamarineB      contained containedin=@ClusterColorCSG
+syn keyword HLSpringgreenB        HLSpringgreenB           contained containedin=@ClusterColorCSG
+syn keyword HLKhakiB              HLKhakiB                 contained containedin=@ClusterColorCSG
 syn keyword HLTan1B               HLTan1B
-syn keyword HLSalmonB             HLSalmonB                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSalmonB             HLSalmonB                contained containedin=@ClusterColorCSG
 
-syn keyword HLRedBU               HLRedBU                  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLYellowBU            HLYellowBU               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreenBU             HLGreenBU                contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLRedBU               HLRedBU                  contained containedin=@ClusterColorCSG
+syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=@ClusterColorCSG
+syn keyword HLYellowBU            HLYellowBU               contained containedin=@ClusterColorCSG
+syn keyword HLGreenBU             HLGreenBU                contained containedin=@ClusterColorCSG
+syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=@ClusterColorCSG
+syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=@ClusterColorCSG
 
-syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreen3BgB           HLGreen3BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLGreen1BgB           HLGreen1BgB              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLRedBgB              HLRedBgB                 contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=@ClusterColorCSG
+syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=@ClusterColorCSG
+syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=@ClusterColorCSG
+syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=@ClusterColorCSG
+syn keyword HLGreen3BgB           HLGreen3BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGreen1BgB           HLGreen1BgB              contained containedin=@ClusterColorCSG
+syn keyword HLRedBgB              HLRedBgB                 contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 " Strikethrough
-syn keyword HLGreyOut              HLGreyOut               contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLStrikeThroughDefault HLStrikeThroughDefault  contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLStrikeThroughGrey    HLStrikeThroughGrey     contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLBarelyVisible        HLBarelyVisible         contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLGreyOut              HLGreyOut               contained containedin=@ClusterColorCSG
+syn keyword HLStrikeThroughDefault HLStrikeThroughDefault  contained containedin=@ClusterColorCSG
+syn keyword HLStrikeThroughGrey    HLStrikeThroughGrey     contained containedin=@ClusterColorCSG
+syn keyword HLBarelyVisible        HLBarelyVisible         contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 " List of all possible gui options (many may not work...).
-syn keyword HLSpecial1             HLSpecial1              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial2             HLSpecial2              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial3             HLSpecial3              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial4             HLSpecial4              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial5             HLSpecial5              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial6             HLSpecial6              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial7             HLSpecial7              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial8             HLSpecial8              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial9             HLSpecial9              contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial10            HLSpecial10             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
-syn keyword HLSpecial11            HLSpecial11             contained containedin=vimSynKeyRegion,vimHiGroup,vimHiLink
+syn keyword HLSpecial1             HLSpecial1              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial2             HLSpecial2              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial3             HLSpecial3              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial4             HLSpecial4              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial5             HLSpecial5              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial6             HLSpecial6              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial7             HLSpecial7              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial8             HLSpecial8              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial9             HLSpecial9              contained containedin=@ClusterColorCSG
+syn keyword HLSpecial10            HLSpecial10             contained containedin=@ClusterColorCSG
+syn keyword HLSpecial11            HLSpecial11             contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 
 

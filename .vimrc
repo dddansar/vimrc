@@ -118,12 +118,12 @@ endif
 " NOTE: Link NeoVim to Vim's .vimrc and .vim/ in linux!
 " Link the .vimrc file in NeoVim.
 " ln -s ~/.vimrc ~/.config/nvim/init.vim
-" Link the .vim/ folder in NeoVim.
-" ln -s ~/.vim ~/.config/nvim/.vim
-" Link the spell checking folder in NeoVim.
+" Link various .vim/ subfolders in NeoVim.
 " ln -s ~/.vim/spell ~/.config/nvim/spell
-" Link the custom colorscheme in NeoVim.
 " ln -s ~/.vim/colors ~/.config/nvim/colors
+" ln -s ~/.vim/after ~/.config/nvim/after
+" ln -s ~/.vim/autocorrect ~/.config/nvim/autocorrect
+" ln -s ~/.vim/syntax ~/.config/nvim/syntax
 " Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
 
@@ -319,6 +319,7 @@ function! CommonSettings()
    "---------------------------------------------------------------------------
    if has("gui_running")
       " Selects between windows and linux OS
+      " NOTE: use ":set guifont=(tab)" to cycle through the list of fonts.
       if g:using_windows
          if !has('nvim')
             set guifont=Consolas:h13.5:cANSI
@@ -496,19 +497,22 @@ function! DefaultSettings()
    " Always display the status line (showing file name and path), even if
    " only one window is displayed.
    set laststatus=2
+
+   " statusline: sets the text in the status line bar under the file.
+   " statusline refreshes on cursor movement, mode changes (insert → normal, etc.)
+   " buffer changes (edits, saves), window focus changes, any command execution.
    " %n: buffer number, %f: file path, %t: file name only %h: help buffer
    " flag, %=: creates sections %m: modified flag," \ : add space, %p: line
-   " percentage, %r: display if read only [RO], %v display column number,
-   " %l: display line number, %L: display total line numbers.
+   " percentage, %r: display read only [RO], %v display current column number,
+   " %l: display current line number, %L: display total line numbers.
    set statusline=%f%m%r
    " set statusline+=\ \ \ %{g:status_line_var}
    " set statusline+=\ \ \ %{SynGroup()}
    set statusline+=\ \ \ %{SynStackGroup()}
    " set statusline+=%=%p%%\ %l/%L:%v\ %t
    set statusline+=%=\ %l/%L:%v\ %p%%
-   " The update time for cursor hold, used to update g:status_line_var,
-   " and also sets the update time for the swap file, but I'm not using the
-   " swap file...
+
+   " The update time for cursor hold
    " set updatetime=500
    set updatetime=200
 

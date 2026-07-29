@@ -97,5 +97,10 @@ if exists("b:current_syntax") && b:current_syntax == "markdown"
    call AllNumbers()
    " call AllSlashes()
    " call AllHLWords()
+
+   " AllPaths needs to be after regex/slashes/operators/separators...
+   call AllPaths1(0)
+   call AllPathsWin(0)
+   call AllPathsDollar(0)
 endif
 

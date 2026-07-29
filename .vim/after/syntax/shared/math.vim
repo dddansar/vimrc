@@ -84,11 +84,7 @@ if g:performance_mode <= 0
    " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f s' μi e⁻ˣxᵗ⁻¹
 
    hi  link    SpMathSingleChar Constant
-   syn match   SpMathSingleChar "
-            \\%(\<\|[^!-~]\)[a-zA-Z]
-            \\%((s\%()\)\@=\)\@<!
-            \\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!
-            \\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathSingleChar "\%(\<\|[^!-~]\)[a-zA-Z]\%((s\%()\)\@=\)\@<!\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!\%(\w\)\@!" contains=@NoSpell
 
    " misses aᵐbᵐ
 

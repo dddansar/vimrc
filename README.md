@@ -69,11 +69,14 @@ NeoVim uses different configuration directories than Vim. You can get all the vi
 
 Option 2) Linking NeoVim to Vim, can depend on the specific locations that NeoVim uses in your OS. Below is what works for me in Ubuntu/Mint Linux.
 
-Link Vim's .vimrc and .vim/ files in NeoVim.
+Link Vim's .vimrc and .vim/ subfolders in NeoVim.
 ```bash
-ln -s ~/.vim/colors ~/.config/nvim/colors
-ln -s ~/.vim/spell ~/.config/nvim/spell
-ln -s ~/.vim/pack ~/.config/nvim/pack
+ln -s ~/.vim/colors      ~/.config/nvim/colors
+ln -s ~/.vim/spell       ~/.config/nvim/spell
+ln -s ~/.vim/pack        ~/.config/nvim/pack
+ln -s ~/.vim/after       ~/.config/nvim/after
+ln -s ~/.vim/autocorrect ~/.config/nvim/autocorrect
+ln -s ~/.vim/syntax      ~/.config/nvim/syntax
 ```
 
 And add to ~/.config/nvim/init.lua

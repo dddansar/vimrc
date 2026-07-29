@@ -144,15 +144,15 @@ augroup END
 "------------------------------------------------------------------------------
 " List of all possible gui options (many don't work...).
 hi default HLSpecial1  gui=bold          guisp=red guifg=grey50
+hi default HLSpecial8  gui=italic        guisp=red guifg=grey50
 hi default HLSpecial2  gui=underline     guisp=red guifg=grey50
 hi default HLSpecial3  gui=undercurl     guisp=red guifg=grey50
 hi default HLSpecial4  gui=underdotted   guisp=red guifg=grey50
 hi default HLSpecial5  gui=underdouble   guisp=red guifg=grey50
 hi default HLSpecial6  gui=underdashed   guisp=red guifg=grey50
+hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey50
 hi default HLSpecial7  gui=inverse       guisp=red guifg=grey50
-hi default HLSpecial8  gui=italic        guisp=red guifg=grey50
 hi default HLSpecial9  gui=standout      guisp=red guifg=grey50
 hi default HLSpecial10 gui=nocombine     guisp=red guifg=grey50
-hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey50
 "------------------------------------------------------------------------------
 

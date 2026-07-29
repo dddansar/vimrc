@@ -1,7 +1,7 @@
 "==============================================================================
-" File: txt.vim
+" File: text.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all txt files.
+" Description: This file adds custom syntax highlighting for all text files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ endif
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-" if exists("b:txt_loaded")
+" if exists("b:text_loaded")
 "    finish
 " endif
 if exists("g:debug_syntax")
@@ -48,7 +48,7 @@ endif
 if !exists("g:syntax_on")
   finish
 endif
-let b:txt_loaded = 1
+let b:text_loaded = 1
 
 if !exists("b:current_syntax") || b:current_syntax == ""
    let b:current_syntax = "text"
@@ -73,7 +73,11 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    endif
    if expand('%:t') =~ '\.uni\.txt$'
       source $vim_folder_path/after/syntax/shared/math.vim
+      setlocal nospell
    endif
+   " if expand('%:p') =~ '/reference_files/'
+   "    source $vim_folder_path/after/syntax/shared/linux.vim
+   " endif
 
    call AllFilesDefaultSyntax()
 endif
@@ -87,24 +91,29 @@ setlocal nocindent
 
 
 " Match parenthesis
-hi  link    TxtParen     Function
-syn match   TxtParen     "[)(]"
+hi  link    TextParen     Function
+syn match   TextParen     "[)(]"
 
-hi  link    TxtSBr       StorageClass
-syn match   TxtSBr       "[[\]]"
+hi  link    TextSBr       StorageClass
+syn match   TextSBr       "[[\]]"
 
-hi  link    TxtCBr       Define
-syn match   TxtCBr       "[}{]"
+hi  link    TextCBr       Define
+syn match   TextCBr       "[}{]"
+
+hi  link    TextOperators  Operator
+syn match   TextOperators  "[$–]"
+hi  link    TextSlash      Operator
+syn match   TextSlash      "\/"
 
 
 " Match (+) (-) (~)
 "------------------------------------------------------------------------------
-hi  link    TxtPlusParen      StorageClass
-syn match   TxtPlusParen      "(+)"
-hi  link    TxtMinusParen     Function
-syn match   TxtMinusParen     "(-)"
-hi  link    TxtTildaParen     Define
-syn match   TxtTildaParen     "(\~)"
+hi  link    TextPlusParen      StorageClass
+syn match   TextPlusParen      "(+)"
+hi  link    TextMinusParen     Function
+syn match   TextMinusParen     "(-)"
+hi  link    TextTildaParen     Define
+syn match   TextTildaParen     "(\~)"
 "------------------------------------------------------------------------------
 
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
@@ -121,36 +130,47 @@ syn match Tealbg              "\<P8\>" contains=@NoSpell
 syn match Blue2bg             "\<P9\>" contains=@NoSpell
 
 " Make lines beginning with # as titles
-hi link TxtTitles1 AllTitles1
-hi link TxtTitles2 AllTitles2
-hi link TxtTitles3 AllTitles3
-hi link TxtTitles4 AllTitles4
-hi link TxtTitles5 AllTitles5
-syntax match TxtTitles1 "^\s*# .*"
-syntax match TxtTitles2 "^\s*## .*"
-syntax match TxtTitles3 "^\s*### .*"
-syntax match TxtTitles4 "^\s*#### .*"
-syntax match TxtTitles5 "^\s*##### .*"
-
-hi  link    TxtOperators    Operator
-syn match   TxtOperators    "[$–]"
+hi link TextTitles1 AllTitles1
+hi link TextTitles2 AllTitles2
+hi link TextTitles3 AllTitles3
+hi link TextTitles4 AllTitles4
+hi link TextTitles5 AllTitles5
+syntax match TextTitles1 "^\s*# .*"
+syntax match TextTitles2 "^\s*## .*"
+syntax match TextTitles3 "^\s*### .*"
+syntax match TextTitles4 "^\s*#### .*"
+syntax match TextTitles5 "^\s*##### .*"
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
 if exists("b:current_syntax") && b:current_syntax == "text"
-   call AllOperators()
    call AllEqualities()
    call AllArrows()
-   call AllSeparators2()
    call AllParenBr()
    " call AllWebsites(0)
    call AllLabel()
    call AllNumbers()
    call AllSlashes()
+   call AllSeparators2()
+   call AllOperators()
    call StrikeoutEn()
-   call AllCommentLeader()
+   call AllCommentAnywhere()
    call AllHLWords()
+   call AllHLExclamations()
    call AllTitlesNotContained()
+   call AllQuotesLookbehind(0)
+
+   " if expand('%:t') =~# '^regex.*\.txt$' || expand('%:p') =~ '/reference_files/'
+   "    call RegexMatches(0)
+   "    call RegexMatchesVim(0)
+   "    call RegexMatchesPerl(1)
+   "    call SpRegexSearches(0)
+   "    setlocal nospell
+   " endif
+   " AllPaths needs to be after regex/slashes/operators/separators...
+   call AllPaths1(0)
+   call AllPathsWin(0)
+   call AllPathsDollar(0)
 
    if expand('%:t') =~# '^claude_history.*\.txt$'
       if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
@@ -163,39 +183,11 @@ endif
 "------------------------------------------------------------------------------
 " Start of line, one or more spaces followed by 0 or 1 "(" followed by
 " number/letter and ")".
-hi  link    TxtNumberParen    Function
-hi  link    TxtLetterParen    Question
-syn match   TxtNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
-syn match   TxtNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
-syn match   TxtLetterParen    "\s\+([A-Z])" contains=@NoSpell
+hi  link    TextNumberParen    Function
+hi  link    TextLetterParen    Question
+syn match   TextNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
+syn match   TextLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
+syn match   TextNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
+syn match   TextLetterParen    "\s\+([A-Z])" contains=@NoSpell
 "------------------------------------------------------------------------------
-
-" if hlexists('SpAllHLNoteNC')
-"    syn clear SpAllHLNoteNC
-"    syn clear SpAllHLViNoteNC
-"    syn clear SpAllHLTodoNC
-"    syn clear SpAllHLViTodoNC
-"    syn clear SpAllHLWarningNC
-"    syn clear SpAllHLWarningNC
-"    syn clear SpAllHLTodoNC
-"    syn clear SpAllHLViTodoNC
-" endif
-" syn match SpAllHLNoteNC    "\%(^\|.\)\<NOTE\>.\+!!!*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLNote,AllHLNote       transparent
-" syn match SpAllHLViNoteNC  "\%(^\|.\)\<VINOTE\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViNote,AllHLViNote   transparent
-" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+!!!*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLTodo,AllHLTodo       transparent
-" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViTodo,AllHLViTodo   transparent
-" syn match SpAllHLWarningNC "\%(^\|.\)\<WARNING\>.\+!!!*" contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLWarning,AllHLWarning transparent
-" syn match SpAllHLWarningNC "\%(^\|.\)\<DO NOT\>.\+!!!*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLWarning,AllHLWarning transparent
-" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+???*"    contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLTodo,AllHLTodo       transparent
-" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+???*"  contains=Txt.*,AllArrows,AllCaps,AllEquality,AllSeparators2,SpAllHLViTodo,AllHLViTodo   transparent
-
-" syn match SpAllHLNoteNC    "\%(^\|.\)\<NOTE\>.\+!!!*"    contains=ALL,AllOperators
-" syn match SpAllHLViNoteNC  "\%(^\|.\)\<VINOTE\>.\+!!!*"  contains=ALL,AllOperators
-" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+!!!*"    contains=ALL,AllOperators
-" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+!!!*"  contains=ALL,AllOperators
-" syn match SpAllHLWarningNC "\%(^\|.\)\<WARNING\>.\+!!!*" contains=ALL,AllOperators
-" syn match SpAllHLWarningNC "\%(^\|.\)\<DO NOT\>.\+!!!*"  contains=ALL,AllOperators
-" syn match SpAllHLTodoNC    "\%(^\|.\)\<TODO\>.\+???*"    contains=ALL,AllOperators
-" syn match SpAllHLViTodoNC  "\%(^\|.\)\<VITODO\>.\+???*"  contains=ALL,AllOperators
 

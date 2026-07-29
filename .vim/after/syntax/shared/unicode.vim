@@ -102,7 +102,7 @@ call setcellwidths([
          \ [0x1f850, 0x1f850, 2],
          \ [0x1f852, 0x1f852, 2],
          \ [0x1f858, 0x1f858, 2],
-         \])
+         \ ])
 " See also :help ambiwidth
 " The ambiwidth option in Vim controls how ambiguous-width characters are
 " displayed. (such as Euro, Registered Sign, Copyright Sign, Greek letters,

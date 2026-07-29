@@ -1,7 +1,7 @@
 "==============================================================================
-" File: perl.vim
+" File: vhdl.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all perl files.
+" Description: This file adds custom syntax highlighting for all VHDL files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -33,7 +33,7 @@
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-" if exists("b:perl_loaded")
+" if exists("b:vhdl_loaded")
 "    finish
 " endif
 if exists("b:disable_after_syntax")
@@ -46,33 +46,47 @@ if !isdirectory(expand($vim_folder_path))
    finish
 endif
 if exists("g:debug_syntax")
-   echom "perl.vim syntax file loaded"
+   echom "vhdl.vim syntax file loaded"
 endif
-let b:perl_loaded = 1
+let b:vhdl_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "perl"
+if exists("b:current_syntax") && b:current_syntax == "vhdl"
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
-   call AllFilesDefaultSyntax()
+   if hlexists('vhdlTodo')
+      syn clear vhdlTodo
+   endif
 
-   call AllParenBr()
-   call AllEqualities()
-   " call AllOperators()
-   " call AllArrows()
-   " call AllDefineDollar()
-   " call AllDefineAt()
-   call RegexMatches(1)
-   call RegexMatchesPerl(1)
-   call SpRegexSearches(1)
+   call AllFilesDefaultSyntax()
 endif
 
-hi  link    PlEquality    Operator
-syn match   PlEquality    "=\%(pod\|cut\)\@!"
+hi  link    VHDLConditional Conditional
+syn keyword VHDLConditional if else begin end then
 
-hi  link    PlDefineAnd   Function
-syn match   PlDefineAnd   "^\s*&\w\+"
+hi  link    VHDLRepeat Repeat
+syn keyword VHDLRepeat while do for loop
+
+hi  link    VHDLFunction Function
+syn keyword VHDLFunction function procedure package
+
+hi  link    VHDLType Type
+syn keyword VHDLType variable
+
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if exists("b:current_syntax") && b:current_syntax == "vhdl"
+   call AllTime()
+   call AllOperators()
+   call AllShiftOp()
+   call AllEqualities()
+   call AllParenBr()
+   call AllArrows()
+   call AllSeparators()
+   call AllDefineTick()
+   call AllLabel()
+endif
+
 

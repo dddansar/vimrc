@@ -35,13 +35,8 @@ if !exists("g:syntax_on")
   finish
 endif
 
-
-if !has('nvim')
-   syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimString
-else " For NeoVim
-   syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody
-endif
-
+syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,shDoubleQuote,shSingleQuote,perlMatch,perlSpecialMatch,perlSpecialString,perlQR
+syn cluster RegexContainedinPerl contains=AllQuotes,AllQuotesLookbehind,shDoubleQuote,shSingleQuote,perlMatch,perlSpecialMatch,perlSpecialString,perlQR
 
 " Exit if the file was already loaded
 if exists("b:regex_loaded")
@@ -50,98 +45,227 @@ endif
 let b:regex_loaded = 1
 
 
-function! RegexMatches()
+" Generic Regex Matches
+function! RegexMatches(contained_en)
+   let l:contained = (a:contained_en ? 'contained ' : '')
+
    hi  link    RegexSpChars   NonText
-   syn match   RegexSpChars   "\$"              contained containedin=@RegexContainedin
-   syn match   RegexSpChars   "\."              contained containedin=@RegexContainedin
-   syn match   RegexSpChars   "\^"              contained containedin=@RegexContainedin
-   " syn match   RegexSpChars   "-"               contained containedin=@RegexContainedin
-   syn match   RegexSpChars   "\\n"              contained containedin=@RegexContainedin
+   execute 'syn match   RegexSpChars   "\$"              ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\^"              ' . l:contained . 'containedin=@RegexContainedin'
+   " execute 'syn match   RegexSpChars   "-"               ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\n"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\r"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\e"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\b"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\n"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\n"             ' . l:contained . 'containedin=@RegexContainedin'
+
+   " Keep regex dot the same color as the color I use in text files.
+   hi  link    RegexSpDot     Delimiter
+   " execute 'syn match   RegexSpChars   "\%(\.\)\@<!\.\%( \|$\|\.\)\@!"   ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexSpDot     "\."              ' . l:contained . 'containedin=@RegexContainedin'
 
    hi  link    RegexAst       Question
-   syn match   RegexAst       "*"               contained containedin=@RegexContainedin
+   execute 'syn match   RegexAst       "*"               ' . l:contained . 'containedin=@RegexContainedin'
 
    " Rematch double and/or.
    hi  link    RegexAndOr     Delimiter
-   syn match   RegexAndOr     "&&"              contained containedin=@RegexContainedin
-   syn match   RegexAndOr     "||"              contained containedin=@RegexContainedin
+   execute 'syn match   RegexAndOr     "&&"              ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexAndOr     "||"              ' . l:contained . 'containedin=@RegexContainedin'
 
    " Regex Ranges
+   " match [abc], [3981!$@*&(*\]\-abc]
+   " don't match "[abc]abcs[abc]", [ abc ], "[abc] abcs][abc]"
+   " match       [!-.:-@[\]-`{-~]
+   " don't match [!-.:-@[.]-`{-~], or [arsit\]
+   " matches    \[!-.:-@[\]-`{-~] but RegexNoColor will clear the first parenthesis
    hi  link    RegexRanges    Constant
-   syn match   RegexRanges    "\[.\{-}\\\@<!]"  contained containedin=@RegexContainedin
-
-   hi  link    RegexContinue  Exception
-   syn match   RegexContinue  "^\s*\\"          contained containedin=@RegexContainedin,vimOperParen
+   " execute 'syn match   RegexRanges    "\[.\{-}\\\@<!]"  ' . l:contained . 'containedin=@RegexContainedin'
+   " same as RegexRanges above but allow a max of 1 space in the range.
+   "              [^ ]*       zero or more non-space characters
+   "         \( \=[^ ]*\)     optionally one space followed by zero or more non-space characters
+   " \@> means no backtracking so that if "\]" is matched, don't allow it to backtrack and close on "]"
+   execute 'syn match   RegexRanges    "\[\%(\%(\\\]\|[^ \]]\)*\)\@>\%( \=\%(\%(\\\]\|[^ \]]\)*\)\@>\)]\%(]\)\@!"  ' . l:contained . 'containedin=@RegexContainedin'
 
    " WARNING: This can give incorrect matches if not set.
-   syn match   RegexNoColor   "\\\\"            contained containedin=@RegexContainedin
-   syn match   RegexNoColor   "\\[.[\]'$"~*/-]" contained containedin=@RegexContainedin
-   syn match   RegexNoColor   "\\\^"            contained containedin=@RegexContainedin
+   execute 'syn match   RegexNoColor   "\\\\"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexNoColor   "\\[.[\]''$"~*/-]" ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexNoColor   "\\\^"             ' . l:contained . 'containedin=@RegexContainedin'
 
+   " Word boundaries
    hi  link    RegexWordBndr  Number
-   syn match   RegexWordBndr  "\\<"             contained containedin=@RegexContainedin
-   syn match   RegexWordBndr  "\\>"             contained containedin=@RegexContainedin
+   execute 'syn match   RegexWordBndr  "\\<"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexWordBndr  "\\>"             ' . l:contained . 'containedin=@RegexContainedin'
+   " execute 'syn match   RegexWordBndr  "\\b"             ' . l:contained . 'containedin=@RegexContainedin'
+   " execute 'syn match   RegexWordBndr  "\\B"             ' . l:contained . 'containedin=@RegexContainedin'
 
-   hi  link    RegexLessThan  Constant
-   syn match   RegexLessThan  "\\<lt>.\{-}\%(>\)\@="hs=s+2 contained containedin=vimMapRhs
-
+   " Separators
    hi  link    RegexPatSepOr  Delimiter
-   syn match   RegexPatSepOr  "\\|"             contained containedin=@RegexContainedin
-   syn match   RegexPatSepOr  "\\\\|"           contained containedin=@RegexContainedin
+   execute 'syn match   RegexPatSepOr  "\\|"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSepOr  "\\\\|"           ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSepOr  "\\&"             ' . l:contained . 'containedin=@RegexContainedin'
 
+   " Capturing groups
    hi  link    RegexPatSep    Statement
-   syn match   RegexPatSep    "\\("             contained containedin=@RegexContainedin
-   syn match   RegexPatSep    "\\%("            contained containedin=@RegexContainedin
-   syn match   RegexPatSep    "\\)"             contained containedin=@RegexContainedin
+   execute 'syn match   RegexPatSep    "\\("             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSep    "\\%("            ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSep    "\\)"             ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSep    "\\[0-9]"         ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPatSep    "\\%\%(\[\)\@="    ' . l:contained . 'containedin=@RegexContainedin'
 
-   hi  link    RegexPosLook   Conditional
-   syn match   RegexPosLook   "\\@<="           contained containedin=@RegexContainedin
-   syn match   RegexPosLook   "\\@="            contained containedin=@RegexContainedin
-   syn match   RegexPosLook   "\\zs"            contained containedin=@RegexContainedin
-   syn match   RegexPosLook   "\\ze"            contained containedin=@RegexContainedin
-
-   hi  link    RegexNegLook   Question
-   syn match   RegexNegLook   "\\@<!"           contained containedin=@RegexContainedin
-   syn match   RegexNegLook   "\\@!"            contained containedin=@RegexContainedin
-
+   " Quantifiers
    hi  link    RegexQuant  Question
-   syn match   RegexQuant  "\\+"                contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\?"                contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\="                contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\{[0-9]*,[0-9]\+}" contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\{[0-9]\+\%(,[0-9]*\)\?}" contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\{-}"              contained containedin=@RegexContainedin
-   syn match   RegexQuant  "\\{-[0-9],}"        contained containedin=@RegexContainedin
+   execute 'syn match   RegexQuant  "\\+"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexQuant  "\\?"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexQuant  "\\="                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexQuant  "\\\?{-\\\?}"              ' . l:contained . 'containedin=@RegexContainedin'
 
-   hi  link    RegexWildcards Identifier
-   syn match   RegexWildcards "
-              \\\[sSdDxXoOhHpPwWaAlLuUiIfF0-9]" contained containedin=@RegexContainedin
+   execute 'syn match   RegexQuant  "\\\?{-\?[0-9]*,[0-9]\+\\\?}" ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexQuant  "\\\?{-\?[0-9]\+\%(,[0-9]*\)\?\\\?}" ' . l:contained . 'containedin=@RegexContainedin'
+
+   " Character Classes
+   hi  link    RegexClass Constant
+   execute 'syn match   RegexClass "\\[sSdDxXoOhHpPwWaAlLuUiIfFtkK]" ' . l:contained . 'containedin=@RegexContainedin'
 
    syn cluster ClusterRegex contains=Regex.*
 endfunction
 
 
-function! SpRegexSearches()
+" Vim Regex Matches
+function! RegexMatchesVim(contained_en)
+   let l:contained = (a:contained_en ? 'contained ' : '')
+
+   " Lookahead/Lookbehind
+   hi  link    RegexPosLookVim   Question
+   execute 'syn match   RegexPosLookVim   "\\@<="           ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPosLookVim   "\\@="            ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPosLookVim   "\\zs"            ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexPosLookVim   "\\ze"            ' . l:contained . 'containedin=@RegexContainedin'
+
+   hi  link    RegexNegLookVim   Question
+   execute 'syn match   RegexNegLookVim   "\\@<!"           ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexNegLookVim   "\\@!"            ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexNegLookVim   "\\@>"            ' . l:contained . 'containedin=@RegexContainedin'
+
+   " case sensitivity and magic
+   hi  link    RegexMagicVim  Question
+   execute 'syn match   RegexMagicVim  "\\c"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexMagicVim  "\\C"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexMagicVim  "\\v"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexMagicVim  "\\V"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexMagicVim  "\\m"                ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexMagicVim  "\\M"                ' . l:contained . 'containedin=@RegexContainedin'
+
+   " Line matching
+   hi  link    RegexLineVim  NonText
+   execute 'syn match   RegexLineVim   "\\_\."              ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexLineVim   "\\_s"               ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexLineVim   "\\[_%]\^"           ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexLineVim   "\\[_%]\$"           ' . l:contained . 'containedin=@RegexContainedin'
+
+   syn cluster ClusterRegex contains=Regex.*
+endfunction
+
+
+" Perl Regex Matches
+function! RegexMatchesPerl(contained_en)
+   let l:contained = (a:contained_en ? 'contained ' : '')
+
+   " Separators
+   hi  link    RegexPatSepOrPerl  Delimiter
+   execute 'syn match   RegexPatSepOrPerl  "|"           ' . l:contained . 'containedin=RegexPatSepPerl'
+
+   " Quantifiers
+   execute 'syn match   RegexLookPerl   "?"              ' . l:contained . 'containedin=@RegexContainedin'
+   execute 'syn match   RegexLookPerl   "+"              ' . l:contained . 'containedin=@RegexContainedin'
+
+   " Lookahead/Lookbehind
+   hi  link    RegexLookPerl   Question
+   execute 'syn match   RegexLookPerl   "\%((\)\@<=?<\?="       ' . l:contained . 'containedin=RegexPatSepPerl'
+   execute 'syn match   RegexLookPerl   "\%((\)\@<=?<\?!"       ' . l:contained . 'containedin=RegexPatSepPerl'
+
+   hi  link    RegexAtomicPerl   Question
+   execute 'syn match   RegexAtomicPerl "\%((\)\@<=?>"          ' . l:contained . 'containedin=RegexPatSepPerl'
+
+   hi  link    RegexPatSepPerl      RegexNoColor
+   hi  link    RegexPatSepGroupPerl Statement
+   " Allows nested parentheses. Colors the parentheses not the internals.
+   " Can contains itself with @ClusterRegex
+   " Needs to be oneline to not break other syntax groups
+   execute 'syn region  RegexPatSepPerl' .
+      \ ' matchgroup=RegexPatSepGroupPerl' .
+      \ ' start="\%(\\\)\@<!(\%(?:\)\?"' .
+      \ ' end="\%(\\\)\@<!)" ' .
+      \ l:contained ' containedin=@RegexContainedinPerl contains=@ClusterRegex oneline'
+
+   syn cluster ClusterRegex contains=Regex.*
+endfunction
+
+
+" Search and Replace
+function! SpRegexSearches(contained_en)
+   let l:contained = (a:contained_en ? 'contained ' : '')
+
    if g:performance_mode <= 0
       " Match s///
-      syn match   SpRegexSearches1  "%\?s\/.\+\/.*\/[giIceErnp&]*" contains=Regex.*,vimNotation containedin=vimMapRhs,SpVimRegexLine
-      hi  link    SpRegexS11 Function
-      hi  link    SpRegexS12 Function
-      hi  link    SpRegexS13 Function
-      syn match   SpRegexS11 "%\?s\/\%(.\+\/.*\/\)\@="                 contained containedin=SpRegexSearches1
-      syn match   SpRegexS12 "\%(\\\)\@<!\/"                           contained containedin=SpRegexSearches1
-      syn match   SpRegexS13 "\%(%\?s\/.\+\/.*\/\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches1
+      " Only matches one separator at a time
+      " hi  link    SpRegexSearches1 RegexNoColor
+      " execute 'syn match   SpRegexSearches1  "\%(%\|\<\)s\/.\+\/.*\/[giIceErnp&]*" contains=Regex.*,vimNotation ' . l:contained . 'containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind'
+      " hi  link    SpRegexS11 Function
+      " hi  link    SpRegexS12 Function
+      " hi  link    SpRegexS13 Function
+      " execute 'syn match   SpRegexS11 "%\?s\/\%(.\+\/.*\/\)\@="                 contained containedin=SpRegexSearches1'
+      " execute 'syn match   SpRegexS12 "\%(\\\)\@<!\/"                           contained containedin=SpRegexSearches1'
+      " execute 'syn match   SpRegexS13 "\%(%\?s\/.\+\/.*\/\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches1'
 
-      if (!exists("b:comment_leader") || b:comment_leader != '#') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '#')
-         " Match s###g s###e
-         syn match   SpRegexSearches2  "%\?s#.\+#.*#[giIceErnp&]*" contains=Regex.*,vimNotation containedin=vimMapRhs,SpVimRegexLine
-         hi  link    SpRegexS21 Function
-         hi  link    SpRegexS22 Function
-         hi  link    SpRegexS23 Function
-         syn match   SpRegexS21 "%\?s#\%(.\+#.*#\)\@="                 contained containedin=SpRegexSearches2
-         syn match   SpRegexS22 "\%(\\\)\@<!#"                         contained containedin=SpRegexSearches2
-         syn match   SpRegexS23 "\%(%\?s#.\+#.*#\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches2
-      endif
+      " if (!exists("b:comment_leader") || b:comment_leader != '#') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '#')
+      "    " Match s###g s###e
+      "    execute 'syn match   SpRegexSearches2  "%\?s#.\+#.*#[giIceErnp&]*" contains=Regex.*,vimNotation ' . l:contained . 'containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind'
+      "    hi  link    SpRegexS21 Function
+      "    hi  link    SpRegexS22 Function
+      "    hi  link    SpRegexS23 Function
+      "    execute 'syn match   SpRegexS21 "\%(%\|\<\)s#\%(.\+#.*#\)\@="                 contained containedin=SpRegexSearches2'
+      "    execute 'syn match   SpRegexS22 "\%(\\\)\@<!#"                         contained containedin=SpRegexSearches2'
+      "    execute 'syn match   SpRegexS23 "\%(%\?s#.\+#.*#\)\@<=[giIceErnp&]\+"  contained containedin=SpRegexSearches2'
+      " endif
+
+      " Matches different search and replace separators, while keeping track of
+      " which separator was matched. Assigns no colors to the internals of the
+      " search/replace but assigns the Function highlight group color to its
+      " main command keywords and separators.
+      hi link SpRegexSearches    RegexNoColor
+      " NOTE: SpRegexSearchesSep needs a different name for each separator, or
+      " separators may incorrectly match in other search/replace separators.
+      let l:sep_names = {
+         \ '/': 'Slash',
+         \ '#': 'Hash',
+         \ '%': 'Percent',
+         \ '@': 'At',
+         \ '!': 'Bang',
+         \ ',': 'Comma',
+         \ ';': 'Semi'
+         \ }
+      for l:s in ['/', '#', '%', '@', '!', ',', ';']
+         let l:sep = l:s ==# '/' ? '/'
+                 \ : l:s ==# '#' ? '\#'
+                 \ : l:s ==# '%' ? '%'
+                 \ : l:s ==# '@' ? '@'
+                 \ : l:s ==# '!' ? '!'
+                 \ : l:s ==# ',' ? ','
+                 \ : ';'
+         let l:name = l:sep_names[l:s]
+         execute 'hi link SpRegexSearchesSep' . l:name . ' Function'
+
+         " Matches entire search and replace line.
+         execute 'syn match SpRegexSearches' . l:name . ' "\%([%$]\|\<[0-9,]*\)s' . l:sep . '.\+' . l:sep . '.*' . l:sep . '[0-9giIceErnp&]*" contains=SpRegexSearchesSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,RegexPatSepPerl'
+
+         " Matches search and replace commands/separators in SpRegexSearches.
+         " Has some corner case issues but overall works pretty well.
+         " May incorrectly match if another separators comes after the end.
+         " May incorrectly match if s/ occurs again in other separators.
+         execute 'syn match SpRegexSearchesSep' . l:name . ' "\%([%$]\|\<[0-9,]*\)s' . l:sep . '\|' . l:sep . '[0-9giIceErnp&]*\%(.*' . l:sep . '\)\@!\|' . l:sep . '" contained'
+      endfor
+
    endif
 endfunction
 

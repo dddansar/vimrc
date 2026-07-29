@@ -51,7 +51,7 @@ endif
 let b:sh_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax == "csh" || b:current_syntax == "bash")
+if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax == "csh" || b:current_syntax == "bash" || b:current_syntax == "posix")
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
@@ -60,6 +60,14 @@ if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax =
 
    call AllFilesDefaultSyntax()
    call AllPathsSingleSlashStart(1)
+   call RegexMatches(1)
+   call RegexMatchesPerl(1)
+   call SpRegexSearches(1)
+   " AllPaths needs to be after regex/slashes/operators/separators...
+   call AllPaths1(0)
+   call AllPathsWin(0)
+   call AllPathsDollar(0)
+   call AllDefineDollar()
 endif
 
 hi! link shVarAssign    Operator
@@ -67,12 +75,18 @@ hi! link shVarAssign    Operator
 hi! link shAlias        Define
 hi! link shLoop         Repeat
 
+hi  link    ShDelimiters   Delimiter
+syn match   ShDelimiters   "[:;|]" contained containedin=shDoubleQuote,shSingleQuote
+
+hi  link    ShOptions   shOption
+syn match   ShOptions   "--\w\+\>" contained containedin=shDoubleQuote,shSingleQuote
+syn match   ShOptions   "\s-[a-zA-Z]\+\s" contained containedin=shDoubleQuote,shSingleQuote
+
+hi  link    ShOperators   Operator
+syn match   ShOperators   "[=]" contained containedin=shDoubleQuote,shSingleQuote
 
 hi  link    LinuxCommands2 Identifier
 syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
-
-" create dummy region to contain paths
-syn match ShDummyRegion "^\w\+=.*" transparent
 
 " invisible/transparent group...
 syn keyword LinuxCommands tmux containedin=shIf

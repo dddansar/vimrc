@@ -93,7 +93,7 @@ augroup SetFiletypeComment
    autocmd FileType mermaid                                                      let b:comment_leader = '%%'
 
    " Same idea as comment_leader above but with multi-line comments.
-   autocmd FileType c,cpp,cs,java,javascript,typescript,swift,kotlin,go,rust,php,css,scala,dart,groovy,sql,d,verilog,systemverilog,vhdl let b:multi_line_comment_start = '\/\*' | let b:multi_line_comment_end = '\*\/'
+   autocmd FileType c,cpp,cs,java,javascript,typescript,swift,kotlin,go,rust,php,css,scala,dart,groovy,sql,d,verilog,systemverilog,vhdl let b:multi_line_comment_start = '/\*' | let b:multi_line_comment_end = '\*/'
  " autocmd FileType python       let b:multi_line_comment_start = "'''"    | let b:multi_line_comment_end = "'''"
    autocmd FileType ruby         let b:multi_line_comment_start = '=begin' | let b:multi_line_comment_end = '=end'
    autocmd FileType perl         let b:multi_line_comment_start = '=pod'   | let b:multi_line_comment_end = '=cut'
@@ -110,53 +110,6 @@ augroup SetFiletypeComment
 
 augroup END
 
-if !exists("g:syntax_on")
-  finish
-endif
-if !isdirectory(expand($vim_folder_path))
-   finish
-endif
-
-"------------------------------------------------------------------------------
-" Colors and Syntax Highlighting
-"------------------------------------------------------------------------------
-" This will load custom syntax matching for all files.
-augroup EnCustomSyntax
-
-   " Use autocmd!/au! to clear existing autocommands to prevent duplicates.
-   autocmd!
-
-   "===========================================================================
-   "===================== Source syntax files =================================
-   "===========================================================================
-
-   " NOTE: FileType specific syntax files can be found in:
-   "       $VIMRUNTIME/syntax/
-   " See:  $VIMRUNTIME/syntax/vim.vim
-   " NOTE: Vim determines which syntax file to load based on the file:
-   "       $VIMRUNTIME/filetype.vim
-
-   if g:select_custom_syntax >= 2 && g:select_custom_syntax < 5
-
-      " Apply these settings to all files by default
-      "---------------------------------------------------------------------
-      " Adds additional color highlight groups.
-      autocmd BufNewFile,BufRead * if !exists("b:more_colors_loaded") | source $vim_folder_path/more_colors.vim | endif
-
-      " Contains a library of syntax functions.
-      autocmd BufNewFile,BufRead * if !exists("b:syntax_library_loaded") | source $vim_folder_path/syntax_library.vim | endif
-
-      " Adds additional syntax matching for various filetypes.
-      " autocmd BufNewFile,BufRead * if !exists("b:AllFilesDefaultSyntax_loaded") | if exists('*AllFilesDefaultSyntax') | call AllFilesDefaultSyntax() | endif | endif
-
-      " Add abbreviations to shorten common and repetitive text.
-      autocmd BufNewFile,BufRead * if !exists("b:abbrev_loaded") | source $vim_folder_path/abbrev.vim | endif
-      "---------------------------------------------------------------------
-
-   endif
-   "===========================================================================
-
-augroup END
 
 let b:custom_syntax_loaded = 1
 
