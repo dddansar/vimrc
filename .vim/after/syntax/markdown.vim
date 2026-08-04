@@ -72,18 +72,6 @@ if hlexists('markdownError')
    syn clear markdownError
 endif
 
-" Make lines beginning with # as titles
-hi link TxtTitles1 AllTitles1
-hi link TxtTitles2 AllTitles2
-hi link TxtTitles3 AllTitles3
-hi link TxtTitles4 AllTitles4
-hi link TxtTitles5 AllTitles5
-syntax match TxtTitles1 "^\s*# .*"
-syntax match TxtTitles2 "^\s*## .*"
-syntax match TxtTitles3 "^\s*### .*"
-syntax match TxtTitles4 "^\s*#### .*"
-syntax match TxtTitles5 "^\s*##### .*"
-
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "markdown"
    " call AllOperators()
@@ -97,6 +85,8 @@ if exists("b:current_syntax") && b:current_syntax == "markdown"
    call AllNumbers()
    " call AllSlashes()
    " call AllHLWords()
+
+   call AllTitlesMarkdown()
 
    " AllPaths needs to be after regex/slashes/operators/separators...
    call AllPaths1(0)

@@ -75,6 +75,9 @@ hi! link shVarAssign    Operator
 hi! link shAlias        Define
 hi! link shLoop         Repeat
 
+" hi  link    ShDollarBracket   Define
+" syn match   ShDollarBracket   "\%(\${\|}\)" contained containedin=shDoubleQuote,shSingleQuote
+
 hi  link    ShDelimiters   Delimiter
 syn match   ShDelimiters   "[:;|]" contained containedin=shDoubleQuote,shSingleQuote
 

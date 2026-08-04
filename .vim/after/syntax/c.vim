@@ -59,6 +59,11 @@ if exists("b:current_syntax") && b:current_syntax == "c"
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
+   " I use my own TODO/NOTE matching
+   if hlexists('cTodo')
+      syn clear cTodo
+   endif
+
    call AllFilesDefaultSyntax()
 endif
 

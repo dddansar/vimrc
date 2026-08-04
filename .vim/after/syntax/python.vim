@@ -57,6 +57,11 @@ if exists("b:current_syntax") && b:current_syntax == "python"
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
+   " I use my own TODO/NOTE matching
+   if hlexists('pythonTodo')
+      syn clear pythonTodo
+   endif
+
    call AllFilesDefaultSyntax()
 
    call AllOperators()
@@ -66,7 +71,4 @@ if exists("b:current_syntax") && b:current_syntax == "python"
    call AllArrows()
    call AllSeparators()
 endif
-
-hi  link    PythonNote  AllHLNote
-syn keyword PythonNote  NOTE containedin=.*Comment.*
 

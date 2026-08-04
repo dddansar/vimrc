@@ -57,6 +57,11 @@ if exists("b:current_syntax") && b:current_syntax == "tcl"
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
+   " I use my own TODO/NOTE matching
+   if hlexists('tclTodo')
+      syn clear tclTodo
+   endif
+
    call AllFilesDefaultSyntax()
 
    call AllDefineDollar()

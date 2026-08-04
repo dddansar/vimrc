@@ -51,7 +51,7 @@ endif
 let b:tex_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "tex"
+if exists("b:current_syntax") && (b:current_syntax == "tex" || b:current_syntax == "plaintex")
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
@@ -59,6 +59,14 @@ if exists("b:current_syntax") && b:current_syntax == "tex"
    source $vim_folder_path/after/syntax/shared/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
+
+   " I use my own TODO/NOTE matching
+   if hlexists('initexTodo')
+      syn clear initexTodo
+   endif
+   if hlexists('texTodo')
+      syn clear texTodo
+   endif
 
    call AllFilesDefaultSyntax()
 endif

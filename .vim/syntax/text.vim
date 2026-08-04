@@ -57,6 +57,8 @@ endif
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "text"
    let b:comment_leader = '//'
+   let b:multi_line_comment_start = '/\*'
+   let b:multi_line_comment_end = '\*/'
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
@@ -79,6 +81,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    "    source $vim_folder_path/after/syntax/shared/linux.vim
    " endif
 
+   " NOTE: Need to move AllOperators before AllHLExclamations()
+   call AllOperators()
    call AllFilesDefaultSyntax()
 endif
 
@@ -129,18 +133,6 @@ syn match Green2bg            "\<P7\>" contains=@NoSpell
 syn match Tealbg              "\<P8\>" contains=@NoSpell
 syn match Blue2bg             "\<P9\>" contains=@NoSpell
 
-" Make lines beginning with # as titles
-hi link TextTitles1 AllTitles1
-hi link TextTitles2 AllTitles2
-hi link TextTitles3 AllTitles3
-hi link TextTitles4 AllTitles4
-hi link TextTitles5 AllTitles5
-syntax match TextTitles1 "^\s*# .*"
-syntax match TextTitles2 "^\s*## .*"
-syntax match TextTitles3 "^\s*### .*"
-syntax match TextTitles4 "^\s*#### .*"
-syntax match TextTitles5 "^\s*##### .*"
-
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
 if exists("b:current_syntax") && b:current_syntax == "text"
@@ -152,21 +144,30 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllNumbers()
    call AllSlashes()
    call AllSeparators2()
-   call AllOperators()
    call StrikeoutEn()
    call AllCommentAnywhere()
-   call AllHLWords()
-   call AllHLExclamations()
+   call AllMultiLineCommentAnywhere()
+   " call AllHLWords()
+   " call AllHLExclamations()
+   call AllTitlesMarkdown()
    call AllTitlesNotContained()
-   call AllQuotesLookbehind(0)
 
-   " if expand('%:t') =~# '^regex.*\.txt$' || expand('%:p') =~ '/reference_files/'
-   "    call RegexMatches(0)
-   "    call RegexMatchesVim(0)
-   "    call RegexMatchesPerl(1)
-   "    call SpRegexSearches(0)
-   "    setlocal nospell
-   " endif
+   if expand('%:t') =~# '^regex.*\.txt$'
+      call AllQuotesLookbehind(1)
+      call RegexMatches(0)
+      call RegexMatchesVim(0)
+      call RegexMatchesPerl(0)
+      call SpRegexSearches(0)
+      " setlocal nospell
+
+      " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
+      syn match   RegexQuant  "\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
+
+      hi  link  TextLinuxCommands Statement
+      syn match TextLinuxCommands "\<grep\%( -\w\+\)*\>"
+   else
+      call AllQuotesLookbehind(0)
+   endif
    " AllPaths needs to be after regex/slashes/operators/separators...
    call AllPaths1(0)
    call AllPathsWin(0)

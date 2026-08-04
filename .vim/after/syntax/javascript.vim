@@ -1,7 +1,8 @@
 "==============================================================================
-" File: perl.vim
+" File: javascript.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for all perl files.
+" Description: This file adds custom syntax highlighting for all javascript
+"              files.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -33,7 +34,7 @@
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
-" if exists("b:perl_loaded")
+" if exists("b:javascript_loaded")
 "    finish
 " endif
 if exists("b:disable_after_syntax")
@@ -46,38 +47,32 @@ if !isdirectory(expand($vim_folder_path))
    finish
 endif
 if exists("g:debug_syntax")
-   echom "perl.vim syntax file loaded"
+   echom "javascript.vim syntax file loaded"
 endif
-let b:perl_loaded = 1
+let b:javascript_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "perl"
+if exists("b:current_syntax") && b:current_syntax == "javascript"
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
    " I use my own TODO/NOTE matching
-   if hlexists('perlTodo')
-      syn clear perlTodo
+   if hlexists('javaScriptCommentTodo')
+      syn clear javaScriptCommentTodo
    endif
 
    call AllFilesDefaultSyntax()
-
-   call AllParenBr()
+   call AllOperators()
    call AllEqualities()
-   " call AllOperators()
-   " call AllArrows()
-   " call AllDefineDollar()
-   " call AllDefineAt()
+   call AllParenBr()
+   call AllSeparators()
    call RegexMatches(1)
    call RegexMatchesPerl(1)
-   call SpRegexSearches(1)
+   " call SpRegexSearches(1)
 endif
 
-hi  link    PlEquality    Operator
-syn match   PlEquality    "=\%(pod\|cut\)\@!"
-
-hi  link    PlDefineAnd   Function
-syn match   PlDefineAnd   "^\s*&\w\+"
+hi  link    JavascriptRegexEnds Statement
+syn region  JavascriptRegex matchgroup=JavascriptRegexEnds start="/\ze[^/]" end="/gm\?\>" oneline
 

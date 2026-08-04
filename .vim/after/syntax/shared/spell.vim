@@ -53,12 +53,14 @@ let b:spell_loaded = 1
 
 "------------------------------------------------------------------------------
 setlocal spell
-setlocal spelllang+=en_us
+setlocal spelllang=en,en_us
 " Ignore uppercase of first word.
 setlocal spellcapcheck=
 "------------------------------------------------------------------------------
 
-call AllIgnoreSpellings()
+if !hlexists('AllSpellCommColor1')
+   call AllIgnoreSpellings()
+endif
 
 "------------------------------------------------------------------------------
 " Setting up a custom dictionary !!!!

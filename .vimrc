@@ -605,7 +605,7 @@ function! DefaultSettings()
 
    " When you turn on spell checking, tell Vim to not check the spelling of
    " text that is not explicitly covered by a syntax item.
-   syntax spell notoplevel
+   " syntax spell notoplevel
 
    " Prevents the cursor from going within the top or bottom x lines of the
    " screen and will readjust the screen to show a min of x lines below or
@@ -1129,10 +1129,10 @@ function! LoadMappings()
    " NOTE: On Linux, the "*y command yanks text to the selection register
    "       (for middle-click paste), while the "+y command yanks text to the
    "       clipboard register (for standard CTRL+V paste).
-   nnoremap <c-leftmouse>  <leftmouse>viw"*yk$/<middlemouse><cr>
-   nnoremap <c-rightmouse> <leftmouse>viw"*yk$/\<<middlemouse>\><cr>
-   nnoremap <s-leftmouse>  <leftmouse>viw"*yk$/\V\c<middlemouse><cr>
-   nnoremap <s-rightmouse> <leftmouse>viw"*yk$/\V\c\<<middlemouse>\><cr>
+   nnoremap <c-leftmouse>  <leftmouse>viw"*yk$/\V\c<middlemouse><cr>
+   nnoremap <c-rightmouse> <leftmouse>viw"*yk$/\V\c\<<middlemouse>\><cr>
+   nnoremap <s-leftmouse>  <leftmouse>viw"*yk$/<up>\\|<middlemouse><cr>
+   nnoremap <s-rightmouse> <leftmouse>viw"*yk$/<up>\\|\<<middlemouse>\><cr>
 
    " Invert the lazyredraw setting.
    nnoremap <leader>@ :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
@@ -1147,7 +1147,7 @@ function! LoadMappings()
 
       " Search for characters being selected.
       vnoremap <c-/> "+y`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-8> "+y`<<a-backspace>/\<<middlemouse>\><cr>
+      vnoremap <c-8> "+y`<<a-backspace>/\V\c\<<middlemouse>\><cr>
 
       " Add another word to the existing search!
       vnoremap ? "+y`<<a-backspace>/<up>\\|<middlemouse><cr>
@@ -1155,7 +1155,7 @@ function! LoadMappings()
 
       " Search for word under the cursor.
       nnoremap <c-/> viw"+y<a-backspace>/\V\c<middlemouse><cr>
-      nnoremap <c-8> viw"+y<a-backspace>/\<<middlemouse>\><cr>
+      nnoremap <c-8> viw"+y<a-backspace>/\V\c\<<middlemouse>\><cr>
 
       " Add another word to the existing search!
       " NOTE: "?" was used to search backwards but I can just use <s-n>.
@@ -1166,7 +1166,7 @@ function! LoadMappings()
       " Search for characters being selected.
       vnoremap /     <esc>`<<a-backspace>/\V\c<middlemouse><cr>
       vnoremap <c-/> <esc>`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-8> <esc>`<<a-backspace>/\<<middlemouse>\><cr>
+      vnoremap <c-8> <esc>`<<a-backspace>/\V\c\<<middlemouse>\><cr>
 
       " Add another word to the existing search!
       vnoremap ? <esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
@@ -1174,7 +1174,7 @@ function! LoadMappings()
 
       " Search for word under the cursor.
       nnoremap <c-/> viw"*y<a-backspace>/\V\c<middlemouse><cr>
-      nnoremap <c-8> viw"*y<a-backspace>/\<<middlemouse>\><cr>
+      nnoremap <c-8> viw"*y<a-backspace>/\V\c\<<middlemouse>\><cr>
 
       " Add another word to the existing search!
       " NOTE: "?" was used to search backwards but I can just use <s-n>.
@@ -1398,7 +1398,7 @@ function! LoadMappings()
    " in the file.
    nnoremap <leader>fc m':%s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:%s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:%s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:%s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>:noh<cr><c-o><c-o><c-o>
 
-   " Capitalize first letter of every Word on the current line.
+   " Capitalize first letter of every Word on the current line (Title Case).
    nnoremap <leader>fu :s/\<[a-z]/\u&/g<cr>
    " Capitalize first letter of every Word on every line in the file.
    nnoremap <leader>fU m':%s/\<[a-z]/\u&/g<cr>:noh<cr><c-o>
@@ -1486,16 +1486,27 @@ function! LoadMappings()
    nnoremap <leader>j5 83%
 
    " Enable disable spell checking.
-   nnoremap <leader>sc  :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell notoplevel<cr>
-   nnoremap <leader>ss  :source ~/.vim/after/syntax/shared/spell.vim<cr>:call IgnoreSpellings()<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>sn :setlocal nospell<cr>
+   " NOTE: adding & at the end of a set option in Vim, resets the setting to
+   "       it's default value! -> set spellcapcheck&
+   nnoremap <leader>sn  :setlocal nospell<cr>
+
+   nnoremap <leader>sc :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sd :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell notoplevel<cr>
+
+   nnoremap <leader>sz :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sx :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell notoplevel<cr>
+
+   nnoremap <leader>ss :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>st :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell notoplevel<cr>
+
 
 
    " Fix window after opening a split screen.
    nnoremap <leader>sp  :sp<cr><c-w><bar><c-w>_
    nnoremap <leader>vsp :vsp<cr><c-w><bar><c-w>_
    " Opposite of sp and vsp.
-   nnoremap <leader>sd  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
+ " nnoremap <leader>sd  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
+   nnoremap <leader>sb  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
    nnoremap <leader>rsp :set<space>splitright<cr>:vsp<cr><c-w><bar><c-w>_:set<space>nosplitright<cr>
    " topleft botright
    nnoremap <leader>tsp :topleft<space>split<cr><c-w><bar><c-w>_

@@ -58,6 +58,11 @@ if exists("b:current_syntax") && b:current_syntax == "asm"
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
+   " I use my own TODO/NOTE matching
+   if hlexists('asmTodo')
+      syn clear asmTodo
+   endif
+
    call AllFilesDefaultSyntax()
 
    call AllDefineDollar()

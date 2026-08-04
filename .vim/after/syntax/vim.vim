@@ -70,6 +70,16 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
       finish
    endif
 
+   " I use my own TODO/NOTE matching
+   if hlexists('vimTodo')
+      syn clear vimTodo
+   endif
+   " I use my own Titles
+   if hlexists('vimCommentTitle')
+      syn clear vimCommentTitle
+   endif
+
+
    call AllFilesDefaultSyntax()
 
    call AllDefineAt()
