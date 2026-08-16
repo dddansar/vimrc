@@ -152,19 +152,54 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllTitlesMarkdown()
    call AllTitlesNotContained()
 
-   if expand('%:t') =~# '^regex.*\.txt$'
+   if expand('%:t') =~# '.*regex.*\.txt$' || expand('%:t') =~# '^substitution_tutorial\.txt$'
       call AllQuotesLookbehind(1)
+
+      " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
+      hi link    TextQuotesLookbehind TextNoColor
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+''+ end=+'\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+
       call RegexMatches(0)
       call RegexMatchesVim(0)
       call RegexMatchesPerl(0)
+      " Needs to be after $ is matched from regex
+      call AllDefineDollar()
+      call AllDefineAt()
+      " Needs to be after AllDefineDollar as $s/// is a valid substitution
       call SpRegexSearches(0)
-      " setlocal nospell
 
       " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
       syn match   RegexQuant  "\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
 
       hi  link  TextLinuxCommands Statement
-      syn match TextLinuxCommands "\<grep\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(\.\)\@<!\<grep\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?"
+      syn match TextLinuxCommands "\(\.\)\@<!\<echo\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(\.\)\@<!\<awk\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(\.\)\@<!\<perl\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(^\||\)\s*\<cat\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\(^\||\)\s*\<print\>"
+      syn match TextLinuxCommands "\(^\||\)\s*\<use\>"
+      syn match TextLinuxCommands "\(^\||\)\s*\<time\>"
+      syn match TextLinuxCommands "\(^\|[|(]\)\s*\<my\>"
+      syn keyword TextLinuxCommands syntime timethis
+      " Contain in TextQuotesLookbehind
+      syn keyword TextLinuxCommands print sub gsub contained
+
+      " Add # comments as well
+      syn match AllCommentLineStart +^\s*#.*+
+
+      " Match a hashbang
+      hi  link  TextHashBang Define
+      syn match TextHashBang +^#!.*+
+
+      " Match programming conditionals and loops
+      hi  link  TextPrgmConditionals Conditional
+      syn match TextPrgmConditionals +^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
+      syn match TextPrgmConditionals +^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
+
+      syn match   AllEquality    "=\~" containedin=RegexPatSepPerl
    else
       call AllQuotesLookbehind(0)
    endif

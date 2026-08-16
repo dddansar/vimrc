@@ -60,7 +60,7 @@ syn cluster ClusterHLWords contains=AllHLTodo,AllHLNote,AllHLViNote,AllHLViTodo,
 
 " NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
 " Common containedin cluster for all path matches
-syn cluster ClusterAllPathsCI contains=@ClusterCommentsPlusScope,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,shFunctionExpr,shDerefPattern,SpVimString1,SpVimString2,cshSnglQuote,AllQuotes,AllQuotesLookbehind,RegexPatSepPerl
+syn cluster ClusterAllPathsCI contains=@ClusterCommentsPlusScope,.*String.*,vimAugroup,vimMapRhs,shSingleQuote,shExpr,shIf,shDo,shLoop,shFor,shDblBrace,@shLoopList,ShDummyRegion,shArrayRegion,shFunctionOne,shFunctionExpr,shDerefPattern,SpVimString1,SpVimString2,cshSnglQuote,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind
 
 " Just in case another file has it set to ignore (like with markdown files)...
 syn case match
@@ -118,10 +118,7 @@ function! AllTabsAndSpaces()
    if g:performance_mode <= 0
       " Highlight trailing white spaces
       hi  link     AllTrailingSpaces    HLBarelyVisible
-      " NOTE: using \n insead of $ fixes an issue of matches extending comments
-      " to the next line...
-    " syn match    AllTrailingSpaces    '\s\+\($\)\@='  containedin=ALL
-      syn match    AllTrailingSpaces    '\s\+\(\n\)\@=' containedin=ALL
+      syn match    AllTrailingSpaces    '\(\S\|^\)\@<=\s\+$' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -513,13 +510,13 @@ endfunction
 function! AllPathsDollar(contained_en)
    " Identicial to AllPaths2, but must start with $path.
    " Matches $path/file or $path/path2/file.txt or $USER/path/ or $path/$file
-   " not these? $(path)/file, ${path}/file.txt, ${path}/${file}
+   " not these? $(path)/file, ${path}/file.txt, ${path}/${file}, $a/b
    " does not match: ${path/path/file}, ${path}
    if g:performance_mode <= 0
       hi  link    AllPathsDollar Underlined
       execute 'syn match AllPathsDollar "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$' .
-         \ '\%([a-zA-Z0-9_.-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)' .
+         \ '\%([a-zA-Z0-9_.-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)\+\)' .
          \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\+\/\?' .
          \ '\%([)}\]>]\)\@<!' .
          \ '\%(\s\|\n\|["''),}\]:;<>*]\)\@=" ' .
@@ -556,14 +553,16 @@ function! AllWebsites(contained_en)
    " Unsafe Website Characters
    " Spaces:                    Must be encoded as %20 or +.
    " Control / Non-ASCII:       Quotes ("), brackets (< > { }), symbols (^, \, |, `), and all non-ASCII characters.
+   " Websites Must Not End On These Special Character
+   " .,)!?'"]#&=\@:;%$*         Punctuation followed by other text
 
    " Match links like www.vim.org
    hi  link     AllWebLinks1  Underlined
-   execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
-   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 endfunction
 
 
@@ -692,16 +691,16 @@ endfunction
 function! AllQuotes(contained_en)
    " Match quotes with region (region is non-greedy by default).
    hi link    AllQuotes String
-   execute 'syn region AllQuotes start=+\%(\s\|^\)"+ms=e skip=+""+ end=+"\ze\%(\W\|$\)+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotes start=+\%(\s\|^\)''+ms=e skip=+''''+ end=+''\ze\%(\W\|$\)+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%(\s\|^\)"+ms=e skip=+""+ end=+"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%(\s\|^\)''+ms=e skip=+''''+ end=+''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 
 " Can't match ='quote' or other characters with AllQuotes() if the '=' is
 " already matched from elsewhere -> Need to use lookbehind to match instead.
 function! AllQuotesLookbehind(contained_en)
    hi link    AllQuotesLookbehind String
-   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"\ze\%(\W\|$\)+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+''''+ end=+''\ze\%(\W\|$\)+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+''''+ end=+''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 "------------------------------------------------------------------------------
 
