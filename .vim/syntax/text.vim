@@ -57,7 +57,7 @@ endif
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "text"
    let b:comment_leader = '//'
-   let b:multi_line_comment_start = '/\*'
+   let b:multi_line_comment_start = '\(^\|\s\)\@<=/\*'
    let b:multi_line_comment_end = '\*/'
    source $vim_folder_path/more_colors.vim
    source $vim_folder_path/syntax_library.vim
@@ -71,13 +71,12 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
    " NOTE: Moving these here to re-source on file/syntax reload.
    if expand('%:t') =~# '\.uni\.txt$'
-      source $vim_folder_path/after/syntax/shared/unicode.vim
-   endif
-   if expand('%:t') =~ '\.uni\.txt$'
       source $vim_folder_path/after/syntax/shared/math.vim
+      source $vim_folder_path/after/syntax/shared/math_mappings.vim
+      source $vim_folder_path/after/syntax/shared/unicode.vim
       setlocal nospell
    endif
-   " if expand('%:p') =~ '/reference_files/'
+   " if expand('%:p') =~# '/reference_files/'
    "    source $vim_folder_path/after/syntax/shared/linux.vim
    " endif
 
@@ -152,7 +151,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllTitlesMarkdown()
    call AllTitlesNotContained()
 
-   if expand('%:t') =~# '.*regex.*\.txt$' || expand('%:t') =~# '^substitution_tutorial\.txt$'
+   if expand('%:t') =~# '.*regex.*\.txt$' || expand('%:t') =~# '.*substitution_tutorial\.txt$'
       call AllQuotesLookbehind(1)
 
       " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
@@ -170,8 +169,10 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       call SpRegexSearches(0)
 
       " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
-      syn match   RegexQuant  "\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
+      hi  link  TextRegexQuant RegexQuant
+      syn match TextRegexQuant  "\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
 
+      " Contain in TextQuotesLookbehind
       hi  link  TextLinuxCommands Statement
       syn match TextLinuxCommands "\(\.\)\@<!\<grep\%( -\w\+\)*\>"
       syn match TextLinuxCommands "\(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?"
@@ -183,12 +184,16 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       syn match TextLinuxCommands "\(^\||\)\s*\<use\>"
       syn match TextLinuxCommands "\(^\||\)\s*\<time\>"
       syn match TextLinuxCommands "\(^\|[|(]\)\s*\<my\>"
+
       syn keyword TextLinuxCommands syntime timethis
-      " Contain in TextQuotesLookbehind
       syn keyword TextLinuxCommands print sub gsub contained
 
       " Add # comments as well
-      syn match AllCommentLineStart +^\s*#.*+
+      hi  link  TextCommentLineStart AllCommentLineStart
+      syn match TextCommentLineStart +^\s*#.*+
+
+      hi  link  TextCommentAnywhere AllCommentAnywhere
+      syn match TextCommentAnywhere +\(\s\)\@<=#\s[a-zA-Z0-9].*+
 
       " Match a hashbang
       hi  link  TextHashBang Define
@@ -199,7 +204,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       syn match TextPrgmConditionals +^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
       syn match TextPrgmConditionals +^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
 
-      syn match   AllEquality    "=\~" containedin=RegexPatSepPerl
+      hi  link  TextEquality AllEquality
+      syn match TextEquality    "=\~" containedin=RegexPatSepPerl
    else
       call AllQuotesLookbehind(0)
    endif

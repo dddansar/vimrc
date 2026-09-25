@@ -73,24 +73,19 @@ if g:performance_mode <= 0
    " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some unicode
    " chars while it matches others... so `ˣ` is invisible to them as a boundary
    " marker -> use \%(\w\)\@<! instead of \< and \%(\w\)\@! instead of \>
-   " Testing \%(\<\W\?\) with containedin instead of \%(\w\)\@<! -> misses aᵐb
-   " -> testing \%(\<\|\W\) -> issues with paren...
-   " NOTE: Testing \%(\<\|[^!-~]\) -> 2x improvement!!!!! -> WARNING: don't
-   " fully work!!! -> NOTE: changed order inside custom.vim -> worked!!
    " 16ˣ × 7ˣ
    " ˣ16 × ˣ7
    " aˣ × aˣ
    " ˣa × ˣa
    " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f s' μi e⁻ˣxᵗ⁻¹
+   " aᵐbᵐ
 
    hi  link    SpMathSingleChar Constant
-   syn match   SpMathSingleChar "\%(\<\|[^!-~]\)[a-zA-Z]\%((s\%()\)\@=\)\@<!\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!\%(\w\)\@!" contains=@NoSpell
-
-   " misses aᵐbᵐ
+   syn match   SpMathSingleChar "\%(\w\)\@<![a-zA-Z]\%((s\%()\)\@=\)\@<!\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!\%(\w\)\@!" contains=@NoSpell
 
    " More efficient not to merge into SpMathSingleChar
    " Unmatch I a A as they are common 1 letter words in English.
-   syn match   SpMathNoColorIaA2 "\%(^\|[!(.?:;]\|\w\|(\)\@<=\s\?\<[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=" contains=@NoSpell
+   syn match   SpMathNoColorIaA2 "\%(^\s*\|[!(.?:;,]\|\w\|(\)\@<=\s\?\<[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=" contains=@NoSpell
 
    hi  link    SpMathSingleChar2 Constant
    syn match   SpMathSingleChar2 "\s\?\<[aA] \%(\<\%(will\|was\|then\)\>\)\@=" contains=@NoSpell
@@ -107,35 +102,35 @@ if g:performance_mode <= 0
    hi  link    SpMathXInNum     Function
    syn match   SpMathXInNum     "x" contained contains=@NoSpell
    hi  link    SpMathNumWithX   Number
-   syn match   SpMathNumWithX   "\%(\<\|[^!-~]\)\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
+   syn match   SpMathNumWithX   "\%(\w\)\@<!\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
 
    " Derivatives
    hi  link    SpMathDeriv      Constant
-   syn match   SpMathDeriv      "\%(\<\|[^!-~]\)d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
-   syn match   SpMathDeriv      "\%(\<\|[^!-~]\)\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
+   syn match   SpMathDeriv      "\%(\w\)\@<!d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
+   syn match   SpMathDeriv      "\%(\w\)\@<!\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
 
    hi  link    SpMathDeriv2     Constant
    syn match   SpMathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
 
    " Highlight common math multi-variables.
    hi  link    SpMathMultiVars1 Constant
-   syn match   SpMathMultiVars1 "\%(\<\|[^!-~]\)\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
-   syn match   SpMathMultiVars2 "\%(\<\|[^!-~]\s\?\)[a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
+   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
    hi  link    SpMathMultiVars3 Constant
    syn match   SpMathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
 
    " Match more functions.
    hi  link    SpMathFunction   Function
-   syn match   SpMathFunction   "\%(\<\|[^!-~]\)[f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
+   syn match   SpMathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
 
    " Highlight math terms/functions.
-   syn match   SpMathFunction   "\%(\<\|[^!-~]\)\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell
-   syn match   SpMathFunction   "\%(\<\|[^!-~]\)[0-9]*\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
-   syn match   SpMathFunction   "\%(\<\|[^!-~]\)\%(curl\|grad\|div\|rot\|proj\|det\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
+   syn match   SpMathFunction   "\%(\w\)\@<!\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathFunction   "\%(\w\)\@<![0-9]*\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
+   syn match   SpMathFunction   "\%(\w\)\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\%(\w\)\@!" contains=@NoSpell,MathNumInVar
    "---------------------------------------------------------------------------
 
    " Clusters
@@ -148,6 +143,8 @@ endif
 "---------------------------
 " Common math abbreviations
 "---------------------------
+
+" NOTE: <buffer> makes abbrev local to the current buffer instead of global.
 
 " Common pi
 inorea <buffer> _pr2       πr²<left><right><c-r>=Eatchar('\s')<cr>
@@ -250,11 +247,6 @@ inorea <buffer> _memq      ∈ ℚ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _memr      ∈ ℝ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _memi      ∈ 𝕀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _memc      ∈ ℂ<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea <buffer> _xnm1      xⁿ⁻¹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _xnp1      xⁿ⁺¹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nm1       ⁿ⁻¹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _np1       ⁿ⁺¹<left><right><c-r>=Eatchar('\s')<cr>
 
 " Formal definitions
 inorea <buffer> _defd      f′(x) = limₕ₋›₀ (f(x+h) - f(x))/h<left><right><c-r>=Eatchar('\s')<cr>

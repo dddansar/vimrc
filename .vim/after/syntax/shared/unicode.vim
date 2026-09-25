@@ -165,6 +165,8 @@ endif
 " NOTE: Using   <c-r>=Eatchar('\s')<cr>   to consume the space typed after an
 "       abbreviation.
 
+" NOTE: <buffer> makes abbrev local to the current buffer instead of global.
+
 inorea <buffer> _tick      ✓<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _check     ✓<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _xtick     ✗<left><right><c-r>=Eatchar('\s')<cr>
@@ -524,10 +526,14 @@ syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚
 
 " For all
 inorea <buffer> _fa        ∀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _all       ∀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _forall    ∀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _faxs      ∀x∈𝕊<left><right><c-r>=Eatchar('\s')<cr>
 
 " There exists
 inorea <buffer> _te        ∃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _exists    ∃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _thereexists ∃<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _tne       ∄<left><right><c-r>=Eatchar('\s')<cr>
 
 " Therefore
@@ -563,14 +569,14 @@ inorea <buffer> _inter     ∩<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _in        ∩<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Inter     ⋂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _In        ⋂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_in       ⋒<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _din       ⋒<left><right><c-r>=Eatchar('\s')<cr>
 
 " UNION
 inorea <buffer> _union     ∪<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _un        ∪<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Union     ⋃<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Un        ⋃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_un       ⋓<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dun       ⋓<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _unpl      ⊎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _undot     ⊍<left><right><c-r>=Eatchar('\s')<cr>
@@ -608,8 +614,8 @@ inorea <buffer> _subne     ⊊<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _nsupe     ⊉<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _supne     ⊋<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> d_sub      ⋐<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_sup      ⋑<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dsub      ⋐<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dsup      ⋑<left><right><c-r>=Eatchar('\s')<cr>
 
 " Normal subgroups
 inorea <buffer> _nmsub     ⊲<left><right><c-r>=Eatchar('\s')<cr>
@@ -1098,12 +1104,11 @@ inorea <buffer> _mrab      ❭<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _hrab      ❯<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _vhrab     ❱<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _ab2      ⟨⟩<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _2lab      ⟪<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _2rab      ⟫<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _2rab2    ⟪⟫<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea <buffer> d_lab     《<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_rab     》<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mldab     ⟪<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mrdab     ⟫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mrdab2   ⟪⟫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _ldab     《<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _rdab     》<left><right><c-r>=Eatchar('\s')<cr>
 
 " Flattened parenthesis
 inorea <buffer> _lfp       ⟮<left><right><c-r>=Eatchar('\s')<cr>
@@ -1122,8 +1127,8 @@ inorea <buffer> _2raq      »<left><right><c-r>=Eatchar('\s')<cr>
 hi  link  UnicodeTBrk  PreProc
 syn match UnicodeTBrk  "[⟨⟩⟪⟫«»❬❮❰❭❯❱《》]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-inorea <buffer> d_lpa      ⟦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_rpa      ⟧<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> d_lp       ⟦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> d_rp       ⟧<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_lcb      ⦃<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_rcb      ⦄<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -1609,59 +1614,6 @@ inorea <buffer> _Na        𝞩<left><right><c-r>=Eatchar('\s')<cr>
 hi  link    UnicodeGreekUNorm UnicodeVarColor
 syn match   UnicodeGreekUNorm "[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩᴨФᴪ𝞩Ω]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-" Cursive
-inorea <buffer> c_Alpha    𝛢<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Al       𝛢<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Beta     𝛣<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Be       𝛣<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Gamma    𝛤<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ga       𝛤<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Delta    𝛥<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_De       𝛥<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Epsilon  𝛦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ep       𝛦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Zeta     𝛧<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ze       𝛧<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Eta      𝛨<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Et       𝛨<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Theta    𝛩<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Th       𝛩<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Theta2   𝛳<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Th2      𝛳<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Iota     𝛪<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Io       𝛪<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Kappa    𝛫<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ka       𝛫<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Lambda   𝛬<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_La       𝛬<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Mu       𝛭<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Nu       𝛮<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Xi       𝛯<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Omicron  𝛰<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_On       𝛰<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Pi       𝛱<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Rho      𝛲<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Sigma    𝛴<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Si       𝛴<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Tau      𝛵<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ta       𝛵<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Upsilon  𝛶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Up       𝛶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Phi      𝛷<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ph       𝛷<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Chi      𝛸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ch       𝛸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Psi      𝛹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Ps       𝛹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Omega    𝛺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Om       𝛺<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea <buffer> c_Nabla    𝛻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Na       𝛻<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeGreekUC UnicodeCColor
-syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
 " Greek
 inorea <buffer> _alpha     α<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _al        α<left><right><c-r>=Eatchar('\s')<cr>
@@ -1720,6 +1672,59 @@ inorea <buffer> _na        ∇<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeGreekLNorm UnicodeVarColor
 syn match   UnicodeGreekLNorm "[αβγɣδεζηθικλμνξοπρςστυφχψω∇µф]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Cursive
+inorea <buffer> c_Alpha    𝛢<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Al       𝛢<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Beta     𝛣<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Be       𝛣<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Gamma    𝛤<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ga       𝛤<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Delta    𝛥<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_De       𝛥<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Epsilon  𝛦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ep       𝛦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Zeta     𝛧<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ze       𝛧<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Eta      𝛨<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Et       𝛨<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Theta    𝛩<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Th       𝛩<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Theta2   𝛳<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Th2      𝛳<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Iota     𝛪<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Io       𝛪<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Kappa    𝛫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ka       𝛫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Lambda   𝛬<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_La       𝛬<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Mu       𝛭<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Nu       𝛮<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Xi       𝛯<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Omicron  𝛰<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_On       𝛰<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Pi       𝛱<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Rho      𝛲<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Sigma    𝛴<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Si       𝛴<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Tau      𝛵<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ta       𝛵<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Upsilon  𝛶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Up       𝛶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Phi      𝛷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ph       𝛷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Chi      𝛸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ch       𝛸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Psi      𝛹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Ps       𝛹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Omega    𝛺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Om       𝛺<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> c_Nabla    𝛻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Na       𝛻<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeGreekUC UnicodeCColor
+syn match   UnicodeGreekUC "[𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Cursive
 inorea <buffer> c_alpha    𝛼<left><right><c-r>=Eatchar('\s')<cr>
@@ -2002,6 +2007,37 @@ inorea <buffer> _cae        æ<left><right><c-r>=Eatchar('\s')<cr>
 "---------------------------
 
 " Cursive
+inorea <buffer> c_A        𝐴<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_B        𝐵<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_C        𝐶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_D        𝐷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_E        𝐸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_F        𝐹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_G        𝐺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_H        𝐻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_I        𝐼<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_J        𝐽<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_K        𝐾<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_L        𝐿<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_M        𝑀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_N        𝑁<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_O        𝑂<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_P        𝑃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Q        𝑄<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_R        𝑅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_S        𝑆<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_T        𝑇<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_U        𝑈<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_V        𝑉<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_W        𝑊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_X        𝑋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Y        𝑌<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> c_Z        𝑍<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinUC UnicodeCColor
+syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Cursive
 inorea <buffer> c_a        𝑎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_b        𝑏<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> c_c        𝑐<left><right><c-r>=Eatchar('\s')<cr>
@@ -2032,6 +2068,37 @@ inorea <buffer> c_z        𝑧<left><right><c-r>=Eatchar('\s')<cr>
 hi  link    UnicodeLatinLC UnicodeCColor
 syn match   UnicodeLatinLC "[𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝘩𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
+
+" Bold
+inorea <buffer> b_A        𝐀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_B        𝐁<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_C        𝐂<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_D        𝐃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_E        𝐄<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_F        𝐅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_G        𝐆<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_H        𝐇<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_I        𝐈<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_J        𝐉<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_K        𝐊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_L        𝐋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_M        𝐌<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_N        𝐍<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_O        𝐎<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_P        𝐏<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_Q        𝐐<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_R        𝐑<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_S        𝐒<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_T        𝐓<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_U        𝐔<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_V        𝐕<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_W        𝐖<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_X        𝐗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_Y        𝐘<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> b_Z        𝐙<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinUB UnicodeBColor
+syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Bold
 inorea <buffer> b_a        𝐚<left><right><c-r>=Eatchar('\s')<cr>
@@ -2065,100 +2132,6 @@ hi  link    UnicodeLatinLB UnicodeBColor
 syn match   UnicodeLatinLB "[𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
-" Bold, cursive
-inorea <buffer> bc_a       𝒂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_b       𝒃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_c       𝒄<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_d       𝒅<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_e       𝒆<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_f       𝒇<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_g       𝒈<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_h       𝒉<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_i       𝒊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_j       𝒋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_k       𝒌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_l       𝒍<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_m       𝒎<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_n       𝒏<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_o       𝒐<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_p       𝒑<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_q       𝒒<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_r       𝒓<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_s       𝒔<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_t       𝒕<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_u       𝒖<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_v       𝒗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_w       𝒘<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_x       𝒙<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_y       𝒚<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bc_z       𝒛<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinLBC UnicodeBCColor
-syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
-" Cursive
-inorea <buffer> c_A        𝐴<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_B        𝐵<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_C        𝐶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_D        𝐷<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_E        𝐸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_F        𝐹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_G        𝐺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_H        𝐻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_I        𝐼<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_J        𝐽<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_K        𝐾<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_L        𝐿<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_M        𝑀<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_N        𝑁<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_O        𝑂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_P        𝑃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Q        𝑄<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_R        𝑅<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_S        𝑆<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_T        𝑇<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_U        𝑈<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_V        𝑉<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_W        𝑊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_X        𝑋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Y        𝑌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> c_Z        𝑍<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinUC UnicodeCColor
-syn match   UnicodeLatinUC "[𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
-" Bold
-inorea <buffer> b_A        𝐀<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_B        𝐁<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_C        𝐂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_D        𝐃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_E        𝐄<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_F        𝐅<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_G        𝐆<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_H        𝐇<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_I        𝐈<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_J        𝐉<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_K        𝐊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_L        𝐋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_M        𝐌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_N        𝐍<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_O        𝐎<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_P        𝐏<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_Q        𝐐<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_R        𝐑<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_S        𝐒<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_T        𝐓<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_U        𝐔<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_V        𝐕<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_W        𝐖<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_X        𝐗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_Y        𝐘<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_Z        𝐙<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinUB UnicodeBColor
-syn match   UnicodeLatinUB "[𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
-
 " Bold cursive
 inorea <buffer> bc_A       𝑨<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> bc_B       𝑩<left><right><c-r>=Eatchar('\s')<cr>
@@ -2190,68 +2163,163 @@ inorea <buffer> bc_Z       𝒁<left><right><c-r>=Eatchar('\s')<cr>
 hi  link    UnicodeLatinUBC UnicodeBCColor
 syn match   UnicodeLatinUBC "[𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
+" Bold, cursive
+inorea <buffer> bc_a       𝒂<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_b       𝒃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_c       𝒄<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_d       𝒅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_e       𝒆<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_f       𝒇<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_g       𝒈<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_h       𝒉<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_i       𝒊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_j       𝒋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_k       𝒌<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_l       𝒍<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_m       𝒎<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_n       𝒏<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_o       𝒐<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_p       𝒑<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_q       𝒒<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_r       𝒓<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_s       𝒔<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_t       𝒕<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_u       𝒖<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_v       𝒗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_w       𝒘<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_x       𝒙<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_y       𝒚<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bc_z       𝒛<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinLBC UnicodeBCColor
+syn match   UnicodeLatinLBC "[𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+
+" Mathematical Script
+inorea <buffer> m_A        𝒜<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_B        ℬ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_C        𝒞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_D        𝒟<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_E        ℰ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_F        ℱ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_G        𝒢<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_H        ℋ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_I        ℐ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_J        𝒥<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_K        𝒦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_L        ℒ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_M        ℳ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_N        𝒩<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_O        𝒪<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_P        𝒫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_Q        𝒬<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_R        ℛ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_S        𝒮<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_T        𝒯<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_U        𝒰<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_V        𝒱<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_W        𝒲<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_X        𝒳<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_Y        𝒴<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_Z        𝒵<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinUS UnicodeMColor
+syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Mathematical Script
+inorea <buffer> m_a        𝒶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_b        𝒷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_c        𝒸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_d        𝒹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_e        ℯ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_f        𝒻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_g        ℊ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_h        𝒽<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_i        𝒾<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_j        𝒿<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_k        𝓀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_l        ℓ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_l2       𝓁<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_m        𝓂<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_n        𝓃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_o        ℴ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_p        𝓅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_q        𝓆<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_r        𝓇<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_s        𝓈<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_t        𝓉<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_u        𝓊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_v        𝓋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_w        𝓌<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_x        𝓍<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_y        𝓎<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> m_z        𝓏<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinLS UnicodeMColor
+syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+
 " Mathematical bold script
-inorea <buffer> bs_a       𝓪<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_b       𝓫<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_c       𝓬<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_d       𝓭<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_e       𝓮<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_f       𝓯<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_g       𝓰<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_h       𝓱<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_i       𝓲<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_j       𝓳<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_k       𝓴<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_l       𝓵<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_m       𝓶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_n       𝓷<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_o       𝓸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_p       𝓹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_q       𝓺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_r       𝓻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_s       𝓼<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_t       𝓽<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_u       𝓾<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_v       𝓿<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_w       𝔀<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_x       𝔁<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_y       𝔂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_z       𝔃<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinLBS UnicodeBsColor
-syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
-
-" Mathematical bold script
-inorea <buffer> bs_A       𝓐<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_B       𝓑<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_C       𝓒<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_D       𝓓<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_E       𝓔<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_F       𝓕<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_G       𝓖<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_H       𝓗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_I       𝓘<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_J       𝓙<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_K       𝓚<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_L       𝓛<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_M       𝓜<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_N       𝓝<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_O       𝓞<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_P       𝓟<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_Q       𝓠<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_R       𝓡<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_S       𝓢<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_T       𝓣<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_U       𝓤<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_V       𝓥<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_W       𝓦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_X       𝓧<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_Y       𝓨<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> bs_Z       𝓩<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_A       𝓐<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_B       𝓑<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_C       𝓒<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_D       𝓓<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_E       𝓔<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_F       𝓕<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_G       𝓖<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_H       𝓗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_I       𝓘<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_J       𝓙<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_K       𝓚<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_L       𝓛<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_M       𝓜<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_N       𝓝<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_O       𝓞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_P       𝓟<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_Q       𝓠<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_R       𝓡<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_S       𝓢<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_T       𝓣<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_U       𝓤<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_V       𝓥<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_W       𝓦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_X       𝓧<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_Y       𝓨<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_Z       𝓩<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeLatinUBS UnicodeBsColor
 syn match   UnicodeLatinUBS "[𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Mathematical bold script
+inorea <buffer> bm_a       𝓪<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_b       𝓫<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_c       𝓬<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_d       𝓭<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_e       𝓮<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_f       𝓯<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_g       𝓰<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_h       𝓱<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_i       𝓲<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_j       𝓳<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_k       𝓴<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_l       𝓵<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_m       𝓶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_n       𝓷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_o       𝓸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_p       𝓹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_q       𝓺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_r       𝓻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_s       𝓼<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_t       𝓽<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_u       𝓾<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_v       𝓿<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_w       𝔀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_x       𝔁<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_y       𝔂<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> bm_z       𝔃<left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeLatinLBS UnicodeBsColor
+syn match   UnicodeLatinLBS "[𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Mathematical Fraktur
 inorea <buffer> f_A        𝔄<left><right><c-r>=Eatchar('\s')<cr>
@@ -2284,6 +2352,7 @@ inorea <buffer> f_Z        ℨ<left><right><c-r>=Eatchar('\s')<cr>
 hi  link    UnicodeLatinUF UnicodeMColor
 syn match   UnicodeLatinUF "[𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
+" Mathematical Fraktur
 inorea <buffer> f_a        𝔞<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> f_b        𝔟<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> f_c        𝔠<left><right><c-r>=Eatchar('\s')<cr>
@@ -2314,70 +2383,7 @@ inorea <buffer> f_z        𝔷<left><right><c-r>=Eatchar('\s')<cr>
 hi  link    UnicodeLatinLF UnicodeMColor
 syn match   UnicodeLatinLF "[𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-" Mathematical Script
-inorea <buffer> s_A        𝒜<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_B        ℬ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_C        𝒞<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_D        𝒟<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_E        ℰ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_F        ℱ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_G        𝒢<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_H        ℋ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_I        ℐ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_J        𝒥<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_K        𝒦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_L        ℒ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_M        ℳ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_N        𝒩<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_O        𝒪<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_P        𝒫<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_Q        𝒬<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_R        ℛ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_S        𝒮<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_T        𝒯<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_U        𝒰<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_V        𝒱<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_W        𝒲<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_X        𝒳<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_Y        𝒴<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_Z        𝒵<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinUS UnicodeMColor
-syn match   UnicodeLatinUS "[𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
-inorea <buffer> s_a        𝒶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_b        𝒷<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_c        𝒸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_d        𝒹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_e        ℯ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_f        𝒻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_g        ℊ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_h        𝒽<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_i        𝒾<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_j        𝒿<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_k        𝓀<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_l        ℓ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_l2       𝓁<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_m        𝓂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_n        𝓃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_o        ℴ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_p        𝓅<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_q        𝓆<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_r        𝓇<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_s        𝓈<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_t        𝓉<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_u        𝓊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_v        𝓋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_w        𝓌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_x        𝓍<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_y        𝓎<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> s_z        𝓏<left><right><c-r>=Eatchar('\s')<cr>
-
-hi  link    UnicodeLatinLS UnicodeMColor
-syn match   UnicodeLatinLS "[𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀ℓ𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-
 " Double
-inorea <buffer> d_nP       ℙ̶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_A        𝔸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_B        𝔹<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_C        ℂ<left><right><c-r>=Eatchar('\s')<cr>
@@ -2394,6 +2400,8 @@ inorea <buffer> d_M        𝕄<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_N        ℕ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_O        𝕆<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_P        ℙ<left><right><c-r>=Eatchar('\s')<cr>
+ " NOTE: the - in ℙ̶ is a combining character.
+inorea <buffer> d_nP       ℙ̶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_Q        ℚ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_R        ℝ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_S        𝕊<left><right><c-r>=Eatchar('\s')<cr>
@@ -2405,7 +2413,10 @@ inorea <buffer> d_X        𝕏<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_Y        𝕐<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_Z        ℤ<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> d_np       𝕡̶<left><right><c-r>=Eatchar('\s')<cr>
+hi  link    UnicodeLatinUD UnicodeDBColor
+syn match   UnicodeLatinUD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+" Double
 inorea <buffer> d_a        𝕒<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_b        𝕓<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_c        𝕔<left><right><c-r>=Eatchar('\s')<cr>
@@ -2422,6 +2433,8 @@ inorea <buffer> d_m        𝕞<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_n        𝕟<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_o        𝕠<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_p        𝕡<left><right><c-r>=Eatchar('\s')<cr>
+ " NOTE: the - in 𝕡̶ is a combining character.
+inorea <buffer> d_np       𝕡̶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_q        𝕢<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_r        𝕣<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_s        𝕤<left><right><c-r>=Eatchar('\s')<cr>
@@ -2435,10 +2448,10 @@ inorea <buffer> d_z        𝕫<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> d_pi        ℼ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_Pi        ℿ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> d_Si        ⅀<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link    UnicodeLatinD UnicodeDBColor
-syn match   UnicodeLatinD "[∅Ᵽ𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤℿ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeLatinD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+hi  link    UnicodeLatinLD UnicodeDBColor
+syn match   UnicodeLatinLD "[ᵽ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫ℼ⅀]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 "---------------------------
@@ -2456,7 +2469,7 @@ inorea <buffer> a_6        ⁶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_7        ⁷<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_8        ⁸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_9        ⁹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_inf      𝆗<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_inf      𝆗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_+        ⁺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_pl       ⁺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_-        ⁻<left><right><c-r>=Eatchar('\s')<cr>
@@ -2529,7 +2542,7 @@ inorea <buffer> __6        ⁶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __7        ⁷<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __8        ⁸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __9        ⁹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __inf      𝆗<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __inf      𝆗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __+        ⁺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __pl       ⁺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __-        ⁻<left><right><c-r>=Eatchar('\s')<cr>
@@ -2585,6 +2598,9 @@ inorea <buffer> __m6      ⁻⁶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __m7      ⁻⁷<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __m8      ⁻⁸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __m9      ⁻⁹<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> __nm1    ⁿ⁻¹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __np1    ⁿ⁺¹<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> __1dn    ¹ᐟⁿ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __1db    ¹ᐟᵇ<left><right><c-r>=Eatchar('\s')<cr>
@@ -2968,8 +2984,8 @@ inorea <buffer> _m7       ₋₇<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _m8       ₋₈<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _m9       ₋₉<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _minf     ₋∞<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mninf    ₋∞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _nm1     ₙ₋₁<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _np1     ₙ₊₁<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _1dn     ₁៸ₙ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _1db     ₁៸ⱃ<left><right><c-r>=Eatchar('\s')<cr>
@@ -2981,6 +2997,11 @@ inorea <buffer> _1ob     ₁៸ⱃ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _1ox     ₁៸ₓ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _1o2     ₁៸₂<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> _o2      ៸₂<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> _pinf     ₊∞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plinf    ₊∞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _minf     ₋∞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mninf    ₋∞<left><right><c-r>=Eatchar('\s')<cr>
 
 
 " NOTE no b,c,d,f,g,q,r,w,y,z

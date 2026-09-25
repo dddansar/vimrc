@@ -634,6 +634,9 @@ function! DefaultSettings()
          " set cm=blowfish2
       endif
       " When editing encrypted files make sure the following is set.
+      " NOTE: You can delete .viminfo to remove Vim's saved history. It saves
+      " info on command-line history, search history, file marks, saved
+      " registers, buffer list (recently opened files), input line history...
       set viminfo=
       set nobackup
       set noundofile

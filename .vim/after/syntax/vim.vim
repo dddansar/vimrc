@@ -59,13 +59,13 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
    source $vim_folder_path/abbrev.vim
 
    " NOTE: Moving these here to re-source on file/syntax reload.
-   if expand('%:t') =~ '^math_mappings\.vim$'
+   if expand('%:t') =~# '^math_mappings\.vim$'
       source $vim_folder_path/after/syntax/shared/math_mappings.vim
    endif
    if expand('%:t') =~# '\(math_mappings\|math\|unicode\)\.vim$'
       source $vim_folder_path/after/syntax/shared/unicode.vim
    endif
-   if expand('%:t') =~ '^all_colors\.vim$'
+   if expand('%:t') =~# '^all_colors\.vim$'
       source $vim_folder_path/colors/all_colors.vim
       finish
    endif

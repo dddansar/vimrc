@@ -118,7 +118,14 @@ function! AllTabsAndSpaces()
    if g:performance_mode <= 0
       " Highlight trailing white spaces
       hi  link     AllTrailingSpaces    HLBarelyVisible
-      syn match    AllTrailingSpaces    '\(\S\|^\)\@<=\s\+$' containedin=ALL
+      syn match    AllTrailingSpaces    '\(\S\|^\)\@<=\s\+\(\n\)\@=' containedin=ALL
+   endif
+endfunction
+
+function! AllUnwantedCharacters()
+   if g:performance_mode <= 0
+      hi  link     AllUnwantedCharacters  Error
+      syn match    AllUnwantedCharacters  '[‘-‟−—–∣]' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -516,7 +523,7 @@ function! AllPathsDollar(contained_en)
       hi  link    AllPathsDollar Underlined
       execute 'syn match AllPathsDollar "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$' .
-         \ '\%([a-zA-Z0-9_.-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)\+\)' .
+         \ '\%([0-9_.-]*[a-zA-Z]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)\+\)' .
          \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\+\/\?' .
          \ '\%([)}\]>]\)\@<!' .
          \ '\%(\s\|\n\|["''),}\]:;<>*]\)\@=" ' .
@@ -939,6 +946,7 @@ function! AllFilesDefaultSyntax()
    call AllTitles()
    call AllSudo()
    call AllCopyright()
+   call AllUnwantedCharacters()
 endfunction
 
 
