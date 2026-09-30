@@ -1,8 +1,10 @@
 " Add the abbreviation list to the thesaurus to look them up as you type
 " with <c-x><c-t> or <c-n> or <c-p>. See "set thesaurus" in .vimrc
 " You can generate this list with the help of this grep command:
-"     grep "^\s*inorea" .vim/. -r
+"     grep "^\s*inorea" .vim/. -r > dummy.vim
 "     Then trim the contents to only have the abbreviation name...
+"     When done, sort and uniq to confirm no repeats exist
+"     Use ^\(.*\)$\n^\1$ to find repeats after sorting.
 _pr2
 _pr3
 _sqrh
@@ -72,7 +74,7 @@ _vecdiff
 _vamb
 _ineqd
 _ineqp
-_cross
+_crossm
 _varea
 _id3
 _id2
@@ -133,12 +135,14 @@ _dx
 _dy
 _dz
 _dxy
+_dxdy
 _dxyz
+_dxdydz
 _dfdx
 _dfdy
 _dfdz
-_dfdxyz
 _dfxyz
+_dfdxdydz
 _dphdxyz
 _dphxyz
 _dphidxyz
@@ -352,7 +356,7 @@ _binomial1
 _bins
 _binomial
 _fs
-_fourier
+_fourierseries
 _s2a2
 _x2a2
 _lnxa
@@ -380,12 +384,10 @@ _bitcoin
 _sign
 _male
 _fmale
-_sun
 _section
-_paragraph
 _silcrow
-_pilcrow
 _paragraph
+_pilcrow
 _inv?
 _pmi
 _per
@@ -429,7 +431,8 @@ _radio
 _scales
 _swords
 _peace
-_sun
+_sunb
+_sunw
 _warn
 _uncert
 _caution
@@ -452,18 +455,18 @@ _rangle
 _90
 _btw
 _//
-_pll
+_prl
 _parallel
 _\|\|
-_pll2
+_prl2
 _parallel2
-_npll
+_nprl
 _w\|\|
-_wpll
+_wprl
 _s\|\|
-_spll
-_sspll
-a_pll
+_sprl
+_ssprl
+a_prl
 _nmid
 _nsl
 _bbar
@@ -503,8 +506,8 @@ _f4star
 _f6star
 _f8star
 _f12star
-_pllg
-_fpllg
+_prlg
+_fprlg
 _srtri
 _sdtri
 _sutri
@@ -513,6 +516,8 @@ _sfrtri
 _sfdtri
 _sfutri
 _sfltri
+_srltri
+_join
 _ltri
 _rtri
 _dtri
@@ -547,12 +552,13 @@ _degree
 _degrees
 _ring
 _dot
-_sdot
+_dot2
 _ast
 _**
 _times
 _xx
 _x2
+_cross
 b_xx
 _lx
 b_lx
@@ -561,6 +567,7 @@ _crosshair
 _dotplus
 _dotpl
 _ox
+_tensor
 _Ox
 _Odv
 _opl
@@ -581,7 +588,7 @@ _oeq
 _oast
 _otri
 _ostar
-_Opll
+_Oprl
 _Opause
 _Osqare
 _Otri
@@ -695,6 +702,7 @@ _nor
 _xor
 _xor2
 _xnor
+_hadamard
 _cor
 _cand
 _!=
@@ -803,6 +811,13 @@ _2g
 _mg
 _3g
 _3l
+_preceeds
+_prec
+_preceq
+_precapp
+_precnapp
+_precsim
+_precnsim
 _pc
 _pce
 _epc
@@ -810,6 +825,13 @@ _npce
 _npc
 _pcae
 _pcnae
+_succeeds
+_succ
+_succeq
+_succapp
+_succnapp
+_succsim
+_succnsim
 _sc
 _nsc
 _esc
@@ -1086,7 +1108,9 @@ _2cb2
 _2cbrack2
 _2cbracket2
 _assert
+_stee
 _tee
+_entails
 _ntee
 _rtee
 _-\|
@@ -1146,6 +1170,7 @@ _sq
 _sq3
 _sq4
 _inf
+_aleph
 _prop
 _sine
 o_1
@@ -1188,26 +1213,26 @@ _(17)
 _(18)
 _(19)
 _(20)
-_1dot
-_2dot
-_3dot
-_4dot
-_5dot
-_6dot
-_7dot
-_8dot
-_9dot
-_10dot
-_11dot
-_12dot
-_13dot
-_14dot
-_15dot
-_16dot
-_17dot
-_18dot
-_19dot
-_20dot
+_1fs
+_2fs
+_3fs
+_4fs
+_5fs
+_6fs
+_7fs
+_8fs
+_9fs
+_10fs
+_11fs
+_12fs
+_13fs
+_14fs
+_15fs
+_16fs
+_17fs
+_18fs
+_19fs
+_20fs
 _(A)
 _(B)
 _(C)
@@ -1646,8 +1671,8 @@ b_Rho
 b_Rh
 b_Sigma
 b_Si
-b_sigma2
-b_si2
+b_Sigma2
+b_Si2
 b_Tau
 b_Ta
 b_Upsilon
@@ -3386,7 +3411,6 @@ _n2
 _n3
 _n4
 _n5
-_pc
 r_p
 r_po
 r_op

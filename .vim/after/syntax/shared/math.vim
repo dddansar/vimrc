@@ -81,22 +81,26 @@ if g:performance_mode <= 0
    " aᵐbᵐ
 
    hi  link    SpMathSingleChar Constant
-   syn match   SpMathSingleChar "\%(\w\)\@<![a-zA-Z]\%((s\%()\)\@=\)\@<!\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathSingleChar "\%(\w\)\@<![b-zB-HJ-Z]\%((s\%()\)\@=\)\@<!\%('[dstm]\%([ :;,?!.>)\]]\|$\)\@=\)\@<!\%(\w\)\@!" contains=@NoSpell
 
-   " More efficient not to merge into SpMathSingleChar
-   " Unmatch I a A as they are common 1 letter words in English.
-   syn match   SpMathNoColorIaA2 "\%(^\s*\|[!(.?:;,]\|\w\|(\)\@<=\s\?\<[IaA]\>\%(\s[a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@=" contains=@NoSpell
-
-   hi  link    SpMathSingleChar2 Constant
-   syn match   SpMathSingleChar2 "\s\?\<[aA] \%(\<\%(will\|was\|then\)\>\)\@=" contains=@NoSpell
-   syn match   SpMathSingleChar2 "\s\?\<[IaA] \%(\<\%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
+   " Match I a A under certain conditions
+   hi  link    SpMathSingleCharIaA1 Constant
+   hi  link    SpMathSingleCharIaA2 Constant
+   hi  link    SpMathSingleCharIaA3 Constant
+   syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,] \|[a-zA-Z][a-z] \|[a-zA-Z]\| (\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
+   " Improves performance but less accurate each time
+   " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-z] \|[a-zA-Z(]\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
+   " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-zA-Z(]\s\?\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| [a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@!" contains=@NoSpell
+   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
+   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
 
    " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.
    hi  link    SpMathNumInVar   Number
-   syn match   SpMathNumInVar   "\<[0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum
+   syn match   SpMathNumInVar   "\%(\w\)\@<![0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum
    hi  link    SpMathVarInNum   Constant
-   syn match   SpMathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
+   syn match   SpMathVarInNum   "\%(\w\)\@<![0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
 
    " Match x when it mean multiplication or hex number.
    hi  link    SpMathXInNum     Function
@@ -110,7 +114,7 @@ if g:performance_mode <= 0
    syn match   SpMathDeriv      "\%(\w\)\@<!\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
 
    hi  link    SpMathDeriv2     Constant
-   syn match   SpMathDeriv2     "\<[a-zA-Z]\>\%('\s\)\@="  contains=@NoSpell
+   syn match   SpMathDeriv2     "\%(\w\)\@<![a-zA-Z]\>\%(' \)\@="  contains=@NoSpell
 
    " Highlight common math multi-variables.
    hi  link    SpMathMultiVars1 Constant
@@ -118,10 +122,10 @@ if g:performance_mode <= 0
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
-   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%(\s\?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
+   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%( \?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
    hi  link    SpMathMultiVars3 Constant
-   syn match   SpMathMultiVars3 "\<\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
+   syn match   SpMathMultiVars3 "\%(\w\)\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
 
    " Match more functions.
    hi  link    SpMathFunction   Function

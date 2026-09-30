@@ -220,10 +220,10 @@ endfunction
 function! AllShiftOp()
    hi  link    AllShiftOp       Function
    if (!exists("b:comment_leader") || b:comment_leader[0] != '>') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '>')
-      syn match   AllShiftOp       ">>"
+      syn match   AllShiftOp       "\%(>\)\@<!>>\%(>\)\@!"
    endif
    if (!exists("b:comment_leader") || b:comment_leader[0] != '<') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '<')
-      syn match   AllShiftOp       "<<"
+      syn match   AllShiftOp       "\%(<\)\@<!<<\%(<\)\@!"
    endif
 endfunction
 

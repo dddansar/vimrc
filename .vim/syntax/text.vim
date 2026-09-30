@@ -75,6 +75,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       source $vim_folder_path/after/syntax/shared/math_mappings.vim
       source $vim_folder_path/after/syntax/shared/unicode.vim
       setlocal nospell
+      call AllShiftOp()
    endif
    " if expand('%:p') =~# '/reference_files/'
    "    source $vim_folder_path/after/syntax/shared/linux.vim
