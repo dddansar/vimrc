@@ -236,21 +236,21 @@ inorea <buffer> _rpi2      -π/2 ≤ θ ≤ π/2<left><right><c-r>=Eatchar('\s')
 inorea <buffer> _r2pi      0 ≤ θ < 2π<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _rpi       0 ≤ θ ≤ π<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _mempi2    ∈ [-π/2,π/2]<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mempi     ∈ [0,π],<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mem2pi    ∈ [0,2π],<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mem0inf   ∈ [0,∞)<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _meminf0   ∈ (-∞,0]<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memminf0  ∈ (-∞,0]<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _meminf    ∈ (-∞,∞)<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mempi2    ∈[-π/2,π/2]<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mempi     ∈[0,π],<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mem2pi    ∈[0,2π],<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mem0inf   ∈[0,∞)<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _meminf0   ∈(-∞,0]<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memminf0  ∈(-∞,0]<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _meminf    ∈(-∞,∞)<left><right><c-r>=Eatchar('\s')<cr>
 
 " Common member sets
-inorea <buffer> _memn      ∈ ℕ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memz      ∈ ℤ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memq      ∈ ℚ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memr      ∈ ℝ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memi      ∈ 𝕀<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _memc      ∈ ℂ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memn      ∈ℕ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memz      ∈ℤ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memq      ∈ℚ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memr      ∈ℝ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memi      ∈𝕀<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _memc      ∈ℂ<left><right><c-r>=Eatchar('\s')<cr>
 
 " Formal definitions
 inorea <buffer> _defd      f′(x) = limₕ₋›₀ (f(x+h) - f(x))/h<left><right><c-r>=Eatchar('\s')<cr>
@@ -269,7 +269,7 @@ inorea <buffer> _ineqd     \|a⃗.b⃗\| ≤ a⃗.b⃗<left><right><
 inorea <buffer> _ineqp     a⃗+b⃗ ≤ a⃗+b⃗<left><right><c-r>=Eatchar('\s')<cr>
 
 " Cross product
-inorea <buffer> _cross     <space><bs>      ⎡a₂b₃ - b₂a₃⎤<cr><esc>ia⃗×b⃗ = ⎢a₃b₁ - b₃a₁⎥<cr>      ⎣a₁b₂ - b₁a₂⎦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _crossm    <space><bs>      ⎡a₂b₃ - b₂a₃⎤<cr><esc>ia⃗×b⃗ = ⎢a₃b₁ - b₃a₁⎥<cr>      ⎣a₁b₂ - b₁a₂⎦<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _varea     a⃗×b⃗=a⃗b⃗sinθ<left><right><c-r>=Eatchar('\s')<cr>
 
 " Identity matrix
@@ -374,19 +374,20 @@ inorea <buffer> _dx        ∂x<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dy        ∂y<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dz        ∂z<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dxy       ∂x∂y<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dxdy      ∂x∂y<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dxyz      ∂x∂y∂z<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dxdydz    ∂x∂y∂z<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _dfdx      ∂f/∂x<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dfdy      ∂f/∂y<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dfdz      ∂f/∂z<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _dfdxyz    (∂f/∂x,∂f/∂y,∂f/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dfxyz     (∂f/∂x,∂f/∂y,∂f/∂z)<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dfdxdydz  (∂f/∂x,∂f/∂y,∂f/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dphdxyz   (∂φ/∂x,∂φ/∂y,∂φ/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dphxyz    (∂φ/∂x,∂φ/∂y,∂φ/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dphidxyz  (∂φ/∂x,∂φ/∂y,∂φ/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dphixyz   (∂φ/∂x,∂φ/∂y,∂φ/∂z)<left><right><c-r>=Eatchar('\s')<cr>
-
 
 " Variables
 inorea <buffer> _fx        f(x)<left><right><c-r>=Eatchar('\s')<cr>
@@ -570,7 +571,7 @@ inorea <buffer> _proba     P(A∪B) = P(A) + P(B) - P(A∩B)<left><right><c-r>=E
 inorea <buffer> _probc     P(A/B) = P(A∩B)/P(B) = P(B/A).P(A)/P(B)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _bayes     P(Bᵢ/A) = P(Bᵢ)P(A/Bᵢ)/(∑(ᵢ₌₀:៷)P(Bᵢ)P(A/Bᵢ))<left><right><c-r>=Eatchar('\s')<cr>
 
-" De Morgan’s Laws:
+" De Morgan's Laws:
 inorea <buffer> _demorgan  (A∪B)ᶜ = Aᶜ∩Bᶜ ; (A∩B)ᶜ = Aᶜ∪Bᶜ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dm        (A∪B)ᶜ = Aᶜ∩Bᶜ ; (A∩B)ᶜ = Aᶜ∪Bᶜ<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -624,7 +625,7 @@ inorea <buffer> _cdfd      P(X≤k)=∑(ₖ₌₀:ₓ)f(x)dx<left><right><c-r>=E
 
 " Binomial distribution function - PMF
 inorea <buffer> _pmfb      ⎛n⎞<cr>P(X=k)=⎝k⎠pᵏ(1-p)ⁿ⁻ᵏ=ⁿCₖpᵏqⁿ⁻ᵏ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _cdfb      ⎛n⎞<cr>P(X≤k)=∑(ₖ₌₀:ₓ)⎝k⎠pᵏ(1-p)ⁿ⁻ᵏ=I₁₋ₚ(n−k,k+1)<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _cdfb      ⎛n⎞<cr>P(X≤k)=∑(ₖ₌₀:ₓ)⎝k⎠pᵏ(1-p)ⁿ⁻ᵏ=I₁₋ₚ(n-k,k+1)<left><right><c-r>=Eatchar('\s')<cr>
 " Binomial Probability Distribution:
 inorea <buffer> _meanb     μ = ∑pᵢxᵢ/∑pᵢ = ∑pᵢxᵢ = np<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _varb      σ² = ∑(xᵢ-μ)²pᵢ = ∑pᵢxᵢ² - μ² = npq<left><right><c-r>=Eatchar('\s')<cr>
@@ -648,13 +649,13 @@ inorea <buffer> _cdfn      F(x)=P(X<x)=1/σ√2π ∫(-∞:ₓ)e⁽ᵗ⁻ꭟ⁾�
 
 " Continuous Uniform Density
 inorea <buffer> _pdfcu     f(x)=1/(b-a) ; a ≤ x ≤ b ; 0 elsewhere<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _cdfcu     F(x)=0; x < a; F(x)=(x−a)/(b-a) ; a ≤ x ≤ b ; F(x)=1 ; x > b<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _cdfcu     F(x)=0; x < a; F(x)=(x-a)/(b-a) ; a ≤ x ≤ b ; F(x)=1 ; x > b<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _meancu    μ=(a+b)/2<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _varcu     σ²=((b−a)²−1)/12<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _varcu     σ²=((b-a)²-1)/12<left><right><c-r>=Eatchar('\s')<cr>
 
 " Exponential probability Density Function
 inorea <buffer> _pdfe      f(t)=λe⁻ᣔᵗ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _cdfe      F(x)=1−e⁻ᣔˣ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _cdfe      F(x)=1-e⁻ᣔˣ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _meane     μ=β<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _vare      σ²=β²<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -693,7 +694,7 @@ inorea <buffer> _seb       SEⱃ=sₑ/√(∑(ᵢ₌₁:ₙ)(xᵢ-x̅)²<left><r
 inorea <buffer> _usub      ∫(ₐ:ⱃ)f(g(x))g′(x)dx = ∫(₍ₐ₎:₍ⱃ₎)f(u)du<left><right><c-r>=Eatchar('\s')<cr>
 
 " Integration by Parts
-inorea <buffer> _intparts  ∫(ₐ:ⱃ)u dv = uv∣ₐᵇ -∫(ₐ:ⱃ)v du.<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _intparts  ∫(ₐ:ⱃ)u dv = uv\|ₐᵇ -∫(ₐ:ⱃ)v du<left><right><c-r>=Eatchar('\s')<cr>
 
 " Power series
 inorea <buffer> _pseries   ∑(ₙ₌₀:∞)(aₙxⁿ)<left><right><c-r>=Eatchar('\s')<cr>
@@ -711,13 +712,13 @@ inorea <buffer> _bins      ⎛n⎞<cr>(a+b)ⁿ=∑(ₖ₌₀:∞)⎝k⎠aⁿ⁻�
 inorea <buffer> _binomial  ⎛n⎞<cr>(a+b)ⁿ=∑(ₖ₌₀:∞)⎝k⎠aⁿ⁻ᵏ+bᵏ<left><right><c-r>=Eatchar('\s')<cr>
 
 " Fourier series
-inorea <buffer> _fs        f(x)=a₀/2 + ∑(ₙ₌₁:∞)(aₙ cos nx + bₙ sin nx) ; aₙ=1/π ∫(-π:π)f(x)cos(nx)dx ; bₙ=1/π ∫(-π:π)f(x)sin(nx)dx<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _fourier   f(x)=a₀/2 + ∑(ₙ₌₁:∞)(aₙ cos nx + bₙ sin nx) ; aₙ=1/π ∫(-π:π)f(x)cos(nx)dx ; bₙ=1/π ∫(-π:π)f(x)sin(nx)dx<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _fs            f(x)=a₀/2 + ∑(ₙ₌₁:∞)(aₙ cos nx + bₙ sin nx) ; aₙ=1/π ∫(-π:π)f(x)cos(nx)dx ; bₙ=1/π ∫(-π:π)f(x)sin(nx)dx<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _fourierseries f(x)=a₀/2 + ∑(ₙ₌₁:∞)(aₙ cos nx + bₙ sin nx) ; aₙ=1/π ∫(-π:π)f(x)cos(nx)dx ; bₙ=1/π ∫(-π:π)f(x)sin(nx)dx<left><right><c-r>=Eatchar('\s')<cr>
 
 " Common algebraic terms
 inorea <buffer> _s2a2      (s²+a²)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _x2a2      (x²+a²)<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _lnxa      ln∣(x+a)/(x-a)∣<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _lnxa      ln\|(x+a)/(x-a)\|<left><right><c-r>=Eatchar('\s')<cr>
 
 " Alligation is a method of calculating weighted averages
 inorea <buffer> _allig     w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>

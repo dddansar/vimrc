@@ -242,15 +242,15 @@ hi  link  AsmData Conditional
 " MOVSX                             "Move and sign extend
 " MOVZX                             "Move and zero extend
 "
-" MOVABS[BWLQ]\?                    "move immediate value to register    valid only under –m64
-" MOVABS[BWLQ]\?A                   "move immediate value to register {AL, AX, GAX, RAX}   valid only under –m64
-" \%(MOVSB[WLQ]\?\|MOVSW[LQ]\?\)    "move and sign extend    valid only under –m64
-" \%(MOVZB[WLQ]\?\|MOVZW[LQ]\?\)    "move and zero extend    valid only under –m64
-" POPAW                             "pop general-purpose registers from stack     invalid under –m64
-" POPAL, POPA                       "pop general-purpose registers from stack     invalid under –m64
-" PUSHAW                            "push general-purpose registers onto stack    invalid under –m64
-" PUSHAL, PUSHA                     "push general-purpose registers onto stack    invalid under –m64
-" XCHG[BWLQ]\?A                     "exchange    xchgqA valid only under –m64
+" MOVABS[BWLQ]\?                    "move immediate value to register    valid only under -m64
+" MOVABS[BWLQ]\?A                   "move immediate value to register {AL, AX, GAX, RAX}   valid only under -m64
+" \%(MOVSB[WLQ]\?\|MOVSW[LQ]\?\)    "move and sign extend    valid only under -m64
+" \%(MOVZB[WLQ]\?\|MOVZW[LQ]\?\)    "move and zero extend    valid only under -m64
+" POPAW                             "pop general-purpose registers from stack     invalid under -m64
+" POPAL, POPA                       "pop general-purpose registers from stack     invalid under -m64
+" PUSHAW                            "push general-purpose registers onto stack    invalid under -m64
+" PUSHAL, PUSHA                     "push general-purpose registers onto stack    invalid under -m64
+" XCHG[BWLQ]\?A                     "exchange    xchgqA valid only under -m64
 syn keyword AsmData MOV MOVB MOVW MOVL
 syn keyword AsmData CMOVEW CMOVEL CMOVEQ CMOVZW CMOVZL CMOVZQ
 syn keyword AsmData CMOVNEW CMOVNEL CMOVNEQ CMOVNZW CMOVNZL CMOVNZQ
@@ -683,7 +683,7 @@ syn keyword AsmFComp FCOMI FUCOMI FCOMIP FUCOMIP FTST FXAM COMISD
 " FSINCOS "Sine and cosine
 " FPTAN   "Partial tangent
 " FPATAN  "Partial arctangent
-" F2XM1   "2 x − 1
+" F2XM1   "2 x - 1
 " FYL2X   "y∗log 2x
 " FYL2XP1 "y∗log 2(x+1)
 syn keyword AsmFComp FSIN FCOS FSINCOS FPTAN FPATAN F2XM1 FYL2X FYL2XP1

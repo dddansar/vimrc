@@ -190,9 +190,9 @@ syn match    NetrwImg   "\<[a-zA-Z0-9._-][a-zA-Z0-9._ -]*\.\%(jpg\|jpeg\|png\|gi
 " Key Archive and Compression Formats:
 "     .zip: The most common, universally supported format.
 "     .zipx: Used by WinZip for advanced, higher-ratio compression.
-"     .7z: 7-Zip’s native format, known for high compression ratios and strong
+"     .7z: 7-Zip's native format, known for high compression ratios and strong
 "      encryption.
-"     .rar: WinRAR’s archive format, frequently used for large files.
+"     .rar: WinRAR's archive format, frequently used for large files.
 "     .tar / .tar.gz / .tgz: Common on Unix/Linux systems for archiving and
 "      compressing files.
 "     .gz / .z: GNU gzip format, standard on Linux.

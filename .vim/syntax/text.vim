@@ -105,7 +105,7 @@ hi  link    TextCBr       Define
 syn match   TextCBr       "[}{]"
 
 hi  link    TextOperators  Operator
-syn match   TextOperators  "[$–]"
+syn match   TextOperators  "[$]"
 hi  link    TextSlash      Operator
 syn match   TextSlash      "\/"
 
