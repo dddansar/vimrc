@@ -91,22 +91,27 @@ if g:performance_mode <= 0
    " Improves performance but less accurate each time
    " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-z] \|[a-zA-Z(]\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
    " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-zA-Z(]\s\?\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
-   syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| [a-zA-Z0-9'"(][a-zA-Z0-9'"(]\|'[dm] \)\@!" contains=@NoSpell
+   syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(]\|[0-9]\)\|'[dm] \)\@!" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
-   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
+   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|but\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
 
    " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.
    hi  link    SpMathNumInVar   Number
    syn match   SpMathNumInVar   "\%(\w\)\@<![0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum
+
    hi  link    SpMathVarInNum   Constant
-   syn match   SpMathVarInNum   "\%(\w\)\@<![0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
+   syn match   SpMathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
 
    " Match x when it mean multiplication or hex number.
    hi  link    SpMathXInNum     Function
    syn match   SpMathXInNum     "x" contained contains=@NoSpell
+
    hi  link    SpMathNumWithX   Number
-   syn match   SpMathNumWithX   "\%(\w\)\@<!\%([0-9]\+\|N\)\([x×][0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
+   syn match   SpMathNumWithX   "\<\%([0-9]\+\|N\)\(x[0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2,SpMathXInNum
+   " SpMathNumWithX2 does not work when merged in SpMathNumWithX/SpMathXInNum...
+   hi  link    SpMathNumWithX2  Number
+   syn match   SpMathNumWithX2  "\%(×\)\@<=\([0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2,SpMathXInNum
 
    " Derivatives
    hi  link    SpMathDeriv      Constant
@@ -119,10 +124,11 @@ if g:performance_mode <= 0
    " Highlight common math multi-variables.
    hi  link    SpMathMultiVars1 Constant
    syn match   SpMathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathMultiVars1 "\%(\w \?\)\@<!\%(by\)\%( \?\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
-   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%([Ii][tne]\|vs\|to\|[oO][knfr]\)\@<!\%( \?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
+   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!\%([Ii][efnst]\|vs\|[Aa][nst]\|to\|so\|b[ey]\|u[ns]\|re\|[Oo][knfr]\)\@<!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
    hi  link    SpMathMultiVars3 Constant
    syn match   SpMathMultiVars3 "\%(\w\)\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges

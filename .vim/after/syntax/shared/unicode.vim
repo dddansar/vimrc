@@ -214,7 +214,9 @@ inorea <buffer> _?n!       ‽<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _!!        ‼<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _!?        ⁉<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3dot      ⋯<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_3dot     …<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _3doth     ⋮<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _3dotdd    ⋱<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _3dotdu    ⋰<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _no        ø<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _nO        Ø<left><right><c-r>=Eatchar('\s')<cr>
@@ -224,7 +226,6 @@ inorea <buffer> _inv!      ¡<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _ddag      ‡<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dag       †<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _3ddot     ⋱<left><right><c-r>=Eatchar('\s')<cr>
 
 " Intercalate
 inorea <buffer> _ntcal     ⊺<left><right><c-r>=Eatchar('\s')<cr>
@@ -524,7 +525,7 @@ hi  link    UnicodeOperators2 Operator
 syn match   UnicodeOperators2 "[∘∗×⨯⋅✖☓𐌗⨉⋇⋄⬝⋉⋊⋈⊹∔]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " syn match   UnicodeOperators2 "/" contains=@NoSpell
-hi  link    UnicodeOShapes StorageClass
+hi  link    UnicodeOShapes Operator
 syn match   UnicodeOShapes "[ⴳⴴⴵ⨂⊗⦼⌀𐌈⨁〇𛲜⊝⊖🜔☉⊚◎⊜⨀𐌏⦾⦷🟗🟕⧁⧀⍟⊞⊟⊠⊡⚀⊘⦸⦶⦰ⵁ⊛⎊]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
@@ -1205,6 +1206,12 @@ inorea <buffer> _box     ┌───┬───┐<cr>│   │   │<cr>├�
 inorea <buffer> _boxs    ┌───┐<cr>│   │<cr>└───┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _boxr    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _boxl    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
+
+" Truth tables
+inorea <buffer> _tt0     A│<cr>─┼────<cr> │<cr>│<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _tt1     A│0123<cr>─┼────<cr>0│0101<cr>1│0011<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _tt2     AB│<cr>──┼────────────────<cr>00│0101010101010101<cr>01│0011001100110011<cr>10│0000111100001111<cr>11│0000000011111111<left><right><c-r>=Eatchar('\s')<cr>
+
 
 inorea <buffer> b_btl     ┏<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_bbl     ┗<left><right><c-r>=Eatchar('\s')<cr>
@@ -2754,7 +2761,7 @@ hi  link    UnicodeSPNum Number
 syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛᴺᵀ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeSPOps Operator
-syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeSPOps "[⁺⁻⁼˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᣳᙚˠᶴꜝꜞ˂˃˅˄꜂꜃꜄꜅ᐡᐢ⸴]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 
 hi  link    UnicodeSPParen Function
@@ -2900,6 +2907,7 @@ inorea <buffer> z_=        ₌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_eq       ₌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_dot      .<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_dot2     ․<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_3dot     …<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_oop      ｡<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_(        ₍<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_)        ₎<left><right><c-r>=Eatchar('\s')<cr>

@@ -398,7 +398,9 @@ _?n!
 _!!
 _!?
 _3dot
-z_3dot
+_3doth
+_3dotdd
+_3dotdu
 _no
 _nO
 _inv&
@@ -406,7 +408,6 @@ __:
 _inv!
 _ddag
 _dag
-_3ddot
 _ntcal
 _#
 _note
@@ -2400,6 +2401,7 @@ z_=
 z_eq
 z_dot
 z_dot2
+z_3dot
 z_oop
 z_(
 z_)
