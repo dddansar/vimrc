@@ -102,11 +102,15 @@ hi default HLHotpinkBU           cterm=bold,underline gui=bold,underline ctermfg
 hi default HLGrey80BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=252 guibg=grey80
 hi default HLGrey10BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=234 guibg=grey10
 hi default HLGrey15BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=235 guibg=grey15
-hi default HLOrangered1BgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=202 guibg=orangered1
-hi default HLOrangeBgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=214 guibg=orange
-hi default HLYellow3BgB          cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=184 guibg=yellow3
+hi default HLDeepPinkBgB         cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=198 guibg=deeppink
+hi default HLDodgerBlueBgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=33  guibg=dodgerblue
+hi default HLCyanBgB             cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=51  guibg=cyan
 hi default HLGreen3BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=34  guibg=green3
 hi default HLGreen1BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=46  guibg=green1
+hi default HLYellowBgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=184 guibg=yellow
+hi default HLYellow3BgB          cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=184 guibg=yellow3
+hi default HLOrangeBgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=214 guibg=orange
+hi default HLOrangered1BgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=202 guibg=orangered1
 hi default HLRedBgB              cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=red guibg=red
 "------------------------------------------------------------------------------
 
@@ -154,5 +158,22 @@ hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey50
 hi default HLSpecial7  gui=inverse       guisp=red guifg=grey50
 hi default HLSpecial9  gui=standout      guisp=red guifg=grey50
 hi default HLSpecial10 gui=nocombine     guisp=red guifg=grey50
+"------------------------------------------------------------------------------
+
+"------------------------------------------------------------------------------
+" List of all possible gui options (many don't work...).
+hi default HLBold          gui=bold
+hi default HLItalic        gui=italic
+hi default HLBoldItalic    gui=bold,italic
+hi default HLUnderline     gui=underline
+hi default HLBoldUnderline gui=bold,underline
+hi default HLUndercurl     gui=undercurl
+hi default HLUnderdotted   gui=underdotted
+hi default HLUnderdouble   gui=underdouble
+hi default HLUnderdashed   gui=underdashed
+hi default HLStrikethrough gui=strikethrough
+hi default HLInverse       gui=inverse
+hi default HLStandout      gui=standout
+hi default HLNocombine     gui=nocombine
 "------------------------------------------------------------------------------
 

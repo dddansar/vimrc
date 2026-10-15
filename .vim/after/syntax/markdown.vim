@@ -81,8 +81,10 @@ if exists("b:current_syntax") && b:current_syntax == "markdown"
    call AllParenBr()
    " call AllWebsites(0)
    " call AllEmails(0)
-   call AllLabel()
    call AllNumbers()
+   " call AllNumbersHex()
+   call AllLabel()
+   call AllMultiWordLabel(0)
    " call AllSlashes()
    " call AllHLWords()
 

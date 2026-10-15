@@ -407,24 +407,79 @@ function! AllLabel()
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
    syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
-   " Matches Word1 Word2 ... WordN: if every word is capitalized.
-   hi  link    AllLabel3  PreProc
-   syn match   AllLabel3  "^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell
 endfunction
 
 " Titles/Labels in Comments
-function! AllComLabel()
+function! AllMultiWordLabel(contained_en)
    if exists("b:comment_leader")
-      " Matches Word1 Word2: if every word is capitalized in a comment.
+      " Matches Word1 Word2: if every word is capitalized.
       " hs=s+1 defines the highlight start for the match. hs means highlight
       " start, s start of the match, +1 offset by 1 character forward.
       " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
       "       not match a word ending if it's followed by :!
-      hi  link    AllComLabel  PreProc
-      execute 'syn match   AllComLabel  +' . b:comment_leader .
-         \ '\%(\s*\%(\<[A-Z][a-zA-Z0-9_-]*\|[&/]\)\%(\>\|[a-zA-Z0-9_]\@<=:\@=\|[&/]\@<=:\@!\)\)\+:' .
-         \ '\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+hs=s+' .
-         \ len(b:comment_leader) . ' contains=@NoSpell contained containedin=.*Comment.* keepend'
+      " NOTE: Replaced ( with \x28 and ) with \x29 to help with parenthesis matching readability
+      hi  link    AllMultiWordLabel  PreProc
+      execute 'syn match   AllMultiWordLabel  +' . (a:contained_en ? b:comment_leader : '^') .
+         \ '\%(\s*\%(-\s\)\?' .
+         \    '\%(\%(\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+\%([0-9-]\+\|[a-zA-Z]\?\)\)' .
+         \            '\%(\>\|:\@=\)[+-]*' .
+         \            '\%(\%( & \@=\|, \@=\|[./][A-ZÀ-ß0-9]\@=\|''[a-z]\>\|[\x29"''][ :]\@=\)' .
+         \               '\| \<\%(and\|or\|of\|vs\|the\|to\|at\|is\|in\|by\|a\)\> \@=' .
+         \               '\| vs\. \@=\)*' .
+         \          '\|[\x28"''][A-ZÀ-ß0-9]\@=\)\)' .
+         \ '\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+' .
+         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : '') .
+         \ ' contains=@NoSpell keepend'
+      " Matching Examples:
+      " Chapter 1:
+      " Part 2b:
+      " Q3 Report:
+      " H2O Facts:
+      " 3D Models:
+      " 2024-10-14:
+      " Section 3.1.4:
+      " Input/Output:
+      " A.B.C:
+      " Hello, World:
+      " Tom & Jerry:
+      " Pros and Cons:
+      " To Do:
+      " A:
+      " Well-Known Fact:
+      " Snake_Case_Name:
+      " ALL CAPS HERE:
+      " (Draft) Notes:
+      " (1) Intro:
+      " 1 Intro:
+      " A) Intro:
+      " 1.Intro:
+      " "Quoted Title":
+      " - Item:
+      " C++ Notes:
+      " C-- Notes:
+      "     Indented Title:
+      " Résumé Tips:
+      " Über Cool:
+      " Naïve Bayes:
+      " Old Adults (60+):
+      " Don't Stop:
+
+      " Does not currently match:
+      " 1st Place:                  Only supports 1 letter after a number not 2
+      " 3DS Max:                    Only supports 1 letter after a number not 2
+      " Q&A:                        & must be followed by a space
+      " Dr. Smith:                  . must be followed by a word char
+      " Hello!:                     !,?,%,#,... not currently allowed
+      " Lord of the:                "the" is not followed by a Uppercase word
+      " Hello World :               Space before the colon
+      " Hello World:text            Colon not followed by whitespace or EOL
+      " & Title:                    & must not start the title
+      " Hello,World:                Comma must be followed by a space
+      " A.B.C.:                     Trailing . before the colon
+      " ( Draft):                   ( must be followed by a word char
+      " été:                        Lowercase word
+      " Mixed UPPER lower:          Lowercase word
+      " Read/write:                 Lowercase word
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -610,10 +665,6 @@ endfunction
 "------------------------------------------------------------------------------
 function! AllNumbers()
 
-   " Matches hex #329AF.
-   hi  link    AllHashHex  Number
-   syn match   AllHashHex  "#[a-fA-F0-9_]\+\>" contains=@NoSpell
-
    " Match scientific/exponent/floating point notation/number.
    if g:performance_mode <= 1
       " matches 1 123
@@ -626,28 +677,34 @@ function! AllNumbers()
       " matches 2332.329x10^-32 2323.32x10^+32 2332.32x10^32 2332.32x10^32
       " matches 2332.329x10^+32 2323.32x10^-32
       " and also matches 2^14 2.32^43
-      hi  link  AllNumbers1   Number
-      syn match AllNumbers1   "\<\%(\d*\)\?\.\?\d\+\%(\%([eE]\|x10\^\|\^\)[-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+      hi  link  AllNumbersSci Number
+      syn match AllNumbersSci "\<\%(\d*\)\?\.\?\d\+\%(\%([eE]\|x10\^\|\^\)[-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
    endif
 
-   " Matches hex numbers such as 0x12ad4 or x8732FFA8 or x87_32FFA8 or 0xDEAD_C0DE
+   " Matches undercores in numbers.
+   " 1_2_3_4 or 123_456_789 or 12345_67890
+   " but not _123_45 or 123_ or 123__456
+   hi  link  AllNumbersUnd  Number
+   syn match AllNumbersUnd  "\<[0-9]\+\%(_[0-9]\+\)\+\>" contains=@NoSpell
+endfunction
+
+function! AllNumbersHex()
+   " Matches hex #329AF.
+   hi  link  AllNumbersHex1 Number
+   syn match AllNumbersHex1 "#[a-fA-F0-9_]\+\>" contains=@NoSpell
+
+   " Matches hex numbers such as 0x12ad4 or x8732FFA8 or x87_32FFA8 or 0xDEAD_C0DE or 0xF
    " but not x_123_45 or 0x123_ or 0x123__456
-   hi  link  AllNumbers2   Number
-   syn match AllNumbers2   "\<0[x][0-9A-Fa-f]\%(_\?[0-9A-Fa-f]\)\+\>"   contains=@NoSpell
-   syn match AllNumbers2   "\<[x][0-9A-F]\%(_\?[0-9A-F]\)\+\>"       contains=@NoSpell,MathXInNum
+   hi  link  AllNumbersHex2 Number
+   syn match AllNumbersHex2 "\<0[x][0-9A-Fa-f]\%(_\?[0-9A-Fa-f]\)*\>"   contains=@NoSpell,SpMathXInNum
+   syn match AllNumbersHex2 "\<[x][0-9A-F]\%(_\?[0-9A-F]\)*\>"       contains=@NoSpell,SpMathXInNum
 
    " Matches 19'd1238  19'h1238af 32'b01010111 8'o3241
    " Matches   'd1238    'h1238af   'b01010111  'o3241
    " Matches 19'd12?8  19'h?238af 32'b??10?1? 8'o?241
    " Matches   'd123?    'h??38af   'b???1???  'o32??
-   hi  link  AllNumbers3   Number
-   syn match AllNumbers3   "\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
-
-   " Matches undercores in numbers.
-   " 1_2_3_4 or 123_456_789 or 12345_67890
-   " but not _123_45 or 123_ or 123__456
-   hi  link  AllNumbers4   Number
-   syn match AllNumbers4   "\<[0-9]\+\%(_[0-9]\+\)\+\>" contains=@NoSpell
+   hi  link  AllNumbersTick Number
+   syn match AllNumbersTick "\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
 endfunction
 "------------------------------------------------------------------------------
 
@@ -916,6 +973,143 @@ endfunction
 "------------------------------------------------------------------------------
 
 
+" Add font styles
+"------------------------------------------------------------------------------
+function! AllFontStyles()
+
+   " Markdown font style syntax
+   hi  link    AllMdFontItalic     HLItalic
+   syn match   AllMdFontItalic     "\%( \|^\)\@<=\*\%(\S\&[^*]\).\{1,}\%(\S\&[^*]\)\*\%( \|$\)\@="         contains=@NoSpell
+
+   hi  link    AllMdFontBold       HLBold
+   syn match   AllMdFontBold       "\%( \|^\)\@<=\*\*\%(\S\&[^*]\).\{1,}\%(\S\&[^*]\)\*\*\%( \|$\)\@="     contains=@NoSpell
+
+   hi  link    AllMdFontBoldItalic HLBoldItalic
+   syn match   AllMdFontBoldItalic "\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\).\{1,}\%(\S\&[^*]\)\*\*\*\%( \|$\)\@=" contains=@NoSpell
+
+   hi  link    AllMdFontUline      HLUnderline
+   syn match   AllMdFontUline      "\%( \|^\)\@<=_\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)_\%( \|$\)\@="           contains=@NoSpell
+
+   hi  link    AllMdFontBoldUline  HLBoldUnderline
+   syn match   AllMdFontBoldUline  "\%( \|^\)\@<=__\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)__\%( \|$\)\@="         contains=@NoSpell
+
+   hi  link    AllMdFontUndercurl  HLUndercurl
+   syn match   AllMdFontUndercurl  "\%( \|^\)\@<=\~\%(\S\&[^~]\).\{1,}\%(\S\&[^~]\)\~\%( \|$\)\@="         contains=@NoSpell
+
+   hi  link    AllMdFontStrikeGrey HLStrikeThroughGrey
+   syn match   AllMdFontStrikeGrey "\%( \|^\)\@<=\~\~\~\%(\S\&[^~]\).*"                                    contains=@NoSpell
+   syn match   AllMdFontStrikeGrey "\%( \|^\)\@<=\~\~\%(\S\&[^~]\).\{1,}\%(\S\&[^~]\)\~\~\%( \|$\)\@="     contains=@NoSpell
+
+
+
+   " This makes pattern matching more efficient by only searching for the main pattern once
+   syn match   AllFontPat       "\%( \|^\)\@<=\/[a-zA-Z-] .\{1,} [a-zA-Z-]\/\%( \|$\)\@="
+
+   " Alphabet font style syntax
+   hi  link    AllFontBold       HLBold
+   syn match   AllFontBold       "\/b .\{1,} b\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontItalic     HLItalic
+   syn match   AllFontItalic     "\/i .\{1,} i\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontBoldItalic HLBoldItalic
+   syn match   AllFontBoldItalic "\/b .\{1,} i\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontUline      HLUnderline
+   syn match   AllFontUline      "\/u .\{1,} u\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontBoldUline  HLBoldUnderline
+   syn match   AllFontBoldUline  "\/b .\{1,} u\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontUndercurl  HLUndercurl
+   syn match   AllFontUndercurl  "\/u .\{1,} c\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontStrike     HLStrikethrough
+   syn match   AllFontStrike     "\/- .\{1,} -\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontStrikeGrey HLStrikeThroughGrey
+   syn match   AllFontStrikeGrey "\/s .*"           contains=@NoSpell contained containedin=AllFontPat
+   syn match   AllFontStrikeGrey "\/s .\{1,} s\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontInverse    HLInverse
+   syn match   AllFontInverse    "\/I .\{1,} I\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontStandout   HLStandout
+   syn match   AllFontStandout   "\/S .\{1,} S\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontHighRedB   HLRedBgB
+   syn match   AllFontHighRedB   "\/H .\{1,} R\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighOrRedB HLOrangered1BgB
+   syn match   AllFontHighOrRedB "\/H .\{1,} O\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighYellB  HLYellowBgB
+   syn match   AllFontHighYellB  "\/H .\{1,} Y\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighGreenB HLGreen1BgB
+   syn match   AllFontHighGreenB "\/H .\{1,} G\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighCyanB  HLCyanBgB
+   syn match   AllFontHighCyanB  "\/H .\{1,} C\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighBlueB  HLDodgerBlueBgB
+   syn match   AllFontHighBlueB  "\/H .\{1,} D\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontHighPinkB  HLDeepPinkBgB
+   syn match   AllFontHighPinkB  "\/H .\{1,} P\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontGreyOut    HLGreyOut
+   syn match   AllFontGreyOut    "\/g .\{1,} o\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   hi  link    AllFontRed        HLRed2B
+   syn match   AllFontRed        "\/r .\{1,} r\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontOrange     HLOrangeredB
+   syn match   AllFontOrange     "\/o .\{1,} o\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontYellow     HLYellowB
+   syn match   AllFontYellow     "\/y .\{1,} y\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontGreen      HLGreenB
+   syn match   AllFontGreen      "\/g .\{1,} g\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontCyan       HLCyanB
+   syn match   AllFontCyan       "\/c .\{1,} c\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontDodgerBlue HLDodgerblueB
+   syn match   AllFontDodgerBlue "\/d .\{1,} d\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontPink       HLDeeppinkB
+   syn match   AllFontPink       "\/p .\{1,} p\/"   contains=@NoSpell contained containedin=AllFontPat
+
+   " Tests for markdown patterns
+   " Testing *font styles* patterns
+   " Testing **font styles** patterns
+   " Testing ***font styles*** patterns
+   " Testing _font styles_ patterns
+   " Testing __font styles__ patterns
+   " Testing ~font styles~ patterns
+   " Testing ~~~font styles patterns
+   " Testing ~~font styles~~ patterns
+
+   " Tests for alphabet patterns
+   " Testing /b font styles b/ patterns
+   " Testing /i font styles i/ patterns
+   " Testing /b font styles i/ patterns
+   " Testing /u font styles u/ patterns
+   " Testing /b font styles u/ patterns
+   " Testing /u font styles c/ patterns
+   " Testing /- font styles -/ patterns
+   " Testing /s font styles s/ patterns
+   " Testing /I font styles I/ patterns
+   " Testing /S font styles S/ patterns
+   " Testing /H font styles R/ patterns
+   " Testing /H font styles O/ patterns
+   " Testing /H font styles Y/ patterns
+   " Testing /H font styles G/ patterns
+   " Testing /H font styles C/ patterns
+   " Testing /H font styles D/ patterns
+   " Testing /H font styles P/ patterns
+   " Testing /g font styles o/ patterns
+   " Testing /r font styles r/ patterns
+   " Testing /o font styles o/ patterns
+   " Testing /y font styles y/ patterns
+   " Testing /g font styles g/ patterns
+   " Testing /c font styles c/ patterns
+   " Testing /d font styles d/ patterns
+   " Testing /p font styles p/ patterns
+endfunction
+"------------------------------------------------------------------------------
+
+
 function! AllFilesDefaultSyntax()
    let b:AllFilesDefaultSyntax_loaded = 1
    if &filetype !=# 'help'
@@ -924,7 +1118,7 @@ function! AllFilesDefaultSyntax()
    if (&filetype != 'csv')
       call AllCaps()
    endif
-   call AllComLabel()
+   call AllMultiWordLabel(1)
    if (&filetype == 'text' || &filetype == 'markdown')
       " call AllPaths1(0) " moved inside the files
       " call AllPathsWin(0)

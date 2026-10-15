@@ -126,7 +126,7 @@ syn match   VimLtCSA  "\\<lt>[^>]*>"hs=s+2,he=e-1 contained containedin=vimMapRh
 
 "------------------------------------------------------------------------------
 " Vim default groups
-syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllComLabel
+syn cluster ClusterColorCI contains=vimCommentTitle,vimSynKeyRegion,vimHiKeyList,vimHiLink,AllMultiWordLabel
 syn keyword Comment           Comment           contained containedin=@ClusterColorCI
 syn keyword Constant          Constant          contained containedin=@ClusterColorCI
 syn keyword String            String            contained containedin=@ClusterColorCI
@@ -309,11 +309,15 @@ syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin
 syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=@ClusterColorCSG
-syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=@ClusterColorCSG
-syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=@ClusterColorCSG
-syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=@ClusterColorCSG
+syn keyword HLDeepPinkBgB         HLDeepPinkBgB            contained containedin=@ClusterColorCSG
+syn keyword HLDodgerBlueBgB       HLDodgerBlueBgB          contained containedin=@ClusterColorCSG
+syn keyword HLCyanBgB             HLCyanBgB                contained containedin=@ClusterColorCSG
 syn keyword HLGreen3BgB           HLGreen3BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGreen1BgB           HLGreen1BgB              contained containedin=@ClusterColorCSG
+syn keyword HLYellowBgB           HLYellowBgB              contained containedin=@ClusterColorCSG
+syn keyword HLYellow3BgB          HLYellow3BgB             contained containedin=@ClusterColorCSG
+syn keyword HLOrangeBgB           HLOrangeBgB              contained containedin=@ClusterColorCSG
+syn keyword HLOrangered1BgB       HLOrangered1BgB          contained containedin=@ClusterColorCSG
 syn keyword HLRedBgB              HLRedBgB                 contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 " Strikethrough
@@ -334,6 +338,20 @@ syn keyword HLSpecial8             HLSpecial8              contained containedin
 syn keyword HLSpecial9             HLSpecial9              contained containedin=@ClusterColorCSG
 syn keyword HLSpecial10            HLSpecial10             contained containedin=@ClusterColorCSG
 syn keyword HLSpecial11            HLSpecial11             contained containedin=@ClusterColorCSG
+
+syn keyword HLBold                 HLBold                  contained containedin=@ClusterColorCSG
+syn keyword HLItalic               HLItalic                contained containedin=@ClusterColorCSG
+syn keyword HLBoldItalic           HLBoldItalic            contained containedin=@ClusterColorCSG
+syn keyword HLUnderline            HLUnderline             contained containedin=@ClusterColorCSG
+syn keyword HLBoldUnderline        HLBoldUnderline         contained containedin=@ClusterColorCSG
+syn keyword HLUndercurl            HLUndercurl             contained containedin=@ClusterColorCSG
+syn keyword HLUnderdotted          HLUnderdotted           contained containedin=@ClusterColorCSG
+syn keyword HLUnderdouble          HLUnderdouble           contained containedin=@ClusterColorCSG
+syn keyword HLUnderdashed          HLUnderdashed           contained containedin=@ClusterColorCSG
+syn keyword HLStrikethrough        HLStrikethrough         contained containedin=@ClusterColorCSG
+syn keyword HLInverse              HLInverse               contained containedin=@ClusterColorCSG
+syn keyword HLStandout             HLStandout              contained containedin=@ClusterColorCSG
+syn keyword HLNocombine            HLNocombine             contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 
 

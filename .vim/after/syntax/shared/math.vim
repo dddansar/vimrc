@@ -108,10 +108,10 @@ if g:performance_mode <= 0
    syn match   SpMathXInNum     "x" contained contains=@NoSpell
 
    hi  link    SpMathNumWithX   Number
-   syn match   SpMathNumWithX   "\<\%([0-9]\+\|N\)\(x[0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2,SpMathXInNum
+   syn match   SpMathNumWithX   "\<\%([0-9]\+\|N\)\?\(x[0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,SpMathXInNum,UnicodeOperators2
    " SpMathNumWithX2 does not work when merged in SpMathNumWithX/SpMathXInNum...
    hi  link    SpMathNumWithX2  Number
-   syn match   SpMathNumWithX2  "\%(×\)\@<=\([0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2,SpMathXInNum
+   syn match   SpMathNumWithX2  "\%(×\)\@<=\([0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,SpMathXInNum,UnicodeOperators2
 
    " Derivatives
    hi  link    SpMathDeriv      Constant
@@ -128,7 +128,7 @@ if g:performance_mode <= 0
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
-   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!\%([Ii][efnst]\|vs\|[Aa][nst]\|to\|so\|b[ey]\|u[ns]\|re\|[Oo][knfr]\)\@<!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
+   syn match   SpMathMultiVars2 "\%(\w\)\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!\%([Ii][efnst]\|vs\|[Aa][nst]\|to\|so\|b[ey]\|u[nps]\|[Rr]e\|[Oo][knfr]\)\@<!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
 
    hi  link    SpMathMultiVars3 Constant
    syn match   SpMathMultiVars3 "\%(\w\)\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges

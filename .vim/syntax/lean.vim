@@ -151,6 +151,7 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    call AllLabel()
    call AllSpecifiersInQuotes()
    call AllNumbers()
+   call AllNumbersHex()
    call AllTime()
    call AllTruth()
 endif

@@ -1355,7 +1355,7 @@ function! LoadMappings()
    " Adds the comment ~~ (similar to //) that will highlight the line as a
    " gray strikethrough if strikethrough.vim is loaded. Also works on ranges
    " in the same line by adding a second pair of ~~.
-   nnoremap gr _i~~ <esc>
+   nnoremap gr _i~~~<esc>
    vnoremap gr <esc>`<i~~<esc>`>lla~~<esc>
    " Remove 2 sets of ~~ starting from current line.
    nnoremap <leader>gu 0/\~\~<cr>xxnxx:noh<cr>

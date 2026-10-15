@@ -76,8 +76,8 @@ call setcellwidths([
          \ [0x2160, 0x218f, 2],
          \ [0x2205, 0x2205, 2],
          \ [0x22a2, 0x22af, 2],
-         \ [0x22d2, 0x22d3, 2],
          \ [0x22bf, 0x22c1, 2],
+         \ [0x22d2, 0x22d3, 2],
          \ [0x2460, 0x24ff, 2],
          \ [0x2776, 0x2793, 2],
          \ [0x27c0, 0x27c4, 2],
@@ -439,6 +439,7 @@ syn match   UnicodeOperators1 "[±∓÷∗∼]" contains=@NoSpell  containedin=R
 "
 inorea <buffer> _neg       −<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mdsh      —<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mdash     —<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _deg       °<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _degree    °<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _degrees   °<left><right><c-r>=Eatchar('\s')<cr>
@@ -467,7 +468,8 @@ inorea <buffer> _ox        ⊗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _tensor    ⊗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Ox       ⨂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Odv      ⦼<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _opl       𛲜<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _opl       ⊕<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _opl2      𛲜<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _lopl     𐌈<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Opl      ⨁<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _omn       ⊝<left><right><c-r>=Eatchar('\s')<cr>
@@ -1208,9 +1210,9 @@ inorea <buffer> _boxr    ┌──────┐<cr>│      │<cr>└──�
 inorea <buffer> _boxl    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
 
 " Truth tables
-inorea <buffer> _tt0     A│<cr>─┼────<cr> │<cr>│<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _tt      A│<cr>─┼────<cr> │<cr>│<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _tt1     A│0123<cr>─┼────<cr>0│0101<cr>1│0011<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _tt2     AB│<cr>──┼────────────────<cr>00│0101010101010101<cr>01│0011001100110011<cr>10│0000111100001111<cr>11│0000000011111111<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _tt2     AB│0123456789abcdef<cr>──┼────────────────<cr>00│0101010101010101<cr>01│0011001100110011<cr>10│0000111100001111<cr>11│0000000011111111<left><right><c-r>=Eatchar('\s')<cr>
 
 
 inorea <buffer> b_btl     ┏<left><right><c-r>=Eatchar('\s')<cr>

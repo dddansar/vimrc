@@ -64,7 +64,6 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim
 
-   source $vim_folder_path/strikethrough.vim
    source $vim_folder_path/after/syntax/shared/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
@@ -140,11 +139,13 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllArrows()
    call AllParenBr()
    " call AllWebsites(0)
-   call AllLabel()
    call AllNumbers()
+   call AllNumbersHex()
+   call AllLabel()
+   " call AllMultiWordLabel(0)
    call AllSlashes()
    call AllSeparators2()
-   call StrikeoutEn()
+   call AllFontStyles()
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()
    " call AllHLWords()
@@ -228,9 +229,12 @@ endif
 " number/letter and ")".
 hi  link    TextNumberParen    Function
 hi  link    TextLetterParen    Question
-syn match   TextNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell
-syn match   TextLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell
-syn match   TextNumberParen    "\s\+([0-9]\+)" contains=@NoSpell
-syn match   TextLetterParen    "\s\+([A-Z])" contains=@NoSpell
+syn match   TextNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
+syn match   TextNumberParen    "\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
 "------------------------------------------------------------------------------
 
+if exists("b:current_syntax") && b:current_syntax == "text"
+   call AllMultiWordLabel(0)
+endif

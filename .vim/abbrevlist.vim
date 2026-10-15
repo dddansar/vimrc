@@ -548,6 +548,7 @@ _~~
 __\|
 _neg
 _mdsh
+_mdash
 _deg
 _degree
 _degrees
@@ -572,6 +573,7 @@ _tensor
 _Ox
 _Odv
 _opl
+_opl2
 _lopl
 _Opl
 _omn
