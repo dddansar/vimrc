@@ -267,7 +267,7 @@ endfunction
 
 " Special Chars like @ # $ `
 function! AllSpecial()
-   hi  link    AllSpChars   SpecialChar
+   hi  link    AllSpChars   Function
    if (!exists("b:comment_leader") || b:comment_leader != '@') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '@')
       syn match   AllSpChars    "@"
    endif
@@ -659,21 +659,16 @@ function! AllNumbers()
 
    " Match scientific/exponent/floating point notation/number.
    if g:performance_mode <= 1
-      " matches 1 123
-      " matches 329E+32 32E-32 32E32
-      " matches .329E+32 .32E-32 .32 .32E32
-      " matches 234.23 2332.329e-32 2323.32e+32 2332.32e32
-      " matches        2332.329E+32 2323.32E-32
-      " matches 329x10^32 32x10^-32 32x10^32
-      " matches .329x10^+32 .32x10^-32 .32x10^32
-      " matches 2332.329x10^-32 2323.32x10^+32 2332.32x10^32 2332.32x10^32
-      " matches 2332.329x10^+32 2323.32x10^-32
-      " and also matches 2^14 2.32^43
+      " Matches 1          123
+      " Matches 329E+32    32E-32         32E32
+      " Matches 0.329E+32  0.32E-32       0.32           0.32E32
+      " Matches 234.23     2332.329e-32   2323.32e+32    2332.32e32
+      " Matches            2332.329E+32   2323.32E-32
       hi  link  AllNumbersSci Number
-      syn match AllNumbersSci "\<\%(\d*\)\?\.\?\d\+\%(\%([eE]\|x10\^\|\^\)[-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+      syn match AllNumbersSci "\.\?\<\d\+\%(\.\d\+\)\?\%([eE][-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
    endif
 
-   " Matches undercores in numbers.
+   " Matches underscores in numbers.
    " 1_2_3_4 or 123_456_789 or 12345_67890
    " but not _123_45 or 123_ or 123__456
    hi  link  AllNumbersUnd  Number

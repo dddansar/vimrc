@@ -94,19 +94,26 @@ setlocal nocindent
 
 
 " Match parenthesis
-hi  link    TextParen     Function
-syn match   TextParen     "[)(]"
+" hi  link    TextParen     Function
+" syn match   TextParen     "[)(]"
 
-hi  link    TextSBr       StorageClass
-syn match   TextSBr       "[[\]]"
+" hi  link    TextSBr       StorageClass
+" syn match   TextSBr       "[[\]]"
 
-hi  link    TextCBr       Define
-syn match   TextCBr       "[}{]"
+" hi  link    TextCBr       Define
+" syn match   TextCBr       "[}{]"
 
-hi  link    TextOperators  Operator
-syn match   TextOperators  "[$]"
-hi  link    TextSlash      Operator
+" hi  link    TextOperators  Operator
+" syn match   TextOperators  "[$]"
+
+hi  link    TextSlash      Function
 syn match   TextSlash      "\/"
+
+" Match alone quotes. Quote pairs are matched elsewhere
+hi  link    TextAloneQuotes Function
+syn match   TextAloneQuotes "["]"
+syn match   TextAloneQuotes "\%(\w\)\@<!'"
+" syn match   TextAloneQuotes "'\%(\w\)\@<!" // Incorrectly matches words'
 
 
 " Match (+) (-) (~)
@@ -121,30 +128,44 @@ syn match   TextTildaParen     "(\~)"
 
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
 " P1/P2/P3 for Priorities
-syn match Whitebg             "\<P0\>" contains=@NoSpell
-syn match RedOrangebg         "\<P1\>" contains=@NoSpell
-syn match Orangebg            "\<P2\>" contains=@NoSpell
-syn match LightOrangebg       "\<P3\>" contains=@NoSpell
-syn match Yellowbg            "\<P4\>" contains=@NoSpell
-syn match FluoGreen0bg        "\<P5\>" contains=@NoSpell
-syn match FluoGreen2bg        "\<P6\>" contains=@NoSpell
-syn match Green2bg            "\<P7\>" contains=@NoSpell
-syn match Tealbg              "\<P8\>" contains=@NoSpell
-syn match Blue2bg             "\<P9\>" contains=@NoSpell
+" hi  link  TextPriorities0  HLGrey80BgB
+" syn match TextPriorities0  "\<P0\>" contains=@NoSpell
+" hi  link  TextPriorities1  HLOrangered1BgB
+" syn match TextPriorities1  "\<P1\>" contains=@NoSpell
+" hi  link  TextPriorities2  HLOrangeBgB
+" syn match TextPriorities2  "\<P2\>" contains=@NoSpell
+" hi  link  TextPriorities3  HLYellowBgB
+" syn match TextPriorities3  "\<P3\>" contains=@NoSpell
+" hi  link  TextPriorities4  HLYellow3BgB
+" syn match TextPriorities4  "\<P4\>" contains=@NoSpell
+" hi  link  TextPriorities5  HLGreen1BgB
+" syn match TextPriorities5  "\<P5\>" contains=@NoSpell
+" hi  link  TextPriorities6  HLGreen3BgB
+" syn match TextPriorities6  "\<P6\>" contains=@NoSpell
+" hi  link  TextPriorities7  HLCyanBgB
+" syn match TextPriorities7  "\<P7\>" contains=@NoSpell
+" hi  link  TextPriorities8  HLDodgerBlueBgB
+" syn match TextPriorities8  "\<P8\>" contains=@NoSpell
+" hi  link  TextPriorities9  HLDeepPinkBgB
+" syn match TextPriorities9  "\<P9\>" contains=@NoSpell
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
 if exists("b:current_syntax") && b:current_syntax == "text"
+   call AllSpecial()
    call AllEqualities()
    call AllArrows()
    call AllParenBr()
    " call AllWebsites(0)
+   call AllSeparators2() " needs to be before AllNumbers()
    call AllNumbers()
    call AllNumbersHex()
+   if expand('%:t') =~# '\.uni\.txt$'
+      call MathMatches()
+   endif
    call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()
-   call AllSeparators2()
    call AllFontStyles()
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()

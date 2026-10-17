@@ -60,6 +60,7 @@ let b:math_loaded = 1
 "       you still get a performance hit, and you either want the highlighting
 "       done properly or you don't want it at all, so you can't really cut
 "       corners.
+function! MathMatches()
 if g:performance_mode <= 0
 
    " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
@@ -108,7 +109,7 @@ if g:performance_mode <= 0
    syn match   SpMathXInNum     "x" contained contains=@NoSpell
 
    hi  link    SpMathNumWithX   Number
-   syn match   SpMathNumWithX   "\<\%([0-9]\+\|N\)\?\(x[0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,SpMathXInNum,UnicodeOperators2
+   syn match   SpMathNumWithX   "\%(\<\|\.\?\<\d\+\%(\.\d\+\)\?\|N\)\(x[0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,SpMathXInNum,UnicodeOperators2
    " SpMathNumWithX2 does not work when merged in SpMathNumWithX/SpMathXInNum...
    hi  link    SpMathNumWithX2  Number
    syn match   SpMathNumWithX2  "\%(×\)\@<=\([0-9]\+\)\+\%(\w\)\@!" contains=@NoSpell,SpMathXInNum,UnicodeOperators2
@@ -148,6 +149,7 @@ if g:performance_mode <= 0
    syn cluster ClusterSpMath add=SpMath.*
    "---------------------------------------------------------------------------
 endif
+endfunction
 
 
 "---------------------------
