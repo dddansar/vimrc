@@ -93,7 +93,7 @@ if g:performance_mode <= 0
    " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-zA-Z(]\s\?\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
    syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(]\|[0-9]\)\|'[dm] \)\@!" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
-   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|but\|to\|i\%(mplies\|[ns]\)\)\>\)\@=" contains=@NoSpell
+   syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
    " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
    " Match math variables that are preceded by a number.

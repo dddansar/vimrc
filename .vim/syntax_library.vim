@@ -409,7 +409,7 @@ function! AllLabel()
    syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
 endfunction
 
-" Titles/Labels in Comments
+" Titles/Labels
 function! AllMultiWordLabel(contained_en)
    if exists("b:comment_leader")
       " Matches Word1 Word2: if every word is capitalized.
@@ -417,16 +417,10 @@ function! AllMultiWordLabel(contained_en)
       " start, s start of the match, +1 offset by 1 character forward.
       " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
       "       not match a word ending if it's followed by :!
-      " NOTE: Replaced ( with \x28 and ) with \x29 to help with parenthesis matching readability
       hi  link    AllMultiWordLabel  PreProc
       execute 'syn match   AllMultiWordLabel  +' . (a:contained_en ? b:comment_leader : '^') .
-         \ '\%(\s*\%(-\s\)\?' .
-         \    '\%(\%(\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+\%([0-9-]\+\|[a-zA-Z]\?\)\)' .
-         \            '\%(\>\|:\@=\)[+-]*' .
-         \            '\%(\%( & \@=\|, \@=\|[./][A-ZÀ-ß0-9]\@=\|''[a-z]\>\|[\x29"''][ :]\@=\)' .
-         \               '\| \<\%(and\|or\|of\|vs\|the\|to\|at\|is\|in\|by\|a\)\> \@=' .
-         \               '\| vs\. \@=\)*' .
-         \          '\|[\x28"''][A-ZÀ-ß0-9]\@=\)\)' .
+         \ '\%(\s*\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+\%([0-9-]\+\|[a-zA-Z]\?\)\)' .
+         \         '\%(\>\|:\@=\)[+-]*\%( & \@=\|, \@=\|[./][A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+' .
          \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : '') .
          \ ' contains=@NoSpell keepend'
@@ -442,44 +436,42 @@ function! AllMultiWordLabel(contained_en)
       " A.B.C:
       " Hello, World:
       " Tom & Jerry:
-      " Pros and Cons:
       " To Do:
       " A:
       " Well-Known Fact:
       " Snake_Case_Name:
       " ALL CAPS HERE:
-      " (Draft) Notes:
-      " (1) Intro:
       " 1 Intro:
-      " A) Intro:
       " 1.Intro:
-      " "Quoted Title":
-      " - Item:
       " C++ Notes:
       " C-- Notes:
-      "     Indented Title:
+      "     Indented Titles:
       " Résumé Tips:
       " Über Cool:
       " Naïve Bayes:
-      " Old Adults (60+):
-      " Don't Stop:
+      " Doctor's Note:
 
       " Does not currently match:
-      " 1st Place:                  Only supports 1 letter after a number not 2
-      " 3DS Max:                    Only supports 1 letter after a number not 2
-      " Q&A:                        & must be followed by a space
-      " Dr. Smith:                  . must be followed by a word char
-      " Hello!:                     !,?,%,#,... not currently allowed
-      " Lord of the:                "the" is not followed by a Uppercase word
-      " Hello World :               Space before the colon
-      " Hello World:text            Colon not followed by whitespace or EOL
-      " & Title:                    & must not start the title
-      " Hello,World:                Comma must be followed by a space
-      " A.B.C.:                     Trailing . before the colon
-      " ( Draft):                   ( must be followed by a word char
-      " été:                        Lowercase word
-      " Mixed UPPER lower:          Lowercase word
-      " Read/write:                 Lowercase word
+      " Pros and Cons:
+      " (Draft) Notes:
+      " (1) Intro:
+      " A) Intro:
+      " Adults (60+):
+      " "Quoted Title":
+      " - Item:
+      " 1st Place:
+      " 3DS Max:
+      " Q&A:
+      " Dr. Smith:
+      " Hello!:
+      " Hello World :
+      " Hello World:text
+      " & Title:
+      " Hello,World:
+      " A.B.C.:
+      " ( Draft):
+      " été:
+      " Upper And lowercase:
    endif
 endfunction
 "------------------------------------------------------------------------------
