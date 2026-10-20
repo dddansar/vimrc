@@ -80,11 +80,11 @@ hi  link     NetrwHiddenFile     LineNr
 syn match    NetrwHiddenFile     "\s\.[a-zA-Z0-9_-][a-zA-Z0-9_. -]*\>"
 
 " Paths/folders
-hi  link     NetrwPaths1   Underlined
-syn match    NetrwPaths1   "\<[a-zA-Z0-9_.\-][a-zA-Z0-9._ -]\+/" contains=@NoSpell
+hi  link     NetrwPaths1         Directory
+syn match    NetrwPaths1         "\s\<[a-zA-Z0-9_.\-][a-zA-Z0-9._ -]*/"hs=s+1 contains=@NoSpell
 
 hi  link     NetrwHiddenFolder   Tag
-syn match    NetrwHiddenFolder   "\s\.[a-zA-Z0-9_-][a-zA-Z0-9_. -]*\/"
+syn match    NetrwHiddenFolder   "\s\.[a-zA-Z0-9_-][a-zA-Z0-9_. -]*\/"hs=s+1
 
 
 " Microsoft Office (Open XML & Legacy Formats):

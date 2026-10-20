@@ -495,7 +495,7 @@ function! AllPaths1(contained_en)
    " bash causing matches to incorrectly continue on the following lines.
    " NOTE: Removed {} as that can be problematic with bash when ":-\?" is used.
    if g:performance_mode <= 0
-      hi  link     AllPaths1 Underlined
+      hi  link     AllPaths1 Directory
       execute 'syn match AllPaths1 "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%(\~\|\.\.\?\)\?' .
@@ -520,7 +520,7 @@ function! AllPaths2(contained_en)
    " path/file.ext or option1/option2/... or (123/456)/(7890/123.45).
    " Don't match /word or 1/2 or 2/(2/32)
    if g:performance_mode <= 0
-      hi  link     AllPaths2 Underlined
+      hi  link     AllPaths2 Directory
       execute 'syn match AllPaths2 "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\/\)\{2,}' .
@@ -534,12 +534,13 @@ function! AllPaths2(contained_en)
 endfunction
 
 function! AllPathsWin(contained_en)
-   " Match simple Windows paths C:\Users\name\AppData\ or D:\Users or A:\path\file
-   " Does not match paths like \Users\file without the C:\
+   " Match simple Windows paths C:\Users\name\AppData\ or D:\Users or
+   " A:\path\file or ..\Users\file.ext
+   " Does not match paths like \Users\file without the C:\ or ..\
    if g:performance_mode <= 0
-      hi  link     AllPathsWin Underlined
-      hi  link     AllPathsWin Underlined
-      execute 'syn match AllPathsWin "\<[A-E]:\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
+      hi  link     AllPathsWin Directory
+      hi  link     AllPathsWin Directory
+      execute 'syn match AllPathsWin "\%(\<[A-E]:\|\.\.\)\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
    endif
 endfunction
 
@@ -548,7 +549,7 @@ function! AllPathsSingleSlashStart(contained_en)
    " AllPaths1 but only matches a single slash like in:
    " ./word or ~/path or ../path or ~/.bash_history
    if g:performance_mode <= 0
-      hi  link     AllPathsS1 Underlined
+      hi  link     AllPathsS1 Directory
       execute 'syn match AllPathsS1 "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%(\~\|\.\.\?\)\/' .
@@ -567,7 +568,7 @@ function! AllPathsDollar(contained_en)
    " not these? $(path)/file, ${path}/file.txt, ${path}/${file}, $a/b
    " does not match: ${path/path/file}, ${path}
    if g:performance_mode <= 0
-      hi  link    AllPathsDollar Underlined
+      hi  link    AllPathsDollar Directory
       execute 'syn match AllPathsDollar "' .
          \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$' .
          \ '\%([0-9_.-]*[a-zA-Z]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)\+\)' .
@@ -579,7 +580,7 @@ function! AllPathsDollar(contained_en)
          \ 'containedin=@ClusterAllPathsCI keepend'
 
       " Matches $(..)/... and ${...}/...
-      " hi  link    AllPathsDollar2 Underlined
+      " hi  link    AllPathsDollar2 Directory
       " execute 'syn match AllPathsDollar2 "' .
       "    \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$[({]' .
       "    \ '\%([a-zA-Z0-9_.-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)[)}]' .
@@ -594,8 +595,9 @@ endfunction
 "------------------------------------------------------------------------------
 
 
-" Match websites and emails.
+" Match websites and emails
 "------------------------------------------------------------------------------
+" Match websites
 function! AllWebsites(contained_en)
    " Valid Website Characters
    " Alphanumeric:              All lowercase letters (a-z), uppercase letters (A-Z), and digits (0-9).
@@ -610,7 +612,7 @@ function! AllWebsites(contained_en)
    " Websites Must Not End On These Special Character
    " .,)!?'"]#&=\@:;%$*         Punctuation followed by other text
 
-   " Match links like www.vim.org
+   " Match links that start with www like www.vim.org
    hi  link     AllWebLinks1  Underlined
    execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 
@@ -619,7 +621,7 @@ function! AllWebsites(contained_en)
    execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 endfunction
 
-
+" Match emails
 function! AllEmails(contained_en)
    " Valid email characters
    " 1. Local Part (Before the @)
@@ -646,7 +648,7 @@ function! AllEmails(contained_en)
    " #!$%&'*+-/=?^_{|}~@example.org: Technically valid but rarely used.
    " Invalid Emails:
    " Contains a space: abc def@example.com, abc.def@exam ple.com, abcdef @example.com
-   " Missing Local or Domain part: abc.def@example, @domain.com, abc.def@:
+   " Missing local/domain part: abc.def@example, @domain.com, abc.def@:
    " Incorrect period usage: abc..def@example.com, .abc@example.com, abc@example..com
    " Domain part starts/ends with a hyphen: abc@example-.com, abc@-example.com
 endfunction
@@ -975,21 +977,28 @@ function! AllFontStyles()
    syn match   AllMdFontBoldItalic "\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\).\{1,}\%(\S\&[^*]\)\*\*\*\%( \|$\)\@=" contains=@NoSpell
 
    hi  link    AllMdFontUline      HLUnderline
-   syn match   AllMdFontUline      "\%( \|^\)\@<=_\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)_\%( \|$\)\@="           contains=@NoSpell
+   syn match   AllMdFontUline      "\%( \|^\)\@<=__\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)__\%( \|$\)\@="         contains=@NoSpell
 
    hi  link    AllMdFontBoldUline  HLBoldUnderline
-   syn match   AllMdFontBoldUline  "\%( \|^\)\@<=__\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)__\%( \|$\)\@="         contains=@NoSpell
+   syn match   AllMdFontBoldUline  "\%( \|^\)\@<=___\%(\S\&[^_]\).\{1,}\%(\S\&[^_]\)___\%( \|$\)\@="       contains=@NoSpell
 
    hi  link    AllMdFontUndercurl  HLUndercurl
    syn match   AllMdFontUndercurl  "\%( \|^\)\@<=\~\%(\S\&[^~]\).\{1,}\%(\S\&[^~]\)\~\%( \|$\)\@="         contains=@NoSpell
 
-   hi  link    AllMdFontStrikeGrey HLStrikeThroughGrey
-   syn match   AllMdFontStrikeGrey "\%( \|^\)\@<=\~\~\~\%(\S\&[^~]\).*"                                    contains=@NoSpell
-   syn match   AllMdFontStrikeGrey "\%( \|^\)\@<=\~\~\%(\S\&[^~]\).\{1,}\%(\S\&[^~]\)\~\~\%( \|$\)\@="     contains=@NoSpell
+   hi  link    AllMdFontStrike     HLStrikeThroughGrey
+   syn match   AllMdFontStrike     "\%( \|^\)\@<=\~\~\%(\S\&[^~]\).\{1,}\%(\S\&[^~]\)\~\~\%( \|$\)\@="     contains=@NoSpell
+
+   hi  link    AllMdFontStrikeLine HLStrikeThroughGrey
+   syn match   AllMdFontStrikeLine "\%( \|^\)\@<=\~\~\~\%([^~]\).*"                                        contains=@NoSpell
 
 
 
-   " This makes pattern matching more efficient by only searching for the main pattern once
+   " Can't be contained in AllFontPat and needs to be before AllFontPat
+   hi  link    AllFontStrikeLine HLStrikeThroughGrey
+   syn match   AllFontStrikeLine "\%( \|^\)\@<=\/s .*" contains=@NoSpell
+
+   " This makes pattern matching more efficient by only searching for the main
+   " pattern once.
    syn match   AllFontPat       "\%( \|^\)\@<=\/[a-zA-Z-] .\{1,} [a-zA-Z-]\/\%( \|$\)\@="
 
    " Alphabet font style syntax
@@ -1014,9 +1023,8 @@ function! AllFontStyles()
    hi  link    AllFontStrike     HLStrikethrough
    syn match   AllFontStrike     "\/- .\{1,} -\/"   contains=@NoSpell contained containedin=AllFontPat
 
-   hi  link    AllFontStrikeGrey HLStrikeThroughGrey
-   syn match   AllFontStrikeGrey "\/s .*"           contains=@NoSpell contained containedin=AllFontPat
-   syn match   AllFontStrikeGrey "\/s .\{1,} s\/"   contains=@NoSpell contained containedin=AllFontPat
+   hi  link    AllFontStrike     HLStrikeThroughGrey
+   syn match   AllFontStrike     "\/s .\{1,} s\/"   contains=@NoSpell contained containedin=AllFontPat
 
    hi  link    AllFontInverse    HLInverse
    syn match   AllFontInverse    "\/I .\{1,} I\/"   contains=@NoSpell contained containedin=AllFontPat
@@ -1061,8 +1069,8 @@ function! AllFontStyles()
    " Testing *font styles* patterns
    " Testing **font styles** patterns
    " Testing ***font styles*** patterns
-   " Testing _font styles_ patterns
    " Testing __font styles__ patterns
+   " Testing ___font styles___ patterns
    " Testing ~font styles~ patterns
    " Testing ~~~font styles patterns
    " Testing ~~font styles~~ patterns
@@ -1076,6 +1084,7 @@ function! AllFontStyles()
    " Testing /u font styles c/ patterns
    " Testing /- font styles -/ patterns
    " Testing /s font styles s/ patterns
+   " Testing /s font styles patterns
    " Testing /I font styles I/ patterns
    " Testing /S font styles S/ patterns
    " Testing /H font styles R/ patterns

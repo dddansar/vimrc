@@ -117,14 +117,15 @@ if g:performance_mode <= 0
    " Derivatives
    hi  link    SpMathDeriv      Constant
    syn match   SpMathDeriv      "\%(\w\)\@<!d[a-np-zA-Z]\%(\w\)\@!\%(-\)\@!"  contains=@NoSpell
-   syn match   SpMathDeriv      "\%(\w\)\@<!\%(dxdy\|dxdz\|dydz\|dxdydz\|drdф\|drdθ\|drdθdф\|dudv\|dxdydz\)\%(\w\)\@!"  contains=@NoSpell
+   syn match   SpMathDeriv      "\%(\w\)\@<!d\%(xdy\%(dz\)\?\|xdz\|ydz\|rdф\%(dθ\)\?\|rdθ\%(dф\)\?\|udv\%(dw\)\?\)\%(\w\)\@!"  contains=@NoSpell
 
    hi  link    SpMathDeriv2     Constant
    syn match   SpMathDeriv2     "\%(\w\)\@<![a-zA-Z]\>\%(' \)\@="  contains=@NoSpell
 
    " Highlight common math multi-variables.
    hi  link    SpMathMultiVars1 Constant
-   syn match   SpMathMultiVars1 "\%(\w\)\@<!\%(xy\|yz\|xz\|xyz\|np\|npq\|[a-cm-n][xz]\|[acn][y]\|ij\|jk\|ik\|ijk\|ab\|abc\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathMultiVars1 "\%(\w\)\@<!\%(np\?\|[a-cm-n][xz]\|[acn][y]\|ijk\?\|jk\|ik\|abc\?d\?e\?\)\%(\w\)\@!" contains=@NoSpell
+   syn match   SpMathMultiVars1 "\%(\w\)\@<![a-w]\?\%(xy\|yz\|xz\|xyz\)\%(\w\)\@!" contains=@NoSpell
    syn match   SpMathMultiVars1 "\%(\w \?\)\@<!\%(by\)\%( \?\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.

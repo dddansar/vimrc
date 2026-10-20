@@ -1357,6 +1357,7 @@ function! LoadMappings()
    " in the same line by adding a second pair of ~~.
    nnoremap gr _i~~~<esc>
    vnoremap gr <esc>`<i~~<esc>`>lla~~<esc>
+   vnoremap <silent> <expr> ga mode() ==# "v" ? "<c-v>_o_<s-i>~~~<esc>" : mode() ==# "V" ? "<c-v>_o_<s-i>~~~<esc>" : "_o_<s-i>~~~<esc>"
    " Remove 2 sets of ~~ starting from current line.
    nnoremap <leader>gu 0/\~\~<cr>xxnxx:noh<cr>
 

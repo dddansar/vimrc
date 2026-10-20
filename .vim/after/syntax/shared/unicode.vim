@@ -145,7 +145,7 @@ syn keyword UnicodeBsColor       UnicodeBsColor containedin=vimSynKeyRegion,vimH
 if g:performance_mode <= 0
    " Don't spell check any unicode chars in comments:
    hi  link     UnicodeCommentColor   Comment
-   syn match    UnicodeCommentColor  "[a-zA-Z]*[^ -~]\%(\S\)*"   contains=@NoSpell contained containedin=.*Comment.*
+   syn match    UnicodeCommentColor  "\%(\<[a-zA-Z]\+[^\t-~]\%(\S\)*\|[^\t-~]\)"   contains=@NoSpell contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 
    " Highlight chars that you don't want used
    " Moved to AllUnwantedCharacters()
@@ -1375,10 +1375,10 @@ inorea <buffer> _3into     ∰<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _intc      ∲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _inta      ∳<left><right><c-r>=Eatchar('\s')<cr>
 
-hi  link   UnicodeAlgebra     Operator
+hi  link   UnicodeAlgebra     MoreMsg
 syn match  UnicodeAlgebra     "[∂𝜕∇∫∮∯∯∰∰∲∳∬∭′‵]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
-hi  link   UnicodeAlgebraNary Operator
+hi  link   UnicodeAlgebraNary MoreMsg
 syn match  UnicodeAlgebraNary "[∏∐∑⋀⋁]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 "---------------------------
@@ -2773,7 +2773,10 @@ hi  link    UnicodeSPOps Function
 syn match   UnicodeSPOps "[⁺⁻˟ᐟ˜·ᐨ﹡ᕁᐠᐝᐤ॰ᙚꜝꜞ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeSPEq Operator
-syn match   UnicodeSPEq "[⁼ᶴ˂˃˅˄]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeSPEq "[⁼˂˃˅˄]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
+hi  link    UnicodeSPEq MoreMsg
+syn match   UnicodeSPEq "[ᶴ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeSPSets UnicodeSetsColor
 syn match   UnicodeSPSets "[꜂꜃꜄꜅ᐡᐢ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
@@ -4196,9 +4199,9 @@ inorea <buffer> zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Vectors in comments
 hi  link   UnicodeVectorsCom  Comment
-syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comment.*
-syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comment.*
-syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comment.*
+syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 
 " Vectors
 hi  link      UnicodeVectors  HLBlue
@@ -4208,7 +4211,7 @@ syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=Regex
 
 " Negation in comments
 hi  link   UnicodeNotLogicCom Comment
-syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comment.*
+syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 
 " Negation
 hi  link      UnicodeNotLogic Constant
