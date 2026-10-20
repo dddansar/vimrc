@@ -28,8 +28,11 @@ Contains all my vimrc settings.
 ├── c.vim                       # C/C++ custom syntax highlighting
 ├── colors/...                  # Contains the custom colorschemes
 ├── java.vim                    # Java custom syntax highlighting
+├── javascript.vim              # Javascript custom syntax highlighting
+├── json.vim                    # JSON custom syntax highlighting
 ├── linux.vim                   # Linux Commands custom syntax highlighting
 ├── lean.vim                    # Lean math prover custom syntax highlighting
+├── lua.vim                     # Lua custom syntax highlighting
 ├── math.vim                    # Math custom syntax highlighting and abbreviations
 ├── math_mappings.vim           # Math/Unicode mappings from VSCode/Lean
 ├── markdown.vim                # Markdown custom syntax highlighting
@@ -41,7 +44,6 @@ Contains all my vimrc settings.
 ├── regex.vim                   # Regular expression custom syntax highlighting
 ├── sh.vim                      # Bash/shell custom syntax highlighting
 ├── spell.vim                   # Spell checking configurations
-├── strikethrough.vim           # Text strikethrough effects
 ├── verilog.vim                 # Verilog and SystemVerilog custom syntax highlighting
 ├── svn.vim                     # SVN custom syntax highlighting
 ├── syntax/custom_syntax.vim    # Responsible for loading the custom syntax highlighting groups based on file extension
@@ -50,6 +52,7 @@ Contains all my vimrc settings.
 ├── text.vim                    # Plain text custom syntax highlighting
 ├── tex.vim                     # LaTeX custom syntax highlighting
 ├── unicode.vim                 # Unicode support and abbreviations
+├── vhdl.vim                    # VHDL custom syntax highlighting
 └── vim.vim                     # Vim custom syntax highlighting
 ```
 

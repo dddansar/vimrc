@@ -210,7 +210,7 @@ let g:claude_batch_api = 0
 " input price; cache read tokens cost 0.1× (10%). 1-hour TTL (extended): cache
 " write tokens cost 2× base input price; still 0.1× for reads
 " NOTE: caching only activates when the cached prefix meets the model's
-" minimum token threshold (typically 1024–4096 tokens depending on model).
+" minimum token threshold (typically 1024-4096 tokens depending on model).
 " NOTE: The plugin sends: system prompt -> buffer contents -> message history.
 "       - The system prompt is very stable - it'll cache on the first call and
 "       hit every subsequent call in the session. This is always a win.
@@ -333,13 +333,13 @@ function! CommonSettings()
          " Select btw font styles
          if g:font_style == 0
             if !has('nvim')
-               set guifont=Monospace\ 14
+               set guifont=Monospace\ 15
                " winpos 1000 0         " Open GVim in top right by default
             else " for NeoVim
-               set guifont=Monospace:h14
+               set guifont=Monospace:h15
             endif
-            set lines=47          " Height
-            set columns=130       " Width
+            set lines=39          " Height
+            set columns=120       " Width
          else
             if !has('nvim')
                set guifont=Monospace\ 20
