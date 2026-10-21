@@ -168,7 +168,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllSlashes()
    call AllFontStyles()
       set conceallevel=2   " Used by AllFontStyles() to hide start/end of match
-      set concealcursor=nv " Used by AllFontStyles() to hide start/end of match
+      set concealcursor=n  " Used by AllFontStyles() to hide start/end of match
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()
    " call AllHLWords()

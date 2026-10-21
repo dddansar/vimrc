@@ -43,6 +43,43 @@ let b:more_colors_loaded = 1
 
 " Custom highlighting groups
 "------------------------------------------------------------------------------
+hi default HLSienna              cterm=NONE gui=NONE ctermfg=130 guifg=sienna
+hi default HLBrown               cterm=NONE gui=NONE ctermfg=88  guifg=brown
+hi default HLRed2                cterm=NONE gui=NONE ctermfg=196 guifg=red2
+hi default HLOrangered           cterm=NONE gui=NONE ctermfg=202 guifg=orangered
+hi default HLDarkorange3         cterm=NONE gui=NONE ctermfg=166 guifg=darkorange3
+hi default HLDarkorange          cterm=NONE gui=NONE ctermfg=208 guifg=darkorange
+hi default HLOrange              cterm=NONE gui=NONE ctermfg=214 guifg=orange
+hi default HLTomato1             cterm=NONE gui=NONE ctermfg=203 guifg=tomato1
+hi default HLHotpink             cterm=NONE gui=NONE ctermfg=205 guifg=hotpink
+hi default HLDeeppink            cterm=NONE gui=NONE ctermfg=198 guifg=deeppink
+hi default HLDeeppink4           cterm=NONE gui=NONE ctermfg=89  guifg=deeppink4
+hi default HLMagenta4            cterm=NONE gui=NONE ctermfg=90  guifg=magenta4
+hi default HLFuchsia             cterm=NONE gui=NONE ctermfg=201 guifg=fuchsia
+hi default HLPurple              cterm=NONE gui=NONE ctermfg=165 guifg=purple
+hi default HLPurple4             cterm=NONE gui=NONE ctermfg=54  guifg=purple4
+hi default HLNavy                cterm=NONE gui=NONE ctermfg=17  guifg=navy
+hi default HLBlue                cterm=NONE gui=NONE ctermfg=20  guifg=blue
+hi default HLMediumslateblue     cterm=NONE gui=NONE ctermfg=99  guifg=mediumslateblue
+hi default HLDeepskyblue4        cterm=NONE gui=NONE ctermfg=24  guifg=deepskyblue4
+hi default HLDodgerblue          cterm=NONE gui=NONE ctermfg=33  guifg=dodgerblue
+hi default HLDeepskyblue         cterm=NONE gui=NONE ctermfg=45  guifg=deepskyblue
+hi default HLCyan                cterm=NONE gui=NONE ctermfg=51  guifg=cyan
+hi default HLYellow              cterm=NONE gui=NONE ctermfg=184 guifg=yellow
+hi default HLYellowgreen         cterm=NONE gui=NONE ctermfg=148 guifg=yellowgreen
+hi default HLGreen               cterm=NONE gui=NONE ctermfg=46  guifg=green
+hi default HLGreen3              cterm=NONE gui=NONE ctermfg=34  guifg=green3
+hi default HLOlive               cterm=NONE gui=NONE ctermfg=100 guifg=olive
+hi default HLKhaki4              cterm=NONE gui=NONE ctermfg=101 guifg=khaki4
+hi default HLGrey30              cterm=NONE gui=NONE ctermfg=236 guifg=grey30
+hi default HLLightmagenta        cterm=NONE gui=NONE ctermfg=177 guifg=lightmagenta
+hi default HLSkyblue             cterm=NONE gui=NONE ctermfg=81  guifg=skyblue
+hi default HLMediumaquamarine    cterm=NONE gui=NONE ctermfg=79  guifg=mediumaquamarine
+hi default HLSpringgreen         cterm=NONE gui=NONE ctermfg=48  guifg=springgreen
+hi default HLKhaki               cterm=NONE gui=NONE ctermfg=222 guifg=khaki
+hi default HLTan1                cterm=NONE gui=NONE ctermfg=215 guifg=tan1
+hi default HLSalmon              cterm=NONE gui=NONE ctermfg=210 guifg=salmon
+
 hi default HLSiennaB             cterm=bold gui=bold ctermfg=130 guifg=sienna
 hi default HLBrownB              cterm=bold gui=bold ctermfg=88  guifg=brown
 hi default HLRed2B               cterm=bold gui=bold ctermfg=196 guifg=red2
@@ -59,7 +96,6 @@ hi default HLFuchsiaB            cterm=bold gui=bold ctermfg=201 guifg=fuchsia
 hi default HLPurpleB             cterm=bold gui=bold ctermfg=165 guifg=purple
 hi default HLPurple4B            cterm=bold gui=bold ctermfg=54  guifg=purple4
 hi default HLNavyB               cterm=bold gui=bold ctermfg=17  guifg=navy
-hi default HLBlue                cterm=NONE gui=NONE ctermfg=20  guifg=blue
 hi default HLBlueB               cterm=bold gui=bold ctermfg=20  guifg=blue
 hi default HLMediumslateblueB    cterm=bold gui=bold ctermfg=99  guifg=mediumslateblue
 hi default HLDeepskyblue4B       cterm=bold gui=bold ctermfg=24  guifg=deepskyblue4
@@ -68,22 +104,15 @@ hi default HLDeepskyblueB        cterm=bold gui=bold ctermfg=45  guifg=deepskybl
 hi default HLCyanB               cterm=bold gui=bold ctermfg=51  guifg=cyan
 hi default HLYellowB             cterm=bold gui=bold ctermfg=184 guifg=yellow
 hi default HLYellowgreenB        cterm=bold gui=bold ctermfg=148 guifg=yellowgreen
-hi default HLGreen               cterm=NONE gui=NONE ctermfg=46  guifg=green
 hi default HLGreenB              cterm=bold gui=bold ctermfg=46  guifg=green
-hi default HLGreen3              cterm=NONE gui=NONE ctermfg=34  guifg=green3
 hi default HLGreen3B             cterm=bold gui=bold ctermfg=34  guifg=green3
-hi default HLOlive               cterm=NONE gui=NONE ctermfg=100 guifg=olive
 hi default HLOliveB              cterm=bold gui=bold ctermfg=100 guifg=olive
-hi default HLKhaki4              cterm=NONE gui=NONE ctermfg=101 guifg=khaki4
 hi default HLKhaki4B             cterm=bold gui=bold ctermfg=101 guifg=khaki4
-
-hi default HLGrey30              cterm=NONE gui=NONE ctermfg=236 guifg=grey30
 hi default HLGrey30B             cterm=bold gui=bold ctermfg=236 guifg=grey30
 hi default HLGrey40B             cterm=bold gui=bold ctermfg=239 guifg=grey40
 hi default HLGrey50B             cterm=bold gui=bold ctermfg=242 guifg=grey50
-hi default HLWhiteB              cterm=bold gui=bold ctermfg=255 guifg=white
-
 hi default HLGrey60B             cterm=bold gui=bold ctermfg=245 guifg=grey60
+hi default HLWhiteB              cterm=bold gui=bold ctermfg=255 guifg=white
 hi default HLLightmagentaB       cterm=bold gui=bold ctermfg=177 guifg=lightmagenta
 hi default HLSkyblueB            cterm=bold gui=bold ctermfg=81  guifg=skyblue
 hi default HLMediumaquamarineB   cterm=bold gui=bold ctermfg=79  guifg=mediumaquamarine
@@ -174,6 +203,8 @@ hi default HLItalic        gui=italic
 hi default HLBoldItalic    gui=bold,italic
 hi default HLUnderline     gui=underline
 hi default HLBoldUnderline gui=bold,underline
+hi default HLItalUnderline gui=italic,underline
+hi default HLBoldItalUnder gui=bold,italic,underline
 hi default HLUndercurl     gui=undercurl
 hi default HLUnderdotted   gui=underdotted
 hi default HLUnderdouble   gui=underdouble

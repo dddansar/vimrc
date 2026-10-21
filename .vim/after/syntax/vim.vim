@@ -250,6 +250,45 @@ syn keyword FloatFooter       FloatFooter       contained containedin=@ClusterCo
 "------------------------------------------------------------------------------
 " Custom syntax groups
 syn cluster ClusterColorCSG contains=vimSynKeyRegion,vimHiGroup,vimHiLink,vimHiKeyList,vimLineComment
+
+syn keyword HLSienna              HLSienna                 contained containedin=@ClusterColorCSG
+syn keyword HLBrown               HLBrown                  contained containedin=@ClusterColorCSG
+syn keyword HLRed2                HLRed2                   contained containedin=@ClusterColorCSG
+syn keyword HLOrangered           HLOrangered              contained containedin=@ClusterColorCSG
+syn keyword HLDarkorange3         HLDarkorange3            contained containedin=@ClusterColorCSG
+syn keyword HLDarkorange          HLDarkorange             contained containedin=@ClusterColorCSG
+syn keyword HLOrange              HLOrange                 contained containedin=@ClusterColorCSG
+syn keyword HLTomato1             HLTomato1                contained containedin=@ClusterColorCSG
+syn keyword HLHotpink             HLHotpink                contained containedin=@ClusterColorCSG
+syn keyword HLDeeppink            HLDeeppink               contained containedin=@ClusterColorCSG
+syn keyword HLDeeppink4           HLDeeppink4              contained containedin=@ClusterColorCSG
+syn keyword HLMagenta4            HLMagenta4               contained containedin=@ClusterColorCSG
+syn keyword HLFuchsia             HLFuchsia                contained containedin=@ClusterColorCSG
+syn keyword HLPurple              HLPurple                 contained containedin=@ClusterColorCSG
+syn keyword HLPurple4             HLPurple4                contained containedin=@ClusterColorCSG
+syn keyword HLNavy                HLNavy                   contained containedin=@ClusterColorCSG
+syn keyword HLBlue                HLBlue                   contained containedin=@ClusterColorCSG
+syn keyword HLBlue                HLBlue                   contained containedin=@ClusterColorCSG
+syn keyword HLMediumslateblue     HLMediumslateblue        contained containedin=@ClusterColorCSG
+syn keyword HLDeepskyblue4        HLDeepskyblue4           contained containedin=@ClusterColorCSG
+syn keyword HLDodgerblue          HLDodgerblue             contained containedin=@ClusterColorCSG
+syn keyword HLDeepskyblue         HLDeepskyblue            contained containedin=@ClusterColorCSG
+syn keyword HLCyan                HLCyan                   contained containedin=@ClusterColorCSG
+syn keyword HLYellow              HLYellow                 contained containedin=@ClusterColorCSG
+syn keyword HLYellowgreen         HLYellowgreen            contained containedin=@ClusterColorCSG
+syn keyword HLGreen               HLGreen                  contained containedin=@ClusterColorCSG
+syn keyword HLGreen3              HLGreen3                 contained containedin=@ClusterColorCSG
+syn keyword HLOlive               HLOlive                  contained containedin=@ClusterColorCSG
+syn keyword HLKhaki4              HLKhaki4                 contained containedin=@ClusterColorCSG
+syn keyword HLGrey30              HLGrey30                 contained containedin=@ClusterColorCSG
+syn keyword HLLightmagenta        HLLightmagenta           contained containedin=@ClusterColorCSG
+syn keyword HLSkyblue             HLSkyblue                contained containedin=@ClusterColorCSG
+syn keyword HLMediumaquamarine    HLMediumaquamarine       contained containedin=@ClusterColorCSG
+syn keyword HLSpringgreen         HLSpringgreen            contained containedin=@ClusterColorCSG
+syn keyword HLKhaki               HLKhaki                  contained containedin=@ClusterColorCSG
+syn keyword HLTan1                HLTan1                   contained containedin=@ClusterColorCSG
+syn keyword HLSalmon              HLSalmon                 contained containedin=@ClusterColorCSG
+
 syn keyword HLSiennaB             HLSiennaB                contained containedin=@ClusterColorCSG
 syn keyword HLBrownB              HLBrownB                 contained containedin=@ClusterColorCSG
 syn keyword HLRed2B               HLRed2B                  contained containedin=@ClusterColorCSG
@@ -275,28 +314,21 @@ syn keyword HLDeepskyblueB        HLDeepskyblueB           contained containedin
 syn keyword HLCyanB               HLCyanB                  contained containedin=@ClusterColorCSG
 syn keyword HLYellowB             HLYellowB                contained containedin=@ClusterColorCSG
 syn keyword HLYellowgreenB        HLYellowgreenB           contained containedin=@ClusterColorCSG
-syn keyword HLGreen               HLGreen                  contained containedin=@ClusterColorCSG
 syn keyword HLGreenB              HLGreenB                 contained containedin=@ClusterColorCSG
-syn keyword HLGreen3              HLGreen3                 contained containedin=@ClusterColorCSG
 syn keyword HLGreen3B             HLGreen3B                contained containedin=@ClusterColorCSG
-syn keyword HLOlive               HLOlive                  contained containedin=@ClusterColorCSG
 syn keyword HLOliveB              HLOliveB                 contained containedin=@ClusterColorCSG
-syn keyword HLKhaki4              HLKhaki4                 contained containedin=@ClusterColorCSG
 syn keyword HLKhaki4B             HLKhaki4B                contained containedin=@ClusterColorCSG
-
-syn keyword HLGrey30              HLGrey30                 contained containedin=@ClusterColorCSG
 syn keyword HLGrey30B             HLGrey30B                contained containedin=@ClusterColorCSG
 syn keyword HLGrey40B             HLGrey40B                contained containedin=@ClusterColorCSG
 syn keyword HLGrey50B             HLGrey50B                contained containedin=@ClusterColorCSG
-syn keyword HLWhiteB              HLWhiteB                 contained containedin=@ClusterColorCSG
-
 syn keyword HLGrey60B             HLGrey60B                contained containedin=@ClusterColorCSG
+syn keyword HLWhiteB              HLWhiteB                 contained containedin=@ClusterColorCSG
 syn keyword HLLightmagentaB       HLLightmagentaB          contained containedin=@ClusterColorCSG
 syn keyword HLSkyblueB            HLSkyblueB               contained containedin=@ClusterColorCSG
 syn keyword HLMediumaquamarineB   HLMediumaquamarineB      contained containedin=@ClusterColorCSG
 syn keyword HLSpringgreenB        HLSpringgreenB           contained containedin=@ClusterColorCSG
 syn keyword HLKhakiB              HLKhakiB                 contained containedin=@ClusterColorCSG
-syn keyword HLTan1B               HLTan1B
+syn keyword HLTan1B               HLTan1B                  contained containedin=@ClusterColorCSG
 syn keyword HLSalmonB             HLSalmonB                contained containedin=@ClusterColorCSG
 
 syn keyword HLRedU                HLRedU                   contained containedin=@ClusterColorCSG
@@ -351,6 +383,9 @@ syn keyword HLItalic               HLItalic                contained containedin
 syn keyword HLBoldItalic           HLBoldItalic            contained containedin=@ClusterColorCSG
 syn keyword HLUnderline            HLUnderline             contained containedin=@ClusterColorCSG
 syn keyword HLBoldUnderline        HLBoldUnderline         contained containedin=@ClusterColorCSG
+syn keyword HLItalUnderline        HLItalUnderline         contained containedin=@ClusterColorCSG
+syn keyword HLBoldItalUnder        HLBoldItalUnder         contained containedin=@ClusterColorCSG
+
 syn keyword HLUndercurl            HLUndercurl             contained containedin=@ClusterColorCSG
 syn keyword HLUnderdotted          HLUnderdotted           contained containedin=@ClusterColorCSG
 syn keyword HLUnderdouble          HLUnderdouble           contained containedin=@ClusterColorCSG
