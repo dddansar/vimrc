@@ -231,6 +231,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       hi  link  TextEquality AllEquality
       syn match TextEquality    "=\~" containedin=RegexPatSepPerl
+
+      call AllHLExclamations() " Need to recall otherwise not all ? in TODOs will be highlighted
    else
       call AllQuotesLookbehind(0)
    endif

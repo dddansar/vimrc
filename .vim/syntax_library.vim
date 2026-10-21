@@ -1032,106 +1032,102 @@ function! AllFontStyles()
 
    " This makes pattern matching more efficient by only searching for the main
    " pattern once.
-   syn match   AllFontPat       "\%( \|^\)\@<=\/[a-zA-Z-] .\{-1,} [a-zA-Z-]\/\%([ .:;,!?)\]}'"]\|$\)\@=" keepend
+   syn match   AllFontPat       "\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}'"]\|$\)\@=" keepend
 
-   " Using \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} instead of .\{-1,} to not match
+   " Using \%(\%( [a-z]\/\)\@!.\)\{-1,} instead of .\{-1,} to not match
    " different patterns with the same color match:
    "   Red /u font styles r/ yellow /u font styles y/ green /u font styles g/ patterns
    hi  link    AllFontBold         HLBold
-   syn match   AllFontBold         "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBold         "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontItalic       HLItalic
-   syn match   AllFontItalic       "\/i \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} i\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontItalic       "\/i \%(\%( [a-z]\/\)\@!.\)\{-1,} i\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontBoldItalic   HLBoldItalic
-   syn match   AllFontBoldItalic   "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} i\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBoldItalic   "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} i\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontUline        HLUnderline
-   syn match   AllFontUline        "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} u\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUline        "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} u\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineRed     HLRedU
-   syn match   AllFontUlineRed     "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineRed     "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineOrange  HLOrangeredU
-   syn match   AllFontUlineOrange  "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineOrange  "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineYellow  HLYellowU
-   syn match   AllFontUlineYellow  "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineYellow  "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineGreen   HLGreenU
-   syn match   AllFontUlineGreen   "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineGreen   "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontBoldUline    HLBoldUnderline
-   syn match   AllFontBoldUline    "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} u\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBoldUline    "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} u\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineRed    HLRedBU
-   syn match   AllFontBUlineRed    "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineRed    "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineOrange HLOrangeredBU
-   syn match   AllFontBUlineOrange "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineOrange "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineYellow HLYellowBU
-   syn match   AllFontBUlineYellow "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineYellow "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineGreen  HLGreenBU
-   syn match   AllFontBUlineGreen  "\/b \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineGreen  "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontUndercurl    HLUndercurl
-   syn match   AllFontUndercurl    "\/u \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUndercurl    "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
-   hi  link    AllFontStrike       HLStrikethrough
-   syn match   AllFontStrike       "\/- \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} -\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontStrikeW      HLStrikethrough
+   syn match   AllFontStrikeW      "\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} s\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
-   hi  link    AllFontStrike       HLStrikeThroughGrey
-   syn match   AllFontStrike       "\/s \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} s\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontStrikeG      HLStrikeThroughGrey
+   syn match   AllFontStrikeG      "\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
-   hi  link    AllFontInverse      HLInverse
-   syn match   AllFontInverse      "\/I \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} I\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
-
-   hi  link    AllFontStandout     HLStandout
-   syn match   AllFontStandout     "\/S \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} S\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
-
+   hi  link    AllFontHighWhiteB   HLStandout
+   syn match   AllFontHighWhiteB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighRedB     HLRedBgB
-   syn match   AllFontHighRedB     "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} R\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighRedB     "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighOrRedB   HLOrangered1BgB
-   syn match   AllFontHighOrRedB   "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} O\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighOrRedB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighYellB    HLYellowBgB
-   syn match   AllFontHighYellB    "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} Y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighYellB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighGreenB   HLGreen1BgB
-   syn match   AllFontHighGreenB   "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} G\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighGreenB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighCyanB    HLCyanBgB
-   syn match   AllFontHighCyanB    "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} C\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighCyanB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighBlueB    HLDodgerBlueBgB
-   syn match   AllFontHighBlueB    "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} D\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighBlueB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} d\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighPinkB    HLDeepPinkBgB
-   syn match   AllFontHighPinkB    "\/H \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} P\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighPinkB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontGreyOut      HLGreyOut
-   syn match   AllFontGreyOut      "\/g \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontGreyOut      "\/g \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    hi  link    AllFontRed          HLRed2B
-   syn match   AllFontRed          "\/r \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontRed          "\/r \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontOrange       HLOrangeredB
-   syn match   AllFontOrange       "\/o \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontOrange       "\/o \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontYellow       HLYellowB
-   syn match   AllFontYellow       "\/y \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontYellow       "\/y \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontGreen        HLGreenB
-   syn match   AllFontGreen        "\/g \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontGreen        "\/g \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontCyan         HLCyanB
-   syn match   AllFontCyan         "\/c \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontCyan         "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontDodgerBlue   HLDodgerblueB
-   syn match   AllFontDodgerBlue   "\/d \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} d\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontDodgerBlue   "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} d\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontPink         HLDeeppinkB
-   syn match   AllFontPink         "\/p \%(\%( [a-zA-Z-]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontPink         "\/p \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " Hides the pattern start/end in normal and visual mode, to apply use:
    "    set conceallevel=2
    "    set concealcursor=nv
-   syn match AllFontHideStart "\/[a-zA-Z-] " contained conceal
-   syn match AllFontHideEnd   " [a-zA-Z-]\/" contained conceal
+   syn match AllFontHideStart "\/[a-z] " contained conceal
+   syn match AllFontHideEnd   " [a-z]\/" contained conceal
 
 
    " Tests for markdown-like patterns
-   " Testing *font styles* patterns     Testing ***font styles*** patterns
-   " Testing **font styles** patterns   Testing __font styles__ patterns
+   " Testing *font styles* patterns Testing ***font styles*** patterns
+   " Testing **font styles** patterns Testing __font styles__ patterns
    " Testing ***font styles*** patterns Testing *font styles* patterns
-   " Testing __font styles__ patterns   Testing ~~font styles~~ patterns
+   " Testing __font styles__ patterns Testing ~~font styles~~ patterns
    " Testing ___font styles___ patterns Testing ~font styles~ patterns
-   " Testing ~font styles~ patterns     Testing ___font styles___ patterns
-   " Testing ~~~font styles patterns    Testing ~~~font styles patterns
-   " Testing ~~font styles~~ patterns   Testing **font styles** patterns
+   " Testing ~font styles~ patterns Testing ___font styles___ patterns
+   " Testing ~~~font styles patterns Testing ~~~font styles patterns
+   " Testing ~~font styles~~ patterns Testing **font styles** patterns
 
    " Tests for alphabet patterns
    " Testing /b font styles b/ patterns Testing /b font styles r/ patterns
@@ -1140,26 +1136,26 @@ function! AllFontStyles()
    " Testing /u font styles u/ patterns Testing /b font styles g/ patterns
    " Testing /b font styles u/ patterns Testing /u font styles r/ patterns
    " Testing /u font styles c/ patterns Testing /u font styles o/ patterns
-   " Testing /- font styles -/ patterns Testing /u font styles y/ patterns
-   " Testing /s font styles s/ patterns Testing /u font styles g/ patterns
-   " Testing /s font styles patterns    Testing /s font styles patterns
-   " Testing /I font styles I/ patterns Testing /u font styles u/ patterns
-   " Testing /S font styles S/ patterns Testing /b font styles b/ patterns
-   " Testing /H font styles R/ patterns Testing /i font styles i/ patterns
-   " Testing /H font styles O/ patterns Testing /b font styles i/ patterns
-   " Testing /H font styles Y/ patterns Testing /u font styles u/ patterns
-   " Testing /H font styles G/ patterns Testing /b font styles u/ patterns
-   " Testing /H font styles C/ patterns Testing /u font styles c/ patterns
-   " Testing /H font styles D/ patterns Testing /- font styles -/ patterns
-   " Testing /H font styles P/ patterns Testing /s font styles s/ patterns
+   " Testing /s font styles s/ patterns Testing /u font styles y/ patterns
+   " Testing /s font styles g/ patterns Testing /u font styles g/ patterns
+   " Testing /s font styles patterns Testing /s font styles patterns
+   " Testing /h font styles w/ patterns Testing /u font styles u/ patterns
+   " Testing /h font styles w/ patterns Testing /b font styles b/ patterns
+   " Testing /h font styles r/ patterns Testing /i font styles i/ patterns
+   " Testing /h font styles o/ patterns Testing /b font styles i/ patterns
+   " Testing /h font styles y/ patterns Testing /u font styles u/ patterns
+   " Testing /h font styles g/ patterns Testing /b font styles u/ patterns
+   " Testing /h font styles c/ patterns Testing /u font styles c/ patterns
+   " Testing /h font styles d/ patterns Testing /s font styles s/ patterns
+   " Testing /h font styles p/ patterns Testing /s font styles g/ patterns
    " Testing /g font styles o/ patterns Testing /s font styles patterns
-   " Testing /r font styles r/ patterns Testing /I font styles I/ patterns
-   " Testing /o font styles o/ patterns Testing /S font styles S/ patterns
-   " Testing /y font styles y/ patterns Testing /H font styles R/ patterns
-   " Testing /g font styles g/ patterns Testing /H font styles O/ patterns
-   " Testing /c font styles c/ patterns Testing /H font styles Y/ patterns
-   " Testing /d font styles d/ patterns Testing /H font styles G/ patterns
-   " Testing /p font styles p/ patterns Testing /H font styles C/ patterns
+   " Testing /r font styles r/ patterns Testing /h font styles w/ patterns
+   " Testing /o font styles o/ patterns Testing /h font styles w/ patterns
+   " Testing /y font styles y/ patterns Testing /h font styles r/ patterns
+   " Testing /g font styles g/ patterns Testing /h font styles o/ patterns
+   " Testing /c font styles c/ patterns Testing /h font styles y/ patterns
+   " Testing /d font styles d/ patterns Testing /h font styles g/ patterns
+   " Testing /p font styles p/ patterns Testing /h font styles c/ patterns
 endfunction
 "------------------------------------------------------------------------------
 
