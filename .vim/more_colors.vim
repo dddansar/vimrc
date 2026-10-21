@@ -92,6 +92,13 @@ hi default HLKhakiB              cterm=bold gui=bold ctermfg=222 guifg=khaki
 hi default HLTan1B               cterm=bold gui=bold ctermfg=215 guifg=tan1
 hi default HLSalmonB             cterm=bold gui=bold ctermfg=210 guifg=salmon
 
+hi default HLRedU               cterm=underline gui=underline ctermfg=red guifg=red
+hi default HLOrangeredU         cterm=underline gui=underline ctermfg=202 guifg=orangered
+hi default HLYellowU            cterm=underline gui=underline ctermfg=184 guifg=yellow
+hi default HLGreenU             cterm=underline gui=underline ctermfg=46  guifg=green
+hi default HLDodgerblueU        cterm=underline gui=underline ctermfg=33  guifg=dodgerblue
+hi default HLHotpinkU           cterm=underline gui=underline ctermfg=205 guifg=hotpink
+
 hi default HLRedBU               cterm=bold,underline gui=bold,underline ctermfg=red guifg=red
 hi default HLOrangeredBU         cterm=bold,underline gui=bold,underline ctermfg=202 guifg=orangered
 hi default HLYellowBU            cterm=bold,underline gui=bold,underline ctermfg=184 guifg=yellow

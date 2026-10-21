@@ -137,7 +137,7 @@ if g:performance_mode <= 0
 
    " Match more functions.
    hi  link    SpMathFunction   Function
-   syn match   SpMathFunction   "\%(\w\)\@<![f-h]\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
+   syn match   SpMathFunction   "\%(\w\)\@<![f-hF-H]\d*\>\%('\?'\?(\)\@="  contains=@NoSpell,Conditional
 
    " Highlight math terms/functions.
    syn match   SpMathFunction   "\%(\w\)\@<!\%(mod\|lim\|log\|ln\)\%(\w\)\@!" contains=@NoSpell

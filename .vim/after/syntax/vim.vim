@@ -299,6 +299,13 @@ syn keyword HLKhakiB              HLKhakiB                 contained containedin
 syn keyword HLTan1B               HLTan1B
 syn keyword HLSalmonB             HLSalmonB                contained containedin=@ClusterColorCSG
 
+syn keyword HLRedU                HLRedU                   contained containedin=@ClusterColorCSG
+syn keyword HLOrangeredU          HLOrangeredU             contained containedin=@ClusterColorCSG
+syn keyword HLYellowU             HLYellowU                contained containedin=@ClusterColorCSG
+syn keyword HLGreenU              HLGreenU                 contained containedin=@ClusterColorCSG
+syn keyword HLDodgerblueU         HLDodgerblueU            contained containedin=@ClusterColorCSG
+syn keyword HLHotpinkU            HLHotpinkU               contained containedin=@ClusterColorCSG
+
 syn keyword HLRedBU               HLRedBU                  contained containedin=@ClusterColorCSG
 syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=@ClusterColorCSG
 syn keyword HLYellowBU            HLYellowBU               contained containedin=@ClusterColorCSG
