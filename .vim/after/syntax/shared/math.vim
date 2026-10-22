@@ -71,7 +71,7 @@ if g:performance_mode <= 0
    " Match single chars.
    "---------------------------------------------------------------------------
    " Match single character in its own word.
-   " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some unicode
+   " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some Unicode
    " chars while it matches others... so `ˣ` is invisible to them as a boundary
    " marker -> use \%(\w\)\@<! instead of \< and \%(\w\)\@! instead of \>
    " 16ˣ × 7ˣ
@@ -92,7 +92,7 @@ if g:performance_mode <= 0
    " Improves performance but less accurate each time
    " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-z] \|[a-zA-Z(]\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
    " syn match   SpMathSingleCharIaA1 "\%(^ *\|[!.?:;,a-zA-Z(]\s\?\)\@<![IaA]\%(\w\)\@!" contains=@NoSpell
-   syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(]\|[0-9]\)\|'[dm] \)\@!" contains=@NoSpell
+   syn match   SpMathSingleCharIaA2 "\%(\w\)\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'[dm] \)\@!" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%(\w\)\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 

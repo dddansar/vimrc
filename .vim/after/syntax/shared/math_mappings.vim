@@ -2,7 +2,7 @@
 " File: math_mappings.vim
 "------------------------------------------------------------------------------
 " Description: This file adds custom math mappings and symbols in insert mode.
-"              Type \ followed by a keyword to print it's unicode symbol.
+"              Type \ followed by a keyword to print it's Unicode symbol.
 " NOTE: See also: unicode.vim
 "------------------------------------------------------------------------------
 " NOTE: Source: https://github.com/leanprover/vscode-lean/blob/master/src/abbreviation/abbreviations.json

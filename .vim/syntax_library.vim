@@ -1016,7 +1016,7 @@ function! AllFontStyles()
 
    syn match AllMdFontHideSA3 "\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\)\@=" contained conceal
    syn match AllMdFontHideEA3   "\%(\S\&[^*]\)\@<=\*\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideST3 "\%( \|^\)\@<=\~\~\~\%(\S\&[^~]\)\@=" contained conceal
+   syn match AllMdFontHideST3 "\%( \|^\)\@<=\~\~\~\%([^~]\)\@=" contained conceal
    " syn match AllMdFontHideET3   "\%(\S\&[^~]\)\@<=\~\~\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
    syn match AllMdFontHideSU3 "\%( \|^\)\@<=___\%(\S\&[^_]\)\@=" contained conceal
    syn match AllMdFontHideEU3   "\%(\S\&[^_]\)\@<=___\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
@@ -1034,7 +1034,7 @@ function! AllFontStyles()
    " pattern once.
    syn match   AllFontPat       "\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}'"]\|$\)\@=" keepend
 
-   " Using the following notation for alphabetical font matching:
+   " NOTE: Using the following notation for alphabetical font matching:
    " normal         + color /c col/
    " bold           + color /b col/
    " italic         + color /i col/

@@ -2130,8 +2130,6 @@ a_=
 a_eq
 a_(
 a_)
-aa_*
-aa_tm
 a_*
 a_tm
 a_/

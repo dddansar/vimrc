@@ -733,6 +733,9 @@ function! DefaultSettings()
    " Remove the dashes "----------..." from the gvimdiff filler lines.
    set fillchars+=diff:\ " Fill with space instead
 
+   " NOTE: For improved Unicode ga command use:
+   " git clone https://github.com/tpope/vim-characterize ~/.vim/pack/plugins/start/vim-characterize
+
    "---------------------------------------------------------------------------
    " Some non GUI settings
    "---------------------------------------------------------------------------
