@@ -52,7 +52,7 @@ endif
 let b:math_loaded = 1
 
 
-" NOTE: See also math_mappings.vim for unicode math mappings from leanprover
+" NOTE: See also math_mappings.vim for Unicode math mappings from leanprover
 "       vscode that start with "\".
 
 " WARNING: Can slow down/reduce performance!!
@@ -102,7 +102,8 @@ if g:performance_mode <= 0
    syn match   SpMathNumInVar   "\%(\w\)\@<![0-9]\+\%([a-zA-Z]\+\>\|[a-zA-Z]\+\W\)\@=\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum
 
    hi  link    SpMathVarInNum   Constant
-   syn match   SpMathVarInNum   "\<[0-9]\+[a-zA-Z]\+\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
+   syn match   SpMathVarInNum   "\<[0-9]\+[a-zA-Z]\%(\<0x\)\@<![a-zA-Z]*\%(\w\)\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)" contains=@NoSpell,MathNumInVar
+   syn match   SpMathVarInNum   "\<[0]x\>" contains=@NoSpell,MathNumInVar
 
    " Match x when it mean multiplication or hex number.
    hi  link    SpMathXInNum     Function

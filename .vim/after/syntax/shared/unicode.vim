@@ -4460,16 +4460,17 @@ syn cluster ClusterUnicode add=Unicode.*
 "------------------------------------------------------------------------------
 " Since Unicode has no codepoints for the gaps, you need to use the Private Use Area (U+E000-U+F8FF) and supply a font that has glyphs there.
 "
+" U+E000-U+F8FF BMP Private Use Area
 " Layout (all 104 in the Private Use Area so the set is uniform):
 " Range        Contents
-" U+E000-E019  superscript a-z
-" U+E020-E039  superscript A-Z
-" U+E040-E059  subscript   a-z
-" U+E060-E079  subscript   A-Z
-" U+E080-E098  superscript α-ω (incl. ς)
-" U+E0A0-E0B8  superscript Α-Ω (ς has no uppercase)
-" U+E0C0-E0D8  subscript   α-ω
-" U+E0E0-E0F8  subscript   Α-Ω
+" U+EC20-EC39  superscript a-z
+" U+EC40-EC59  superscript A-Z
+" U+EC60-EC79  subscript   a-z
+" U+EC80-EC98  subscript   A-Z
+" U+ECA0-ECB8  superscript α-ω (incl. ς)
+" U+ECC0-ECD8  superscript Α-Ω (ς has no uppercase)
+" U+ECE0-ECF8  subscript   α-ω
+" U+ED00-ED19  subscript   Α-Ω
 "
 " 1. Install FontForge
 "     sudo apt install fontforge python3-fontforge
@@ -4486,18 +4487,18 @@ syn cluster ClusterUnicode add=Unicode.*
 " 2.3. Copy that path into your working folder as base.ttf:
 "     cp "$(fc-match -f '%{file}' Monospace)" base.ttf
 "
-" 3. Create a file called make.py and add the following:
+" 3. Create a file called make_custom_super_sub_scripts.py and add the following:
 "     import fontforge, psMat, string
 "     f = fontforge.open("base.ttf")
 "     S = 0.6
-"     sets = [(0xE000, ord('a'), 26, 0.35),
-"             (0xE020, ord('A'), 26, 0.35),
-"             (0xE040, ord('a'), 26, -0.05),
-"             (0xE060, ord('A'), 26, -0.05),
-"             (0xE080, 0x3B1, 25, 0.35),
-"             (0xE0A0, 0x391, 25, 0.35),
-"             (0xE0C0, 0x3B1, 25, -0.05),
-"             (0xE0E0, 0x391, 25, -0.05)]
+"     sets = [(0xEC20, ord('a'), 26, 0.35),
+"             (0xEC40, ord('A'), 26, 0.35),
+"             (0xEC60, ord('a'), 26, -0.05),
+"             (0xEC80, ord('A'), 26, -0.05),
+"             (0xECA0, 0x3B1, 25, 0.35),
+"             (0xECC0, 0x391, 25, 0.35),
+"             (0xECE0, 0x3B1, 25, -0.05),
+"             (0xED00, 0x391, 25, -0.05)]
 "     for start, base, n, dy in sets:
 "         for i in range(n):
 "             src = base + i
@@ -4519,7 +4520,7 @@ syn cluster ClusterUnicode add=Unicode.*
 "     f.fontname = f.familyname = f.fullname = "MySupSub"
 "     f.generate("MySupSub.ttf")
 " 3.1. Run the script, then install the font
-"     fontforge -script make.py
+"     fontforge -script make_custom_super_sub_scripts.py
 "     mkdir -p ~/.fonts
 "     cp MySupSub.ttf ~/.fonts/
 "     fc-cache -f
@@ -4529,67 +4530,68 @@ syn cluster ClusterUnicode add=Unicode.*
 " /home/user/.fonts/MySupSub.ttf: MySupSub:style=Book
 "
 " 5. Point gvim at it
-"     set guifont=MySupSub\ 15
+"     set guifont=MySupSub\ 15 " Does not seem to be needed...
 "
-" Result:
+" You should now see the Latin and Greek super/sub scripts below:
 "
-" 0xe000    0xe001    0xe002    0xe003    0xe004    0xe005    0xe006    0xe007 
-" 0xe008    0xe009    0xe00a    0xe00b    0xe00c    0xe00d    0xe00e    0xe00f 
-" 0xe010    0xe011    0xe012    0xe013    0xe014    0xe015    0xe016    0xe017 
-" 0xe018    0xe019 
+" 0xec20    0xec21    0xec22    0xec23    0xec24    0xec25    0xec26    0xec27 
+" 0xec28    0xec29    0xec2a    0xec2b    0xec2c    0xec2d    0xec2e    0xec2f 
+" 0xec30    0xec31    0xec32    0xec33    0xec34    0xec35    0xec36    0xec37 
+" 0xec38    0xec39 
 "
-" 0xe020    0xe021    0xe022    0xe023    0xe024    0xe025    0xe026    0xe027 
-" 0xe028    0xe029    0xe02a    0xe02b    0xe02c    0xe02d    0xe02e    0xe02f 
-" 0xe030    0xe031    0xe032    0xe033    0xe034    0xe035    0xe036    0xe037 
-" 0xe038    0xe039 
+" 0xec40    0xec41    0xec42    0xec43    0xec44    0xec45    0xec46    0xec47 
+" 0xec48    0xec49    0xec4a    0xec4b    0xec4c    0xec4d    0xec4e    0xec4f 
+" 0xec50    0xec51    0xec52    0xec53    0xec54    0xec55    0xec56    0xec57 
+" 0xec58    0xec59 
 "
-" 0xe040    0xe041    0xe042    0xe043    0xe044    0xe045    0xe046    0xe047 
-" 0xe048    0xe049    0xe04a    0xe04b    0xe04c    0xe04d    0xe04e    0xe04f 
-" 0xe050    0xe051    0xe052    0xe053    0xe054    0xe055    0xe056    0xe057 
-" 0xe058    0xe059 
+" 0xec60    0xec61    0xec62    0xec63    0xec64    0xec65    0xec66    0xec67 
+" 0xec68    0xec69    0xec6a    0xec6b    0xec6c    0xec6d    0xec6e    0xec6f 
+" 0xec70    0xec71    0xec72    0xec73    0xec74    0xec75    0xec76    0xec77 
+" 0xec78    0xec79 
 "
-" 0xe060    0xe061    0xe062    0xe063    0xe064    0xe065    0xe066    0xe067 
-" 0xe068    0xe069    0xe06a    0xe06b    0xe06c    0xe06d    0xe06e    0xe06f 
-" 0xe070    0xe071    0xe072    0xe073    0xe074    0xe075    0xe076    0xe077 
-" 0xe078    0xe079 
+" 0xec80    0xec81    0xec82    0xec83    0xec84    0xec85    0xec86    0xec87 
+" 0xec88    0xec89    0xec8a    0xec8b    0xec8c    0xec8d    0xec8e    0xec8f 
+" 0xec90    0xec91    0xec92    0xec93    0xec94    0xec95    0xec96    0xec97 
+" 0xec98    0xec99 
 "
-" 0xe080    0xe081    0xe082    0xe083    0xe084    0xe085    0xe086    0xe087 
-" 0xe088    0xe089    0xe08a    0xe08b    0xe08c    0xe08d    0xe08e    0xe08f 
-" 0xe090    0xe091    0xe092    0xe093    0xe094    0xe095    0xe096    0xe097 
-" 0xe098 
+" 0xeca0    0xeca1    0xeca2    0xeca3    0xeca4    0xeca5    0xeca6    0xeca7 
+" 0xeca8    0xeca9    0xecaa    0xecab    0xecac    0xecad    0xecae    0xecaf 
+" 0xecb0    0xecb1    0xecb2    0xecb3    0xecb4    0xecb5    0xecb6    0xecb7 
+" 0xecb8 
 "
-" 0xe0a0    0xe0a1    0xe0a2    0xe0a3    0xe0a4    0xe0a5    0xe0a6    0xe0a7 
-" 0xe0a8    0xe0a9    0xe0aa    0xe0ab    0xe0ac    0xe0ad    0xe0ae    0xe0af 
-" 0xe0b0    0xe0b1    0xe0b2    0xe0b3    0xe0b4    0xe0b5    0xe0b6    0xe0b7 
-" 0xe0b8 
+" 0xecc0    0xecc1    0xecc2    0xecc3    0xecc4    0xecc5    0xecc6    0xecc7 
+" 0xecc8    0xecc9    0xecca    0xeccb    0xeccc    0xeccd    0xecce    0xeccf 
+" 0xecd0    0xecd1    0xecd2    0xecd3    0xecd4    0xecd5    0xecd6    0xecd7 
+" 0xecd8 
 "
-" 0xe0c0    0xe0c1    0xe0c2    0xe0c3    0xe0c4    0xe0c5    0xe0c6    0xe0c7 
-" 0xe0c8    0xe0c9    0xe0ca    0xe0cb    0xe0cc    0xe0cd    0xe0ce    0xe0cf 
-" 0xe0d0    0xe0d1    0xe0d2    0xe0d3    0xe0d4    0xe0d5    0xe0d6    0xe0d7 
-" 0xe0d8 
+" 0xece0    0xece1    0xece2    0xece3    0xece4    0xece5    0xece6    0xece7 
+" 0xece8    0xece9    0xecea    0xeceb    0xecec    0xeced    0xecee    0xecef 
+" 0xecf0    0xecf1    0xecf2    0xecf3    0xecf4    0xecf5    0xecf6    0xecf7 
+" 0xecf8 
 "
-" 0xe0e0    0xe0e1    0xe0e2    0xe0e3    0xe0e4    0xe0e5    0xe0e6    0xe0e7 
-" 0xe0e8    0xe0e9    0xe0ea    0xe0eb    0xe0ec    0xe0ed    0xe0ee    0xe0ef 
-" 0xe0f0    0xe0f1    0xe0f2    0xe0f3    0xe0f4    0xe0f5    0xe0f6    0xe0f7 
-" 0xe0f8 
+" 0xed00    0xed01    0xed02    0xed03    0xed04    0xed05    0xed06    0xed07 
+" 0xed08    0xed09    0xed0a    0xed0b    0xed0c    0xed0d    0xed0e    0xed0f 
+" 0xed10    0xed11    0xed12    0xed13    0xed14    0xed15    0xed16    0xed17 
+" 0xed18 
 
 hi  link    UnicodeCustomLatinSPL HLBlueB
 hi  link    UnicodeCustomLatinSBL HLBlueB
 hi  link    UnicodeCustomLatinSPU HLBlueB
 hi  link    UnicodeCustomLatinSBU HLBlueB
-syn match   UnicodeCustomLatinSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomLatinSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomLatinSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomLatinSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomLatinSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomLatinSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomLatinSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomLatinSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+
 
 hi  link    UnicodeCustomGreekSPL HLBlueB
 hi  link    UnicodeCustomGreekSBL HLBlueB
 hi  link    UnicodeCustomGreekSPU HLBlueB
 hi  link    UnicodeCustomGreekSBU HLBlueB
-syn match   UnicodeCustomGreekSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomGreekSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomGreekSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-syn match   UnicodeCustomGreekSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomGreekSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomGreekSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomGreekSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
+syn match   UnicodeCustomGreekSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 " Missing Unicode Latin superscript and subscript
 " Lowercase Superscript: complete except q has no official one in some fonts (U+107A5 exists in newer Unicode, but poorly supported).
@@ -4597,138 +4599,138 @@ syn match   UnicodeCustomGreekSBU "[�
 " Lowercase Subscript: Missing b, c, d, f, g, q, w, y, z.
 " Uppercase Subscript: Missing all uppercase.
 
-inorea <buffer> __plq     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnq     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __q        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plq     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnq     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __q        <left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> __plC     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plF     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plQ     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plS     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plX     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plY     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plZ     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnC     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnF     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnQ     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnS     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnX     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnY     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnZ     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __C        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __F        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Q        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __S        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __X        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Y        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Z        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plC     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plF     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plQ     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plS     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plX     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plY     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plZ     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnC     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnF     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnQ     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnS     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnX     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnY     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnZ     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __C        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __F        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Q        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __S        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __X        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Y        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Z        <left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _b         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _c         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _d         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _f         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _g         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _q         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _w         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _y         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _z         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plb      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plc      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _pld      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plf      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plg      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plq      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plw      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _ply      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plz      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnb      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnc      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnd      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnf      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mng      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnq      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnw      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mny      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnz      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _b         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _c         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _d         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _f         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _g         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _q         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _w         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _y         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _z         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plb      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plc      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _pld      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plf      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plg      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plq      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plw      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _ply      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plz      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnb      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnc      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnd      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnf      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mng      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnq      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnw      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mny      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnz      ₋<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _A         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _B         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _C         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _D         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _E         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _F         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _G         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _H         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _I         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _J         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _K         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _L         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _M         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _N         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _O         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _P         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _Q         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _R         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _S         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _T         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _U         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _V         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _W         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _X         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _Y         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _Z         <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plA      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plB      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plC      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plD      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plE      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plF      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plG      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plH      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plI      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plJ      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plK      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plL      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plM      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plN      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plO      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plP      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plQ      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plR      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plS      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plT      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plU      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plV      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plW      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plX      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plY      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plZ      ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnA      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnB      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnC      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnD      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnE      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnF      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnG      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnH      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnI      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnJ      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnK      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnL      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnM      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnN      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnO      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnP      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnQ      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnR      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnS      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnT      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnU      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnV      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnW      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnX      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnY      ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnZ      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _A         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _B         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _C         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _D         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _E         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _F         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _G         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _H         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _I         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _J         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _K         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _L         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _M         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _N         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _O         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _P         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _Q         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _R         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _S         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _T         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _U         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _V         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _W         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _X         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _Y         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _Z         <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plA      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plB      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plC      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plD      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plE      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plF      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plG      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plH      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plI      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plJ      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plK      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plL      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plM      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plN      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plO      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plP      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plQ      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plR      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plS      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plT      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plU      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plV      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plW      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plX      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plY      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plZ      ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnA      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnB      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnC      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnD      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnE      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnF      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnG      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnH      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnI      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnJ      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnK      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnL      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnM      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnN      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnO      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnP      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnQ      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnR      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnS      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnT      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnU      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnV      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnW      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnX      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnY      ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnZ      ₋<left><right><c-r>=Eatchar('\s')<cr>
 
 
 " Missing Unicode Greek superscript and subscript
@@ -4736,254 +4738,256 @@ inorea <buffer> _mnZ      ₋<left><right><c-r>=Eatchar('\s')<cr>
 " Subscript Lowercase: Missing α δ ε ζ η θ ι κ λ μ ν ξ ο π ς σ τ υ ψ ω
 " Uppercase: Missing all of Α-Ω, in both superscript and subscript
 
-inorea <buffer> __ep        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __ze        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __et        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __ka        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __la        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mu        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __nu        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __xi        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __on        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __pi        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __rh        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __si        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __ta        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __ps        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __om        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plep     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plze     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plet     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plka     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plla     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plmu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plnu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plxi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plon     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plpi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plrh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plsi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plta     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plps     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plom     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnep     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnze     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnet     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnka     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnla     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnmu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnnu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnxi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnon     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnpi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnrh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnsi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnta     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnps     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnom     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __ep        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __ze        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __et        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __ka        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __la        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mu        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __nu        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __xi        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __on        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __pi        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __rh        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __si        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __ta        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __ps        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __om        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plep     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plze     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plet     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plka     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plla     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plmu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plnu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plxi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plon     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plpi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plrh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plsi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plta     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plps     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plom     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnep     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnze     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnet     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnka     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnla     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnmu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnnu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnxi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnon     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnpi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnrh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnsi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnta     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnps     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnom     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> __Al        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Be        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ga        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __De        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ep        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ze        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Et        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Th        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Io        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ka        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __La        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Mu        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Nu        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Xi        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __On        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Pi        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Rh        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Si        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ta        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Up        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ph        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ch        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Ps        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __Om        <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plAl     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plBe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plGa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plDe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plEp     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plZe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plEt     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plTh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plIo     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plKa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plLa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plMu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plNu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plXi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plOn     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plPi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plRh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plSi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plTa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plUp     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plPh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plCh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plPs     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __plOm     ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnAl     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnBe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnGa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnDe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnEp     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnZe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnEt     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnTh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnIo     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnKa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnLa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnMu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnNu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnXi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnOn     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnPi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnRh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnSi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnTa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnUp     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnPh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnCh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnPs     ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __mnOm     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> ___al      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___de      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___ep      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___ze      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___et      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___th      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___io      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___ka      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___la      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___mu      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___nu      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___xi      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___on      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___pi      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___si      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___ta      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___up      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___ps      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___om      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plal     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plde     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plep     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plze     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plet     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plth     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plio     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plka     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plla     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plmu     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plnu     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plxi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plon     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plpi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plsi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plta     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plup     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plps     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plom     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnal     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnde     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnep     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnze     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnet     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnth     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnio     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnka     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnla     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnmu     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnnu     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnxi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnon     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnpi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnsi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnta     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnup     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnps     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnom     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Al        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Be        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ga        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __De        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ep        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ze        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Et        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Th        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Io        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ka        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __La        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Mu        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Nu        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Xi        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __On        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Pi        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Rh        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Si        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ta        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Up        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ph        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ch        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Ps        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __Om        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plAl     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plBe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plGa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plDe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plEp     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plZe     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plEt     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plTh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plIo     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plKa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plLa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plMu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plNu     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plXi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plOn     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plPi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plRh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plSi     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plTa     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plUp     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plPh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plCh     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plPs     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __plOm     ⁺<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnAl     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnBe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnGa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnDe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnEp     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnZe     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnEt     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnTh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnIo     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnKa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnLa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnMu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnNu     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnXi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnOn     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnPi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnRh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnSi     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnTa     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnUp     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnPh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnCh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnPs     ⁻<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> __mnOm     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> ___Al      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Be      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ga      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___De      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ep      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ze      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Et      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Th      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Io      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ka      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___La      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Mu      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Nu      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Xi      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___On      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Pi      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Rh      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Si      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ta      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Up      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ph      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ch      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Ps      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___Om      <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plAl     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plBe     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plGa     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plDe     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plEp     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plZe     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plEt     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plTh     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plIo     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plKa     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plLa     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plMu     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plNu     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plXi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plOn     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plPi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plRh     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plSi     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plTa     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plUp     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plPh     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plCh     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plPs     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _plOm     ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnAl     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnBe     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnGa     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnDe     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnEp     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnZe     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnEt     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnTh     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnIo     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnKa     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnLa     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnMu     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnNu     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnXi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnOn     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnPi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnRh     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnSi     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnTa     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnUp     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnPh     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnCh     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnPs     ₋<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___al      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___de      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___ep      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___ze      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___et      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___th      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___io      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___ka      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___la      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___mu      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___nu      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___xi      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___on      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___pi      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___si      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___ta      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___up      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___ps      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___om      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plal     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plde     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plep     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plze     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plet     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plth     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plio     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plka     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plla     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plmu     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plnu     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plxi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plon     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plpi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plsi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plta     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plup     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plps     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plom     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnal     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnde     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnep     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnze     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnet     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnth     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnio     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnka     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnla     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnmu     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnnu     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnxi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnon     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnpi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnsi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnta     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnup     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnps     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnom     ₋<left><right><c-r>=Eatchar('\s')<cr>
+
+
+inorea <buffer> ___Al      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Be      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ga      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___De      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ep      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ze      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Et      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Th      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Io      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ka      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___La      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Mu      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Nu      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Xi      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___On      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Pi      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Rh      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Si      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ta      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Up      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ph      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ch      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Ps      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> ___Om      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plAl     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plBe     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plGa     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plDe     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plEp     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plZe     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plEt     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plTh     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plIo     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plKa     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plLa     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plMu     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plNu     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plXi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plOn     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plPi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plRh     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plSi     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plTa     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plUp     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plPh     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plCh     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plPs     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _plOm     ₊<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnAl     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnBe     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnGa     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnDe     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnEp     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnZe     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnEt     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnTh     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnIo     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnKa     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnLa     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnMu     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnNu     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnXi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnOn     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnPi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnRh     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnSi     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnTa     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnUp     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnPh     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnCh     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnPs     ₋<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
 "------------------------------------------------------------------------------
 

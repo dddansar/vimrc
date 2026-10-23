@@ -126,14 +126,14 @@ hi default HLOrangeredU         cterm=underline gui=underline ctermfg=202 guifg=
 hi default HLYellowU            cterm=underline gui=underline ctermfg=184 guifg=yellow
 hi default HLGreenU             cterm=underline gui=underline ctermfg=46  guifg=green
 hi default HLDodgerblueU        cterm=underline gui=underline ctermfg=33  guifg=dodgerblue
-hi default HLHotpinkU           cterm=underline gui=underline ctermfg=205 guifg=hotpink
+hi default HLDeeppinkU          cterm=underline gui=underline ctermfg=205 guifg=deeppink
 
 hi default HLRedBU               cterm=bold,underline gui=bold,underline ctermfg=red guifg=red
 hi default HLOrangeredBU         cterm=bold,underline gui=bold,underline ctermfg=202 guifg=orangered
 hi default HLYellowBU            cterm=bold,underline gui=bold,underline ctermfg=184 guifg=yellow
 hi default HLGreenBU             cterm=bold,underline gui=bold,underline ctermfg=46  guifg=green
 hi default HLDodgerblueBU        cterm=bold,underline gui=bold,underline ctermfg=33  guifg=dodgerblue
-hi default HLHotpinkBU           cterm=bold,underline gui=bold,underline ctermfg=205 guifg=hotpink
+hi default HLDeeppinkBU          cterm=bold,underline gui=bold,underline ctermfg=205 guifg=deeppink
 
 hi default HLGrey80BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=252 guibg=grey80
 hi default HLGrey10BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=234 guibg=grey10

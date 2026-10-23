@@ -1103,6 +1103,10 @@ function! AllFontStyles()
    syn match   AllFontUlineYellow  "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineGreen   HLGreenU
    syn match   AllFontUlineGreen   "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontUlineBlue    HLDodgerblueU
+   syn match   AllFontUlineBlue    "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontUlinePink    HLDeeppinkU
+   syn match   AllFontUlinePink    "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " bold italic    + color /x col/ " x-treme slant
    hi  link    AllFontBoldItalic   HLBoldItalic
@@ -1119,6 +1123,10 @@ function! AllFontStyles()
    syn match   AllFontBUlineYellow "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineGreen  HLGreenBU
    syn match   AllFontBUlineGreen  "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontUlineBlue    HLDodgerblueBU
+   syn match   AllFontUlineBlue    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   hi  link    AllFontUlinePink    HLDeeppinkBU
+   syn match   AllFontUlinePink    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " ital underline + color /n col/ " slanted underline
    hi  link    AllFontItalUline    HLItalUnderline
@@ -1179,27 +1187,27 @@ function! AllFontStyles()
    " Testing /i font styles w/ patterns Testing /b font styles o/ patterns
    " Testing /x font styles w/ patterns Testing /b font styles y/ patterns
    " Testing /u font styles w/ patterns Testing /b font styles g/ patterns
-   " Testing /d font styles w/ patterns Testing /n font styles w/ patterns
-   " Testing /w font styles w/ patterns Testing /a font styles w/ patterns
-   " Testing /s font styles w/ patterns Testing /h font styles r/ patterns
-   " Testing /s font styles e/ patterns Testing /h font styles o/ patterns
+   " Testing /d font styles w/ patterns Testing /b font styles c/ patterns
+   " Testing /w font styles w/ patterns Testing /b font styles b/ patterns
+   " Testing /s font styles w/ patterns Testing /n font styles w/ patterns
+   " Testing /s font styles e/ patterns Testing /a font styles w/ patterns
    " Testing /s font styles patterns Testing /s font styles patterns
-   " Testing /h font styles w/ patterns Testing /b font styles c/ patterns
-   " Testing /h font styles r/ patterns Testing /b font styles b/ patterns
-   " Testing /h font styles o/ patterns Testing /b font styles p/ patterns
-   " Testing /h font styles y/ patterns Testing /u font styles r/ patterns
-   " Testing /h font styles g/ patterns Testing /u font styles o/ patterns
-   " Testing /h font styles c/ patterns Testing /u font styles y/ patterns
-   " Testing /h font styles b/ patterns Testing /u font styles g/ patterns
+   " Testing /h font styles w/ patterns Testing /b font styles p/ patterns
+   " Testing /h font styles r/ patterns Testing /u font styles r/ patterns
+   " Testing /h font styles o/ patterns Testing /u font styles o/ patterns
+   " Testing /h font styles y/ patterns Testing /u font styles y/ patterns
+   " Testing /h font styles g/ patterns Testing /u font styles g/ patterns
+   " Testing /h font styles c/ patterns Testing /u font styles b/ patterns
+   " Testing /h font styles b/ patterns Testing /u font styles p/ patterns
    " Testing /h font styles p/ patterns Testing /h font styles e/ patterns
    " Testing /c font styles e/ patterns Testing /s font styles patterns
    " Testing /c font styles r/ patterns Testing /d font styles r/ patterns
    " Testing /c font styles o/ patterns Testing /d font styles o/ patterns
    " Testing /c font styles y/ patterns Testing /d font styles y/ patterns
    " Testing /c font styles g/ patterns Testing /d font styles g/ patterns
-   " Testing /c font styles c/ patterns Testing /h font styles c/ patterns
-   " Testing /c font styles b/ patterns Testing /h font styles b/ patterns
-   " Testing /c font styles p/ patterns Testing /h font styles p/ patterns
+   " Testing /c font styles c/ patterns Testing /d font styles b/ patterns
+   " Testing /c font styles b/ patterns Testing /d font styles p/ patterns
+   " Testing /c font styles p/ patterns Testing /d font styles r/ patterns
 endfunction
 "------------------------------------------------------------------------------
 

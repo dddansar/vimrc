@@ -336,14 +336,14 @@ syn keyword HLOrangeredU          HLOrangeredU             contained containedin
 syn keyword HLYellowU             HLYellowU                contained containedin=@ClusterColorCSG
 syn keyword HLGreenU              HLGreenU                 contained containedin=@ClusterColorCSG
 syn keyword HLDodgerblueU         HLDodgerblueU            contained containedin=@ClusterColorCSG
-syn keyword HLHotpinkU            HLHotpinkU               contained containedin=@ClusterColorCSG
+syn keyword HLDeeppinkU           HLDeeppinkU              contained containedin=@ClusterColorCSG
 
 syn keyword HLRedBU               HLRedBU                  contained containedin=@ClusterColorCSG
 syn keyword HLOrangeredBU         HLOrangeredBU            contained containedin=@ClusterColorCSG
 syn keyword HLYellowBU            HLYellowBU               contained containedin=@ClusterColorCSG
 syn keyword HLGreenBU             HLGreenBU                contained containedin=@ClusterColorCSG
 syn keyword HLDodgerblueBU        HLDodgerblueBU           contained containedin=@ClusterColorCSG
-syn keyword HLHotpinkBU           HLHotpinkBU              contained containedin=@ClusterColorCSG
+syn keyword HLDeeppinkBU          HLDeeppinkBU             contained containedin=@ClusterColorCSG
 
 syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=@ClusterColorCSG
