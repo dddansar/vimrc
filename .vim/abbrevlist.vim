@@ -870,14 +870,18 @@ _dla
 _uldra
 _urdla
 _lra
+_rla
 _uda
 _nlfa
 _nlra
+_nrla
 _nrta
 _vlra
+_vrla
 _drta
 _dlfa
 _dlra
+_drla
 _lrta
 _llfa
 _lupa
@@ -887,6 +891,7 @@ _lura
 _ldra
 _ldla
 _llra
+_lrla
 _luda
 _rta2
 _lfa2
@@ -898,9 +903,11 @@ _ula2
 _dra2
 _dla2
 _lra2
+_rla2
 _nrta2
 _vlfa2
 _vlra2
+_vrla2
 _lfa3
 _rta3
 _dna4
@@ -934,6 +941,7 @@ _hrua
 _hrda
 _hlda
 _hlra
+_hrla
 _huda
 _flfa
 _frta
@@ -944,6 +952,7 @@ _frua
 _frda
 _flda
 _flra
+_frla
 _fuda
 _2hda
 _2hua
@@ -957,6 +966,7 @@ _rtba
 _vlrta2
 _vllfa2
 _vllra2
+_vlrla2
 z_lfa
 a_upa
 a_dna

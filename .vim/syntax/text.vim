@@ -67,6 +67,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    source $vim_folder_path/after/syntax/shared/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
+   call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    " NOTE: Moving these here to re-source on file/syntax reload.
    if expand('%:t') =~# '\.uni\.txt$'
@@ -112,8 +113,8 @@ syn match   TextSlash      "\/"
 " Match alone quotes. Quote pairs are matched elsewhere
 hi  link    TextAloneQuotes Function
 syn match   TextAloneQuotes "["]"
-syn match   TextAloneQuotes "\%(\w\)\@<!'"
-" syn match   TextAloneQuotes "'\%(\w\)\@<!" // Incorrectly matches words'
+syn match   TextAloneQuotes "\%(s\)\@<!'"
+syn match   TextUnmatchQuotes "\%(\w\)\@<='\%([dstm]\>\|ve\>\)\@="
 
 
 " Match (+) (-) (~)

@@ -59,6 +59,7 @@ if exists("b:current_syntax") && (b:current_syntax == "tex" || b:current_syntax 
    source $vim_folder_path/after/syntax/shared/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
+   call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    " I use my own TODO/NOTE matching
    if hlexists('initexTodo')

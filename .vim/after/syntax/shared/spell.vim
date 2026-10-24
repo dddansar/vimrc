@@ -58,9 +58,11 @@ setlocal spelllang=en,en_us
 setlocal spellcapcheck=
 "------------------------------------------------------------------------------
 
-if !hlexists('AllSpellCommColor1')
-   call AllIgnoreSpellings()
-endif
+" Needs to be outside spell.vim in case spell.vim gets sourced
+" multiple times and the syntax matching fails to apply
+" if !hlexists('AllSpellCommColor1')
+"    call AllIgnoreSpellings()
+" endif
 
 "------------------------------------------------------------------------------
 " Setting up a custom dictionary !!!!

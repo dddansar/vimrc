@@ -139,11 +139,13 @@ function! AllIgnoreSpellings()
       hi  link     AllSpellCommColor1  Comment
       syn match    AllSpellCommColor1  "\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
       syn match    AllSpellCommColor1  "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellTitleColor1 "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor1    "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on words with capital letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
       syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellTiTleColor2 "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor2    "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on functions () followed by () or arrays [] followed by [].
@@ -342,7 +344,7 @@ function! AllCaps()
    if g:performance_mode <= 1
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant
-      syn match    AllCaps "\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+      syn match    AllCaps "\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
       syn match    AllCaps "\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
    endif
 endfunction
@@ -666,8 +668,9 @@ function! AllNumbers()
       " Matches 0.329E+32  0.32E-32       0.32           0.32E32
       " Matches 234.23     2332.329e-32   2323.32e+32    2332.32e32
       " Matches            2332.329E+32   2323.32E-32
+      " Also matches 1.2.3.4
       hi  link  AllNumbersSci Number
-      syn match AllNumbersSci "\.\?\<\d\+\%(\.\d\+\)\?\%([eE][-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+      syn match AllNumbersSci "\<\d\+\%(\.\d\+\)*\%([eE][-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
    endif
 
    " Matches underscores in numbers.
@@ -731,8 +734,9 @@ endfunction
 
 function! AllSudo()
    " Highlight sudo keyword
-   hi  link    AllSudo      NonText
-   syn keyword AllSudo      sudo containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
+   hi  link    AllSudo    NonText
+   " syn keyword AllSudo    sudo containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
+   syn match   AllSudo    "\<sudo\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
 endfunction
 "------------------------------------------------------------------------------
 
