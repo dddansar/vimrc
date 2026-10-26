@@ -78,7 +78,7 @@ if g:performance_mode <= 0
    " ˣ16 × ˣ7
    " aˣ × aˣ
    " ˣa × ˣa
-   " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f s' μi e⁻ˣxᵗ⁻¹
+   " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f ∥s' μi e⁻ˣxᵗ⁻¹
    " aᵐbᵐ
 
    hi  link    SpMathSingleChar Constant
@@ -192,7 +192,7 @@ inorea <buffer> _4sq       ⁴√<left><right><c-r>=Eatchar('\s')<cr>
 
 " Distance btw 2 points
 inorea <buffer> _dist      √((x₁-x₂)²+(y₁-y₂)²)<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _distv     x⃗₁-x⃗₂²
+inorea <buffer> _distv     ∥x⃗₁-x⃗₂∥²
 " 3D Distance formula
 inorea <buffer> _3ddist    √((x₁-x₂)²+(y₁-y₂)²+(z₁-z₂)²)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _dist3     √((x₁-x₂)²+(y₁-y₂)²+(z₁-z₂)²)<left><right><c-r>=Eatchar('\s')<cr>
@@ -286,17 +286,17 @@ inorea <buffer> _defdiv    div F(x,y,z) = lim(R(x,y,z)->0) 1/\|R(x,y,z)\| ∫∫
 inorea <buffer> _defdcurl  curl F(x,y,z).[ĵ,î,k̂]ᵀ = lim(\|A(x,y,z).î\|->0) 1/\|A(x,y,z)\| ∮꜀ꜰ⃗.dr⃗<left><right><c-r>=Eatchar('\s')<cr>
 
 " Dot product
-inorea <buffer> _dotp      a⃗.b⃗ = ∑(ₙ₌₁:៷)aₙbₙ = a⃗b⃗cosθ = scalar<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _vecdiff   a⃗-b⃗ = a⃗²+b⃗² - 2a⃗b⃗cosθ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _vamb      a⃗-b⃗ = a⃗²+b⃗² - 2a⃗b⃗cosθ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _dotp      a⃗.b⃗ = ∑(ₙ₌₁:៷)aₙbₙ = ∥a⃗∥∥b⃗∥cosθ = scalar<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _vecdiff   ∥a⃗-b⃗∥ = ∥a⃗∥²+∥b⃗∥² - 2∥a⃗∥∥b⃗∥cosθ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _vamb      ∥a⃗-b⃗∥ = ∥a⃗∥²+∥b⃗∥² - 2∥a⃗∥∥b⃗∥cosθ<left><right><c-r>=Eatchar('\s')<cr>
 
 " Inequalities
-inorea <buffer> _ineqd     \|a⃗.b⃗\| ≤ a⃗.b⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _ineqp     a⃗+b⃗ ≤ a⃗+b⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _ineqd     \|a⃗.b⃗\| ≤ ∥a⃗∥.∥b⃗∥<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _ineqp     ∥a⃗+b⃗∥ ≤ ∥a⃗∥+∥b⃗∥<left><right><c-r>=Eatchar('\s')<cr>
 
 " Cross product
 inorea <buffer> _crossm    <space><bs>      ⎡a₂b₃ - b₂a₃⎤<cr><esc>ia⃗×b⃗ = ⎢a₃b₁ - b₃a₁⎥<cr>      ⎣a₁b₂ - b₁a₂⎦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _varea     a⃗×b⃗=a⃗b⃗sinθ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _varea     ∥a⃗×b⃗∥=∥a⃗∥∥b⃗∥sinθ<left><right><c-r>=Eatchar('\s')<cr>
 
 " Identity matrix
 inorea <buffer> _id3       <space><bs>     ⎡1 0 0⎤<cr><esc>iI₃ = ⎢0 1 0⎥<cr>     ⎣0 0 1⎦<left><right><c-r>=Eatchar('\s')<cr>
@@ -308,7 +308,7 @@ inorea <buffer> _eigen     T(v⃗) = λv⃗ = Av⃗ ; v⃗ is an eigenvector for
 " Gradient, divergence, curl
 inorea <buffer> _grad      grad ꜰ⃗ = ∇ꜰ⃗ = (∂f/∂x, ∂f/∂y, ∂f/∂z)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _gradn     grad u⃗ = ∇u⃗ = (∂f/∂x₁, ∂f/∂x₂, ... ,∂f/∂xₙ)<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _div       div ꜰ⃗ = ∇.ꜰ⃗ = ∂P/∂x + ∂Q/∂y + ∂R/∂z<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _divg      div ꜰ⃗ = ∇.ꜰ⃗ = ∂P/∂x + ∂Q/∂y + ∂R/∂z<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _curl      curl ꜰ⃗ = ∇×ꜰ⃗ = (∂R/∂z - ∂Q/∂y)î + (∂P/∂x - ∂R/∂z)ĵ + (∂Q/∂y∂ - ∂P/∂x)ᴋ̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Laplacian operator
@@ -353,7 +353,7 @@ inorea <buffer> _nlde      y⁽ⁿ⁾=f(y⁽ⁿ⁻¹⁾,...,y⁽¹⁾,y⁽⁰⁾
 inorea <buffer> _2cv       ∫∫ ཱf(x,y)dxdy=∫∫𑇁f(x(u,v),y(u,v))\|∂(x,y)/∂(u,v)\|du.dv<left><right><c-r>=Eatchar('\s')<cr>
 
 " Polar coordinates
-" inorea <buffer> _2pol      ∫∫ ཱf(x,y)dxdy=∫(៵:ᵦ)∫(₍𛱝₎:ₕ₍𛱝₎)f(r cos θ, r sin θ) r drdθ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _2pol      ∫∫ ཱf(x,y)dxdy=∫(៵:ᵦ)∫(₍𛱝₎:ₕ₍𛱝₎)f(r cos θ, r sin θ) r drdθ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2pol      ∫∫ ཱf(x,y)dxdy=∫∫f(r.cosθ,r.sinθ) r drdθ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3pol      ∫∫∫𛱖f(x,y,z)dxdydz=∫∫∫𑇁f(r.sinθcosф,r.sinθsinф,r.cosθ) r²sinθ drdθdф<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -361,8 +361,8 @@ inorea <buffer> _3pol      ∫∫∫𛱖f(x,y,z)dxdydz=∫∫∫𑇁f(r.sinθcos
 inorea <buffer> _3cv       ∫∫∫𛱖f(x,y,z)dxdydz=∫∫∫𑇁f(x(u,v,w),y(u,v,w),z(u,v,w))\|∂(x,y,z)/∂(u,v,w)\|du.dv.dw<left><right><c-r>=Eatchar('\s')<cr>
 
 " Surface integral
-inorea <buffer> _sint       A = ∫∫𑇁dꜱ⃗ = ∫∫꛵∂r⃗/∂x × ∂r⃗/∂ydᴀ⃗ = ∫∫꛵√((df/dx)²+(df/dy)²+1)dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _surfaceint A = ∫∫𑇁dꜱ⃗ = ∫∫꛵∂r⃗/∂x × ∂r⃗/∂ydᴀ⃗ = ∫∫꛵√((df/dx)²+(df/dy)²+1)dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _sint       A = ∫∫𑇁dꜱ⃗ = ∫∫꛵∥∂r⃗/∂x × ∂r⃗/∂y∥dᴀ⃗ = ∫∫꛵√((df/dx)²+(df/dy)²+1)dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _surfaceint A = ∫∫𑇁dꜱ⃗ = ∫∫꛵∥∂r⃗/∂x × ∂r⃗/∂y∥dᴀ⃗ = ∫∫꛵√((df/dx)²+(df/dy)²+1)dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
 
 " Line integrals
 inorea <buffer> _greens    ∮ꜰ⃗₁dx+ꜰ⃗₂dy=∫∫𐼦(∂ꜰ⃗₂/∂x-∂ꜰ⃗₁/∂y)dᴀ⃗=∫𐫶ꜰ⃗.dr⃗<left><right><c-r>=Eatchar('\s')<cr>
@@ -372,8 +372,8 @@ inorea <buffer> _stokes    ∮𐫶ꜰ⃗.dr⃗ = ∫∫𑇁curl(ꜰ⃗).dꜱ⃗<
 inorea <buffer> _flux      Flux = ∫∫𑇁ꜰ⃗.dꜱ⃗ = ∫∫∫៴divꜰ⃗.dᴠ⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _flux3d    Flux = ∫∫𑇁ꜰ⃗.dꜱ⃗ = ∫∫∫៴divꜰ⃗.dᴠ⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _flux2d    Flux = ∫𐫶ꜰ⃗.n⃗dꜱ⃗ =  ∫∫𐼦divꜰ⃗.dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _div3d     Flux = ∫∫𑇁ꜰ⃗.dꜱ⃗ = ∫∫∫៴divꜰ⃗.dᴠ⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _div2d     Flux = ∫𐫶ꜰ⃗.n⃗dꜱ⃗ =  ∫∫𐼦divꜰ⃗.dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _divg3d    Flux = ∫∫𑇁ꜰ⃗.dꜱ⃗ = ∫∫∫៴divꜰ⃗.dᴠ⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _divg2d    Flux = ∫𐫶ꜰ⃗.n⃗dꜱ⃗ =  ∫∫𐼦divꜰ⃗.dᴀ⃗<left><right><c-r>=Eatchar('\s')<cr>
 
 " Population growth, logistic growth, temperature change
 inorea <buffer> _popg      dP/dt = k.P -> ∫1/P dP = ∫k.dt -> P = ±C.eᵏᵗ<left><right><c-r>=Eatchar('\s')<cr>
@@ -669,9 +669,9 @@ inorea <buffer> _meanp     μ=λ=np<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _varp      σ²=λ=np<left><right><c-r>=Eatchar('\s')<cr>
 
 " Normal Probability Density Function
-inorea <buffer> _pdfn      φ(x)=1/σ√2π e⁻⁽ˣ⁻ꭟ⁾ᐟ²ᣙ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _pdfn      φ(x)=1/σ√2π e⁻⁽ˣ⁻ꭟ⁾^²ᐟ²ᣙ^²<left><right><c-r>=Eatchar('\s')<cr>
 " Cumulative Normal Distribution Function
-inorea <buffer> _cdfn      F(x)=P(X<x)=1/σ√2π ∫(-∞:ₓ)e⁽ᵗ⁻ꭟ⁾ᐟ²ᣙdt<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _cdfn      F(x)=P(X<x)=1/σ√2π ∫(-∞:ₓ)e⁽ᵗ⁻ꭟ⁾^²ᐟ²ᣙ^²dt<left><right><c-r>=Eatchar('\s')<cr>
 
 " Continuous Uniform Density
 inorea <buffer> _pdfcu     f(x)=1/(b-a) ; a ≤ x ≤ b ; 0 elsewhere<left><right><c-r>=Eatchar('\s')<cr>
@@ -714,10 +714,8 @@ inorea <buffer> _se        sₑ=√(1/(n-2) ∑(ᵢ₌₀:ₙ)(yᵢ-ŷ)²<left>
 inorea <buffer> _seb       SEⱃ=sₑ/√(∑(ᵢ₌₁:ₙ)(xᵢ-x̅)²<left><right><c-r>=Eatchar('\s')<cr>
 
 
-
-
 " u Substitution
-inorea <buffer> _usub      ∫(ₐ:ⱃ)f(g(x))g′(x)dx = ∫(₍ₐ₎:₍ⱃ₎)f(u)du<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _usub      ∫(ₐ:ⱃ)f(g(x))g′(x)dx = ∫(₍ₐ₎:₍ⱃ₎)f(u)du<left><right><c-r>=Eatchar('\s')<cr>
 
 " Integration by Parts
 inorea <buffer> _intparts  ∫(ₐ:ⱃ)u dv = uv\|ₐᵇ -∫(ₐ:ⱃ)v du<left><right><c-r>=Eatchar('\s')<cr>

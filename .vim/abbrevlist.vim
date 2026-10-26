@@ -81,7 +81,7 @@ _id2
 _eigen
 _grad
 _gradn
-_div
+_divg
 _curl
 _laplacian
 _laop
@@ -119,8 +119,8 @@ _stokes
 _flux
 _flux3d
 _flux2d
-_div3d
-_div2d
+_divg3d
+_divg2d
 _popg
 _logg
 _tempc
@@ -367,7 +367,6 @@ _check
 _xtick
 _xcheck
 _tm
-_tm2
 _copy
 _tmr
 _reg
@@ -459,8 +458,6 @@ _//
 _prl
 _parallel
 _\|\|
-_prl2
-_parallel2
 _nprl
 _w\|\|
 _wprl
@@ -472,8 +469,8 @@ _nmid
 _nsl
 _bbar
 _ssl
-_fsl
-_bsl
+" _fsl
+" _bsl
 _lfsl
 _lbsl
 _tri
@@ -543,7 +540,7 @@ _+-
 _pm
 _-+
 _mp
-_divop
+_div
 _~~
 __\|
 _neg
@@ -584,6 +581,7 @@ _Odot
 _Odot2
 _oo
 _oo2
+_bullseye
 _Oo
 _oe
 _Oe
@@ -658,6 +656,7 @@ _Unpl
 _Undot
 _member
 _mem
+_smem
 _nmember
 _nmem
 _contains
@@ -999,6 +998,10 @@ _crta
 _clfa
 _crta2
 _clfa2
+_blfa
+_brta
+_blfa2
+_brta2
 _blc
 _brc
 _tlc
@@ -2157,15 +2160,12 @@ a_\
 a_bsl
 a_dot
 aa_dot
-a_3dot
 aa_oop
 a_oop
 a_~
-a_^
 a_\|
 a_$
 a_dollar
-a_gamma2
 a_int
 a_!
 a_inv!
@@ -2182,16 +2182,6 @@ a_sup
 a_supe
 a_un
 a_in
-aa_0
-aa_1
-aa_2
-aa_3
-aa_4
-aa_5
-aa_6
-aa_7
-aa_8
-aa_9
 __0
 __1
 __2
@@ -2451,16 +2441,6 @@ z_sup
 z_supe
 z_un
 z_in
-zz_0
-zz_1
-zz_2
-zz_3
-zz_4
-zz_5
-zz_6
-zz_7
-zz_8
-zz_9
 _0
 _1
 _2
