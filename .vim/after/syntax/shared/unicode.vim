@@ -2520,7 +2520,7 @@ inorea <buffer> aa_dot     ᐝ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> aa_oop     ᐤ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_oop      ॰<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_~        ˜<left><right><c-r>=Eatchar('\s')<cr>
-" inorea <buffer> a_^        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_^        ˆ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_\|       ᣳ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_$        ᙚ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_dollar   ᙚ<left><right><c-r>=Eatchar('\s')<cr>
@@ -2689,7 +2689,7 @@ hi  link    UnicodeSPNum Number
 syn match   UnicodeSPNum "[⁰¹²³⁴⁵⁶⁷⁸⁹ᣛ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 hi  link    UnicodeSPOps Function
-syn match   UnicodeSPOps "[⁺⁻˜·ꜝꜞ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match   UnicodeSPOps "[⁺⁻˜ˆ·ꜝꜞ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 hi  link    UnicodeSPCustom HLBlueB
 syn match   UnicodeSPCustom "[ᐨ˟ᐟᐠᐤ॰ᐝᣳᙚᶴ꜂꜃꜄꜅ᐡᐢ]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
@@ -3962,6 +3962,13 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 " 0xed10    0xed11    0xed12    0xed13    0xed14    0xed15    0xed16    0xed17 
 " 0xed18 
 
+" Highlight as error if using unintended private Unicode ranges
+"     Basic Multilingual Plane (BMP): U+E000 to U+F8FF (6,400 code points)
+"     Supplementary Private Use Area-A (Plane 15): U+F0000 to U+FFFFD (65,534 code points)
+"     Supplementary Private Use Area-B (Plane 16): U+100000 to U+10FFFD (65,534 code points)
+hi  link     AllPrivateUnicode  Error
+syn match    AllPrivateUnicode  '[\UE000-\UF8FF]' containedin=SpUnicodeNoSpell
+
 " Missing Unicode Latin superscript and subscript
 " Lowercase Superscript: complete except q has no official one in some fonts (U+107A5 exists in newer Unicode, but poorly supported).
 " Uppercase Superscript: is missing C, F, Q, S, X, Y, Z.
@@ -4360,23 +4367,26 @@ inorea <buffer> _mnPs     ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
 
 
-hi  link    UnicodeCustomLatinSPL HLBlueB
-hi  link    UnicodeCustomLatinSBL HLBlueB
-hi  link    UnicodeCustomLatinSPU HLBlueB
-hi  link    UnicodeCustomLatinSBU HLBlueB
-syn match   UnicodeCustomLatinSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomLatinSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomLatinSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomLatinSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" hi  link    UnicodeCustomLatinSPL HLBlueB
+" hi  link    UnicodeCustomLatinSBL HLBlueB
+" hi  link    UnicodeCustomLatinSPU HLBlueB
+" hi  link    UnicodeCustomLatinSBU HLBlueB
+" syn match   UnicodeCustomLatinSPL "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomLatinSBL "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomLatinSPU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomLatinSBU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
-hi  link    UnicodeCustomGreekSPL HLBlueB
-hi  link    UnicodeCustomGreekSBL HLBlueB
-hi  link    UnicodeCustomGreekSPU HLBlueB
-hi  link    UnicodeCustomGreekSBU HLBlueB
-syn match   UnicodeCustomGreekSPL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomGreekSBL "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomGreekSPU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-syn match   UnicodeCustomGreekSBU "[]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" hi  link    UnicodeCustomGreekSPL HLBlueB
+" hi  link    UnicodeCustomGreekSBL HLBlueB
+" hi  link    UnicodeCustomGreekSPU HLBlueB
+" hi  link    UnicodeCustomGreekSBU HLBlueB
+" syn match   UnicodeCustomGreekSPL "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomGreekSBL "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomGreekSPU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+" syn match   UnicodeCustomGreekSBU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+
+hi  link    UnicodeCustomLatinGreekSubSup HLBlue
+syn match   UnicodeCustomLatinGreekSubSup "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 "------------------------------------------------------------------------------
 
 

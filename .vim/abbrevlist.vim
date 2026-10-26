@@ -2163,6 +2163,7 @@ aa_dot
 aa_oop
 a_oop
 a_~
+a_^
 a_\|
 a_$
 a_dollar
