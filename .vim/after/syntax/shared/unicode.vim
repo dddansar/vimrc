@@ -78,6 +78,7 @@ call setcellwidths([
          \ [0x22a2, 0x22af, 2],
          \ [0x22bf, 0x22c1, 2],
          \ [0x22d2, 0x22d3, 2],
+         \ [0x23de, 0x23df, 2],
          \ [0x2460, 0x24ff, 2],
          \ [0x2776, 0x2793, 2],
          \ [0x27c0, 0x27c4, 2],
@@ -140,24 +141,13 @@ syn keyword UnicodeVarColor      UnicodeVarColor containedin=vimSynKeyRegion,vim
 syn keyword UnicodeBsColor       UnicodeBsColor containedin=vimSynKeyRegion,vimHiLink
 
 
-" Do not spell check any of the special characters in the whole Unicode range!!
+" Do not spell check any of the Unicode special characters
 "------------------------------------------------------------------------------
-if g:performance_mode <= 0
-   " Don't spell check any Unicode chars in comments:
-   hi  link     UnicodeCommentColor   Comment
-   syn match    UnicodeCommentColor  "\%(\<[a-zA-Z]\+[^\t-~]\%(\S\)*\|[^\t-~]\)"   contains=@NoSpell contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+" Don't spell check any Unicode chars
+syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
 
-   " Highlight chars that you don't want used
-   " Moved to AllUnwantedCharacters()
-   " hi  link     UnicodeDontUse NonText
-   " syn match    UnicodeDontUse "[‘-‟−—–∣]" contains=@NoSpell containedin=RegexRanges,@ClusterSpMath,vimMapRhs
-endif
-
-" Ignore Unicode Characters in spell checking
-" NOTE: Needs to be at the top or it won't include the syntax matches below.
-syn match   SpUnicodeNoSpell "[a-zA-Z0-9]*[\uEC20-\uED19ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ][a-zA-Z0-9\uEC20-\uED19ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]*" contains=@NoSpell,AllNumbersSci,ClusterSpMath,AllCaps,ClusterUnicode
-" TODO 'aᵈ = 1'
-" TODO // 'aᵈ = 1'
+" Don't spell check any Unicode chars in comments or quotes
+syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
 "------------------------------------------------------------------------------
 
 
@@ -1199,6 +1189,20 @@ syn match UnicodeDbParen   "[⟦⟧⦃⦄]" contains=@NoSpell  containedin=Regex
 
 inorea <buffer> _topp     ︵<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _botp     ︶<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _topcb    ︷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _botcb    ︸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _topwcb   ⏞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _botwcb   ⏟<left><right><c-r>=Eatchar('\s')<cr>
+
+" Manual hack to get a top/bot bracket like feature
+inorea <buffer> _topsb    ┌┴┐<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> _botsb    └┬┘<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> _topwsb   ┌─┴─┐<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> _botwsb   └─┬─┘<left><right><c-r>=Eatchar('\s')<cr>
+
 
 " Curves and function builder shapes
 " ◜◝◟◞︵︶()⎛⎞⎝⎠⎧ ⎫⎩ ⎭⎰╰ ╯╮╭‾᭴⦦⦧⦢⦣⦟⼈㇏𝈺𝈻 ⼃⵰৴ノ𝀎Ꜥᜆ⎎
@@ -1305,7 +1309,7 @@ inorea <buffer> _2cbrack2     ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<c
 inorea <buffer> _2cbracket2   ⎰⎱<cr>⎱⎰<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeMultiParen Delimiter
-syn match   UnicodeMultiParen "[︵︶⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match   UnicodeMultiParen "[︵︶︷︸⏞⏟⎛⎞⎜⎟⎝⎠⟮⟯]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 hi  link    UnicodeMultiSBrk Delimiter
 syn match   UnicodeMultiSBrk "[⎡⎤⎢⎥⎣⎦⌈⌊⌉⌋]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
@@ -4212,9 +4216,9 @@ inorea <buffer> zuv_z   ⳾̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Vectors in comments
 hi  link   UnicodeVectorsCom  Comment
-syn match  UnicodeVectorsCom  "d\?\%(.⃗\)" contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpUnicodeNoSpell
-syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpUnicodeNoSpell
-syn match  UnicodeVectorsCom  "\%(.̂\)"    contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpUnicodeNoSpell
+syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.⃗\)[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
+syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
+syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.̂\)[a-zA-Z0-9]*"    contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
 
 " Vectors
 hi  link      UnicodeVectors  HLBlue
@@ -4224,11 +4228,11 @@ syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=Regex
 
 " Negation in comments
 hi  link   UnicodeNotLogicCom Comment
-syn match  UnicodeNotLogicCom "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  contained containedin=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpUnicodeNoSpell
+syn match  UnicodeNotLogicCom "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
 
 " Negation
 hi  link      UnicodeNotLogic Constant
-syn match     UnicodeNotLogic "[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match     UnicodeNotLogic "\<[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 " You could also use other combining Unicode chars such as the overline used
 " for not (u0305).

@@ -1061,6 +1061,14 @@ d_lcb
 d_rcb
 _topp
 _botp
+_topcb
+_botcb
+_topwcb
+_botwcb
+_topsb
+_botsb
+_topwsb
+_botwsb
 _btl
 _bbl
 _btr

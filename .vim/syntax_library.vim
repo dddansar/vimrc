@@ -53,7 +53,9 @@ hi  link  AllTitles5   Title
 " hi  link  AllTitles9   Number
 " hi  link  AllTitles0   Structure
 
-syn cluster ClusterCommentsPlusScope contains=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+syn cluster ClusterCommentsPlusScope contains=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,AllComNoteScope,AllComViNoteScope,AllComTodoScope,AllComViTodoScope,AllComWarningScope,AllComDoNotScope
+syn cluster ClusterCommentsPlusComScope contains=.*Comment.*,AllComNoteScope,AllComViNoteScope,AllComTodoScope,AllComViTodoScope,AllComWarningScope,AllComDoNotScope
+syn cluster ClusterCommentsPlusNoComScope contains=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 
 syn cluster ClusterHLWords contains=AllHLTodo,AllHLNote,AllHLViNote,AllHLViTodo,AllHLWarning,AllHLWarning,AllHLTodo,AllHLTodo,AllHLError,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpAllHLNote,SpAllHLViNote,SpAllHLTodo,SpAllHLViTodo,SpAllHLWarning,SpAllHLWarning
 
@@ -137,27 +139,27 @@ function! AllIgnoreSpellings()
    if g:performance_mode <= 0
       " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
       hi  link     AllSpellCommColor1  Comment
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellCommColor1  "\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellCommColor1  "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTitleColor1 "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor1    "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on words with capital letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
-      syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTiTleColor2 "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor2    "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on functions () followed by () or arrays [] followed by [].
       " No need to match dashes or numbers or capitals as that is covered above...
       hi  link     AllSpellCommColor3  Comment
-      syn match    AllSpellCommColor3  "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellCommColor3  "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellNoColor3    "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=TOP
 
       " Ignore spell on functions( immediately followed by ( with no spaces.
       " No need to match dashes or numbers or capitals as that is covered above...
       hi  link     AllSpellCommColor4  Comment
-      syn match    AllSpellCommColor4  "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusScope
+      syn match    AllSpellCommColor4  "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellNoColor4    "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP
    endif
 endfunction
@@ -569,6 +571,7 @@ function! AllPathsDollar(contained_en)
    " Matches $path/file or $path/path2/file.txt or $USER/path/ or $path/$file
    " not these? $(path)/file, ${path}/file.txt, ${path}/${file}, $a/b
    " does not match: ${path/path/file}, ${path}
+   " Match at least 1 [a-zA-Z] before the first slash -> don't match $10/bbl
    if g:performance_mode <= 0
       hi  link    AllPathsDollar Directory
       execute 'syn match AllPathsDollar "' .
@@ -723,13 +726,13 @@ endfunction
 function! AllCopyright()
    " Common Keywords
    hi  link    AllCopyright Statement
-   syn match   AllCopyright "Copyright"         containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "Copyright\s*(c).*" containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "MIT LICENSE"       containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "MIT License"       containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "Apache License"    containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "Creative Commons"  containedin=@ClusterCommentsPlusScope
-   syn match   AllCopyright "©"                 containedin=@ClusterCommentsPlusScope
+   syn match   AllCopyright "Copyright"         containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "Copyright\s*(c).*" containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "MIT LICENSE"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "MIT License"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "Apache License"    containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "Creative Commons"  containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "©"                 containedin=@ClusterCommentsPlusComScope
 endfunction
 
 function! AllSudo()
@@ -821,6 +824,8 @@ endfunction
 
 " Highlights '!!!' and '???' if they follow one of the AllHLWords.
 " Like in NOTE: ... !!! or TODO: ... ??? or WARNING: ... !!!
+" Does not work well with comment titles/labels like in:
+" NOTE: ... !!! -> syn clear vimCommentTitle
 function! AllHLExclamations()
    if g:performance_mode <= 0
 
@@ -839,12 +844,12 @@ function! AllHLExclamations()
       " TODO: NOTE: WARNING: ... !!! The !!! should match the WARNING color !!! not TODO !!!    or NOTE !!!
       " WARNING: TODO: NOTE: ... !!! The !!! should match the NOTE    color !!! not WARNING !!! or TODO !!!
       " NOTE: WARNING: TODO: ... !!! The !!! should match the TODO    color !!! not NOTE !!!    or WARNING !!!
-      syn region AllNoteScope    matchgroup=SpAllHLNote     start="\<NOTE\%(:\|\>\)\@="      skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
-      syn region AllViNoteScope  matchgroup=SpAllHLViNote   start="\<VINOTE\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
-      syn region AllTodoScope    matchgroup=SpAllHLTodo     start="\<TODO\%(:\|\>\)\@="      skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
-      syn region AllViTodoScope  matchgroup=SpAllHLViTodo   start="\<VITODO\%(:\|\>\)\@="    skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
-      syn region AllWarningScope matchgroup=SpAllHLWarning  start="\<WARNING\%(:\|\>\)\@="   skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
-      syn region AllDoNotScope   matchgroup=SpAllHLWarning  start="\<DO NOT\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString
+      syn region AllComNoteScope    matchgroup=SpAllHLNote     start="\<NOTE\%(:\|\>\)\@="      skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComViNoteScope  matchgroup=SpAllHLViNote   start="\<VINOTE\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComTodoScope    matchgroup=SpAllHLTodo     start="\<TODO\%(:\|\>\)\@="      skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComViTodoScope  matchgroup=SpAllHLViTodo   start="\<VITODO\%(:\|\>\)\@="    skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComWarningScope matchgroup=SpAllHLWarning  start="\<WARNING\%(:\|\>\)\@="   skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComDoNotScope   matchgroup=SpAllHLWarning  start="\<DO NOT\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
 
 
       " NOTE: When not contained in comment, need to contain TOP!!!
@@ -883,12 +888,12 @@ function! AllHLExclamations()
       " hi  link   Sp2AllHLError       HLRedBgB
 
       " NOTE: Allows multiple !!! occurrences per keyword !!! - WARNING: matches !!! with closest !!! keyword !!!
-      syn match SpAllHLNote    "!!!*"              contained containedin=AllNoteScope
-      syn match SpAllHLViNote  "!!!*"              contained containedin=AllViNoteScope
-      syn match SpAllHLTodo    "\%(!!!*\|???*\)"   contained containedin=AllTodoScope
-      syn match SpAllHLViTodo  "\%(!!!*\|???*\)"   contained containedin=AllViTodoScope
-      syn match SpAllHLWarning "!!!*"              contained containedin=AllWarningScope
-      syn match SpAllHLWarning "!!!*"              contained containedin=AllDoNotScope
+      syn match SpAllHLNote    "!!!*"              contained containedin=AllComNoteScope,AllNoteScope
+      syn match SpAllHLViNote  "!!!*"              contained containedin=AllComViNoteScope,AllViNoteScope
+      syn match SpAllHLTodo    "\%(!!!*\|???*\)"   contained containedin=AllComTodoScope,AllTodoScope
+      syn match SpAllHLViTodo  "\%(!!!*\|???*\)"   contained containedin=AllComViTodoScope,AllViTodoScope
+      syn match SpAllHLWarning "!!!*"              contained containedin=AllComWarningScope,AllWarningScope
+      syn match SpAllHLWarning "!!!*"              contained containedin=AllComDoNotScope,AllDoNotScope
 
    endif
 endfunction
