@@ -508,7 +508,8 @@ function! DefaultSettings()
    set statusline=%f%m%r
    " set statusline+=\ \ \ %{g:status_line_var}
    " set statusline+=\ \ \ %{SynGroup()}
-   set statusline+=\ \ \ %{SynStackGroup()}
+   " set statusline+=\ \ \ %{SynStackGroup()}
+   set statusline+=\ \ \ %{SynStackCached()}
    " set statusline+=%=%p%%\ %l/%L:%v\ %t
    set statusline+=%=\ %l/%L:%v\ %p%%
 
@@ -1605,6 +1606,16 @@ function! SynStackGroup()
    let l:stack = synstack(line('.'), col('.'))
    return join(map(l:stack, 'synIDattr(v:val, "name")'), ' ') . ' ' . synIDattr(synIDtrans(synID(line('.'), col('.'), 0)), "name")
 endfunction
+
+" Improves hjkl motion performance by only calling SynStackGroup on Cursor hold
+let g:syn_stack = ''
+function! SynStackCached()
+   return g:syn_stack
+endfunction
+augroup SynStackIdle
+   autocmd!
+   autocmd CursorHold  * let g:syn_stack = SynStackGroup()
+augroup END
 
 "------------------------------------------------------------------------------
 " Function: s:visual_hold_reset()

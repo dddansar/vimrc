@@ -57,7 +57,7 @@ syn cluster ClusterCommentsPlusScope contains=.*Comment.*,AllNoteScope,AllViNote
 syn cluster ClusterCommentsPlusComScope contains=.*Comment.*,AllComNoteScope,AllComViNoteScope,AllComTodoScope,AllComViTodoScope,AllComWarningScope,AllComDoNotScope
 syn cluster ClusterCommentsPlusNoComScope contains=.*Comment.*,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 
-syn cluster ClusterHLWords contains=AllHLTodo,AllHLNote,AllHLViNote,AllHLViTodo,AllHLWarning,AllHLWarning,AllHLTodo,AllHLTodo,AllHLError,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpAllHLNote,SpAllHLViNote,SpAllHLTodo,SpAllHLViTodo,SpAllHLWarning,SpAllHLWarning
+syn cluster ClusterHLWords contains=AllHLAI,AllHLTodo,AllHLNote,AllHLViNote,AllHLViTodo,AllHLWarning,AllHLError,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpAllHLNote,SpAllHLViNote,SpAllHLTodo,SpAllHLViTodo,SpAllHLWarning
 
 
 " NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
@@ -110,6 +110,17 @@ doautocmd SetFiletypeComment FileType
 " NOTE: Can't use "syntax keyword" with "contains=@NoSpell".
 "------------------------------------------------------------------------------
 
+"------------------------------------------------------------------------------
+" NOTE: \%#=N at the very start of a pattern forces which regex engine Vim
+"       uses for that pattern:
+"       \%#=0: automatic (the default; Vim picks)
+"       \%#=1: the old backtracking engine
+"       \%#=2: the newer NFA engine
+" The NFA engine is generally faster on complex patterns, but the backtracking
+" engine can win on short, simple ones. When used \%#=N must be the first thing
+" in the pattern. The global equivalent is :set regexpengine=1, but the
+" per-pattern prefix lets you test one match at a time.
+"------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
 function! AllTabsAndSpaces()
@@ -120,14 +131,14 @@ function! AllTabsAndSpaces()
    if g:performance_mode <= 0
       " Highlight trailing white spaces
       hi  link     AllTrailingSpaces    HLBarelyVisible
-      syn match    AllTrailingSpaces    '\(\S\|^\)\@<=\s\+\(\n\)\@=' containedin=ALL
+      syn match    AllTrailingSpaces    '\%#=1\(\S\|^\)\@<=\s\+\(\n\)\@=' containedin=ALL
    endif
 endfunction
 
 function! AllUnwantedCharacters()
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      syn match    AllUnwantedCharacters  '[‘-‟−—–∣]' containedin=ALL
+      syn match    AllUnwantedCharacters  '\%#=1[‘-‟−—–∣]' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -139,28 +150,28 @@ function! AllIgnoreSpellings()
    if g:performance_mode <= 0
       " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
       hi  link     AllSpellCommColor1  Comment
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellCommColor1  "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTitleColor1 "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor1    "\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]\+[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]\+\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on words with capital letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
-      syn match    AllSpellCommColor2  "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTiTleColor2 "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor2    "\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor2  "\%#=1\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTiTleColor2 "\%#=1\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor2    "\%#=1\<[a-zA-Z0-9._-][a-z0-9._-]*[A-Z][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on functions () followed by () or arrays [] followed by [].
       " No need to match dashes or numbers or capitals as that is covered above...
       hi  link     AllSpellCommColor3  Comment
-      syn match    AllSpellCommColor3  "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellNoColor3    "\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=TOP
+      syn match    AllSpellCommColor3  "\%#=1\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellNoColor3    "\%#=1\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=TOP
 
       " Ignore spell on functions( immediately followed by ( with no spaces.
       " No need to match dashes or numbers or capitals as that is covered above...
       hi  link     AllSpellCommColor4  Comment
-      syn match    AllSpellCommColor4  "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellNoColor4    "\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP
+      syn match    AllSpellCommColor4  "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellNoColor4    "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP
    endif
 endfunction
 function! ClearAllIgnoreSpellings()
@@ -197,26 +208,26 @@ endfunction
 " Math various Operators
 function! AllOperators()
    hi  link    AllOperators    Function
-   syn match   AllOperators    "[&|]"
-   syn match   AllOperators    "&&"
-   syn match   AllOperators    "||"
+   syn match   AllOperators    "\%#=1[&|]"
+   syn match   AllOperators    "\%#=1&&"
+   syn match   AllOperators    "\%#=1||"
 
-   syn match   AllOperators    "\*"
-   syn match   AllOperators    "+"
+   syn match   AllOperators    "\%#=1\*"
+   syn match   AllOperators    "\%#=1+"
    if (!exists("b:comment_leader") || b:comment_leader[0] != '-') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '-')
-      syn match   AllOperators    "-"
+      syn match   AllOperators    "\%#=1-"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '%') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '%')
-      syn match   AllOperators    "%"
+      syn match   AllOperators    "\%#=1%"
    endif
-   syn match   AllOperators    "\^"
-   syn match   AllOperators    "\~"
+   syn match   AllOperators    "\%#=1\^"
+   syn match   AllOperators    "\%#=1\~"
 
-   syn match   AllOperators    "?"
+   syn match   AllOperators    "\%#=1?"
 
    if (!exists("b:comment_leader") || b:comment_leader != '!') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '!')
-      syn match   AllOperators    "!"
+      syn match   AllOperators    "\%#=1!"
    endif
 endfunction
 
@@ -224,10 +235,10 @@ endfunction
 function! AllShiftOp()
    hi  link    AllShiftOp       Function
    if (!exists("b:comment_leader") || b:comment_leader[0] != '>') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '>')
-      syn match   AllShiftOp       "\%(>\)\@<!>>\%(>\)\@!"
+      syn match   AllShiftOp       "\%#=1\%(>\)\@<!>>\%(>\)\@!"
    endif
    if (!exists("b:comment_leader") || b:comment_leader[0] != '<') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '<')
-      syn match   AllShiftOp       "\%(<\)\@<!<<\%(<\)\@!"
+      syn match   AllShiftOp       "\%#=1\%(<\)\@<!<<\%(<\)\@!"
    endif
 endfunction
 
@@ -235,37 +246,37 @@ endfunction
 function! AllEqualities()
    hi  link    AllEquality       Operator
    if (!exists("b:comment_leader") || b:comment_leader[0] != '>') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '>')
-      syn match   AllEquality    "\%(>\)\@<!>\%(>\)\@!"
-      syn match   AllEquality    ">="
+      syn match   AllEquality    "\%#=1\%(>\)\@<!>\%(>\)\@!"
+      syn match   AllEquality    "\%#=1>="
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '<') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '<')
-      syn match   AllEquality    "\%(<\)\@<!<\%(<\)\@!"
-      syn match   AllEquality    "<="
-      syn match   AllEquality    "<=>"
+      syn match   AllEquality    "\%#=1\%(<\)\@<!<\%(<\)\@!"
+      syn match   AllEquality    "\%#=1<="
+      syn match   AllEquality    "\%#=1<=>"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '=') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '=')
-      syn match   AllEquality    "="
-      syn match   AllEquality    "=="
-      syn match   AllEquality    "=>"
+      syn match   AllEquality    "\%#=1="
+      syn match   AllEquality    "\%#=1=="
+      syn match   AllEquality    "\%#=1=>"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader != '!') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '!')
-      syn match   AllEquality    "!="
+      syn match   AllEquality    "\%#=1!="
    endif
 
-   syn match   AllEquality    "|=>"
+   syn match   AllEquality    "\%#=1|=>"
 endfunction
 
 
 " Arrows
 function! AllArrows()
    hi  link    AllArrows   Question
-   syn match   AllArrows   "->"  containedin=perlVarPlain
-   syn match   AllArrows   "|->"
-   syn match   AllArrows   "<-"
-   syn match   AllArrows   "<->"
+   syn match   AllArrows   "\%#=1->"  containedin=perlVarPlain
+   syn match   AllArrows   "\%#=1|->"
+   syn match   AllArrows   "\%#=1<-"
+   syn match   AllArrows   "\%#=1<->"
 endfunction
 
 
@@ -273,31 +284,31 @@ endfunction
 function! AllSpecial()
    hi  link    AllSpChars   Function
    if (!exists("b:comment_leader") || b:comment_leader != '@') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '@')
-      syn match   AllSpChars    "@"
+      syn match   AllSpChars    "\%#=1@"
    endif
    if (!exists("b:comment_leader") || b:comment_leader != '#') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '#')
-      syn match   AllSpChars    "#"
+      syn match   AllSpChars    "\%#=1#"
    endif
-   syn match   AllSpChars    "\$"
-   syn match   AllSpChars    "`"
+   syn match   AllSpChars    "\%#=1\$"
+   syn match   AllSpChars    "\%#=1`"
 endfunction
 
 
 " Separators like : ; . ,
 function! AllSeparators()
    hi  link    AllSeparators   Delimiter
-   syn match   AllSeparators   "[:;,.]\%($\)\@!"
+   syn match   AllSeparators   "\%#=1[:;,.]\%($\)\@!"
 endfunction
 function! AllSeparators2()
    hi  link    AllSeparators2  Delimiter
-   syn match   AllSeparators2  "[:;,.]"
+   syn match   AllSeparators2  "\%#=1[:;,.]"
 endfunction
 
 " Match a . if surrounded by words like in word.word or item[i].value
 function! AllDotInWords()
    if g:performance_mode <= 1
       hi  link    AllDotInWords     Delimiter
-      syn match   AllDotInWords     "\([a-zA-Z0-9\])]\)\@<=\%(\.\|::\?\)\([a-zA-Z]\)\@="
+      syn match   AllDotInWords     "\%#=1\([a-zA-Z0-9\])]\)\@<=\%(\.\|::\?\)\([a-zA-Z]\)\@="
    endif
 endfunction
 
@@ -307,15 +318,15 @@ function! AllSlashes()
    " messes with perl /
    if (!exists("b:comment_leader") || b:comment_leader[0] != '/') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '/')
       hi  link    AllSpChars1    Operator
-      syn match   AllSpChars1    "\/"
+      syn match   AllSpChars1    "\%#=1\/"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '\\') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '\\')
       hi  link    AllSpChars2    Exception
-      syn match   AllSpChars2    "\\"
+      syn match   AllSpChars2    "\%#=1\\"
 
       hi  link    AllSpChars3  SpecialChar
-      syn match   AllSpChars3  "\\n"
+      syn match   AllSpChars3  "\%#=1\\n"
    endif
 endfunction
 
@@ -324,17 +335,17 @@ endfunction
 function! AllParenBr()
    if (!exists("b:comment_leader") || b:comment_leader[0] != '(') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '(')
       hi  link    AllParen       Delimiter
-      syn match   AllParen       "[)(]"
+      syn match   AllParen       "\%#=1[)(]"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '[') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '[')
       hi  link    AllParenSBr         Delimiter
-      syn match   AllParenSBr         "[[\]]"
+      syn match   AllParenSBr         "\%#=1[[\]]"
    endif
 
    if (!exists("b:comment_leader") || b:comment_leader[0] != '{') && (!exists("b:multi_line_comment_start") || b:multi_line_comment_start[0] != '{')
       hi  link    AllParenCBr         Delimiter
-      syn match   AllParenCBr         "[}{]"
+      syn match   AllParenCBr         "\%#=1[}{]"
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -346,8 +357,8 @@ function! AllCaps()
    if g:performance_mode <= 1
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant
-      syn match    AllCaps "\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
-      syn match    AllCaps "\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+      syn match    AllCaps "\%#=1\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+      syn match    AllCaps "\%#=1\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -359,44 +370,44 @@ endfunction
 function! AllDefineHash()
    " Matches words like #define.
    hi  link    AllDefineHash     Define
-   syn match   AllDefineHash     "#[a-zA-Z0-9_]\+\>" contains=@NoSpell
+   syn match   AllDefineHash     "\%#=1#[a-zA-Z0-9_]\+\>" contains=@NoSpell
 endfunction
 
 " Matches $myVariable123 and ${myVariable123}
 function! AllDefineDollar()
    hi  link    AllDefineDollar   Define
-   syn match   AllDefineDollar   "\$[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=tclVarRef,shDoubleQuote,shSingleQuote,RegexPatSepPerl
-   syn match   AllDefineDollar   "\${[a-zA-Z0-9_]\+}" contains=@NoSpell
+   syn match   AllDefineDollar   "\%#=1\$[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=tclVarRef,shDoubleQuote,shSingleQuote,RegexPatSepPerl
+   syn match   AllDefineDollar   "\%#=1\${[a-zA-Z0-9_]\+}" contains=@NoSpell
 endfunction
 
 " Matches `abc123
 function! AllDefineTick()
    hi  link    AllDefineTick     Define
-   syn match   AllDefineTick     "`[a-zA-Z0-9_]\+\>\%(`\)\@!"  contains=@NoSpell
+   syn match   AllDefineTick     "\%#=1`[a-zA-Z0-9_]\+\>\%(`\)\@!"  contains=@NoSpell
 endfunction
 
 " Matches @abc123
 function! AllDefineAt()
    hi  link    AllDefineAt       Number
-   syn match   AllDefineAt       "@[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
+   syn match   AllDefineAt       "\%#=1@[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
 endfunction
 
 " Matches %abc123
 function! AllDefinePercent()
    hi  link    AllDefinePercent  Number
-   syn match   AllDefinePercent  "%[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
+   syn match   AllDefinePercent  "\%#=1%[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
 endfunction
 
 " Matches &abc123
 function! AllDefineAnd()
    hi  link    AllDefineAnd      Identifier
-   syn match   AllDefineAnd      "&[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
+   syn match   AllDefineAnd      "\%#=1&[a-zA-Z0-9_]\+\>" contains=@NoSpell containedin=vimGroupList
 endfunction
 
 " Matches %h %d in Strings
 function! AllSpecifiersInQuotes()
    hi  link  AllSpecifiers SpecialChar
-   syn match AllSpecifiers "%[0-9.]*[bBoOdDhHxXsScCfFeEgGtTmMlLvVpPuUzZ%]"  contained containedin=.*String.*
+   syn match AllSpecifiers "\%#=1%[0-9.]*[bBoOdDhHxXsScCfFeEgGtTmMlLvVpPuUzZ%]"  contained containedin=.*String.*
 endfunction
 "------------------------------------------------------------------------------
 
@@ -407,10 +418,10 @@ endfunction
 function! AllLabel()
    " Matches word: if first word on line
    hi  link    AllLabel   PreProc
-   syn match   AllLabel   "^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
+   syn match   AllLabel   "\%#=1^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
-   syn match   AllLabel2  "^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators
+   syn match   AllLabel2  "\%#=1^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
 endfunction
 
 " Titles/Labels
@@ -422,12 +433,12 @@ function! AllMultiWordLabel(contained_en)
       " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
       "       not match a word ending if it's followed by :!
       hi  link    AllMultiWordLabel  PreProc
-      execute 'syn match   AllMultiWordLabel  +' . (a:contained_en ? b:comment_leader : '^') .
-         \ '\%(\s*\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+\%([0-9-]\+\|[a-zA-Z]\?\)\)' .
+      execute 'syn match   AllMultiWordLabel  +\%#=1' . (a:contained_en ? b:comment_leader : '^') .
+         \ '\%(\s*\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)' .
          \         '\%(\>\|:\@=\)[+-]*\%( & \@=\|, \@=\|[./][A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
-         \ '\)\+:\%(\s\|$\)\@=\%(NOTE:\|TODO:\|WARNING:\)\@<!+' .
+         \ '\)\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
          \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : '') .
-         \ ' contains=@NoSpell keepend'
+         \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
       " Chapter 1:
       " Part 2b:
@@ -501,7 +512,7 @@ function! AllPaths1(contained_en)
    if g:performance_mode <= 0
       hi  link     AllPaths1 Directory
       execute 'syn match AllPaths1 "' .
-         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%#=1\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%(\~\|\.\.\?\)\?' .
          \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\{2,}\/\?' .
          \ '\%([)}\]>]\)\@<!' .
@@ -526,7 +537,7 @@ function! AllPaths2(contained_en)
    if g:performance_mode <= 0
       hi  link     AllPaths2 Directory
       execute 'syn match AllPaths2 "' .
-         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%#=1\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\/\)\{2,}' .
          \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\.[a-zA-Z0-9]\+\)\?' .
          \ '\%([)}\]>]\)\@<!' .
@@ -544,7 +555,7 @@ function! AllPathsWin(contained_en)
    if g:performance_mode <= 0
       hi  link     AllPathsWin Directory
       hi  link     AllPathsWin Directory
-      execute 'syn match AllPathsWin "\%(\<[A-E]:\|\.\.\)\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
+      execute 'syn match AllPathsWin "\%#=1\%(\<[A-E]:\|\.\.\)\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
    endif
 endfunction
 
@@ -555,7 +566,7 @@ function! AllPathsSingleSlashStart(contained_en)
    if g:performance_mode <= 0
       hi  link     AllPathsS1 Directory
       execute 'syn match AllPathsS1 "' .
-         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
+         \ '\%#=1\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
          \ '\%(\~\|\.\.\?\)\/' .
          \ '\%([a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\/\?' .
          \ '\%([)}\]>]\)\@<!' .
@@ -575,7 +586,7 @@ function! AllPathsDollar(contained_en)
    if g:performance_mode <= 0
       hi  link    AllPathsDollar Directory
       execute 'syn match AllPathsDollar "' .
-         \ '\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$' .
+         \ '\%#=1\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=\$' .
          \ '\%([0-9_.-]*[a-zA-Z]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)\+\)' .
          \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\+\/\?' .
          \ '\%([)}\]>]\)\@<!' .
@@ -619,11 +630,11 @@ function! AllWebsites(contained_en)
 
    " Match links that start with www like www.vim.org
    hi  link     AllWebLinks1  Underlined
-   execute 'syn match    AllWebLinks1  "\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks1  "\%#=1\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
-   execute 'syn match    AllWebLinks2  "\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks2  "\%#=1\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 endfunction
 
 " Match emails
@@ -641,11 +652,12 @@ function! AllEmails(contained_en)
 
    " Match emails like abcd@efg.com
    hi  link     AllEmails  Tag
-   execute 'syn match AllEmails "' .
+   execute 'syn match AllEmails "\%#=1' .
       \ '\%(^\|\s\)' .
-      \ '\%([a-zA-Z0-9!#$%&''*+/=?^_`{|}~-]\+\.\?\)\+@' .
-      \ '\%([a-zA-Z0-9]\+\%(\%(\-\?[a-zA-Z0-9]\+\)\+\)\?\.\)\+[a-zA-Z]\+" ' .
-      \ 'contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+      \ '[a-zA-Z0-9!#$%&''*+/=?^_`{|}~-]\+\%(\.[a-zA-Z0-9!#$%&''*+/=?^_`{|}~-]\+\)*@' .
+      \ '\%([a-zA-Z0-9]\+\%(-[a-zA-Z0-9]\+\)*\.\)\+[a-zA-Z]\+" ' .
+      \ 'contains=@NoSpell ' . (a:contained_en ? 'contained ' : '') .
+      \ 'containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 
    " Valid Emails:
    " simple@example.com, abc.def.123@domain.org, user+mailbox@gmail.com,
@@ -673,33 +685,33 @@ function! AllNumbers()
       " Matches            2332.329E+32   2323.32E-32
       " Also matches 1.2.3.4
       hi  link  AllNumbersSci Number
-      syn match AllNumbersSci "\<\d\+\%(\.\d\+\)*\%([eE][-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
+      syn match AllNumbersSci "\%#=1\<\d\+\%(\.\d\+\)*\%([eE][-+±∓]\?\d\+\)\?\%(\w\)\@!\%('\w\)\@!" contains=@NoSpell
    endif
 
    " Matches underscores in numbers.
    " 1_2_3_4 or 123_456_789 or 12345_67890
    " but not _123_45 or 123_ or 123__456
    hi  link  AllNumbersUnd  Number
-   syn match AllNumbersUnd  "\<[0-9]\+\%(_[0-9]\+\)\+\>" contains=@NoSpell
+   syn match AllNumbersUnd  "\%#=1\<[0-9]\+\%(_[0-9]\+\)\+\>" contains=@NoSpell
 endfunction
 
 function! AllNumbersHex()
    " Matches hex #329AF.
    hi  link  AllNumbersHex1 Number
-   syn match AllNumbersHex1 "#[a-fA-F0-9_]\+\>" contains=@NoSpell
+   syn match AllNumbersHex1 "\%#=1#[a-fA-F0-9_]\+\>" contains=@NoSpell
 
    " Matches hex numbers such as 0x12ad4 or x8732FFA8 or x87_32FFA8 or 0xDEAD_C0DE or 0xF
    " but not x_123_45 or 0x123_ or 0x123__456
    hi  link  AllNumbersHex2 Number
-   syn match AllNumbersHex2 "\<0[x][0-9A-Fa-f]\%(_\?[0-9A-Fa-f]\)*\>"   contains=@NoSpell,SpMathXInNum
-   syn match AllNumbersHex2 "\<[x][0-9A-F]\%(_\?[0-9A-F]\)*\>"       contains=@NoSpell,SpMathXInNum
+   syn match AllNumbersHex2 "\%#=1\<0[x][0-9A-Fa-f]\%(_\?[0-9A-Fa-f]\)*\>"   contains=@NoSpell,MathXInNum
+   syn match AllNumbersHex2 "\%#=1\<[x][0-9A-F]\%(_\?[0-9A-F]\)*\>"       contains=@NoSpell,MathXInNum
 
    " Matches 19'd1238  19'h1238af 32'b01010111 8'o3241
    " Matches   'd1238    'h1238af   'b01010111  'o3241
    " Matches 19'd12?8  19'h?238af 32'b??10?1? 8'o?241
    " Matches   'd123?    'h??38af   'b???1???  'o32??
    hi  link  AllNumbersTick Number
-   syn match AllNumbersTick "\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
+   syn match AllNumbersTick "\%#=1\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
 endfunction
 "------------------------------------------------------------------------------
 
@@ -711,7 +723,7 @@ function! AllTime()
    " Matches 34.23ns 34.23ps 34.23fs 34.23us 34.23ms 34.23s
    " Matches 34.23sec 34.23min 34.23hr
    hi  link  AllTime    Debug
-   syn match AllTime    "\<\d\+\%(\.\?\d\+\)\?\%(\%([fpnum]s\|s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
+   syn match AllTime    "\%#=1\<\d\+\%(\.\d\+\)\?\%(\%([fpnum]s\|s\)\|\%(sec\)\|\%(min\)\|\%(hr\)\)\>"
 endfunction
 "------------------------------------------------------------------------------
 
@@ -726,20 +738,20 @@ endfunction
 function! AllCopyright()
    " Common Keywords
    hi  link    AllCopyright Statement
-   syn match   AllCopyright "Copyright"         containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "Copyright\s*(c).*" containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "MIT LICENSE"       containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "MIT License"       containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "Apache License"    containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "Creative Commons"  containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "©"                 containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1Copyright"         containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1Copyright\s*(c).*" containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1MIT LICENSE"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1MIT License"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1Apache License"    containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1Creative Commons"  containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1©"                 containedin=@ClusterCommentsPlusComScope
 endfunction
 
 function! AllSudo()
    " Highlight sudo keyword
    hi  link    AllSudo    NonText
    " syn keyword AllSudo    sudo containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
-   syn match   AllSudo    "\<sudo\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
+   syn match   AllSudo    "\%#=1\<sudo\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,.*String.*,shSingleQuote
 endfunction
 "------------------------------------------------------------------------------
 
@@ -751,16 +763,16 @@ endfunction
 function! AllQuotes(contained_en)
    " Match quotes with region (region is non-greedy by default).
    hi link    AllQuotes String
-   execute 'syn region AllQuotes start=+\%(\s\|^\)"+ms=e skip=+""+ end=+"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotes start=+\%(\s\|^\)''+ms=e skip=+''''+ end=+''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)"+ms=e skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)''+ms=e skip=+\%#=1''''+ end=+\%#=1''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 
 " Can't match ='quote' or other characters with AllQuotes() if the '=' is
 " already matched from elsewhere -> Need to use lookbehind to match instead.
 function! AllQuotesLookbehind(contained_en)
    hi link    AllQuotesLookbehind String
-   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+''''+ end=+''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+\%#=1''''+ end=+\%#=1''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 "------------------------------------------------------------------------------
 
@@ -770,28 +782,28 @@ endfunction
 " Matches comments if it's the first non-space character on the line.
 function! AllCommentLineStart()
    if exists("b:comment_leader")
-      execute 'syn match AllCommentLineStart +^\s*' . b:comment_leader . '.*+'
+      execute 'syn match AllCommentLineStart +\%#=1^\s*' . b:comment_leader . '.*+'
    endif
 endfunction
 
 " Matches comments starting from anywhere on the line.
 function! AllCommentAnywhere()
    if exists("b:comment_leader")
-      execute 'syn match AllCommentAnywhere +' . b:comment_leader . '.*+'
+      execute 'syn match AllCommentAnywhere +\%#=1' . b:comment_leader . '.*+'
    endif
 endfunction
 
 " Matches multi-line comments if it's the first non-space character on the line.
 function! AllMultiLineCommentLineStart()
    if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
-      execute 'syn region AllMultiLineCommentLineStart start="^\s*' . b:multi_line_comment_start . '" end="' . b:multi_line_comment_end . '"'
+      execute 'syn region AllMultiLineCommentLineStart start="\%#=1^\s*' . b:multi_line_comment_start . '" end="\%#=1' . b:multi_line_comment_end . '"'
    endif
 endfunction
 
 " Matches multi-line comments starting from anywhere on the line.
 function! AllMultiLineCommentAnywhere()
    if exists("b:multi_line_comment_start") && exists("b:multi_line_comment_end")
-      execute 'syn region AllMultiLineCommentAnywhere start="' . b:multi_line_comment_start . '" end="' . b:multi_line_comment_end . '"'
+      execute 'syn region AllMultiLineCommentAnywhere start="\%#=1' . b:multi_line_comment_start . '" end="\%#=1' . b:multi_line_comment_end . '"'
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -800,6 +812,7 @@ endfunction
 " Highlight words that require attention like NOTE, TODO and WARNING.
 "------------------------------------------------------------------------------
 function! AllHLWords()
+   hi  link    AllHLAI          HLDodgerBlueBgB
    hi  link    AllHLNote        HLGreen3BgB
    hi  link    AllHLViNote      HLGreen1BgB
    hi  link    AllHLTodo        HLOrangeBgB
@@ -811,15 +824,18 @@ function! AllHLWords()
    " NOTE: needs to be match, not keyword, so that AllHLExclamations can work.
    " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
    "       not match a word ending if it's followed by :!
-   syn match AllHLTodo    "\<TODO\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLNote    "\<NOTE\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLViNote  "\<VINOTE\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLViTodo  "\<VITODO\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLWarning "\<WARNING\%(\>\|:\@=\)" contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLWarning "\<DO NOT\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLTodo    "\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLTodo    "\<HACK\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
-   syn match AllHLError   "\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*
+   syn match AllHLAI      "\%#=1\<CLAUDE\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLAI      "\%#=1\<CHATGPT\%(\>\|:\@=\)" contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLAI      "\%#=1\<GEMINI\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLTodo    "\%#=1\<TODO\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLNote    "\%#=1\<NOTE\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLViNote  "\%#=1\<VINOTE\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLViTodo  "\%#=1\<VITODO\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLWarning "\%#=1\<WARNING\%(\>\|:\@=\)" contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLWarning "\%#=1\<DO NOT\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLTodo    "\%#=1\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLTodo    "\%#=1\<HACK\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope
+   syn match AllHLError   "\%#=1\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*
 endfunction
 
 " Highlights '!!!' and '???' if they follow one of the AllHLWords.
@@ -844,21 +860,21 @@ function! AllHLExclamations()
       " TODO: NOTE: WARNING: ... !!! The !!! should match the WARNING color !!! not TODO !!!    or NOTE !!!
       " WARNING: TODO: NOTE: ... !!! The !!! should match the NOTE    color !!! not WARNING !!! or TODO !!!
       " NOTE: WARNING: TODO: ... !!! The !!! should match the TODO    color !!! not NOTE !!!    or WARNING !!!
-      syn region AllComNoteScope    matchgroup=SpAllHLNote     start="\<NOTE\%(:\|\>\)\@="      skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComViNoteScope  matchgroup=SpAllHLViNote   start="\<VINOTE\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComTodoScope    matchgroup=SpAllHLTodo     start="\<TODO\%(:\|\>\)\@="      skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComViTodoScope  matchgroup=SpAllHLViTodo   start="\<VITODO\%(:\|\>\)\@="    skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComWarningScope matchgroup=SpAllHLWarning  start="\<WARNING\%(:\|\>\)\@="   skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComDoNotScope   matchgroup=SpAllHLWarning  start="\<DO NOT\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
 
 
       " NOTE: When not contained in comment, need to contain TOP!!!
-      syn region AllNoteScope    matchgroup=SpAllHLNote     start="\<NOTE\%(:\|\>\)\@="      skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
-      syn region AllViNoteScope  matchgroup=SpAllHLViNote   start="\<VINOTE\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
-      syn region AllTodoScope    matchgroup=SpAllHLTodo     start="\<TODO\%(:\|\>\)\@="      skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
-      syn region AllViTodoScope  matchgroup=SpAllHLViTodo   start="\<VITODO\%(:\|\>\)\@="    skip="[!?][!?]\+\ze.*[!?][!?]" end="[!?][!?][!?]*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
-      syn region AllWarningScope matchgroup=SpAllHLWarning  start="\<WARNING\%(:\|\>\)\@="   skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
-      syn region AllDoNotScope   matchgroup=SpAllHLWarning  start="\<DO NOT\%(:\|\>\)\@="    skip="!!\+\ze.*!!" end="!!!*" end="\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
 
 
 
@@ -880,20 +896,13 @@ function! AllHLExclamations()
       " syn match AllDoNotScope   "\<DO NOT\%(:\|\>\)\@=.*\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\@<!!!!*" keepend transparent containedin=.*Comment.* contains=SpAllHLWarning,AllHLWarning
 
 
-      " hi  link   Sp2AllHLNote        HLGreen3BgB
-      " hi  link   Sp2AllHLViNote      HLGreen1BgB
-      " hi  link   Sp2AllHLTodo        HLOrangeBgB
-      " hi  link   Sp2AllHLViTodo      HLYellow3BgB
-      " hi  link   Sp2AllHLWarning     HLOrangered1BgB
-      " hi  link   Sp2AllHLError       HLRedBgB
-
       " NOTE: Allows multiple !!! occurrences per keyword !!! - WARNING: matches !!! with closest !!! keyword !!!
-      syn match SpAllHLNote    "!!!*"              contained containedin=AllComNoteScope,AllNoteScope
-      syn match SpAllHLViNote  "!!!*"              contained containedin=AllComViNoteScope,AllViNoteScope
-      syn match SpAllHLTodo    "\%(!!!*\|???*\)"   contained containedin=AllComTodoScope,AllTodoScope
-      syn match SpAllHLViTodo  "\%(!!!*\|???*\)"   contained containedin=AllComViTodoScope,AllViTodoScope
-      syn match SpAllHLWarning "!!!*"              contained containedin=AllComWarningScope,AllWarningScope
-      syn match SpAllHLWarning "!!!*"              contained containedin=AllComDoNotScope,AllDoNotScope
+      syn match SpAllHLNote    "\%#=1!!!*"              contained containedin=AllComNoteScope,AllNoteScope
+      syn match SpAllHLViNote  "\%#=1!!!*"              contained containedin=AllComViNoteScope,AllViNoteScope
+      syn match SpAllHLTodo    "\%#=1\%(!!!*\|???*\)"   contained containedin=AllComTodoScope,AllTodoScope
+      syn match SpAllHLViTodo  "\%#=1\%(!!!*\|???*\)"   contained containedin=AllComViTodoScope,AllViTodoScope
+      syn match SpAllHLWarning "\%#=1!!!*"              contained containedin=AllComWarningScope,AllWarningScope
+      syn match SpAllHLWarning "\%#=1!!!*"              contained containedin=AllComDoNotScope,AllDoNotScope
 
    endif
 endfunction
@@ -915,16 +924,16 @@ endfunction
 function! AllTitles()
    if g:performance_mode <= 0
       if exists("b:comment_leader")
-         execute 'syn match AllTitles1 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-         execute 'syn match AllTitles2 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-         execute 'syn match AllTitles3 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-         execute 'syn match AllTitles4 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-         execute 'syn match AllTitles5 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-       " execute 'syn match AllTitles6 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-       " execute 'syn match AllTitles7 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-       " execute 'syn match AllTitles8 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-       " execute 'syn match AllTitles9 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
-       " execute 'syn match AllTitles0 ''' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+         execute 'syn match AllTitles1 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+         execute 'syn match AllTitles2 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+         execute 'syn match AllTitles3 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+         execute 'syn match AllTitles4 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+         execute 'syn match AllTitles5 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles6 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles7 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles8 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles9 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
+       " execute 'syn match AllTitles0 ''\%#=1' . b:comment_leader . '\s\+[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*''ms=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*'
       endif
    endif
 endfunction
@@ -933,16 +942,16 @@ endfunction
 function! AllTitlesNotContained()
    if g:performance_mode <= 0
       if exists("b:comment_leader")
-         execute 'syn match AllTitles1 ''^\s*[0-9][0-9]\?\.\s.*'''
-         execute 'syn match AllTitles2 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-         execute 'syn match AllTitles3 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-         execute 'syn match AllTitles4 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-         execute 'syn match AllTitles5 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-       " execute 'syn match AllTitles6 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-       " execute 'syn match AllTitles7 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-       " execute 'syn match AllTitles8 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-       " execute 'syn match AllTitles9 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
-       " execute 'syn match AllTitles0 ''^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+         execute 'syn match AllTitles1 ''\%#=1^\s*[0-9][0-9]\?\.\s.*'''
+         execute 'syn match AllTitles2 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+         execute 'syn match AllTitles3 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+         execute 'syn match AllTitles4 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+         execute 'syn match AllTitles5 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+       " execute 'syn match AllTitles6 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+       " execute 'syn match AllTitles7 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+       " execute 'syn match AllTitles8 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+       " execute 'syn match AllTitles9 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
+       " execute 'syn match AllTitles0 ''\%#=1^\s*[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.[0-9][0-9]\?\.\s.*'''
       endif
    endif
 endfunction
@@ -957,16 +966,16 @@ function! AllTitlesMarkdown()
  " hi link AllTitlesMarkdown8 AllTitles8
  " hi link AllTitlesMarkdown9 AllTitles9
  " hi link AllTitlesMarkdown0 AllTitles0
-   syntax match AllTitlesMarkdown1 "^\s*# .*"
-   syntax match AllTitlesMarkdown2 "^\s*## .*"
-   syntax match AllTitlesMarkdown3 "^\s*### .*"
-   syntax match AllTitlesMarkdown4 "^\s*#### .*"
-   syntax match AllTitlesMarkdown5 "^\s*##### .*"
- " syntax match AllTitlesMarkdown6 "^\s*###### .*"
- " syntax match AllTitlesMarkdown7 "^\s*####### .*"
- " syntax match AllTitlesMarkdown8 "^\s*######## .*"
- " syntax match AllTitlesMarkdown9 "^\s*######### .*"
- " syntax match AllTitlesMarkdown0 "^\s*########## .*"
+   syntax match AllTitlesMarkdown1 "\%#=1^\s*# .*"
+   syntax match AllTitlesMarkdown2 "\%#=1^\s*## .*"
+   syntax match AllTitlesMarkdown3 "\%#=1^\s*### .*"
+   syntax match AllTitlesMarkdown4 "\%#=1^\s*#### .*"
+   syntax match AllTitlesMarkdown5 "\%#=1^\s*##### .*"
+ " syntax match AllTitlesMarkdown6 "\%#=1^\s*###### .*"
+ " syntax match AllTitlesMarkdown7 "\%#=1^\s*####### .*"
+ " syntax match AllTitlesMarkdown8 "\%#=1^\s*######## .*"
+ " syntax match AllTitlesMarkdown9 "\%#=1^\s*######### .*"
+ " syntax match AllTitlesMarkdown0 "\%#=1^\s*########## .*"
 endfunction
 "------------------------------------------------------------------------------
 
@@ -983,52 +992,52 @@ function! AllFontStyles()
    " Markdown-like font style syntax
    "---------------------------------------------------------------------------
    hi  link    AllMdFontItalic     HLItalic
-   syn match   AllMdFontItalic     "\%( \|^\)\@<=\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideSA1,AllMdFontHideEA1
+   syn match   AllMdFontItalic     "\%#=1\%( \|^\)\@<=\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideSA1,AllMdFontHideEA1
 
    hi  link    AllMdFontBold       HLBold
-   syn match   AllMdFontBold       "\%( \|^\)\@<=\*\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\*\%([ .:;,!?)\]}'"]\|$\)\@="     contains=@NoSpell,AllMdFontHideSA2,AllMdFontHideEA2
+   syn match   AllMdFontBold       "\%#=1\%( \|^\)\@<=\*\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\*\%([ .:;,!?)\]}'"]\|$\)\@="     contains=@NoSpell,AllMdFontHideSA2,AllMdFontHideEA2
 
    hi  link    AllMdFontBoldItalic HLBoldItalic
-   syn match   AllMdFontBoldItalic "\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contains=@NoSpell,AllMdFontHideSA3,AllMdFontHideEA3
+   syn match   AllMdFontBoldItalic "\%#=1\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\).\{-1,}\%(\S\&[^*]\)\*\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contains=@NoSpell,AllMdFontHideSA3,AllMdFontHideEA3
 
    hi  link    AllMdFontUline      HLUnderline
-   syn match   AllMdFontUline      "\%( \|^\)\@<=__\%(\S\&[^_]\).\{-1,}\%(\S\&[^_]\)__\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideSU2,AllMdFontHideEU2
+   syn match   AllMdFontUline      "\%#=1\%( \|^\)\@<=__\%(\S\&[^_]\).\{-1,}\%(\S\&[^_]\)__\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideSU2,AllMdFontHideEU2
 
    hi  link    AllMdFontBoldUline  HLBoldUnderline
-   syn match   AllMdFontBoldUline  "\%( \|^\)\@<=___\%(\S\&[^_]\).\{-1,}\%(\S\&[^_]\)___\%([ .:;,!?)\]}'"]\|$\)\@="       contains=@NoSpell,AllMdFontHideSU3,AllMdFontHideEU3
+   syn match   AllMdFontBoldUline  "\%#=1\%( \|^\)\@<=___\%(\S\&[^_]\).\{-1,}\%(\S\&[^_]\)___\%([ .:;,!?)\]}'"]\|$\)\@="       contains=@NoSpell,AllMdFontHideSU3,AllMdFontHideEU3
 
    hi  link    AllMdFontUndercurl  HLUndercurl
-   syn match   AllMdFontUndercurl  "\%( \|^\)\@<=\~\%(\S\&[^~]\).\{-1,}\%(\S\&[^~]\)\~\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideST1,AllMdFontHideET1
+   syn match   AllMdFontUndercurl  "\%#=1\%( \|^\)\@<=\~\%(\S\&[^~]\).\{-1,}\%(\S\&[^~]\)\~\%([ .:;,!?)\]}'"]\|$\)\@="         contains=@NoSpell,AllMdFontHideST1,AllMdFontHideET1
 
    hi  link    AllMdFontStrike     HLStrikeThroughGrey
-   syn match   AllMdFontStrike     "\%( \|^\)\@<=\~\~\%(\S\&[^~]\).\{-1,}\%(\S\&[^~]\)\~\~\%([ .:;,!?)\]}'"]\|$\)\@="     contains=@NoSpell,AllMdFontHideST2,AllMdFontHideET2
+   syn match   AllMdFontStrike     "\%#=1\%( \|^\)\@<=\~\~\%(\S\&[^~]\).\{-1,}\%(\S\&[^~]\)\~\~\%([ .:;,!?)\]}'"]\|$\)\@="     contains=@NoSpell,AllMdFontHideST2,AllMdFontHideET2
 
    hi  link    AllMdFontStrikeLine HLStrikeThroughGrey
-   syn match   AllMdFontStrikeLine "\%( \|^\)\@<=\~\~\~\%([^~]\).*" contains=@NoSpell,AllMdFontHideST3
+   syn match   AllMdFontStrikeLine "\%#=1\%( \|^\)\@<=\~\~\~\%([^~]\).*" contains=@NoSpell,AllMdFontHideST3
 
    " Hides the pattern start/end in normal mode, to apply use:
    "    set conceallevel=2
    "    set concealcursor=n
-   syn match AllMdFontHideSA1 "\%( \|^\)\@<=\*\%(\S\&[^*]\)\@=" contained conceal
-   syn match AllMdFontHideEA1   "\%(\S\&[^*]\)\@<=\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideST1 "\%( \|^\)\@<=\~\%(\S\&[^~]\)\@=" contained conceal
-   syn match AllMdFontHideET1   "\%(\S\&[^~]\)\@<=\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   " syn match AllMdFontHideSU1 "\%( \|^\)\@<=_\%(\S\&[^_]\)\@=" contained conceal
-   " syn match AllMdFontHideEU1   "\%(\S\&[^_]\)\@<=_\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideSA1 "\%#=1\%( \|^\)\@<=\*\%(\S\&[^*]\)\@=" contained conceal
+   syn match AllMdFontHideEA1 "\%#=1\%(\S\&[^*]\)\@<=\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideST1 "\%#=1\%( \|^\)\@<=\~\%(\S\&[^~]\)\@=" contained conceal
+   syn match AllMdFontHideET1 "\%#=1\%(\S\&[^~]\)\@<=\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   " syn match AllMdFontHideSU1 "\%#=1\%( \|^\)\@<=_\%(\S\&[^_]\)\@=" contained conceal
+   " syn match AllMdFontHideEU1 "\%#=1\%(\S\&[^_]\)\@<=_\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
 
-   syn match AllMdFontHideSA2 "\%( \|^\)\@<=\*\*\%(\S\&[^*]\)\@=" contained conceal
-   syn match AllMdFontHideEA2   "\%(\S\&[^*]\)\@<=\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideST2 "\%( \|^\)\@<=\~\~\%(\S\&[^~]\)\@=" contained conceal
-   syn match AllMdFontHideET2   "\%(\S\&[^~]\)\@<=\~\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideSU2 "\%( \|^\)\@<=__\%(\S\&[^_]\)\@=" contained conceal
-   syn match AllMdFontHideEU2   "\%(\S\&[^_]\)\@<=__\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideSA2 "\%#=1\%( \|^\)\@<=\*\*\%(\S\&[^*]\)\@=" contained conceal
+   syn match AllMdFontHideEA2 "\%#=1\%(\S\&[^*]\)\@<=\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideST2 "\%#=1\%( \|^\)\@<=\~\~\%(\S\&[^~]\)\@=" contained conceal
+   syn match AllMdFontHideET2 "\%#=1\%(\S\&[^~]\)\@<=\~\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideSU2 "\%#=1\%( \|^\)\@<=__\%(\S\&[^_]\)\@=" contained conceal
+   syn match AllMdFontHideEU2 "\%#=1\%(\S\&[^_]\)\@<=__\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
 
-   syn match AllMdFontHideSA3 "\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\)\@=" contained conceal
-   syn match AllMdFontHideEA3   "\%(\S\&[^*]\)\@<=\*\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideST3 "\%( \|^\)\@<=\~\~\~\%([^~]\)\@=" contained conceal
-   " syn match AllMdFontHideET3   "\%(\S\&[^~]\)\@<=\~\~\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
-   syn match AllMdFontHideSU3 "\%( \|^\)\@<=___\%(\S\&[^_]\)\@=" contained conceal
-   syn match AllMdFontHideEU3   "\%(\S\&[^_]\)\@<=___\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideSA3 "\%#=1\%( \|^\)\@<=\*\*\*\%(\S\&[^*]\)\@=" contained conceal
+   syn match AllMdFontHideEA3 "\%#=1\%(\S\&[^*]\)\@<=\*\*\*\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideST3 "\%#=1\%( \|^\)\@<=\~\~\~\%([^~]\)\@=" contained conceal
+   " syn match AllMdFontHideET3 "\%#=1\%(\S\&[^~]\)\@<=\~\~\~\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
+   syn match AllMdFontHideSU3 "\%#=1\%( \|^\)\@<=___\%(\S\&[^_]\)\@=" contained conceal
+   syn match AllMdFontHideEU3 "\%#=1\%(\S\&[^_]\)\@<=___\%([ .:;,!?)\]}'"]\|$\)\@=" contained conceal
 
 
    "---------------------------------------------------------------------------
@@ -1037,11 +1046,11 @@ function! AllFontStyles()
 
    " Can't be contained in AllFontPat and needs to be before AllFontPat
    hi  link    AllFontStrikeLine HLStrikeThroughGrey
-   syn match   AllFontStrikeLine "\%( \|^\)\@<=\/s .*" contains=@NoSpell,AllFontHideStart,AllFontHideEnd
+   syn match   AllFontStrikeLine "\%#=1\%( \|^\)\@<=\/s .*" contains=@NoSpell,AllFontHideStart,AllFontHideEnd
 
    " This makes pattern matching more efficient by only searching for the main
    " pattern once.
-   syn match   AllFontPat       "\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}'"]\|$\)\@=" keepend
+   syn match   AllFontPat       "\%#=1\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}'"]\|$\)\@=" keepend
 
    " NOTE: Using the following notation for alphabetical font matching:
    " normal         + color /c col/
@@ -1063,123 +1072,123 @@ function! AllFontStyles()
 
    " normal         + color /c col/
    hi  link    AllFontRed          HLRed2
-   syn match   AllFontRed          "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontRed          "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontOrange       HLOrangered
-   syn match   AllFontOrange       "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontOrange       "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontYellow       HLYellow
-   syn match   AllFontYellow       "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontYellow       "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontGreen        HLGreen
-   syn match   AllFontGreen        "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontGreen        "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontCyan         HLCyan
-   syn match   AllFontCyan         "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontCyan         "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontDodgerBlue   HLDodgerblue
-   syn match   AllFontDodgerBlue   "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontDodgerBlue   "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontPink         HLDeeppink
-   syn match   AllFontPink         "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontPink         "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontGreyOut      HLGreyOut
-   syn match   AllFontGreyOut      "\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontGreyOut      "\%#=1\/c \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " bold           + color /b col/
    hi  link    AllFontBold         HLBold
-   syn match   AllFontBold         "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBold         "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontRedB         HLRed2B
-   syn match   AllFontRedB         "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontRedB         "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontOrangeB      HLOrangeredB
-   syn match   AllFontOrangeB      "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontOrangeB      "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontYellowB      HLYellowB
-   syn match   AllFontYellowB      "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontYellowB      "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontGreenB       HLGreenB
-   syn match   AllFontGreenB       "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontGreenB       "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontCyanB        HLCyanB
-   syn match   AllFontCyanB        "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontCyanB        "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontDodgerBlueB  HLDodgerblueB
-   syn match   AllFontDodgerBlueB  "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontDodgerBlueB  "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontPinkB        HLDeeppinkB
-   syn match   AllFontPinkB        "\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontPinkB        "\%#=1\/b \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " italic         + color /i col/
    hi  link    AllFontItalic       HLItalic
-   syn match   AllFontItalic       "\/i \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontItalic       "\%#=1\/i \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " underline      + color /u col/
    hi  link    AllFontUline        HLUnderline
-   syn match   AllFontUline        "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUline        "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineRed     HLRedU
-   syn match   AllFontUlineRed     "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineRed     "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineOrange  HLOrangeredU
-   syn match   AllFontUlineOrange  "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineOrange  "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineYellow  HLYellowU
-   syn match   AllFontUlineYellow  "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineYellow  "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineGreen   HLGreenU
-   syn match   AllFontUlineGreen   "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineGreen   "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineBlue    HLDodgerblueU
-   syn match   AllFontUlineBlue    "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineBlue    "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlinePink    HLDeeppinkU
-   syn match   AllFontUlinePink    "\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlinePink    "\%#=1\/u \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " bold italic    + color /x col/ " x-treme slant
    hi  link    AllFontBoldItalic   HLBoldItalic
-   syn match   AllFontBoldItalic   "\/x \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBoldItalic   "\%#=1\/x \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " bold underline + color /d col/ " double
    hi  link    AllFontBoldUline    HLBoldUnderline
-   syn match   AllFontBoldUline    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBoldUline    "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineRed    HLRedBU
-   syn match   AllFontBUlineRed    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineRed    "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineOrange HLOrangeredBU
-   syn match   AllFontBUlineOrange "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineOrange "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineYellow HLYellowBU
-   syn match   AllFontBUlineYellow "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineYellow "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontBUlineGreen  HLGreenBU
-   syn match   AllFontBUlineGreen  "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBUlineGreen  "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlineBlue    HLDodgerblueBU
-   syn match   AllFontUlineBlue    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlineBlue    "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontUlinePink    HLDeeppinkBU
-   syn match   AllFontUlinePink    "\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUlinePink    "\%#=1\/d \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " ital underline + color /n col/ " slanted underline
    hi  link    AllFontItalUline    HLItalUnderline
-   syn match   AllFontItalUline    "\/n \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontItalUline    "\%#=1\/n \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " bold ital und  + color /a col/ " all
    hi  link    AllFontBoldItalUnd  HLBoldItalUnder
-   syn match   AllFontBoldItalUnd  "\/a \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontBoldItalUnd  "\%#=1\/a \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " curl           + color /w col/ " wavy
    hi  link    AllFontUndercurl    HLUndercurl
-   syn match   AllFontUndercurl    "\/w \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontUndercurl    "\%#=1\/w \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " strikethrough  + color /s col/
    hi  link    AllFontStrikeW      HLStrikethrough
-   syn match   AllFontStrikeW      "\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontStrikeW      "\%#=1\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontStrikeG      HLStrikeThroughGrey
-   syn match   AllFontStrikeG      "\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontStrikeG      "\%#=1\/s \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " highlight      + color /h col/
    hi  link    AllFontHighWhiteB   HLStandout
-   syn match   AllFontHighWhiteB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighWhiteB   "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} w\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighRedB     HLRedBgB
-   syn match   AllFontHighRedB     "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighRedB     "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} r\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighOrRedB   HLOrangered1BgB
-   syn match   AllFontHighOrRedB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighOrRedB   "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} o\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighYellB    HLYellowBgB
-   syn match   AllFontHighYellB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighYellB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} y\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighGreenB   HLGreen1BgB
-   syn match   AllFontHighGreenB   "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighGreenB   "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} g\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighCyanB    HLCyanBgB
-   syn match   AllFontHighCyanB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighCyanB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} c\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighBlueB    HLDodgerBlueBgB
-   syn match   AllFontHighBlueB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighBlueB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} b\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighPinkB    HLDeepPinkBgB
-   syn match   AllFontHighPinkB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighPinkB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} p\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
    hi  link    AllFontHighGreyB    HLGrey15BgB
-   syn match   AllFontHighGreyB    "\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
+   syn match   AllFontHighGreyB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat
 
    " Hides the pattern start/end in normal mode, to apply use:
    "    set conceallevel=2
    "    set concealcursor=n
-   syn match AllFontHideStart "\/[a-z] " contained conceal
-   syn match AllFontHideEnd   " [a-z]\/" contained conceal
+   syn match AllFontHideStart "\%#=1\/[a-z] " contained conceal
+   syn match AllFontHideEnd   "\%#=1 [a-z]\/" contained conceal
 
    " Tests for markdown-like patterns
    " Testing *font styles* patterns Testing ***font styles*** patterns

@@ -141,6 +141,10 @@ endfunction
 function! RegexMatchesVim(contained_en)
    let l:contained = (a:contained_en ? 'contained ' : '')
 
+   " Vim engine used
+   hi  link    RegexEngineVim   SpecialKey
+   execute 'syn match   RegexEngineVim   "\\%#=[0-2]"           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
+
    " Lookahead/Lookbehind
    hi  link    RegexPosLookVim   Question
    execute 'syn match   RegexPosLookVim   "\\@<="           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'

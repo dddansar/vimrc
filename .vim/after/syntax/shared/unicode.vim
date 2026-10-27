@@ -141,16 +141,6 @@ syn keyword UnicodeVarColor      UnicodeVarColor containedin=vimSynKeyRegion,vim
 syn keyword UnicodeBsColor       UnicodeBsColor containedin=vimSynKeyRegion,vimHiLink
 
 
-" Do not spell check any of the Unicode special characters
-"------------------------------------------------------------------------------
-" Don't spell check any Unicode chars
-syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
-
-" Don't spell check any Unicode chars in comments or quotes
-syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
-"------------------------------------------------------------------------------
-
-
 " NOTE: To add more ASCII/Unicode symbols use (i)c-v  :help i_CTRL-V_digit
 " then use u for UTF-16 or U for UTF-32 followed by 4 or 8 digits.
 " (i)c-v u03c0 gives: π 
@@ -3589,9 +3579,9 @@ inorea <buffer> uv_Z    ᴢ̂<left><right><c-r>=Eatchar('\s')<cr>
 
 " Vectors in comments
 hi  link   UnicodeVectorsCom  Comment
-syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.⃗\)[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
+syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.⃗\)[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpellCom
 syn match  UnicodeVectorsCom  "\%(d⃗\)"    contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
-syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.̂\)[a-zA-Z0-9]*"    contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
+syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.̂\)[a-zA-Z0-9]*"    contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpellCom
 
 " Vectors
 hi  link      UnicodeVectors  HLBlue
@@ -3601,11 +3591,11 @@ syn match     UnicodeVectors  "\%(.̂\)"    contains=@NoSpell  containedin=Regex
 
 " Negation in comments
 hi  link   UnicodeNotLogicCom Comment
-syn match  UnicodeNotLogicCom "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpell
+syn match  UnicodeNotLogicCom "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpellCom
 
 " Negation
 hi  link      UnicodeNotLogic Constant
-syn match     UnicodeNotLogic "\<[A-Z]*\%(.̅\)\+[A-Z]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match     UnicodeNotLogic "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 " You could also use other combining Unicode chars such as the overline used
 " for not (u0305).
@@ -4395,4 +4385,14 @@ syn match   UnicodeCustomLatinGreekSubSup "[-]" contains=@NoSpell  contain
 syn cluster ClusterUnicode add=Unicode.*
 "------------------------------------------------------------------------------
 
+" Do not spell check any of the Unicode special characters
+"------------------------------------------------------------------------------
+" Don't spell check any Unicode chars
+" syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\x9f]\%([a-zA-Z0-9]\|[^\x00-\x9f]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+
+" Don't spell check any Unicode chars in comments or quotes
+" syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\x9f]\%([a-zA-Z0-9]\|[^\x00-\x9f]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+"------------------------------------------------------------------------------
 

@@ -96,59 +96,60 @@ setlocal nocindent
 
 " Match parenthesis
 " hi  link    TextParen     Function
-" syn match   TextParen     "[)(]"
+" syn match   TextParen     "\%#=1[)(]"
 
 " hi  link    TextSBr       StorageClass
-" syn match   TextSBr       "[[\]]"
+" syn match   TextSBr       "\%#=1[[\]]"
 
 " hi  link    TextCBr       Define
-" syn match   TextCBr       "[}{]"
+" syn match   TextCBr       "\%#=1[}{]"
 
 " hi  link    TextOperators  Operator
-" syn match   TextOperators  "[$]"
+" syn match   TextOperators  "\%#=1[$]"
 
 hi  link    TextSlash      Function
-syn match   TextSlash      "\/"
+syn match   TextSlash      "\%#=1\/"
 
 " Match alone quotes. Quote pairs are matched elsewhere
 hi  link    TextAloneQuotes Function
-syn match   TextAloneQuotes "["]"
-syn match   TextAloneQuotes "\%(s\)\@<!'"
-syn match   TextUnmatchQuotes "\%(\w\)\@<='\%([dstm]\>\|ve\>\)\@="
+syn match   TextAloneQuotes "\%#=1["]"
+syn match   TextAloneQuotes "\%#=1\%(s\)\@<!'"
+syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\>\|ve\>\)\@="
 
 
 " Match (+) (-) (~)
 "------------------------------------------------------------------------------
 hi  link    TextPlusParen      StorageClass
-syn match   TextPlusParen      "(+)"
+syn match   TextPlusParen      "\%#=1(+)"
 hi  link    TextMinusParen     Function
-syn match   TextMinusParen     "(-)"
+syn match   TextMinusParen     "\%#=1(-)"
 hi  link    TextTildaParen     Define
-syn match   TextTildaParen     "(\~)"
+syn match   TextTildaParen     "\%#=1(\~)"
 "------------------------------------------------------------------------------
 
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
 " P1/P2/P3 for Priorities
+" NOTE: need to be match not keyword to apply @NoSpell
 " hi  link  TextPriorities0  HLGrey80BgB
-" syn match TextPriorities0  "\<P0\>" contains=@NoSpell
+" syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
 " hi  link  TextPriorities1  HLOrangered1BgB
-" syn match TextPriorities1  "\<P1\>" contains=@NoSpell
+" syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
 " hi  link  TextPriorities2  HLOrangeBgB
-" syn match TextPriorities2  "\<P2\>" contains=@NoSpell
+" syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
 " hi  link  TextPriorities3  HLYellowBgB
-" syn match TextPriorities3  "\<P3\>" contains=@NoSpell
+" syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
 " hi  link  TextPriorities4  HLYellow3BgB
-" syn match TextPriorities4  "\<P4\>" contains=@NoSpell
+" syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
 " hi  link  TextPriorities5  HLGreen1BgB
-" syn match TextPriorities5  "\<P5\>" contains=@NoSpell
+" syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
 " hi  link  TextPriorities6  HLGreen3BgB
-" syn match TextPriorities6  "\<P6\>" contains=@NoSpell
+" syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
 " hi  link  TextPriorities7  HLCyanBgB
-" syn match TextPriorities7  "\<P7\>" contains=@NoSpell
+" syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
 " hi  link  TextPriorities8  HLDodgerBlueBgB
-" syn match TextPriorities8  "\<P8\>" contains=@NoSpell
+" syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
 " hi  link  TextPriorities9  HLDeepPinkBgB
-" syn match TextPriorities9  "\<P9\>" contains=@NoSpell
+" syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
@@ -182,8 +183,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
       hi link    TextQuotesLookbehind TextNoColor
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+""+ end=+"\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+''+ end=+'\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
 
       call RegexMatches(0)
       call RegexMatchesVim(0)
@@ -196,42 +197,42 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
       hi  link  TextRegexQuant RegexQuant
-      syn match TextRegexQuant  "\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
+      syn match TextRegexQuant  "\%#=1\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
 
       " Contain in TextQuotesLookbehind
       hi  link  TextLinuxCommands Statement
-      syn match TextLinuxCommands "\(\.\)\@<!\<grep\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?"
-      syn match TextLinuxCommands "\(\.\)\@<!\<echo\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\(\.\)\@<!\<awk\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\(\.\)\@<!\<perl\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\(^\||\)\s*\<cat\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\(^\||\)\s*\<print\>"
-      syn match TextLinuxCommands "\(^\||\)\s*\<use\>"
-      syn match TextLinuxCommands "\(^\||\)\s*\<time\>"
-      syn match TextLinuxCommands "\(^\|[|(]\)\s*\<my\>"
+      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<grep\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?"
+      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<echo\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<awk\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<perl\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<cat\%( -\w\+\)*\>"
+      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<print\>"
+      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<use\>"
+      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<time\>"
+      syn match TextLinuxCommands "\%#=1\(^\|[|(]\)\s*\<my\>"
 
       syn keyword TextLinuxCommands syntime timethis
       syn keyword TextLinuxCommands print sub gsub contained
 
       " Add # comments as well
       hi  link  TextCommentLineStart AllCommentLineStart
-      syn match TextCommentLineStart +^\s*#.*+
+      syn match TextCommentLineStart +\%#=1^\s*#.*+
 
       hi  link  TextCommentAnywhere AllCommentAnywhere
-      syn match TextCommentAnywhere +\(\s\)\@<=#\s[a-zA-Z0-9].*+
+      syn match TextCommentAnywhere +\%#=1\(\s\)\@<=#\s[a-zA-Z0-9].*+
 
       " Match a hashbang
       hi  link  TextHashBang Define
-      syn match TextHashBang +^#!.*+
+      syn match TextHashBang +\%#=1^#!.*+
 
       " Match programming conditionals and loops
       hi  link  TextPrgmConditionals Conditional
-      syn match TextPrgmConditionals +^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
-      syn match TextPrgmConditionals +^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
+      syn match TextPrgmConditionals +\%#=1^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
+      syn match TextPrgmConditionals +\%#=1^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
 
       hi  link  TextEquality AllEquality
-      syn match TextEquality    "=\~" containedin=RegexPatSepPerl
+      syn match TextEquality    "\%#=1=\~" containedin=RegexPatSepPerl
 
       call AllHLExclamations() " Need to recall otherwise not all ? in TODOs will be highlighted
    else
@@ -255,10 +256,10 @@ endif
 " number/letter and ")".
 hi  link    TextNumberParen    Function
 hi  link    TextLetterParen    Question
-syn match   TextNumberParen    "^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
-syn match   TextLetterParen    "^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
-syn match   TextNumberParen    "\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
-syn match   TextLetterParen    "\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
+syn match   TextNumberParen    "\%#=1^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "\%#=1^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
+syn match   TextNumberParen    "\%#=1\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
 "------------------------------------------------------------------------------
 
 if exists("b:current_syntax") && b:current_syntax == "text"
