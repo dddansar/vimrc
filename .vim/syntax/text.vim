@@ -114,7 +114,7 @@ syn match   TextSlash      "\%#=1\/"
 hi  link    TextAloneQuotes Function
 syn match   TextAloneQuotes "\%#=1["]"
 syn match   TextAloneQuotes "\%#=1\%(s\)\@<!'"
-syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\>\|ve\>\)\@="
+syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
 
 
 " Match (+) (-) (~)
@@ -168,9 +168,9 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()
-   call AllFontStyles()
-      set conceallevel=2   " Used by AllFontStyles() to hide start/end of match
-      set concealcursor=n  " Used by AllFontStyles() to hide start/end of match
+   call AllFontStyles(0)
+      " set conceallevel=2   " Used by AllFontStyles() to hide start/end of match
+      " set concealcursor=n  " Used by AllFontStyles() to hide start/end of match
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()
    " call AllHLWords()

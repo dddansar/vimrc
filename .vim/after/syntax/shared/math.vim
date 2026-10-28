@@ -101,12 +101,14 @@ if g:performance_mode <= 0
    hi  link    SpMathSingleCharIaA3 Constant
    syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|[!.?:;,] \|[a-zA-Z][a-z] \|\w\| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
-   syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'[dm] \)\@!" contains=@NoSpell
+   syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
    syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
    hi  link    SpMathSingleCharIaA4 Constant
-   syn match   SpMathSingleCharIaA4 "\%#=1\%([Tt]he \)\zs[IaA]\>" contains=@NoSpell
+   syn match   SpMathSingleCharIaA4 "\%#=1\<\%([Tt]he \)[IaA]\>" contains=@NoSpell
+   " Ignore spell check on "the" followed by "a" like in "the a variable".
+   syn match   SpMathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
 
    hi  link    SpMathNumberedVar Constant
    syn match   SpMathNumberedVar "\%#=1\w\@<![a-z][0-9]\+\w\@!" contains=@NoSpell
@@ -161,7 +163,7 @@ if g:performance_mode <= 0
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
    syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
-   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be by un up us Re re Ok ok On on Of of Or or
+   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be by un up us Re re Ok ok On on Of of Or or He he
 
    hi  link    SpMathMultiVars3 Constant
    syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges

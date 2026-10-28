@@ -62,6 +62,7 @@ let g:LargeFile = 1024 * 1024 * 500
 let g:netrw_dirhistmax = 0
 
 
+" /d Syntax highlightings controls y/
 " NOTE: Controls the syntax highlightings in all files.
 " If set to 0 will use the default Vim syntax with the pablo colorscheme in
 "             addition to some of my custom syntax matching that adds
@@ -81,6 +82,7 @@ let g:netrw_dirhistmax = 0
 let g:select_custom_syntax = 2
 
 
+" /d Performance mode y/
 " Will turn off additional settings and syntax matching if set to 1 or 2.
 " VINOTE: Vim provides the built-in command :syntime to profile and identify
 "         which syntax matches are consuming the most time.
@@ -134,8 +136,8 @@ endif
 
 "=================================== AI API ===================================
 "------------------------------------------------------------------------------
-" NOTE: You can get an AI API (Claude Sonnet/Opus/Haiku, Google's Gemini,
-" OpenAI/ChatGPT, Ollama/Qwen) to work with Vim/GVim/NeoVim!!!
+" NOTE: You can get an /d AI API (Claude Sonnet/Opus/Haiku, Google's Gemini, y/
+" /d OpenAI/ChatGPT, Ollama/Qwen) y/ to work with Vim/GVim/NeoVim!!!
 " 1) Grab the AI plugin and place in your .vim/pack/.../start/ folder.
 " Although initially intended just for Claude AIs, I made modifications to
 " Pasky's Claude plugin to address bugs I was seeing and to add support for
@@ -161,7 +163,7 @@ let g:openai_api_key=$GPT_API_KEY
 "------------------------------------------------------------------------------
 
 
-" Settings for all AI models:
+" /d Settings for all AI models y/
 "------------------------------------------------------------------------------
 " Open a Chat to start chatting with AI
 let g:ai_map_open_chat = "<leader>cc"
@@ -190,9 +192,7 @@ endif
 " https://brave.com/search/api/
 let g:ai_web_search_api_key=$BRAVE_API_KEY
 "------------------------------------------------------------------------------
-
-
-" Settings for Claude models:
+" /d Settings for Claude models y/
 "------------------------------------------------------------------------------
 " Increase input token limit from 200k to 1m tokens
 " NOTE: Using 1m tokens can easily increase costs. To decrease costs, ask
@@ -246,8 +246,6 @@ let g:claude_thinking_effort = 'low'
 "   "omitted"    - no thinking text returned.
 let g:claude_thinking_display = 'summarized'
 "------------------------------------------------------------------------------
-
-
 " NOTE: Also supports interacting with Qwen (local and free AI)!!!
 " 1) Install ollama
 " curl -fsSL https://ollama.com/install.sh | sh
@@ -263,9 +261,7 @@ let g:ollama_num_ctx = 4096
 " let g:ollama_num_ctx = 32768
 " let g:ollama_num_ctx = 262144
 "------------------------------------------------------------------------------
-
-
-" Select the model to use. By default this is set to claude-sonnet-4-6
+" /d Select the model to use y/. By default this is set to claude-sonnet-4-6
 "------------------------------------------------------------------------------
 " let g:ai_model = 'claude-sonnet-5'
 let g:ai_model = 'claude-sonnet-4-6'
@@ -305,10 +301,11 @@ function! CommonSettings()
       syntax enable
    endif
 
+
    "---------------------------------------------------------------------------
    " NOTE: Need to set colorscheme after syntax on or highlight groups defined
    "       before 'syntax on' may be partially reset.
-   " Load colorscheme before checking file size in the MainFunction augroup to
+   " /d Load colorscheme y/ before checking file size in the MainFunction augroup to
    " avoid a white flash when first opening new files.
    "---------------------------------------------------------------------------
    call LoadColorscheme()
@@ -755,7 +752,7 @@ function! DefaultSettings()
 
 
    "---------------------------------------------------------------------------
-   " Load autocorrect files
+   " /d Load autocorrect files y/
    "---------------------------------------------------------------------------
    if !exists("g:AutocorrectLoaded") && g:use_autocorrect
       if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
@@ -773,8 +770,8 @@ function! DefaultSettings()
    "---------------------------------------------------------------------------
    " Colors and Syntax Highlighting
    "---------------------------------------------------------------------------
-   " NOTE: This file is responsible for loading additional custom syntax
-   " highlighting groups based on the file extension whenever
+   " NOTE: This file is responsible for /d loading additional custom syntax r/
+   " /d highlighting groups r/ based on the file extension/filetype whenever
    " g:select_custom_syntax >= 2.
    "---------------------------------------------------------------------------
    if !exists("b:custom_syntax_loaded")
@@ -844,7 +841,7 @@ endfunction
 
 "------------------------------------------------------------------------------
 " Function: LoadMappings()
-" Description: Loads all mappings
+" Description: /d Loads all mappings y/
 "------------------------------------------------------------------------------
 " remap vs noremap:
 " remap is an option that makes mappings work recursively.
@@ -864,7 +861,7 @@ endfunction
 function! LoadMappings()
 
    "---------------------------------------------------------------------------
-   " Make Vim similar to windows (save, copy, paste, select, ...)
+   " /d Make Vim similar to windows g/ (save, copy, paste, select, ...)
    "---------------------------------------------------------------------------
 
    " Update jump list with m' on cut, copy and paste (you can use <c-o>
@@ -928,7 +925,7 @@ function! LoadMappings()
 
 
    "---------------------------------------------------------------------------
-   " Tab, enter, whitespace mappings
+   " /d Tab, enter, whitespace mappings g/
    "---------------------------------------------------------------------------
 
    " Insert newline with enter without entering insert mode.
@@ -966,7 +963,7 @@ function! LoadMappings()
 
 
    "---------------------------------------------------------------------------
-   " Movement related mappings
+   " /d Movement related mappings g/
    "---------------------------------------------------------------------------
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
@@ -1080,7 +1077,7 @@ function! LoadMappings()
 
 
    "---------------------------------------------------------------------------
-   " Autocorrect related mappings
+   " /u Autocorrect related mappings g/
    "---------------------------------------------------------------------------
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
@@ -1127,7 +1124,7 @@ function! LoadMappings()
    inoremap <a-;> <c-e>
 
    "---------------------------------------------------------------------------
-   " Search related mappings
+   " /d Search related mappings g/
    "---------------------------------------------------------------------------
 
    " Search for item under cursor with mouse.
@@ -1239,7 +1236,7 @@ function! LoadMappings()
 
 
    "---------------------------------------------------------------------------
-   " Switching/recentering window positioning mappings.
+   " /d Switching/recentering window positioning mappings g/
    "---------------------------------------------------------------------------
 
    " Faster map to quit all files in window.
@@ -1339,7 +1336,7 @@ function! LoadMappings()
 
 
    "---------------------------------------------------------------------------
-   " Useful scripts mappings
+   " /d Useful scripts mappings g/
    "---------------------------------------------------------------------------
 
    " Commenting blocks of code.
@@ -1539,7 +1536,7 @@ endfunction
 
 "------------------------------------------------------------------------------
 " Function: AdjustFontSize(amount)
-" Description: Zooms in or zooms out a specific amount.
+" Description: /d Zooms in or zooms out y/ a specific amount.
 "------------------------------------------------------------------------------
 " Functions for the zoom in/out.
 function! AdjustFontSize(amount)
@@ -1567,7 +1564,7 @@ command! SmallerFont call SmallerFont()
 
 "------------------------------------------------------------------------------
 " Function: Eatchar()
-" Description: Use to consume the space typed after an abbreviation:
+" Description: Use to /d consume the space typed after an abbreviation g/:
 "              Add  <c-r>=Eatchar('\s')<cr>  at end of abbreviation.
 "------------------------------------------------------------------------------
 " See :helpgrep Eatchar
@@ -1580,9 +1577,9 @@ endfun
 
 "------------------------------------------------------------------------------
 " Function: SynGroup()
-" Description: This will display the name of the syntax group that is being
-"              applied under the cursor. Helps you debug which syntax group is
-"              giving you issues.
+" Description: /d Displays the name of the syntax group y/ that is being applied
+"              under the cursor. Helps you debug which syntax group is giving
+"              you issues.
 "------------------------------------------------------------------------------
 function! SynGroup()
    " synID({lnum}, {col}, {trans})
@@ -1619,7 +1616,7 @@ augroup END
 
 "------------------------------------------------------------------------------
 " Function: s:visual_hold_reset()
-" Description: Hack fix for Vim/NeoVim on my linux not copying selections to
+" Description: /d Hack fix for Vim/NeoVim on my linux not copying selections o/ to
 "              the linux selection buffer even though I have clipboard utility
 "              installed and loaded...
 "
@@ -1662,7 +1659,7 @@ endif
 
 "------------------------------------------------------------------------------
 " Function: LargeFileSettings()
-" Description: Load large files faster by not using default settings or syntax.
+" Description: /d Load large files faster y/ by not using default settings or syntax.
 "------------------------------------------------------------------------------
 function! LargeFileSettings()
    let g:EnteredLargeFile = 1
@@ -1692,8 +1689,8 @@ endfunction
 
 "------------------------------------------------------------------------------
 " Augroup: MainFunction
-" Description: This is basically the equivalent of main() in C. MainFunction()
-"              loads everything else in this file. First loads CommonSettings()
+" Description: This is basically the equivalent of main() in C. /d MainFunction() r/
+"              /d loads everything else in this file r/. First loads CommonSettings()
 "              then checks the file size, and if less than g:LargeFile, load
 "              DefaultSettings() otherwise load LargeFileSettings().
 "------------------------------------------------------------------------------

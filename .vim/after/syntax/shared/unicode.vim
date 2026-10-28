@@ -3956,7 +3956,7 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 "     Basic Multilingual Plane (BMP): U+E000 to U+F8FF (6,400 code points)
 "     Supplementary Private Use Area-A (Plane 15): U+F0000 to U+FFFFD (65,534 code points)
 "     Supplementary Private Use Area-B (Plane 16): U+100000 to U+10FFFD (65,534 code points)
-hi  link     AllPrivateUnicode  Error
+hi  link     AllPrivateUnicode  WarningMsg
 syn match    AllPrivateUnicode  '[\UE000-\UF8FF]' containedin=SpUnicodeNoSpell
 
 " Missing Unicode Latin superscript and subscript
@@ -4388,11 +4388,17 @@ syn cluster ClusterUnicode add=Unicode.*
 " Do not spell check any of the Unicode special characters
 "------------------------------------------------------------------------------
 " Don't spell check any Unicode chars
-" syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
-syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\x9f]\%([a-zA-Z0-9]\|[^\x00-\x9f]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+" syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+" syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+
+syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
 
 " Don't spell check any Unicode chars in comments or quotes
-" syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua0-\U1ffff][a-zA-Z0-9\ua0-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
-syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\x9f]\%([a-zA-Z0-9]\|[^\x00-\x9f]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+" syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+" syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+
+syn match SpUnicodeNoSpellCom "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+syn match SpUnicodeNoSpellCom "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
 "------------------------------------------------------------------------------
 
