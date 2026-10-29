@@ -182,6 +182,9 @@ inorea <buffer> _bitcoin   ₿<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _sign     𝄉<left><right><c-r>=Eatchar('\s')<cr>
 
+" Non-breaking space
+inorea <buffer> _nbsp      <left><right><c-r>=Eatchar('\s')<cr>
+
 inorea <buffer> _male      ♂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _fmale     ♀<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -3868,16 +3871,15 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 " 3. Create a file called make_custom_super_sub_scripts.py and add the following:
 "     import fontforge, psMat, string
 "     f = fontforge.open("base.ttf")
-"     S = 0.6
-"     sets = [(0xEC20, ord('a'), 26, 0.35),
-"             (0xEC40, ord('A'), 26, 0.35),
-"             (0xEC60, ord('a'), 26, -0.05),
-"             (0xEC80, ord('A'), 26, -0.05),
-"             (0xECA0, 0x3B1, 25, 0.35),
-"             (0xECC0, 0x391, 25, 0.35),
-"             (0xECE0, 0x3B1, 25, -0.05),
-"             (0xED00, 0x391, 25, -0.05)]
-"     for start, base, n, dy in sets:
+"     sets = [(0xEC20, ord('a'), 26, 0.34, 0.50),
+"             (0xEC40, ord('A'), 26, 0.33, 0.55),
+"             (0xEC60, ord('a'), 26, 0.00, 0.57),
+"             (0xEC80, ord('A'), 26,-0.01, 0.55),
+"             (0xECA0, 0x3B1,    25, 0.33, 0.6),
+"             (0xECC0, 0x391,    25, 0.33, 0.55),
+"             (0xECE0, 0x3B1,    25,-0.11, 0.6),
+"             (0xED00, 0x391,    25, 0.00, 0.55)]
+"     for start, base, n, dy, S in sets:
 "         for i in range(n):
 "             src = base + i
 "             if src == 0x3A2:            # unassigned slot between Ρ and Σ
@@ -3898,10 +3900,8 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 "     f.fontname = f.familyname = f.fullname = "MySupSub"
 "     f.generate("MySupSub.ttf")
 " 3.1. Run the script, then install the font
-"     fontforge -script make_custom_super_sub_scripts.py
 "     mkdir -p ~/.fonts
-"     cp MySupSub.ttf ~/.fonts/
-"     fc-cache -f
+"     fontforge -script make_custom_super_sub_scripts.py; cp MySupSub.ttf ~/.fonts/; fc-cache -f
 "
 " 4. Verify
 "     fc-list | grep MySupSub
@@ -4375,7 +4375,7 @@ inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
 " syn match   UnicodeCustomGreekSPU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 " syn match   UnicodeCustomGreekSBU "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
-hi  link    UnicodeCustomLatinGreekSubSup HLBlue
+hi  link    UnicodeCustomLatinGreekSubSup SpecialChar
 syn match   UnicodeCustomLatinGreekSubSup "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 "------------------------------------------------------------------------------
 
@@ -4387,18 +4387,22 @@ syn cluster ClusterUnicode add=Unicode.*
 
 " Do not spell check any of the Unicode special characters
 "------------------------------------------------------------------------------
-" Don't spell check any Unicode chars
-" syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
-" syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+function! UnicodeNoSpell()
+   if g:performance_mode <= 0
+      " Don't spell check any Unicode chars
+      " syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+      " syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
 
-syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
-syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+      syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+      syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
 
-" Don't spell check any Unicode chars in comments or quotes
-" syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
-" syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+      " Don't spell check any Unicode chars in comments or quotes
+      " syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+      " syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
 
-syn match SpUnicodeNoSpellCom "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
-syn match SpUnicodeNoSpellCom "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+      syn match SpUnicodeNoSpellCom "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+      syn match SpUnicodeNoSpellCom "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+   endif
+endfunction
 "------------------------------------------------------------------------------
 

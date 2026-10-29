@@ -108,8 +108,8 @@ hi default HLGreenB              cterm=bold gui=bold ctermfg=46  guifg=green
 hi default HLGreen3B             cterm=bold gui=bold ctermfg=34  guifg=green3
 hi default HLOliveB              cterm=bold gui=bold ctermfg=100 guifg=olive
 hi default HLKhaki4B             cterm=bold gui=bold ctermfg=101 guifg=khaki4
-hi default HLGrey30B             cterm=bold gui=bold ctermfg=236 guifg=grey30
-hi default HLGrey40B             cterm=bold gui=bold ctermfg=239 guifg=grey40
+hi default HLGrey30B             cterm=bold gui=bold ctermfg=238 guifg=grey30
+hi default HLGrey40B             cterm=bold gui=bold ctermfg=240 guifg=grey40
 hi default HLGrey50B             cterm=bold gui=bold ctermfg=242 guifg=grey50
 hi default HLGrey60B             cterm=bold gui=bold ctermfg=245 guifg=grey60
 hi default HLWhiteB              cterm=bold gui=bold ctermfg=255 guifg=white
@@ -138,6 +138,10 @@ hi default HLDeeppinkBU          cterm=bold,underline gui=bold,underline ctermfg
 hi default HLGrey80BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=252 guibg=grey80
 hi default HLGrey10BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=234 guibg=grey10
 hi default HLGrey15BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=235 guibg=grey15
+hi default HLGrey20BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=236 guibg=grey20
+hi default HLGrey30BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=238 guibg=grey30
+hi default HLGrey40BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=240 guibg=grey40
+hi default HLGrey50BgB           cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=242 guibg=grey50
 hi default HLDeepPinkBgB         cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=198 guibg=deeppink
 hi default HLDodgerBlueBgB       cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=33  guibg=dodgerblue
 hi default HLCyanBgB             cterm=bold gui=bold ctermfg=16 guifg=black ctermbg=51  guibg=cyan

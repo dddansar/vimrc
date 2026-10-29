@@ -381,6 +381,7 @@ _rupee
 _ruble
 _bitcoin
 _sign
+_nbsp
 _male
 _fmale
 _section

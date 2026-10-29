@@ -139,6 +139,9 @@ function! AllUnwantedCharacters()
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
       syn match    AllUnwantedCharacters  '\%#=1[‘-‟−—–∣]' containedin=ALL
+
+      hi  link     AllNonBreakingSpace  HLGrey30BgB
+      syn match    AllNonBreakingSpace  '\%#=1 ' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -174,32 +177,32 @@ function! AllIgnoreSpellings()
       syn match    AllSpellNoColor4    "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP
    endif
 endfunction
-function! ClearAllIgnoreSpellings()
-   if hlexists('AllSpellCommColor1')
-      syn clear AllSpellCommColor1
-   endif
-   if hlexists('AllSpellNoColor1')
-      syn clear AllSpellNoColor1
-   endif
-   if hlexists('AllSpellCommColor2')
-      syn clear AllSpellCommColor2
-   endif
-   if hlexists('AllSpellNoColor2')
-      syn clear AllSpellNoColor2
-   endif
-   if hlexists('AllSpellCommColor3')
-      syn clear AllSpellCommColor3
-   endif
-   if hlexists('AllSpellNoColor3')
-      syn clear AllSpellNoColor3
-   endif
-   if hlexists('AllSpellCommColor4')
-      syn clear AllSpellCommColor4
-   endif
-   if hlexists('AllSpellNoColor4')
-      syn clear AllSpellNoColor4
-   endif
-endfunction
+" function! ClearAllIgnoreSpellings()
+"    if hlexists('AllSpellCommColor1')
+"       syn clear AllSpellCommColor1
+"    endif
+"    if hlexists('AllSpellNoColor1')
+"       syn clear AllSpellNoColor1
+"    endif
+"    if hlexists('AllSpellCommColor2')
+"       syn clear AllSpellCommColor2
+"    endif
+"    if hlexists('AllSpellNoColor2')
+"       syn clear AllSpellNoColor2
+"    endif
+"    if hlexists('AllSpellCommColor3')
+"       syn clear AllSpellCommColor3
+"    endif
+"    if hlexists('AllSpellNoColor3')
+"       syn clear AllSpellNoColor3
+"    endif
+"    if hlexists('AllSpellCommColor4')
+"       syn clear AllSpellCommColor4
+"    endif
+"    if hlexists('AllSpellNoColor4')
+"       syn clear AllSpellNoColor4
+"    endif
+" endfunction
 "------------------------------------------------------------------------------
 
 
@@ -1047,14 +1050,14 @@ function! AllFontStyles(contained_en)
 
    " Can't be contained in AllFontPat and needs to be before AllFontPat
    hi  link    AllFontStrikeLine HLStrikeThroughGrey
-   execute 'syn match AllFontStrikeLine "\%#=1\%( \|^\)\@<=\/s .*" contains=@NoSpell,AllFontHideStart,AllFontHideEnd ' . (a:contained_en == 1 ? 'contained containedin=.*Comment.*' : '')
+   execute 'syn match AllFontStrikeLine "\%#=1\%( \|^\)\@<=\/s .*" contains=@NoSpell,AllFontHideStart,AllFontHideEnd ' . (a:contained_en == 1 ? 'contained containedin=@ClusterCommentsPlusScope' : '')
 
 
    " This makes pattern matching more efficient by only searching for the main
    " pattern once.
    " NOTE: using \n insead of $ fixes an issue of matches extending comments
    hi  link    AllFontPatCom Comment
-   execute 'syn match AllFontPat' . (a:contained_en == 1 ? 'Com' : '') . ' "\%#=1\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}''"]\|\n\)\@=" keepend ' . (a:contained_en == 1 ? 'contained containedin=.*Comment.*' : '')
+   execute 'syn match AllFontPat' . (a:contained_en == 1 ? 'Com' : '') . ' "\%#=1\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}''"]\|\n\)\@=" keepend ' . (a:contained_en == 1 ? 'contained containedin=@ClusterCommentsPlusScope' : '')
 
    " NOTE: Using the following notation for alphabetical font matching:
    " normal         + color /c col/
@@ -1267,5 +1270,4 @@ function! AllFilesDefaultSyntax()
    " call AllUnwantedCharacters()
    call AllFontStyles(1)
 endfunction
-
 

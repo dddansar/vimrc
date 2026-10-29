@@ -348,6 +348,10 @@ syn keyword HLDeeppinkBU          HLDeeppinkBU             contained containedin
 syn keyword HLGrey80BgB           HLGrey80BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGrey10BgB           HLGrey10BgB              contained containedin=@ClusterColorCSG
 syn keyword HLGrey15BgB           HLGrey15BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey20BgB           HLGrey20BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey30BgB           HLGrey30BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey40BgB           HLGrey40BgB              contained containedin=@ClusterColorCSG
+syn keyword HLGrey50BgB           HLGrey50BgB              contained containedin=@ClusterColorCSG
 syn keyword HLDeepPinkBgB         HLDeepPinkBgB            contained containedin=@ClusterColorCSG
 syn keyword HLDodgerBlueBgB       HLDodgerBlueBgB          contained containedin=@ClusterColorCSG
 syn keyword HLCyanBgB             HLCyanBgB                contained containedin=@ClusterColorCSG

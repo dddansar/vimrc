@@ -74,7 +74,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       source $vim_folder_path/after/syntax/shared/math.vim
       source $vim_folder_path/after/syntax/shared/math_mappings.vim
       source $vim_folder_path/after/syntax/shared/unicode.vim
-      setlocal nospell
+      " setlocal nospell
+      call UnicodeNoSpell()
       call AllShiftOp()
    endif
    " if expand('%:p') =~# '/reference_files/'
@@ -88,9 +89,8 @@ endif
 
 " smartindent in Vim is an indentation option that provides automatic
 " indentation when starting a new line.
+" Keep autoindent, but remove cindent/smartindent
 setlocal nosmartindent
-
-" Keep autoindent, but remove cindent
 setlocal nocindent
 
 

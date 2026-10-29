@@ -82,6 +82,10 @@ if g:performance_mode <= 0
    " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some Unicode
    " chars while it matches others... so `ˣ` is invisible to them as a boundary
    " marker -> using \w\@<! instead of \< and \w\@! instead of \>
+   " NOTE: \w\@<! over \W\@<=, because \W\@<= does not match start of line ^
+   "       so it needs to be \%(\W\|^\)\@<= instead and \%(\W\|^\)\zs with \zs
+   "       still does not properly match if preceding char was matched
+   "       elsewhere even with old Vim engine \%#=1...
    " 16ˣ × 7ˣ
    " ˣ16 × ˣ7
    " aˣ × aˣ
@@ -158,12 +162,14 @@ if g:performance_mode <= 0
    hi  link    SpMathMultiVars1 Constant
    syn match   SpMathMultiVars1 "\%#=1\w\@<!\%(np\?\|[a-cm-n][xz]\|[acn][y]\|ijk\?\|jk\|ik\|abc\?d\?e\?\)\w\@!" contains=@NoSpell
    syn match   SpMathMultiVars1 "\%#=1\w\@<![a-w]\?\%(xy\|yz\|xz\|xyz\)\w\@!" contains=@NoSpell
-   syn match   SpMathMultiVars1 "\%#=1\%(\w \?\)\@<!\%(by\)\%( \?\w\)\@!" contains=@NoSpell
 
    " Highlight math variables - any 2 chars surrounded by non chars.
    hi  link    SpMathMultiVars2 Constant
    syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell,AllPreKeywords8,AllPreKeywords2 containedin=SpellCapitalized1
-   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be by un up us Re re Ok ok On on Of of Or or He he
+
+   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he
+   syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
+   syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
 
    hi  link    SpMathMultiVars3 Constant
    syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges

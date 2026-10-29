@@ -14,6 +14,7 @@ Contains all my vimrc settings.
 - Can emulate clipboard utility and copying selections if not supported by default in Vim/NeoVim or even in Windows
 - Includes custom mappings and abbreviations
 - Contains font and GUI customizations
+- Adds font styles such as bold, underline, italic, colors, strikethrough and other combinations.
 - Improved search and replace usability with mappings
 - Contains autocorrect and spell checking support
 - Displays the name of the syntax group being applied under the cursor to make debugging syntax groups significantly easier
