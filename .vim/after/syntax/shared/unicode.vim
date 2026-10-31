@@ -63,6 +63,14 @@ else
    endif
 endif
 
+" By default iskeyword=@,48-57,_,192-255
+" @ means all alphabetic characters, ie every character for which isalpha()
+" is true. @ already includes many characters in 192-255, so we can remove
+" this range to not include × and ÷ as keywords...
+" NOTE: iskeyword only controls characters up to 255. Can't exclude above 255!!
+set iskeyword-=192-255
+" set iskeyword=48-57,65-90,97-122,_
+
 " Change the width/size/length/cursor of a range of characters!
 " setcellwidths()
 " The format for an inner list is:
@@ -183,7 +191,7 @@ inorea <buffer> _bitcoin   ₿<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _sign     𝄉<left><right><c-r>=Eatchar('\s')<cr>
 
 " Non-breaking space
-inorea <buffer> _nbsp      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _nbsp       <left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _male      ♂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _fmale     ♀<left><right><c-r>=Eatchar('\s')<cr>
@@ -233,8 +241,6 @@ inorea <buffer> _overscore ‾<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _overline  ‾<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _over      ‾<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _ovr       ‾<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a__        ‾<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z__        _<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _end       –<left><right><c-r>=Eatchar('\s')<cr>
 
 "
@@ -2486,44 +2492,41 @@ inorea <buffer> a_7        ⁷<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_8        ⁸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_9        ⁹<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> a_inf      𝆗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_+        ⁺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_pl       ⁺<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_-        ⁻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_mn       ⁻<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_smn      ᐨ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_dsh      ᐨ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_smn      ᐨ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_dsh      ᐨ<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_=        ⁼<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_eq       ⁼<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_(        ⁽<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_(        ⁽⁾<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_)        ⁾<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> aa_*       ˟<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> aa_tm      ˟<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> a_*        ﹡<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> a_tm       ᕁ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_*        ˟<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_tm       ˟<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_/        ᐟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_dv       ᐟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_fsl      ᐟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_\        ᐠ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_bsl      ᐠ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_dot      ·<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> aa_dot     ᐝ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_*        ˟<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_tm       ˟<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_/        ᐟ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_dv       ᐟ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_fsl      ᐟ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_\        ᐠ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_bsl      ᐠ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_dot      ·<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> aa_dot     ᐝ<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> a_3dot     <left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> aa_oop     ᐤ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_oop      ॰<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_~        ˜<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_^        ˆ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_\|       ᣳ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_$        ᙚ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_dollar   ᙚ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_int      ᶴ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_!        ꜝ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_inv!     ꜞ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_,        ⸴<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> aa_oop     ᐤ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_oop      ॰<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _s~        ˜<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _m^        ˆ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_\|       ᣳ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_$        ᙚ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_dollar   ᙚ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> a_int      ᶴ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _rex       ꜝ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _rinvex    ꜞ<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _rc        ⸴<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> a_lt       ˂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> a_gt       ˃<left><right><c-r>=Eatchar('\s')<cr>
+" arrow head
 inorea <buffer> a_lfah     ˂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_rtah     ˃<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> a_dnah     ˅<left><right><c-r>=Eatchar('\s')<cr>
@@ -2554,9 +2557,9 @@ inorea <buffer> __-        ⁻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mn       ⁻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __=        ⁼<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __eq       ⁼<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __/        ᐟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __dv       ᐟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __dot      ·<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __/        ᐟ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __dv       ᐟ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __dot      ·<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __(       ⁽⁾<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __)        ⁾<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -2585,16 +2588,16 @@ inorea <buffer> __m9      ⁻⁹<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __nm1    ⁿ⁻¹<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __np1    ⁿ⁺¹<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> __1dn    ¹ᐟⁿ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1db    ¹ᐟᵇ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1dx    ¹ᐟˣ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1d2    ¹ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __d2      ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1on    ¹ᐟⁿ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1ob    ¹ᐟᵇ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1ox    ¹ᐟˣ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __1o2    ¹ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> __o2      ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1dn    ¹ᐟⁿ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1db    ¹ᐟᵇ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1dx    ¹ᐟˣ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1d2    ¹ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __d2      ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1on    ¹ᐟⁿ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1ob    ¹ᐟᵇ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1ox    ¹ᐟˣ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __1o2    ¹ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> __o2      ᐟ²<left><right><c-r>=Eatchar('\s')<cr>
 
 " No q in sp
 inorea <buffer> __pla     ⁺ᵃ<left><right><c-r>=Eatchar('\s')<cr>
@@ -2796,37 +2799,34 @@ inorea <buffer> z_6        ₆<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_7        ₇<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_8        ₈<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_9        ₉<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_+        ₊<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_pl       ₊<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_-        ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_mn       ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_=        ₌<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_eq       ₌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_dot      .<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_dot2     ․<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_3dot     …<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_oop      ｡<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_(        ₍<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_dot      .<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_dot2     ․<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_3dot     …<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_oop      ｡<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_(        ₍₎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_)        ₎<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_*        ⁎<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_tm       𝅃<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_/        ៸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_dv       ៸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_fsl      ៸<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_\        ៶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_bsl      ៶<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_inf      ∞<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_<        ‹<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_>        ›<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_\|       ៲<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_~        ˷<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _l*        ⁎<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_tm       𝅃<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_/        ៸<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_dv       ៸<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_fsl      ៸<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_\        ៶<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_bsl      ៶<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_inf      ∞<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _aq<        ‹<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _aq>        ›<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_\|       ៲<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _l~        ˷<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> z_gamma2   ៵<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_inv!     ꜟ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_^        ᶺ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_,        ,<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mtv       ᶺ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_,        ,<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> z_lt       ˱<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_gt       ˲<left><right><c-r>=Eatchar('\s')<cr>
+" arrow head
 inorea <buffer> z_lfah     ˱<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_rtah     ˲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_dnah     ˯<left><right><c-r>=Eatchar('\s')<cr>
@@ -2836,9 +2836,10 @@ inorea <buffer> z_sub      ꜀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_sube     ꜁<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_sup      ꜆<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> z_supe     ꜇<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_un       ᵤ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> z_in       ₙ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_un       ᵤ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> z_in       ₙ<left><right><c-r>=Eatchar('\s')<cr>
 
+" ⁰¹₀₁
 " Shortcuts
 inorea <buffer> _0         ₀<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _1         ₁<left><right><c-r>=Eatchar('\s')<cr>
@@ -2853,11 +2854,11 @@ inorea <buffer> _9         ₉<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___+       ₊<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___-       ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___=       ₌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> ___/       ៸<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> ___/       ៸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _pl        ₊<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mn        ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _eq        ₌<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _dv        ៸<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _dv        ៸<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___(      ₍₎<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___)       ₎<left><right><c-r>=Eatchar('\s')<cr>
 
@@ -2886,15 +2887,15 @@ inorea <buffer> _m9       ₋₉<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _nm1     ₙ₋₁<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _np1     ₙ₊₁<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _1dn     ₁៸ₙ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1db     ₁៸ᵇ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1dx     ₁៸ₓ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1d2     ₁៸₂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _d2       ៸₂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1on     ₁៸ₙ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1ob     ₁៸ᵇ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1ox     ₁៸ₓ<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _1o2     ₁៸₂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1dn     ₁៸ₙ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1db     ₁៸ᵇ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1dx     ₁៸ₓ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1d2     ₁៸₂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _d2       ៸₂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1on     ₁៸ₙ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1ob     ₁៸ᵇ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1ox     ₁៸ₓ<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> _1o2     ₁៸₂<left><right><c-r>=Eatchar('\s')<cr>
 " inorea <buffer> _o2      ៸₂<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> _pinf     ₊∞<left><right><c-r>=Eatchar('\s')<cr>
@@ -3393,6 +3394,8 @@ syn match   UnicodeIth "\%(ˢᵗ\|ⁿᵈ\|ʳᵈ\|ᵗʰ\)" contains=@NoSpell  con
 " VINOTE: To get vectors in Unicode like ᵥ⃗ or v⃗, type the char, then hold
 "         ctrl-shift, and type u20d7 and release! You can then repeat the
 "         vector motion on other characters with the "." command!
+"         For combining hat accent ^ use u0302 instead (hat or unit vector).
+"         For combining Overline ‾, used as complement, use u0305
 inorea <buffer> v_a     a⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> v_b     b⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> v_c     c⃗<left><right><c-r>=Eatchar('\s')<cr>
@@ -3622,7 +3625,7 @@ inorea <buffer> o_uvec  ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> o_~  ̃ <left><right><c-r>=Eatchar('\s')<cr>
 " U+0304  ◌̄ - Combining Macron
 inorea <buffer> o_mac  ̄<left><right><c-r>=Eatchar('\s')<cr>
-" U+0305  ◌̅ _ Combining Overline, used as complement and not in math.
+" U+0305  ◌̅ _ Combining Overline, used as complement and ¬ in math.
 inorea <buffer> o__     ̅<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> o_comp  ̅<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> o_not   ̅<left><right><c-r>=Eatchar('\s')<cr>
@@ -3835,9 +3838,12 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 
 
 "------------------------------------------------------------------------------
-" Adding my own custom Unicode Latin and Greek superscript and subscript
+" NOTE: Adding my own custom Unicode Latin and Greek superscript and subscript
 " uppercase and lowerscase characters [a-zA-Z] and [α-ωΑ-Ω] to fill in the
 " missing gaps in Unicode superscript and subscript.
+" Also adds super/sub scripts for: ! " # $ % & ' * , . / : ; < > ? @ [ \ ] ^
+"          _ ` - { | } ~ √ ÷ × ∫ ⋅ ∞ ≥ ≤ ← → ≈ ≮ ≯ ≱ ≰ ≠ ∈ ∋ ⊂ ⊃ ⊆ ⊇ ∪ ∩ ⋯ ∘
+" And adds super super/sub scripts for 0-9
 "------------------------------------------------------------------------------
 " Since Unicode has no codepoints for the gaps, you need to use the Private Use Area (U+E000-U+F8FF) and supply a font that has glyphs there.
 "
@@ -3869,16 +3875,19 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 "     cp "$(fc-match -f '%{file}' Monospace)" base.ttf
 "
 " 3. Create a file called make_custom_super_sub_scripts.py and add the following:
+"
 "     import fontforge, psMat, string
 "     f = fontforge.open("base.ttf")
-"     sets = [(0xEC20, ord('a'), 26, 0.34, 0.50),
-"             (0xEC40, ord('A'), 26, 0.33, 0.55),
-"             (0xEC60, ord('a'), 26, 0.00, 0.57),
-"             (0xEC80, ord('A'), 26,-0.01, 0.55),
-"             (0xECA0, 0x3B1,    25, 0.33, 0.6),
-"             (0xECC0, 0x391,    25, 0.33, 0.55),
-"             (0xECE0, 0x3B1,    25,-0.11, 0.6),
-"             (0xED00, 0x391,    25, 0.00, 0.55)]
+"     sets = [(0xEC20, ord('a'), 26, 0.34, 0.50), # superscript lowercase Latin
+"             (0xEC40, ord('A'), 26, 0.33, 0.55), # superscript uppercase Latin
+"             (0xEC60, ord('a'), 26, 0.00, 0.57), # subscript   lowercase Latin
+"             (0xEC80, ord('A'), 26,-0.01, 0.55), # subscript   uppercase Latin
+"             (0xECA0, 0x3B1,    25, 0.33, 0.60), # superscript lowercase Greek
+"             (0xECC0, 0x391,    25, 0.33, 0.55), # superscript uppercase Greek
+"             (0xECE0, 0x3B1,    25, 0.00, 0.60), # subscript   lowercase Greek
+"             (0xED00, 0x391,    25, 0.00, 0.55), # subscript   uppercase Greek
+"             (0xED20, ord('0'), 10, 0.59, 0.40), # super superscript numbers
+"             (0xED30, ord('0'), 10,-0.21, 0.40)] # super subscript   numbers
 "     for start, base, n, dy, S in sets:
 "         for i in range(n):
 "             src = base + i
@@ -3897,8 +3906,30 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 "             g.transform(psMat.scale(S))
 "             g.transform(psMat.translate(w*(1-S)/2, dy*f.em))
 "             g.width = w
+"
+"     # Extra punctuation and math superscript and subscript symbols
+"     extra = ("!\"#$%&'*,./:;<>?@[\\]^_`{|}~√÷×∫⋅∞≥≤←→≈≮≯≱≰≠∈∋⊂⊃⊆⊇∪∩⋯∘-")
+"     for start, dy, S in [(0xED40, 0.32, 0.6),    # punctuation and math superscript
+"                          (0xED80,-0.02, 0.6)]:   # punctuation and math subscript
+"         for i, ch in enumerate(extra):
+"             src = ord(ch)
+"             try:
+"                 g0 = f[src]
+"             except TypeError:
+"                 print("missing glyph", hex(src), ch); continue
+"             w = g0.width
+"             f.selection.select(src); f.copy()
+"             cp = start + i
+"             f.createChar(cp)
+"             f.selection.select(cp); f.paste()
+"             g = f[cp]
+"             g.transform(psMat.scale(S))
+"             g.transform(psMat.translate(w*(1-S)/2, dy*f.em))
+"             g.width = w
+"
 "     f.fontname = f.familyname = f.fullname = "MySupSub"
 "     f.generate("MySupSub.ttf")
+"
 " 3.1. Run the script, then install the font
 "     mkdir -p ~/.fonts
 "     fontforge -script make_custom_super_sub_scripts.py; cp MySupSub.ttf ~/.fonts/; fc-cache -f
@@ -3952,12 +3983,26 @@ inorea <buffer> o_*  ⃰<left><right><c-r>=Eatchar('\s')<cr>
 " 0xed10    0xed11    0xed12    0xed13    0xed14    0xed15    0xed16    0xed17 
 " 0xed18 
 
+" 0xed20    0xed21    0xed22    0xed23    0xed24    0xed25    0xed26    0xed27 
+" 0xed28    0xed29    0xed2a    0xed2b    0xed2c    0xed2d    0xed2e    0xed2f 
+" 0xed30    0xed31    0xed32    0xed33    0xed34    0xed35    0xed36    0xed37 
+" 0xed38    0xed39    0xed3a    0xed3b    0xed3c    0xed3d    0xed3e    0xed3f 
+" 0xed40    0xed41    0xed42    0xed43    0xed44    0xed45    0xed46    0xed47 
+" 0xed48    0xed49    0xed4a    0xed4b    0xed4c    0xed4d    0xed4e    0xed4f 
+
+" 0xed50    0xed51    0xed52    0xed53    0xed54    0xed55    0xed56    0xed57 
+" 0xed58    0xed59    0xed5a    0xed5b    0xed5c    0xed5d    0xed5e    0xed5f 
+" 0xed60    0xed61    0xed62    0xed63    0xed64    0xed65    0xed66    0xed67 
+" 0xed68    0xed69    0xed6a    0xed6b    0xed6c    0xed6d    0xed6e    0xed6f 
+" 0xed70    0xed71    0xed72    0xed73    0xed74    0xed75    0xed76    0xed77 
+" 0xed78    0xed79    0xed7a    0xed7b    0xed7c    0xed7d    0xed7e    0xed7f 
+
 " Highlight as error if using unintended private Unicode ranges
 "     Basic Multilingual Plane (BMP): U+E000 to U+F8FF (6,400 code points)
 "     Supplementary Private Use Area-A (Plane 15): U+F0000 to U+FFFFD (65,534 code points)
 "     Supplementary Private Use Area-B (Plane 16): U+100000 to U+10FFFD (65,534 code points)
 hi  link     AllPrivateUnicode  WarningMsg
-syn match    AllPrivateUnicode  '[\UE000-\UF8FF]' containedin=SpUnicodeNoSpell
+syn match    AllPrivateUnicode  '[\UE000-\UF8FF]' contains=@NoSpell containedin=SpUnicodeNoSpell
 
 " Missing Unicode Latin superscript and subscript
 " Lowercase Superscript: complete except q has no official one in some fonts (U+107A5 exists in newer Unicode, but poorly supported).
@@ -4224,6 +4269,9 @@ inorea <buffer> __mnCh     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnPs     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __mnOm     ⁻<left><right><c-r>=Eatchar('\s')<cr>
 
+inorea <buffer> a_sum      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_mult     <left><right><c-r>=Eatchar('\s')<cr>
+
 inorea <buffer> ___al      <left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___de      <left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> ___ep      <left><right><c-r>=Eatchar('\s')<cr>
@@ -4356,6 +4404,8 @@ inorea <buffer> _mnCh     ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnPs     ₋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
 
+inorea <buffer> z_sum      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_mult     <left><right><c-r>=Eatchar('\s')<cr>
 
 " hi  link    UnicodeCustomLatinSPL HLBlueB
 " hi  link    UnicodeCustomLatinSBL HLBlueB
@@ -4377,8 +4427,154 @@ inorea <buffer> _mnOm     ₋<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeCustomLatinGreekSubSup SpecialChar
 syn match   UnicodeCustomLatinGreekSubSup "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
-"------------------------------------------------------------------------------
 
+" Added super/sub scripts for: ! " # $ % & ' * , . / : ; < > ? @ [ \ ] ^ _ ` -
+"                  { | } ~ √ ÷ × ∫ ⋅ ∞ ≥ ≤ ← → ≈ ≮ ≯ ≱ ≰ ≠ ∈ ∋ ⊂ ⊃ ⊆ ⊇ ∪ ∩ ⋯ ∘
+" Some super/sub scripts or characters that resemble them already exist:
+" ⁺⁻⁼⁽⁾ ꜝˆ  ˜˟·⸴˂˃ᐟ
+" ₊₋₌₍₎ ﹗   ˷⁎.․៸
+" Also added super super/sub scripts for 0-9
+inorea <buffer> aa_0       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_1       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_2       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_3       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_4       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_5       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_6       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_7       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_8       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> aa_9       <left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> zz_0       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_1       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_2       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_3       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_4       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_5       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_6       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_7       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_8       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> zz_9       <left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> a_ex       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_"        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_#        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_$        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_%        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_&        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_'        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_*        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_,        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_dot      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_/        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_fsl      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_:        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_;        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_<        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_>        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_qu       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_qm       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_@        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_[        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_bsl      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_]        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_^        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a__        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_`        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_{        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_\|       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_}        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_~        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_sq       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_div      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_xx       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_tm       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_int      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_dotp     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_inf      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_ge       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_le       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_lfa      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_rta      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_ae       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_nl       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_ng       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_nge      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_nle      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_ne       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_mem      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_cnt      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_sub      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_sup      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_sube     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_supe     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_un       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_in       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_3dot     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_ring     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> a_-        <left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> z_ex       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_"        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_#        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_$        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_%        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_&        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_'        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_*        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_,        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_dot      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_/        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_fsl      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_:        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_;        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_<        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_>        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_qu       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_qm       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_@        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_[        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_bsl      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_]        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_^        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z__        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_`        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_{        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_\|       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_}        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_~        <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_sq       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_div      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_xx       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_tm       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_int      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_dotp     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_inf      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_ge       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_le       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_lfa      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_rta      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_ae       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_nl       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_ng       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_nge      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_nle      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_ne       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_mem      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_cnt      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_sub      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_sup      <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_sube     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_supe     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_un       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_in       <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_3dot     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_ring     <left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> z_-        <left><right><c-r>=Eatchar('\s')<cr>
+
+hi  link    UnicodeCustomPunctAndMathSubSup SpecialChar
+syn match   UnicodeCustomPunctAndMathSubSup "[-]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+"------------------------------------------------------------------------------
 
 " Clusters
 "------------------------------------------------------------------------------
