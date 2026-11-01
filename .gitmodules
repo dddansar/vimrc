@@ -4,3 +4,6 @@
 [submodule ".vim/colors"]
 	path = .vim/colors
 	url = https://github.com/dddansar/colorschemes
+[submodule ".vim/pack/plugins/start/vim-characterize"]
+	path = .vim/pack/plugins/start/vim-characterize
+	url = https://github.com/tpope/vim-characterize.git
