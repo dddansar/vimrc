@@ -15,46 +15,58 @@ Contains all my vimrc settings.
 - Includes custom mappings and abbreviations
 - Contains font and GUI customizations
 - Adds font styles such as bold, underline, italic, colors, strikethrough and other combinations.
+- Adds improved ga support with tpope/vim-characterize plugin, and added function to search for patterns in Unicode names
 - Improved search and replace usability with mappings
 - Contains autocorrect and spell checking support
 - Displays the name of the syntax group being applied under the cursor to make debugging syntax groups significantly easier
 
 ## .vim/ Folder Contents
 ```
-├── abbrevlist.vim              # Abbreviations list for thesaurus lookup
+.vim/
 ├── abbrev.vim                  # Common abbreviations and shortcuts
-├── all_colors.vim              # Shows all the available colors in Vim, useful for picking colors
-├── asm.vim                     # Assembly custom syntax highlighting
-├── csh.vim                     # C shell custom syntax highlighting
-├── c.vim                       # C/C++ custom syntax highlighting
-├── colors/...                  # Contains the custom colorschemes
-├── java.vim                    # Java custom syntax highlighting
-├── javascript.vim              # Javascript custom syntax highlighting
-├── json.vim                    # JSON custom syntax highlighting
-├── linux.vim                   # Linux Commands custom syntax highlighting
-├── lean.vim                    # Lean math prover custom syntax highlighting
-├── lua.vim                     # Lua custom syntax highlighting
-├── math.vim                    # Math custom syntax highlighting and abbreviations
-├── math_mappings.vim           # Math/Unicode mappings from VSCode/Lean
-├── markdown.vim                # Markdown custom syntax highlighting
+├── abbrevlist.vim              # Abbreviations list for thesaurus lookup
 ├── more_colors.vim             # Adds additional highlighting groups and colors
-├── netrw.vim                   # File browser custom syntax highlighting
-├── pack/pasky/start/...        # Contains the files for Pasky's plugin for using Anthropic's Claude AI via an API
-├── perl.vim                    # Perl custom syntax highlighting
-├── python.vim                  # Python custom syntax highlighting
 ├── regex.vim                   # Regular expression custom syntax highlighting
-├── sh.vim                      # Bash/shell custom syntax highlighting
-├── spell.vim                   # Spell checking configurations
-├── verilog.vim                 # Verilog and SystemVerilog custom syntax highlighting
-├── svn.vim                     # SVN custom syntax highlighting
-├── syntax/custom_syntax.vim    # Responsible for loading the custom syntax highlighting groups based on file extension
-├── syntax_library.vim          # Contains a library of syntax highlighting functions for use in all filetypes
-├── tcl.vim                     # TCL custom syntax highlighting
-├── text.vim                    # Plain text custom syntax highlighting
-├── tex.vim                     # LaTeX custom syntax highlighting
-├── unicode.vim                 # Unicode support and abbreviations
-├── vhdl.vim                    # VHDL custom syntax highlighting
-└── vim.vim                     # Vim custom syntax highlighting
+├── syntax_library.vim          # Library of syntax highlighting functions for use in all filetypes
+├── colors/...                  # Contains the custom colorschemes
+├── pack/
+│   └── pasky/start/claude.vim/ # Pasky's plugin for using Anthropic's Claude AI via an API
+├── plugin/
+│   └── matchparen.vim          # Matching parenthesis highlighting overrides
+├── syntax/
+│   ├── custom_syntax.vim       # Loads the custom syntax highlighting groups based on file extension
+│   ├── lean.vim                # Lean math prover custom syntax highlighting
+│   ├── rcf.vim                 # RCF custom syntax highlighting
+│   └── text.vim                # Plain text custom syntax highlighting
+└── after/
+    ├── ftplugin/
+    │   └── qf.vim              # Quickfix window custom syntax highlighting
+    └── syntax/
+        ├── shared/
+        │   ├── linux.vim           # Linux commands custom syntax highlighting
+        │   ├── math.vim            # Math custom syntax highlighting and abbreviations
+        │   ├── math_mappings.vim   # Math/Unicode mappings from VSCode/Lean
+        │   ├── spell.vim           # Spell checking configurations
+        │   └── unicode.vim         # Unicode support and abbreviations
+        ├── asm.vim             # Assembly custom syntax highlighting
+        ├── c.vim               # C/C++ custom syntax highlighting
+        ├── csh.vim             # C shell custom syntax highlighting
+        ├── java.vim            # Java custom syntax highlighting
+        ├── javascript.vim      # JavaScript custom syntax highlighting
+        ├── json.vim            # JSON custom syntax highlighting
+        ├── lua.vim             # Lua custom syntax highlighting
+        ├── markdown.vim        # Markdown custom syntax highlighting
+        ├── netrw.vim           # File browser custom syntax highlighting
+        ├── perl.vim            # Perl custom syntax highlighting
+        ├── plaintex.vim        # Plain TeX custom syntax highlighting
+        ├── python.vim          # Python custom syntax highlighting
+        ├── sh.vim              # Bash/shell custom syntax highlighting
+        ├── svn.vim             # SVN custom syntax highlighting
+        ├── tcl.vim             # TCL custom syntax highlighting
+        ├── tex.vim             # LaTeX custom syntax highlighting
+        ├── verilog.vim         # Verilog and SystemVerilog custom syntax highlighting
+        ├── vhdl.vim            # VHDL custom syntax highlighting
+        └── vim.vim             # Vim custom syntax highlighting
 ```
 
 ## Getting Started

@@ -490,7 +490,8 @@ inorea <buffer> _dotpl     ∔<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _ox        ⊗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _tensor    ⊗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _Ox       ⨂<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _Odv      ⦼<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _odv       ⨸<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _odv2     ⦼<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _opl       ⊕<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _opl2      𛲜<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _lopl     𐌈<left><right><c-r>=Eatchar('\s')<cr>
@@ -548,7 +549,7 @@ inorea <buffer> _divx      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _xdiv      ⋇<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeOperators2 Function
-syn match   UnicodeOperators2 "[×⨯✖☓𐌗⨉⬝⊹]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match   UnicodeOperators2 "[×⨯-⨻✖☓𐌗⨉⬝⊹]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 " syn match   UnicodeOperators2 "/" contains=@NoSpell,SpUnicodeNoSpell
 hi  link    UnicodeOShapes Function

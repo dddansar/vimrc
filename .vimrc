@@ -129,6 +129,35 @@ endif
 " Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
 
+
+" NOTE: Vim highlights parentheses through a built-in plugin called matchparen.
+" :echo g:loaded_matchparen
+" :NoMatchParen  " turn off
+" :DoMatchParen  " turn on
+" :scriptnames
+" Matchit does not affect parenthesis highlighting, but affects jumps with %
+" :echo exists('g:loaded_matchit')
+" :echo b:match_words
+" :echo b:match_skip
+" packadd! matchit
+" let b:match_words = '\\%(:\\)'
+" NOTE: To fix paren not properly matching in Vim regex you need to:
+" mkdir -p ~/.vim/plugin
+" cp /usr/local/share/vim/vim92/plugin/matchparen.vim ~/.vim/plugin/.
+" Edit local copy of ~/.vim/plugin/matchparen.vim at line 136
+" func s:Highlight_Matching_Pair()
+"     ...
+"     try
+"       ...
+"     endtry
+"     " synIDattr() evaluates at each paren it finds and skips those that
+"     " belong to vimSynRegPat or RegexRanges. synID(...) returns only the
+"     " innermost group, the last entry in the stack.
+"     let s_skip = (s_skip ==# '0' ? '' : s_skip . ' || ')
+"         \ . 'synIDattr(synID(line("."), col("."), 0), "name") =~# "^\\(vimSynRegPat\\|RegexRanges\\)$"'
+"   endif
+
+
 " NOTE: How Plugins are Loaded
 " Gvim uses a Runtime Path (rtp), which is a list of directories it searches for configuration and script files.
 " Startup loading: Any .vim script placed in the plugin/ subdirectory of your runtime path is automatically executed when you open gVim. In Vim 8+, You can organize plugins in a standard folder structure (pack/anyname/start/) and gVim will handle the path management for you.
@@ -1328,6 +1357,17 @@ function! LoadMappings()
    " highlight debugBreakpoint guibg=green guifg=white
    " highlight debugBreakpointDisabled guibg=blue guifg=white
 
+   " File tabs shortcuts.
+   nnoremap <leader>t<cr>     :tabnew<cr>
+   nnoremap <leader>t<Space>  :tabnew
+   nnoremap <leader>tf        :tabfirst<cr>
+   nnoremap <leader>tn        :tabnext<cr>
+   nnoremap <leader>tp        :tabprev<cr>
+   nnoremap <leader>tl        :tablast<cr>
+   nnoremap <leader>tq        :tabclose<cr>
+
+
+
    " Zoom in/out.
    nnoremap <c-middlemouse> :LargerFont<cr>
    nnoremap <s-middlemouse> :SmallerFont<cr>
@@ -1366,6 +1406,8 @@ function! LoadMappings()
    " <c-r><c-w> pastes word under cursor into command line!
    nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
 
+   " Seach for keywords in Unicode names in the tpope/vim-characterize plugin
+   nnoremap <leader>su :UnicodeSearch<space>
 
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
    if g:keyboard_layout == "colemak-dh"
@@ -1655,6 +1697,75 @@ if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_select
       autocmd CursorMoved * call s:visual_hold_reset()
    augroup END
 endif
+
+
+"------------------------------------------------------------------------------
+" Function: UnicodeSearch()
+" Description: Search Unicode names in tpope/vim-characterize plugin's Vim file
+"              and list the matches in the quickfix window.
+" If you want to find Unicode characters with angle in their name, use:
+" :UnicodeSearch angle
+"------------------------------------------------------------------------------
+function! UnicodeSearch(pat) abort
+  let items = []
+
+  " Find every copy of characterize.vim on the runtimepath.
+  let files = globpath(&rtp, 'autoload/characterize.vim', 0, 1)
+
+  " Warn and stop if vim-characterize isn't installed.
+  if empty(files)
+    echohl WarningMsg
+    echomsg 'UnicodeSearch: autoload/characterize.vim not found in runtimepath'
+    echohl None
+    return
+  endif
+
+  " Find every copy of characterize.vim on the runtimepath.
+  " Args: {pattern}, {nosuf}=0, {list}=1 (return a List, not a string)
+  for f in files
+
+    " Read the file line by line (a List of strings).
+    for line in readfile(f)
+
+      " Match lines like:  let s:d[0x2220]='ANGLE'
+      " m[1] = hex code point (e.g. 2220), m[2] = name (e.g. ANGLE).
+      " matchlist() returns [] when the line doesn't match.
+      let m = matchlist(line, '^let s:d\[0x\(\x\+\)\]=''\(.*\)''')
+
+      " Keep line only if:
+      "   !empty(m): the line is a name entry (let s:d[0x....]='...').
+      "      Other lines (comments, HTML entities, emojis) give an empty m.
+      "   m[2] =~? a:pat: the name in that entry contains the search term.
+      if !empty(m) && m[2] =~? a:pat
+
+        " Build one quickfix entry. Quickfix shows the 'text' field:
+        "   nr2char('0x'.m[1]) turns the hex string into the actual
+        "   character, followed by the code point and the name.
+        call add(items, {'text': printf("%s  U+%s  %s",
+              \ nr2char('0x'.m[1]), m[1], m[2])})
+      endif
+    endfor
+  endfor
+
+  " Warn if nothing matched instead of opening an empty quickfix window.
+  if empty(items)
+    echohl WarningMsg
+    echomsg 'UnicodeSearch: no matches for ' . a:pat
+    echohl None
+    return
+  endif
+
+  " Replace the quickfix list: ' ' = create a new list, with a title
+  " and the entries collected above.
+  call setqflist([], ' ', {'title': 'UnicodeSearch '.a:pat, 'items': items})
+
+  " Open the quickfix window to show the results.
+  copen
+endfunction
+
+" :UnicodeSearch {pattern} calls the function. -nargs=1 means exactly one
+" argument; <q-args> passes it as a quoted string.
+command! -nargs=1 UnicodeSearch call UnicodeSearch(<q-args>)
 
 
 "------------------------------------------------------------------------------

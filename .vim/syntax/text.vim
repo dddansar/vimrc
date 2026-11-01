@@ -45,9 +45,6 @@ endif
 if exists("g:debug_syntax")
    echom "text.vim syntax file loaded"
 endif
-if !exists("g:syntax_on")
-  finish
-endif
 let b:text_loaded = 1
 
 if !exists("b:current_syntax") || b:current_syntax == ""

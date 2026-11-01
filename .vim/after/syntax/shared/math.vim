@@ -96,7 +96,8 @@ if g:performance_mode <= 0
    hi  link    SpMathSingleChar    Constant
    syn match   SpMathSingleChar    "\%#=1\w\@<![b-zB-HJ-Z]\w\@!" contains=@NoSpell
 
-   syn match   SpMathNotSingleChar "\%#=1(\@<=s)\@=" contains=@NoSpell
+   " NOTE: using \zs to unmatch (s) if previous characters belong to any other syntax group
+   syn match   SpMathNotSingleChar "\%#=1\%([a-z][a-z]\)\zs(s)\@=" contains=@NoSpell,AllParen
    syn match   SpMathNotSingleChar "\%#=1'[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
 
    " Match I a A under certain conditions
@@ -168,7 +169,7 @@ if g:performance_mode <= 0
    hi  link    SpMathMultiVars2 Constant
    syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he
+   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do
    syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
    syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
 

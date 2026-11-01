@@ -311,7 +311,7 @@ endfunction
 function! AllDotInWords()
    if g:performance_mode <= 1
       hi  link    AllDotInWords     Delimiter
-      syn match   AllDotInWords     "\%#=1\([a-zA-Z0-9\])]\)\@<=\%(\.\|::\?\)\([a-zA-Z]\)\@="
+      syn match   AllDotInWords     "\%#=1\%([a-zA-Z0-9\])]\)\@<=\%(\.\|::\?\)\([a-zA-Z]\)\@="
    endif
 endfunction
 
@@ -358,10 +358,17 @@ endfunction
 "------------------------------------------------------------------------------
 function! AllCaps()
    if g:performance_mode <= 1
+
+      syn cluster ClusterAllCapsContainedin contains=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant
-      syn match    AllCaps "\%#=1\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
-      syn match    AllCaps "\%#=1\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+      syn match    AllCaps "\%#=1\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
+
+      " Match single CAPS like A OR B OR C OR D... if surrounded by other CAPS
+      syn match    AllCaps "\%#=1\%(\%([A-Z]\|\<\)[A-Z]\)\@<= \<[A-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[A-Z]\>\%( [A-Z]\%([A-Z]\|\>\)\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -715,6 +722,11 @@ function! AllNumbersHex()
    " Matches   'd123?    'h??38af   'b???1???  'o32??
    hi  link  AllNumbersTick Number
    syn match AllNumbersTick "\%#=1\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
+endfunction
+
+function! AllNumbersUnicode()
+   hi  link  AllNumbersUnicode Number
+   syn match AllNumbersUnicode "\%#=1\<U+[a-fA-F0-9_]\+\>" contains=@NoSpell
 endfunction
 "------------------------------------------------------------------------------
 
