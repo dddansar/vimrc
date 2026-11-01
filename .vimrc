@@ -619,7 +619,9 @@ function! DefaultSettings()
    " In GVim, 'guioptions' controls whether various GUI widgets are shown.
    " Below means left/bottom scroll bar disabled, right scroll bar enabled.
    " Default: aegimrLtT
-   set guioptions=aegimrtT
+   if !has('nvim')
+      set guioptions=aegimrt
+   endif
    " Remove the toolbar menu (icon bar) in GVim.
    " set guioptions-=T
 

@@ -821,8 +821,8 @@ _dotpl
 _ox
 _tensor
 _Ox
-_Odv
-_Odv2
+_odv
+_odv2
 _opl
 _opl2
 _lopl
