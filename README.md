@@ -15,7 +15,7 @@ Contains all my vimrc settings.
 - Includes custom mappings and abbreviations
 - Contains font and GUI customizations
 - Adds font styles such as bold, underline, italic, colors, strikethrough and other combinations.
-- Adds improved ga support with tpope/vim-characterize plugin, and added function to search for patterns in Unicode names
+- Adds improved Unicode ga support with tpope/vim-characterize plugin, and added function to search for patterns in Unicode names
 - Improved search and replace usability with mappings
 - Contains autocorrect and spell checking support
 - Displays the name of the syntax group being applied under the cursor to make debugging syntax groups significantly easier
@@ -40,7 +40,7 @@ Contains all my vimrc settings.
 │   └── text.vim                # Plain text custom syntax highlighting
 └── after/
     ├── ftplugin/
-    │   └── qf.vim              # Quickfix window custom syntax highlighting
+    │   └── qf.vim              # Quickfix window statusline override
     └── syntax/
         ├── shared/
         │   ├── linux.vim           # Linux commands custom syntax highlighting
@@ -60,6 +60,7 @@ Contains all my vimrc settings.
         ├── perl.vim            # Perl custom syntax highlighting
         ├── plaintex.vim        # Plain TeX custom syntax highlighting
         ├── python.vim          # Python custom syntax highlighting
+        ├── qf.vim              # Quickfix window custom syntax highlighting
         ├── sh.vim              # Bash/shell custom syntax highlighting
         ├── svn.vim             # SVN custom syntax highlighting
         ├── tcl.vim             # TCL custom syntax highlighting
