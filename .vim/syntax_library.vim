@@ -363,12 +363,12 @@ function! AllCaps()
 
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant
-      syn match    AllCaps "\%#=1\<[A-Z][A-Z0-9_]\+\%('[A-Z]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps "\%#=1\<[A-Z]'[A-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[A-Z][A-Z0-9_]\+\%('[DSTM]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell,TextAloneQuotes containedin=@ClusterAllCapsContainedin
+      " syn match    AllCaps "\%#=1\<[A-Z]'[DSTM]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
 
       " Match single CAPS like A OR B OR C OR D... if surrounded by other CAPS
       syn match    AllCaps "\%#=1\%(\%([A-Z]\|\<\)[A-Z]\)\@<= \<[A-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps "\%#=1\<[A-Z]\>\%( [A-Z]\%([A-Z]\|\>\)\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[A-Z]\>\%( [A-Z]\%([A-Z]\|\>\)\|'[DSTM]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
    endif
 endfunction
 "------------------------------------------------------------------------------

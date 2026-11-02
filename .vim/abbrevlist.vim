@@ -1341,6 +1341,9 @@ _box
 _boxs
 _boxr
 _boxl
+_tt
+_tt1
+_tt2
 b_btl
 b_bbl
 b_btr
@@ -3760,8 +3763,6 @@ r_aZ
 r_a9
 r_A9
 r_aZ9
-r_2l
-r_5p
 r_nm
 r_ngnm
 _cfunch

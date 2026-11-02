@@ -750,6 +750,9 @@ function! DefaultSettings()
    " set cc=80
 
    " Maximum column per line before disabling syntax highlighting.
+   " set synmaxcol can limit highlighting very long lines
+   " syn sync minlines (or syn sync fromstart) limits how far back
+   " Vim re-parses. See ":syntax sync" for current values
    if g:performance_mode > 0
       set synmaxcol=1000
    else
@@ -1475,6 +1478,12 @@ function! LoadMappings()
    vnoremap <leader>fS :%!sort\|uniq<cr>
    " Sort and unique all lines in the file.
    nnoremap <leader>fS :%sort u<cr>
+
+
+   " Re-source .vimrc file without reloading file, then update all windows.
+   nnoremap <leader>fg :unlet! b:syntax_library_loaded b:current_syntax g:EnteredDefaultSetting g:EnteredSmallFile g:AutocorrectLoaded g:EnteredCommonSetting g:EnteredLargeFile \| syntax clear \| source $MYVIMRC \| windo e<cr>
+   " Reload only syntax matching
+   nnoremap <leader>ft :unlet! b:syntax_library_loaded b:regex_loaded b:current_syntax \| syntax clear \| let &l:syntax = &l:filetype<cr>
 
 
    " NOTE: Execute shell script on current/selected line and print/replace

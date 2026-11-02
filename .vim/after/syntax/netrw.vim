@@ -38,9 +38,9 @@
 " if exists("b:netrw_loaded")
 "    finish
 " endif
-if exists("b:disable_after_syntax")
-   finish
-endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
 if !exists("g:syntax_on")
    finish
 endif

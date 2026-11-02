@@ -40,9 +40,9 @@ endif
 " if exists("b:vim_loaded")
 "    finish
 " endif
-if exists("b:disable_after_syntax")
-   finish
-endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
 if !isdirectory(expand($vim_folder_path))
    finish
 endif
