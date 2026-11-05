@@ -160,7 +160,9 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    call AllNumbers()
    call AllNumbersHex()
    if expand('%:t') =~# '\.uni\.txt$'
-      call MathMatches()
+      " Highlight Math variables, numbers with x, numbered variables,
+      " numbers starting with dot, derivatives, math functions...
+      " call MathMatches()
    endif
    call AllLabel()
    " call AllMultiWordLabel(0)

@@ -114,10 +114,6 @@ inorea <buffer> r_aZ       [a-zA-Z]<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> r_a9       [a-z0-9]<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> r_A9       [A-Z0-9]<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> r_aZ9      [a-zA-Z0-9]<left><right><c-r>=Eatchar('\s')<cr>
-" Matches 2 letters in a row
-inorea <buffer> r_2l       \([a-z]\)\1<left><right><c-r>=Eatchar('\s')<cr>
-" Matches a 5 letter palindrome
-inorea <buffer> r_5p       \([a-z]\)\([a-z]\)[a-z]\2\1<left><right><c-r>=Eatchar('\s')<cr>
 " Matches at least n times and at most m times the previous match
 inorea <buffer> r_nm       \{n,m}<left><right><c-r>=Eatchar('\s')<cr>
 " non-greedy version

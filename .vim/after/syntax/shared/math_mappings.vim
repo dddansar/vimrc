@@ -196,9 +196,9 @@
 " if exists("b:math_mappings_loaded")
 "    finish
 " endif
-if exists("b:disable_after_syntax")
-   finish
-endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
 if exists("g:debug_syntax")
    echom "math_mappings.vim syntax file loaded"
 endif

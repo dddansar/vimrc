@@ -138,7 +138,7 @@ endfunction
 function! AllUnwantedCharacters()
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      syn match    AllUnwantedCharacters  '\%#=1[‘-‟−—–∣]' containedin=ALL
+      syn match    AllUnwantedCharacters  '\%#=1[‘-‟−—–∣ﬀ-ﬆĲĳŒœӔӕ]' containedin=ALL
 
       hi  link     AllNonBreakingSpace  HLGrey30BgB
       syn match    AllNonBreakingSpace  '\%#=1 ' containedin=ALL
@@ -368,7 +368,7 @@ function! AllCaps()
 
       " Match single CAPS like A OR B OR C OR D... if surrounded by other CAPS
       syn match    AllCaps "\%#=1\%(\%([A-Z]\|\<\)[A-Z]\)\@<= \<[A-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps "\%#=1\<[A-Z]\>\%( [A-Z]\%([A-Z]\|\>\)\|'[DSTM]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[B-Z]\>\%( [A-Z]\%([A-Z]\|\>\)\|'[DSTM]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
    endif
 endfunction
 "------------------------------------------------------------------------------

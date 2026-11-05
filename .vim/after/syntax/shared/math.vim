@@ -37,9 +37,9 @@
 " if exists("b:math_loaded")
 "    finish
 " endif
-if exists("b:disable_after_syntax")
-   finish
-endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
 if !exists("g:syntax_on")
    finish
 endif
@@ -55,146 +55,155 @@ let b:math_loaded = 1
 " NOTE: See also math_mappings.vim for Unicode math mappings from leanprover
 "       vscode that start with "\".
 
+"------------------------------------------------------------------------------
+" Highlights Math variables: x y z, a b c, xy, xyz ab, abc, A, B, C, ijk...
+"            Numbers with x: 10x x20 2x4 329x10^32 2332.329x10^+32
+"            Numbered variables: 2c, 10X, 5y, 123xyz, 3D
+"            Numbers starting with dot: .92 .329E+32 .02^32 .129x10^32
+"            Derivative functions dx dy du dv rdфdθ a' f' g' F′ S′
+"            Math functions like f() g() H() mod lim log sin cos curl grad div
+"
 " WARNING: Can slow down/reduce performance!!
 " NOTE: I tried creating a simpler version of this, but it wasn't worth it,
 "       you still get a performance hit, and you either want the highlighting
 "       done properly or you don't want it at all, so you can't really cut
 "       corners.
+"------------------------------------------------------------------------------
 function! MathMatches()
-if g:performance_mode <= 0
+   if g:performance_mode <= 0
 
-   " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-   " Used to improve scrolling performance and speed.
-   " nnoremap <pageup>   :let g:syntax_disabled = 1<cr>:syntax clear<cr><pageup>
-   " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
+      " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
+      " Used to improve scrolling performance and speed.
+      " nnoremap <pageup>   :let g:syntax_disabled = 1<cr>:syntax clear<cr><pageup>
+      " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
 
-   " NOTE: \%#=N at the very start of a pattern forces which regex engine Vim uses for that pattern:
-   "     \%#=0: automatic (the default; Vim picks)
-   "     \%#=1: the old backtracking engine
-   "     \%#=2: the newer NFA engine
-   " The NFA engine is generally faster on complex patterns, but the backtracking engine can win on short, simple ones.
-   " It must be the first thing in the pattern.
-   " The global equivalent is :set regexpengine=1, but the per-pattern prefix lets you test one match at a time.
+      " NOTE: \%#=N at the very start of a pattern forces which regex engine Vim uses for that pattern:
+      "     \%#=0: automatic (the default; Vim picks)
+      "     \%#=1: the old backtracking engine
+      "     \%#=2: the newer NFA engine
+      " The NFA engine is generally faster on complex patterns, but the backtracking engine can win on short, simple ones.
+      " It must be the first thing in the pattern.
+      " The global equivalent is :set regexpengine=1, but the per-pattern prefix lets you test one match at a time.
 
-   " Match single chars.
-   "---------------------------------------------------------------------------
-   " Match single character in its own word.
-   " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some Unicode
-   " chars while it matches others... so `ˣ` is invisible to them as a boundary
-   " marker -> using \w\@<! instead of \< and \w\@! instead of \>
-   " NOTE: \w\@<! over \W\@<=, because \W\@<= does not match start of line ^
-   "       so it needs to be \%(\W\|^\)\@<= instead and \%(\W\|^\)\zs with \zs
-   "       still does not properly match if preceding char was matched
-   "       elsewhere even with old Vim engine \%#=1...
-   " 16ˣ × 7ˣ
-   " ˣ16 × ˣ7
-   " aˣ × aˣ
-   " ˣa × ˣa
-   " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f ∥s' μi e⁻ˣxᵗ⁻¹
-   " aᵐbᵐ
+      " Match single chars.
+      "---------------------------------------------------------------------------
+      " Match single character in its own word.
+      " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some Unicode
+      " chars while it matches others... so `ˣ` is invisible to them as a boundary
+      " marker -> using \w\@<! instead of \< and \w\@! instead of \>
+      " NOTE: \w\@<! over \W\@<=, because \W\@<= does not match start of line ^
+      "       so it needs to be \%(\W\|^\)\@<= instead and \%(\W\|^\)\zs with \zs
+      "       still does not properly match if preceding char was matched
+      "       elsewhere even with old Vim engine \%#=1...
+      " 16ˣ × 7ˣ
+      " ˣ16 × ˣ7
+      " aˣ × aˣ
+      " ˣa × ˣa
+      " Δy aᵐbᵐ ᵇa aᵇ 2πr ᵥ⃗f ∥s' μi e⁻ˣxᵗ⁻¹
+      " aᵐbᵐ
 
-   hi  link    SpMathSingleChar    Constant
-   syn match   SpMathSingleChar    "\%#=1\w\@<![b-zB-HJ-Z]\w\@!" contains=@NoSpell
+      hi  link    SpMathSingleChar    Constant
+      syn match   SpMathSingleChar    "\%#=1\w\@<![b-zB-HJ-Z]\w\@!" contains=@NoSpell
 
-   " NOTE: using \zs to unmatch (s) if previous characters belong to any other syntax group
-   syn match   SpMathNotSingleChar "\%#=1\%([a-z][a-z]\)\zs(s)\@=" contains=@NoSpell,AllParen
-   syn match   SpMathNotSingleChar "\%#=1'[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
+      " NOTE: using \zs to unmatch (s) if previous characters belong to any other syntax group
+      syn match   SpMathNotSingleChar "\%#=1\%([a-z][a-z]\)\zs(s)\@=" contains=@NoSpell,AllParen
+      syn match   SpMathNotSingleChar "\%#=1'[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
 
-   " Match I a A under certain conditions
-   hi  link    SpMathSingleCharIaA1 Constant
-   hi  link    SpMathSingleCharIaA2 Constant
-   hi  link    SpMathSingleCharIaA3 Constant
-   syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|[!.?:;,] \|[a-zA-Z][a-z] \|\w\| (\)\@<![IaA]\w\@!" contains=@NoSpell
+      " Match I a A under certain conditions
+      hi  link    SpMathSingleCharIaA1 Constant
+      hi  link    SpMathSingleCharIaA2 Constant
+      hi  link    SpMathSingleCharIaA3 Constant
+      syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|[!.?:;,] \|[a-zA-Z][a-z] \|\w\| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
-   syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
-   syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
-   syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
+      syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
-   hi  link    SpMathSingleCharIaA4 Constant
-   syn match   SpMathSingleCharIaA4 "\%#=1\%(\w\)\@<= A\>" contains=@NoSpell
-   syn match   SpMathSingleCharIaA4 "\%#=1\<[Tt]he [IaA]\>" contains=@NoSpell
-   " Ignore spell check on "the" followed by "a" like in "the a variable".
-   syn match   SpMathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
+      hi  link    SpMathSingleCharIaA4 Constant
+      syn match   SpMathSingleCharIaA4 "\%#=1\%(\w\)\@<= A\>" contains=@NoSpell
+      syn match   SpMathSingleCharIaA4 "\%#=1\<[Tt]he [IaA]\>" contains=@NoSpell
+      " Ignore spell check on "the" followed by "a" like in "the a variable".
+      syn match   SpMathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
 
-   hi  link    SpMathNumberedVar Constant
-   syn match   SpMathNumberedVar "\%#=1\w\@<![a-z][0-9]\+\w\@!" contains=@NoSpell
+      hi  link    SpMathNumberedVar Constant
+      syn match   SpMathNumberedVar "\%#=1\w\@<![a-z][0-9]\+\w\@!" contains=@NoSpell
 
-   " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
-   " Match math variables that are preceded by a number.
-   hi  link    SpMathNumInVar   Number
-   syn match   SpMathNumInVar   "\%#=1\w\@<![0-9]\+\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum,SpMathFunctions
+      " Re-match stuff like 2x, 10X, 5y, 123xyz, 3D.
+      " Match math variables that are preceded by a number.
+      hi  link    SpMathNumInVar   Number
+      syn match   SpMathNumInVar   "\%#=1\w\@<![0-9]\+\%([eE][-+±∓]\?[0-9]\)\@!"   contains=@NoSpell contained containedin=SpMathVarInNum,SpMathFunctions
 
-   hi  link    SpMathVarInNum   Constant
-   syn match   SpMathVarInNum   "\%#=1\<[0-9]\+\%(\%('s\>\)\@=\|[a-zA-Z]\%(\<0x\)\@<![a-zA-Z]*\w\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)\)" contains=@NoSpell,SpMathNumInVar
-   syn match   SpMathVarInNum   "\%#=1\<[0]x\>" contains=@NoSpell,SpMathNumInVar
+      hi  link    SpMathVarInNum   Constant
+      syn match   SpMathVarInNum   "\%#=1\<[0-9]\+\%(\%('s\>\)\@=\|[a-zA-Z]\%(\<0x\)\@<![a-zA-Z]*\w\@!\%(\%([0-9][eE]\)\@<!\|\%([-+±∓]\)\@!\)\)" contains=@NoSpell,SpMathNumInVar
+      syn match   SpMathVarInNum   "\%#=1\<[0]x\>" contains=@NoSpell,SpMathNumInVar
 
-   " Match x when it mean multiplication or hex number.
-   " Not SpMathXInNum to not get included in SpUnicodeNoSpell
-   hi  link    MathXInNum     Function
-   syn match   MathXInNum     "\%#=1x" contained contains=@NoSpell
+      " Match x when it mean multiplication or hex number.
+      " Not SpMathXInNum to not get included in SpUnicodeNoSpell
+      hi  link    MathXInNum     Function
+      syn match   MathXInNum     "\%#=1x" contained contains=@NoSpell
 
-   " Matches numbers with x in them
-   " Matches 2x32             3.14x2            0.12x328
-   " Matches 329x10^32        32x10^-32         32x10^32
-   " Matches 0.329x10^+32     0.32x10^-32       0.32x10^32
-   " Matches 2332.329x10^-32  2323.32x10^+32    2332.32x10^32
-   " Matches 2332.329x10^+32  2323.32x10^-32
-   hi  link    SpMathNumWithX   Number
-   syn match   SpMathNumWithX   "\%#=1\%(\<\d\+\%(\.\d\+\)\?\|N\)\%(x[0-9]\+\)\+\w\@!" contains=@NoSpell,MathXInNum
-   " SpMathNumWithX2 does not work when merged in SpMathNumWithX/MathXInNum...
-   hi  link    SpMathNumWithX2  Number
-   syn match   SpMathNumWithX2  "\%#=1\%(×\)\@<=[0-9]\+\w\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
+      " Matches numbers with x in them
+      " Matches 2x32             3.14x2            0.12x328
+      " Matches 329x10^32        32x10^-32         32x10^32
+      " Matches 0.329x10^+32     0.32x10^-32       0.32x10^32
+      " Matches 2332.329x10^-32  2323.32x10^+32    2332.32x10^32
+      " Matches 2332.329x10^+32  2323.32x10^-32
+      hi  link    SpMathNumWithX   Number
+      syn match   SpMathNumWithX   "\%#=1\%(\<\d\+\%(\.\d\+\)\?\|N\)\%(x[0-9]\+\)\+\w\@!" contains=@NoSpell,MathXInNum
+      " SpMathNumWithX2 does not work when merged in SpMathNumWithX/MathXInNum...
+      hi  link    SpMathNumWithX2  Number
+      syn match   SpMathNumWithX2  "\%#=1\%(×\)\@<=[0-9]\+\w\@!" contains=@NoSpell,MathXInNum,UnicodeOperators2
 
-   " Matches the dot followed by a number but not preceded by one.
-   " Matches the dot in: .329E+32    .62E-32    .92  .82E32
-   " Matches the dot in: .129x10^32  .52x10^32  .12  .92x10^32
-   " Matches the dot in: .229^32     .42^32     .3   .02^32
-   hi  link    SpMathDotWithNum  Number
-   syn match   SpMathDotWithNum  "\%#=1\%( \|^\)\@<=\.\%([0-9]\)\@=" contains=@NoSpell
+      " Matches the dot followed by a number but not preceded by one.
+      " Matches the dot in: .329E+32    .62E-32    .92  .82E32
+      " Matches the dot in: .129x10^32  .52x10^32  .12  .92x10^32
+      " Matches the dot in: .229^32     .42^32     .3   .02^32
+      hi  link    SpMathDotWithNum  Number
+      syn match   SpMathDotWithNum  "\%#=1\%( \|^\)\@<=\.\%([0-9]\)\@=" contains=@NoSpell
 
-   " Derivatives
-   hi  link    SpMathDeriv      Constant
-   syn match   SpMathDeriv      "\%#=1\w\@<!d[a-np-zA-Z]\w\@!\%(-\)\@!"  contains=@NoSpell
-   syn match   SpMathDeriv      "\%#=1\w\@<!d\%(xdy\%(dz\)\?\|xdz\|ydz\|rdф\%(dθ\)\?\|rdθ\%(dф\)\?\|udv\%(dw\)\?\)\w\@!"  contains=@NoSpell
+      " Derivatives
+      hi  link    SpMathDeriv      Constant
+      syn match   SpMathDeriv      "\%#=1\w\@<!d[a-np-zA-Z]\w\@!\%(-\)\@!"  contains=@NoSpell
+      syn match   SpMathDeriv      "\%#=1\w\@<!d\%(xdy\%(dz\)\?\|xdz\|ydz\|rdф\%(dθ\)\?\|rdθ\%(dф\)\?\|udv\%(dw\)\?\)\w\@!"  contains=@NoSpell
 
-   hi  link    SpMathDeriv2     Constant
-   syn match   SpMathDeriv2     "\%#=1\w\@<![a-zA-Z]\>\%(['′] \)\@="  contains=@NoSpell
+      hi  link    SpMathDeriv2     Constant
+      syn match   SpMathDeriv2     "\%#=1\w\@<![a-zA-Z]\>\%(['′] \)\@="  contains=@NoSpell
 
-   " Highlight common math multi-variables.
-   hi  link    SpMathMultiVars1 Constant
-   syn match   SpMathMultiVars1 "\%#=1\w\@<!\%(np\?\|[a-cm-n][xz]\|[acn][y]\|ijk\?\|jk\|ik\|abc\?d\?e\?\)\w\@!" contains=@NoSpell
-   syn match   SpMathMultiVars1 "\%#=1\w\@<![a-w]\?\%(xy\|yz\|xz\|xyz\)\w\@!" contains=@NoSpell
+      " Highlight common math multi-variables.
+      hi  link    SpMathMultiVars1 Constant
+      syn match   SpMathMultiVars1 "\%#=1\w\@<!\%(np\?\|[a-cm-n][xz]\|[acn][y]\|ijk\?\|jk\|ik\|abc\?d\?e\?\)\w\@!" contains=@NoSpell
+      syn match   SpMathMultiVars1 "\%#=1\w\@<![a-w]\?\%(xy\|yz\|xz\|xyz\)\w\@!" contains=@NoSpell
 
-   " Highlight math variables - any 2 chars surrounded by non chars.
-   hi  link    SpMathMultiVars2 Constant
-   syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
+      " Highlight math variables - any 2 chars surrounded by non chars.
+      hi  link    SpMathMultiVars2 Constant
+      syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-   syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do
-   syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
-   syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
+      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do No no
+      syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
+      syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
 
-   hi  link    SpMathMultiVars3 Constant
-   syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
+      hi  link    SpMathMultiVars3 Constant
+      syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
 
-   " Match imaginary i
-   hi  link    Mathi Constant
-   syn match   Mathi "\w\@<!i" contains=@NoSpell contained containedin=SpMathFunctions
+      " Match imaginary i if contained in SpMathFunctions
+      hi  link    Mathi Constant
+      syn match   Mathi "\w\@<!i" contains=@NoSpell contained containedin=SpMathFunctions
 
-   " Match more functions.
-   hi  link    SpMathFunctions  Function
-   syn match   SpMathFunctions  "\%#=1\w\@<![f-hF-H]\d*\>\%(['′]\?['′]\?(\)\@="  contains=@NoSpell,Conditional
+      " Match more functions.
+      hi  link    SpMathFunctions  Function
+      syn match   SpMathFunctions  "\%#=1\w\@<![f-hF-H]\d*\>\%(['′]\?['′]\?(\)\@="  contains=@NoSpell,Conditional
 
-   " Highlight math terms/functions.
-   syn match   SpMathFunctions  "\%#=1\w\@<!\%(mod\|lim\|log\|ln\)\w\@!" contains=@NoSpell
-   syn match   SpMathFunctions  "\%#=1\w\@<![0-9]*i\?\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\w\@!" contains=@NoSpell,SpMathNumInVar
-   syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
-   "---------------------------------------------------------------------------
+      " Highlight math terms/functions.
+      syn match   SpMathFunctions  "\%#=1\w\@<!\%(mod\|lim\|log\|ln\)\w\@!" contains=@NoSpell
+      syn match   SpMathFunctions  "\%#=1\w\@<![0-9]*i\?\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\w\@!" contains=@NoSpell,SpMathNumInVar
+      syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
+      "---------------------------------------------------------------------------
 
-   " Clusters
-   "---------------------------------------------------------------------------
-   syn cluster ClusterSpMath add=SpMath.*
-   "---------------------------------------------------------------------------
-endif
+      " Clusters
+      "---------------------------------------------------------------------------
+      syn cluster ClusterSpMath add=SpMath.*
+      "---------------------------------------------------------------------------
+   endif
 endfunction
 
 
