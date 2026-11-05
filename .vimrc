@@ -1481,9 +1481,9 @@ function! LoadMappings()
 
 
    " Re-source .vimrc file without reloading file, then update all windows.
-   nnoremap <leader>fg :unlet! b:syntax_library_loaded b:current_syntax g:EnteredDefaultSetting g:EnteredSmallFile g:AutocorrectLoaded g:EnteredCommonSetting g:EnteredLargeFile \| syntax clear \| source $MYVIMRC \| windo e<cr>
+   nnoremap <silent> <leader>fg :let g:_w = winnr() \| unlet! g:EnteredDefaultSetting g:EnteredSmallFile g:AutocorrectLoaded g:EnteredCommonSetting g:EnteredLargeFile \| execute 'windo unlet! b:syntax_library_loaded b:current_syntax' \| syntax clear \| source $MYVIMRC \| execute 'windo e' \| execute g:_w . 'wincmd w' \| wincmd _ \| wincmd \|<cr>
    " Reload only syntax matching
-   nnoremap <leader>ft :unlet! b:syntax_library_loaded b:regex_loaded b:current_syntax \| syntax clear \| let &l:syntax = &l:filetype<cr>
+   nnoremap <silent>  <leader>ft :unlet! b:syntax_library_loaded b:regex_loaded b:current_syntax \| syntax clear \| let &l:syntax = &l:filetype<cr>
 
 
    " NOTE: Execute shell script on current/selected line and print/replace
