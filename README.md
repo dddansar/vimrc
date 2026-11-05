@@ -5,20 +5,22 @@ Contains all my vimrc settings.
 ## Features
 
 - Works in GVim, Vim and NeoVim
-- Supports both Windows and Linux OS
-- Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Default is Claude Sonnet 4.6 but also Supports Claude Opus 4.6 and the latest 4.7 (should support future versions as well...)) (Now also works with OpenAI/ChatGPT, Google's Gemini and Qwen with Ollama!!!)
-- Uses my own custom colorschemes where the user has full control over all the colors. Multiple custom colorschemes are available.
-- Supports different syntax configurations, can select between Vim's default syntax matching or add some of my custom syntax matching on top of the default Vim syntax matching (default)
-- Support for both Colemak-DH and QWERTY keyboard layouts
-- Includes performance optimization features and multiple performance modes
-- Can emulate clipboard utility and copying selections if not supported by default in Vim/NeoVim or even in Windows
-- Includes custom mappings and abbreviations
+- Supports Windows and Linux OS
+- Supports Colemak-DH and QWERTY keyboard layouts
+- Uses a custom colorscheme fully controlled by the user
+- Supports different syntax configurations
+- Can select between Vim's syntax matching, or add custom syntax matching on top of the Vim's syntax matching (default), or completely override Vim's syntax matching
+- Contains custom syntax library files that can add custom syntax matching to any filetype in addition to filetype specific customizations
 - Contains font and GUI customizations
-- Adds font styles such as bold, underline, italic, colors, strikethrough and other combinations.
-- Adds improved Unicode ga support with tpope/vim-characterize plugin, and added function to search for patterns in Unicode names
-- Improved search and replace usability with mappings
+- Adds font styles such as bold, underline, italic, colors, strikethrough and other combinations
+- Displays the name of the syntax group being applied under the cursor
+- Includes performance optimization features and multiple performance modes
+- Includes AI Integration with Pasky's plugin for using Anthropic's Claude AI via an API (Now also supports OpenAI/ChatGPT, Gemini and Qwen/Ollama!!!)
+- Includes custom mappings and abbreviations
+- Adds improved Unicode support with tpope/vim-characterize plugin, and added a function to search in Unicode names
+- Improved search and replace functionality with mappings
 - Contains autocorrect and spell checking support
-- Displays the name of the syntax group being applied under the cursor to make debugging syntax groups significantly easier
+- Can emulate clipboard utility selections and copying if not supported or properly working such as in NeoVim or Windows
 
 ## .vim/ Folder Contents
 ```
