@@ -1451,6 +1451,26 @@ function! LoadMappings()
    " Seach for keywords in Unicode names in the tpope/vim-characterize plugin
    nnoremap <leader>su :UnicodeSearch<space>
 
+   " Replace unwanted Unicode characters, ask for confirmation on each match
+   function! ReplaceUnwantedUnicode()
+      " Starts the replacement from the current line.
+      let l:start = line('.')
+      let l:pat = '[‟„“”‘’‛‚—−–∣]'
+      let l:map = {
+            \ '‟': '"', '„': '"', '“': '"', '”': '"',
+            \ '‘': "'", '’': "'", '‛': "'", '‚': "'",
+            \ '—': '-', '−': '-', '–': '-',
+            \ '∣': nr2char(124),
+            \ }
+      execute l:start . ',$s/' . l:pat . '/\=l:map[submatch(0)]/gce'
+      " Wrap search around if we started from the middle of the file
+      if l:start > 1
+         execute '1,' . (l:start - 1) . 's/' . l:pat . '/\=l:map[submatch(0)]/gce'
+      endif
+   endfunction
+   nnoremap <leader>ru :call ReplaceUnwantedUnicode()<CR>
+
+
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
    if g:keyboard_layout == "colemak-dh"
       vnoremap <leader>fv :norm<space>ffa
