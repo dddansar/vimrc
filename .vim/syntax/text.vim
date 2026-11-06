@@ -56,27 +56,27 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    let b:comment_leader = '//'
    let b:multi_line_comment_start = '\(^\|\s\)\@<=/\*'
    let b:multi_line_comment_end = '\*/'
-   source $vim_folder_path/colors/more_colors.vim
-   source $vim_folder_path/syntax_library.vim
-   source $vim_folder_path/regex.vim
-   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/lib/more_colors.vim
+   source $vim_folder_path/lib/syntax_library.vim
+   source $vim_folder_path/lib/regex.vim
+   source $vim_folder_path/lib/abbrev.vim
 
-   source $vim_folder_path/after/syntax/shared/spell.vim
+   source $vim_folder_path/lib/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
    call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    " NOTE: Moving these here to re-source on file/syntax reload.
    if expand('%:t') =~# '\.uni\.txt$'
-      source $vim_folder_path/after/syntax/shared/math.vim
-      source $vim_folder_path/after/syntax/shared/math_mappings.vim
-      source $vim_folder_path/after/syntax/shared/unicode.vim
+      source $vim_folder_path/lib/math.vim
+      source $vim_folder_path/lib/math_mappings.vim
+      source $vim_folder_path/lib/unicode.vim
       " setlocal nospell
       call UnicodeNoSpell()
       call AllShiftOp()
    endif
    " if expand('%:p') =~# '/reference_files/'
-   "    source $vim_folder_path/after/syntax/shared/linux.vim
+   "    source $vim_folder_path/lib/linux.vim
    " endif
 
    " NOTE: Need to move AllOperators before AllHLExclamations()

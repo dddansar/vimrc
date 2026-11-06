@@ -56,13 +56,13 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    let b:comment_leader = '--'
    let b:multi_line_comment_start = '/-'
    let b:multi_line_comment_end = '-/'
-   source $vim_folder_path/colors/more_colors.vim
-   source $vim_folder_path/syntax_library.vim
-   source $vim_folder_path/regex.vim
-   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/lib/more_colors.vim
+   source $vim_folder_path/lib/syntax_library.vim
+   source $vim_folder_path/lib/regex.vim
+   source $vim_folder_path/lib/abbrev.vim
 
-   source $vim_folder_path/after/syntax/shared/math_mappings.vim
-   source $vim_folder_path/after/syntax/shared/unicode.vim
+   source $vim_folder_path/lib/math_mappings.vim
+   source $vim_folder_path/lib/unicode.vim
 
    hi  link    LeanSlash    Operator
    syn match   LeanSlash    "\/"

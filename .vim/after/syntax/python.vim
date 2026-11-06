@@ -52,10 +52,10 @@ let b:python_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "python"
-   source $vim_folder_path/colors/more_colors.vim
-   source $vim_folder_path/syntax_library.vim
-   source $vim_folder_path/regex.vim
-   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/lib/more_colors.vim
+   source $vim_folder_path/lib/syntax_library.vim
+   source $vim_folder_path/lib/regex.vim
+   source $vim_folder_path/lib/abbrev.vim
 
    " I use my own TODO/NOTE matching
    if hlexists('pythonTodo')

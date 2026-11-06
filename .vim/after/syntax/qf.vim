@@ -52,9 +52,9 @@ if !exists("b:current_syntax") || b:current_syntax == ""
 endif
 
 if exists("b:current_syntax") && b:current_syntax == "qf"
-   source $vim_folder_path/colors/more_colors.vim
-   source $vim_folder_path/syntax_library.vim
-   source $vim_folder_path/after/syntax/shared/unicode.vim
+   source $vim_folder_path/lib/more_colors.vim
+   source $vim_folder_path/lib/syntax_library.vim
+   source $vim_folder_path/lib/unicode.vim
    " echom "qf.vim source files loaded"
 
    call AllCaps()

@@ -25,14 +25,22 @@ Contains all my vimrc settings.
 ## .vim/ Folder Contents
 ```
 .vim/
-├── abbrev.vim                  # Common abbreviations and shortcuts
-├── abbrevlist.vim              # Abbreviations list for thesaurus lookup
-├── more_colors.vim             # Adds additional highlighting groups and colors
-├── regex.vim                   # Regular expression custom syntax highlighting
-├── syntax_library.vim          # Library of syntax highlighting functions for use in all filetypes
-├── colors/...                  # Contains the custom colorschemes
+├── colors/                     # Contains custom colorschemes
+├── lib/
+│   ├── abbrev.vim              # Common abbreviations and shortcuts
+│   ├── all_colors.vim          # Contains and highlights all the colored names available in Vim.
+│   ├── linux.vim               # Linux commands custom syntax highlighting
+│   ├── math_mappings.vim       # Math/Unicode mappings from VSCode/Lean
+│   ├── math.vim                # Math custom syntax highlighting and abbreviations
+│   ├── more_colors.vim         # Adds additional highlighting groups and colors
+│   ├── regex.vim               # Regular expression custom syntax highlighting
+│   ├── spell.vim               # Spell checking configurations
+│   ├── syntax_library.vim      # Library of syntax highlighting functions for use in all filetypes
+│   └── unicode.vim             # Unicode support and abbreviations
 ├── pack/
-│   └── pasky/start/claude.vim/ # Pasky's plugin for using Anthropic's Claude AI via an API
+│   ├── colorschemes/start/ddd_colorschemes/    # Contains ddd_colorschemes
+│   ├── pasky/start/claude.vim/                 # Pasky's plugin for using Anthropic's Claude AI via an API
+│   └── plugins/start/vim-characterize/         # Pressing ga now gives additional Unicode information
 ├── plugin/
 │   └── matchparen.vim          # Matching parenthesis highlighting overrides
 ├── syntax/
@@ -40,16 +48,12 @@ Contains all my vimrc settings.
 │   ├── lean.vim                # Lean math prover custom syntax highlighting
 │   ├── rcf.vim                 # RCF custom syntax highlighting
 │   └── text.vim                # Plain text custom syntax highlighting
+├── thesaurus/
+│   └── abbrevlist.txt          # Abbreviations list from all files for thesaurus lookup
 └── after/
     ├── ftplugin/
     │   └── qf.vim              # Quickfix window statusline override
     └── syntax/
-        ├── shared/
-        │   ├── linux.vim           # Linux commands custom syntax highlighting
-        │   ├── math.vim            # Math custom syntax highlighting and abbreviations
-        │   ├── math_mappings.vim   # Math/Unicode mappings from VSCode/Lean
-        │   ├── spell.vim           # Spell checking configurations
-        │   └── unicode.vim         # Unicode support and abbreviations
         ├── asm.vim             # Assembly custom syntax highlighting
         ├── c.vim               # C/C++ custom syntax highlighting
         ├── csh.vim             # C shell custom syntax highlighting

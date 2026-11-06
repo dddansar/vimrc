@@ -53,20 +53,20 @@ let b:vim_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "vim"
-   source $vim_folder_path/colors/more_colors.vim
-   source $vim_folder_path/syntax_library.vim
-   source $vim_folder_path/regex.vim
-   source $vim_folder_path/abbrev.vim
+   source $vim_folder_path/lib/more_colors.vim
+   source $vim_folder_path/lib/syntax_library.vim
+   source $vim_folder_path/lib/regex.vim
+   source $vim_folder_path/lib/abbrev.vim
 
    " NOTE: Moving these here to re-source on file/syntax reload.
    if expand('%:t') =~# '^math_mappings\.vim$'
-      source $vim_folder_path/after/syntax/shared/math_mappings.vim
+      source $vim_folder_path/lib/math_mappings.vim
    endif
    if expand('%:t') =~# '\(math_mappings\|math\|unicode\)\.vim$'
-      source $vim_folder_path/after/syntax/shared/unicode.vim
+      source $vim_folder_path/lib/unicode.vim
    endif
    if expand('%:t') =~# '^all_colors\.vim$'
-      source $vim_folder_path/colors/all_colors.vim
+      source $vim_folder_path/lib/all_colors.vim
       finish
    endif
 

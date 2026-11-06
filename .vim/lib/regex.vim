@@ -180,6 +180,9 @@ function! RegexMatchesVim(contained_en)
    execute 'syn match   RegexLineVim   "\\[_%]\^"           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
    execute 'syn match   RegexLineVim   "\\[_%]\$"           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
 
+   hi  link    SpRegexContinue Special
+   syn match   SpRegexContinue "\%(^\s*\)\@<=\\" contained containedin=vimMapRhs
+
    syn cluster ClusterRegex contains=Regex.*
 endfunction
 

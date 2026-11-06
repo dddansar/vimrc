@@ -403,7 +403,9 @@ endfunction
 " Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
-   if g:select_custom_syntax > 1 && filereadable(expand($vim_folder_path . "/colors/ddd_black.vim"))
+   if g:select_custom_syntax > 1 &&
+    \ (filereadable(expand($vim_folder_path . "/colors/ddd_black.vim")) ||
+    \  filereadable(expand($vim_folder_path . "/pack/colorschemes/start/ddd_colorschemes/colors/ddd_black.vim")))
       " The custom colorschemes are in .vim/colors/
       colorscheme ddd_black
       " colorscheme ddd_darkgrey
@@ -699,8 +701,8 @@ function! DefaultSettings()
 
    " Add the abbreviation list to the thesaurus to look them up as you type
    " with <c-x><c-t> or <c-n> or <c-p>.
-   if filereadable(expand($vim_folder_path . "/abbrevlist.vim"))
-      set thesaurus+=$vim_folder_path/abbrevlist.vim
+   if filereadable(expand($vim_folder_path . "/thesaurus/abbrevlist.vim"))
+      set thesaurus+=$vim_folder_path/thesaurus/abbrevlist.vim
    endif
 
    " When this option is set, the screen will not be redrawn while executing

@@ -52,10 +52,10 @@ if exists("g:debug_syntax")
 endif
 let b:netrw_loaded = 1
 
-source $vim_folder_path/colors/more_colors.vim
-source $vim_folder_path/syntax_library.vim
-" source $vim_folder_path/regex.vim
-" source $vim_folder_path/abbrev.vim
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+" source $vim_folder_path/lib/regex.vim
+" source $vim_folder_path/lib/abbrev.vim
 
 " call AllFilesDefaultSyntax()
 
