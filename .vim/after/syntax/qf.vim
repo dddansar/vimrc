@@ -52,7 +52,7 @@ if !exists("b:current_syntax") || b:current_syntax == ""
 endif
 
 if exists("b:current_syntax") && b:current_syntax == "qf"
-   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/colors/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/after/syntax/shared/unicode.vim
    " echom "qf.vim source files loaded"

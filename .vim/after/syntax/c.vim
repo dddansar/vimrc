@@ -54,7 +54,7 @@ let b:c_loaded = 1
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "c"
-   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/colors/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim

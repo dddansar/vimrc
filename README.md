@@ -139,7 +139,7 @@ https://github.com/dddansar/claude.vim
 
 ## Custom Colorscheme
 
-The Vim files contains it's own independent custom colorscheme files found in .vim/colors/. The colorschemes are written in a clear, easy to understand and easy to modify format.
+The Vim files contains it's own independent custom colorscheme files found in ~/.vim/pack/colorschemes/start/ddd_colorschemes/colors/. The colorschemes are written in a clear, easy to understand and easy to modify format.
 
 The colorschemes are independent from the rest of the files and settings. If you want to enable the custom colorschemes without bringing in any of the other files, simply add a colors/ folder in the appropriate location (usually in your .vim/ path), copy over the colorscheme files into the colors/ folder, and then load the colorscheme into your .vimrc file.
 

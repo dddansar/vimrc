@@ -56,7 +56,7 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    let b:comment_leader = '--'
    let b:multi_line_comment_start = '/-'
    let b:multi_line_comment_end = '-/'
-   source $vim_folder_path/more_colors.vim
+   source $vim_folder_path/colors/more_colors.vim
    source $vim_folder_path/syntax_library.vim
    source $vim_folder_path/regex.vim
    source $vim_folder_path/abbrev.vim

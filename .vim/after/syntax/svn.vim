@@ -51,7 +51,7 @@ if exists("g:debug_syntax")
 endif
 let b:svn_loaded = 1
 
-" source $vim_folder_path/more_colors.vim
+" source $vim_folder_path/colors/more_colors.vim
 " source $vim_folder_path/syntax_library.vim
 " source $vim_folder_path/regex.vim
 " source $vim_folder_path/abbrev.vim
