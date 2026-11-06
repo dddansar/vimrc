@@ -45,6 +45,9 @@ let g:using_windows = 0
 " Select btw font styles
 let g:font_style = 0
 
+" Some systems do not support CTRL-SHIFT or ALT-SHIFT...
+let g:ctrl_shift_enabled = 0
+
 " Use encryption
 let g:using_encryption = 0
 
@@ -61,6 +64,8 @@ let g:LargeFile = 1024 * 1024 * 500
 " Disable generation of the .netrwhist file when opening a folder
 let g:netrw_dirhistmax = 0
 
+" In $VIMRUNTIME/syntax/vim.vim don't load python/perl/lua scripts if set to 0.
+let g:vimsyn_embed = 0
 
 " /d Syntax highlightings controls y/
 " NOTE: Controls the syntax highlightings in all files.
@@ -128,6 +133,9 @@ endif
 " ln -s ~/.vim/syntax ~/.config/nvim/syntax
 " Link the Pasky plugin to use Claude's API in NeoVim.
 " ln -s ~/.vim/pack ~/.config/nvim/pack
+
+" Set the max file size for AI API to 500KB
+" let g:MaxAIAPIFile = (1024 * 1024 * 1)/2
 
 
 " NOTE: Vim highlights parentheses through a built-in plugin called matchparen.
@@ -758,6 +766,10 @@ function! DefaultSettings()
    else
       set maxmempattern=5000
    endif
+   " syn sync minlines=1
+
+   " Select which Vim regex engine to use
+   " set regexpengine=1
 
    " Disable modelines to avoid potential security issues...
    set nomodeline
@@ -767,6 +779,11 @@ function! DefaultSettings()
 
    " NOTE: For improved Unicode ga command use:
    " git clone https://github.com/tpope/vim-characterize ~/.vim/pack/plugins/start/vim-characterize
+
+   " joinspaces inserts two spaces after '.', '?' and '!' with a join command
+   " nojoinspaces does not insert these 2 spaces. nojoinspaces fixes the double
+   " space after period case, but not trailing whitespace on the current line.
+   set nojoinspaces
 
    "---------------------------------------------------------------------------
    " Some non GUI settings
@@ -914,6 +931,10 @@ function! LoadMappings()
       nnoremap <c-y> viw"+y
       " Paste over entire word.
       nnoremap <c-p> viw"+gpgv"+y
+      if g:ctrl_shift_enabled
+         " Paste after last char in line.
+         nnoremap <c-s-p> $pm'
+      endif
    else " For Linux
       nnoremap y m'y
       vnoremap y ym'
@@ -926,6 +947,10 @@ function! LoadMappings()
       nnoremap <c-y> viwy
       " Paste over entire word.
       nnoremap <c-p> viwpgvy
+      if g:ctrl_shift_enabled
+         " Paste after last char in line.
+         nnoremap <c-s-p> $pm'
+      endif
    endif
 
    " diff obtain entire file
@@ -995,6 +1020,9 @@ function! LoadMappings()
    inoremap ! !<c-g>u
    inoremap ? ?<c-g>u
 
+   " disable #count undo because I keep using it by accident!!!
+   " nnoremap <expr> u (v:count > 0 ? "<esc>" : "u")
+
 
    "---------------------------------------------------------------------------
    " /d Movement related mappings g/
@@ -1045,6 +1073,11 @@ function! LoadMappings()
       inoremap <c-,> <esc>gja
       inoremap <c-.> <esc>la
 
+      if g:ctrl_shift_enabled
+         " Move page up by 1 line.
+         noremap <c-s-l> <c-e>
+         " <c-s-y> moves page dn by 1 line.
+      endif
    else " For qwerty
 
       " Add insert mode word jumps.
@@ -1091,7 +1124,12 @@ function! LoadMappings()
 
    " Append next line to end of current line.
    " See help :join   - J without g will insert up to 2 spaces (variable).
-   nnoremap <a-j> <down>0i<space><esc>kg<s-j>
+   " NOTE: keeppatterns is an Ex command modifier that prevents your search
+   "       history and the last search pattern register (/) from being
+   "       updated when executing a command
+   nnoremap <a-j> :keeppatterns s/\s*\n\s*/ /<cr>
+   " NOTE: Set nojoinspaces to not insert 2 spaces after . ? and ! with a
+   " join command. But if the line starts with ), <s-j> inserts no spaces.
    vnoremap <a-j> <s-j>
 
    " Select between settings for "colemak-dh" vs "qwerty" keyboard layout.
@@ -1250,19 +1288,19 @@ function! LoadMappings()
 
 
    " Replace all c style /*multi-line*/ comments with single-line //comments.
-   noremap <leader>r/ m':%s/\/\*/\/\//g<cr>:%s/ *\*\///g<cr>:noh<cr><c-o><c-o>
+   noremap <leader>r/ m':keeppatterns %s/\/\*/\/\//g<cr>:keeppatterns %s/ *\*\///g<cr><c-o><c-o>
 
 
    " Search for CamelCase.
    nnoremap <leader>sC /\(\<\u\l\+\\|\l\+\)\(\u\)<cr>
    " Convert each NameLikeThis to name_like_this in current line.
-   nnoremap <leader>rc1 :s#\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<cr>
+   nnoremap <leader>r1c :keeppatterns s#\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<cr>
    " Convert each NameLikeThis to name_like_this in current file.
-   nnoremap <leader>rc_ m':%s#\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<cr>:noh<cr><c-o>
+   nnoremap <leader>rc m':keeppatterns %s#\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<cr><c-o>
    " Convert each name_like_this to NameLikeThis in current line.
-   nnoremap <leader>r_1 :s#\(\%(\<\l\+\)\%(_\)\@=\)\\|_\(\l\)#\u\1\2#g<cr>
+   nnoremap <leader>r1C :keeppatterns s#\(\%(\<\l\+\)\%(_\)\@=\)\\|_\(\l\)#\u\1\2#g<cr>
    " Convert each name_like_this to NameLikeThis in current file.
-   nnoremap <leader>r_c m':%s#\(\%(\<\l\+\)\%(_\)\@=\)\\|_\(\l\)#\u\1\2#g<cr>:noh<cr><c-o>
+   nnoremap <leader>rC m':keeppatterns %s#\(\%(\<\l\+\)\%(_\)\@=\)\\|_\(\l\)#\u\1\2#g<cr><c-o>
 
 
    " Clear search highlighting.
@@ -1372,7 +1410,6 @@ function! LoadMappings()
    nnoremap <leader>tq        :tabclose<cr>
 
 
-
    " Zoom in/out.
    nnoremap <c-middlemouse> :LargerFont<cr>
    nnoremap <s-middlemouse> :SmallerFont<cr>
@@ -1398,14 +1435,14 @@ function! LoadMappings()
    nnoremap <silent> <expr> gc "_i<c-r>=b:comment_leader<cr> <esc>"
    nnoremap <silent> <expr> gs "_vf <del>"
 
-   " Adds the comment ~~ (similar to //) that will highlight the line as a
-   " gray strikethrough if strikethrough.vim is loaded. Also works on ranges
-   " in the same line by adding a second pair of ~~.
+   " Adds the comment ~~~ (similar to //) that will apply a gray strikethrough
+   " highlight if AllFontStyles() is loaded. Also works on ranges in the same
+   " line by adding a second pair of ~~.
    nnoremap gr _i~~~<esc>
-   vnoremap gr <esc>`<i~~<esc>`>lla~~<esc>
-   vnoremap <silent> <expr> ga mode() ==# "v" ? "<c-v>_o_<s-i>~~~<esc>" : mode() ==# "V" ? "<c-v>_o_<s-i>~~~<esc>" : "_o_<s-i>~~~<esc>"
-   " Remove 2 sets of ~~ starting from current line.
-   nnoremap <leader>gu 0/\~\~<cr>xxnxx:noh<cr>
+   vnoremap <silent> <expr> gr mode() ==# "v" && line("v") == line(".") ? "\<esc>`<i~~\<esc>`>lla~~\<esc>" : ":\<c-u>keeppatterns '<,'>s/^\\s*\\zs\\S\\@=/\\~\\~\\~/e\<cr>"
+   " Remove ~~~ starting from current line.
+   vnoremap <silent> ga :<c-u>keeppatterns '<,'>s/^\s*\zs\~\~\~//e<cr>
+
 
    " Load help for word under cursor.
    " <c-r><c-w> pastes word under cursor into command line!
@@ -1439,7 +1476,7 @@ function! LoadMappings()
    " \U uppercase following string.
    " & with sed means use the match found.
    " <cr> just means press enter, aka execute previous command.
-   " :noh will dehighlight any searches.
+   " keeppatterns prevents the search history from being updated
    " <c-o> will jump back through the jump list. The first jump will jump
    "       to the current line where we set the last jump list. The last 2
    "       <c-o> jumps will jump back to before the search and replaces to
@@ -1448,16 +1485,16 @@ function! LoadMappings()
 
    " Capitalize all words after every ending punctuation and every new line
    " in the file.
-   nnoremap <leader>fc m':%s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:%s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:%s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:%s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>:noh<cr><c-o><c-o><c-o>
+   nnoremap <leader>fc m':keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns %s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns %s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr><c-o><c-o><c-o>
 
    " Capitalize first letter of every Word on the current line (Title Case).
-   nnoremap <leader>fu :s/\<[a-z]/\u&/g<cr>
+   nnoremap <leader>fu :keeppatterns s/\<[a-z]/\u&/g<cr>
    " Capitalize first letter of every Word on every line in the file.
-   nnoremap <leader>fU m':%s/\<[a-z]/\u&/g<cr>:noh<cr><c-o>
+   nnoremap <leader>fU m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
 
 
    " Remove extra spacing - Remove unwanted trailing white space.
-   nnoremap <leader>f<space> m':%s/\s\+$//e<cr>:noh<cr><c-o>
+   nnoremap <leader>f<space> m':keeppatterns %s/\%(\s\\| \)\+$//e<cr><c-o>
    " Replace all tabs with spaces according to tabstop setting.
    nnoremap <leader>f<tab> :retab<cr>
    " Every space gets it's own column in visual mode.
@@ -1569,7 +1606,6 @@ function! LoadMappings()
    " topleft botright
    nnoremap <leader>tsp :topleft<space>split<cr><c-w><bar><c-w>_
    nnoremap <leader>bsp :botright<space>split<cr><c-w><bar><c-w>_
-
 
    " Buffers
    " Next/previous

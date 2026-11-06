@@ -169,19 +169,15 @@ hi default HLStrikeThroughDefault  cterm=strikethrough gui=strikethrough
 hi default HLStrikeThroughGrey     cterm=strikethrough gui=strikethrough ctermfg=236 guifg=grey30
 
 " Highlight Links
-" hi link    HLBarelyVisible         HLGrey10BgB
-augroup HLBarelyVisible
-   autocmd!
-   autocmd VimEnter * if exists('g:colors_name') |
-      \ if g:colors_name == 'ddd_darkgrey' |
-      \   hi link HLBarelyVisible HLGrey15BgB |
-      \ elseif &background == 'dark' |
-      \   hi link HLBarelyVisible HLGrey10BgB |
-      \ else |
-      \   hi link HLBarelyVisible HLGrey80BgB |
-      \ endif |
-      \ endif
-augroup END
+if exists('g:colors_name')
+  if g:colors_name == 'ddd_darkgrey'
+    hi link HLBarelyVisible HLGrey15BgB
+  elseif &background == 'dark'
+    hi link HLBarelyVisible HLGrey10BgB
+  else
+    hi link HLBarelyVisible HLGrey80BgB
+  endif
+endif
 "------------------------------------------------------------------------------
 
 

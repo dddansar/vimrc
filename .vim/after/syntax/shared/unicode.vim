@@ -151,7 +151,7 @@ syn keyword UnicodeBsColor       UnicodeBsColor containedin=vimSynKeyRegion,vimH
 
 " NOTE: To add more ASCII/Unicode symbols use (i)c-v  :help i_CTRL-V_digit
 " then use u for UTF-16 or U for UTF-32 followed by 4 or 8 digits.
-" (i)c-v u03c0 gives: π 
+" (i)c-v u03c0 gives: π
 " (i)c-s-u03c0 also works in linux
 " NOTE: Use ga to get the Unicode code
 " NOTE: For improved Unicode ga command use:
@@ -3044,7 +3044,7 @@ syn match   UnicodaSBParen "[₍₎]" contains=@NoSpell  containedin=RegexRanges
 " syn match   UnicodeSPSets "[꜁꜆꜇]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 hi  link    UnicodeSBNum Number
-syn match   UnicodeSBNum "[₀₁₂₃₄₅₆₇₈₉𝆗]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match   UnicodeSBNum "[₀-₉𝆗]" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 " Greek superscript
 " Many were missing!
@@ -3452,6 +3452,28 @@ inorea <buffer> v_X     x⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> v_Y     ʏ⃗<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> v_Z     ᴢ⃗<left><right><c-r>=Eatchar('\s')<cr>
 
+inorea <buffer> v_0     0⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_1     1⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_2     2⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_3     3⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_4     4⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_5     5⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_6     6⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_7     7⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_8     8⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> v_9     9⃗<left><right><c-r>=Eatchar('\s')<cr>
+
+inorea <buffer> vv_0    ₀⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_1    ₁⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_2    ₂⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_3    ₃⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_4    ₄⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_5    ₅⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_6    ₆⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_7    ₇⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_8    ₈⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> vv_9    ₉⃗<left><right><c-r>=Eatchar('\s')<cr>
+
 "  ̅ used for not in math.
 inorea <buffer> n_a     a̅<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> n_b     b̅<left><right><c-r>=Eatchar('\s')<cr>
@@ -3507,27 +3529,16 @@ inorea <buffer> n_X     X̅<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> n_Y     Y̅<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> n_Z     Z̅<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> v_0     0⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_1     1⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_2     2⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_3     3⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_4     4⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_5     5⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_6     6⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_7     7⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_8     8⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> v_9     9⃗<left><right><c-r>=Eatchar('\s')<cr>
-
-inorea <buffer> zv_0    ₀⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_1    ₁⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_2    ₂⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_3    ₃⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_4    ₄⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_5    ₅⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_6    ₆⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_7    ₇⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_8    ₈⃗<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> zv_9    ₉⃗<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_0     0̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_1     1̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_2     2̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_3     3̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_4     4̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_5     5̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_6     6̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_7     7̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_8     8̅<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> n_9     9̅<left><right><c-r>=Eatchar('\s')<cr>
 
 " For combining hat accent ^ use u0302 instead (hat or unit vector).
 inorea <buffer> uv_a    â<left><right><c-r>=Eatchar('\s')<cr>
@@ -3584,6 +3595,17 @@ inorea <buffer> uv_X    x̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> uv_Y    ʏ̂<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> uv_Z    ᴢ̂<left><right><c-r>=Eatchar('\s')<cr>
 
+" inorea <buffer> uv_0    0̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_1    1̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_2    2̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_3    3̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_4    4̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_5    5̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_6    6̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_7    7̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_8    8̂<left><right><c-r>=Eatchar('\s')<cr>
+" inorea <buffer> uv_9    9̂<left><right><c-r>=Eatchar('\s')<cr>
+
 " Vectors in comments
 hi  link   UnicodeVectorsCom  Comment
 syn match  UnicodeVectorsCom  "\<[a-zA-Z0-9]*\%(.⃗\)[a-zA-Z0-9]*" contains=@NoSpell  contained containedin=@ClusterCommentsPlusComScope,SpUnicodeNoSpellCom
@@ -3603,6 +3625,9 @@ syn match  UnicodeNotLogicCom "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@N
 " Negation
 hi  link      UnicodeNotLogic Constant
 syn match     UnicodeNotLogic "\<[a-zA-Z0-9]*\%(.̅\)\+[a-zA-Z0-9]*" contains=@NoSpell  containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+
+hi  link      UnicodeCombiningNumbers Number
+syn match     UnicodeCombiningNumbers "[0-9₀-₉]" contains=@NoSpell contained containedin=UnicodeNotLogic,UnicodeVectors
 
 " You could also use other combining Unicode chars such as the overline used
 " for not (u0305).

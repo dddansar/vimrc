@@ -113,7 +113,7 @@ function! MathMatches()
       hi  link    SpMathSingleCharIaA1 Constant
       hi  link    SpMathSingleCharIaA2 Constant
       hi  link    SpMathSingleCharIaA3 Constant
-      syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|[!.?:;,] \|[a-zA-Z][a-z] \|\w\| (\)\@<![IaA]\w\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
       syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
