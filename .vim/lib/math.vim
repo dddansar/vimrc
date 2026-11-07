@@ -178,12 +178,12 @@ function! MathMatches()
       hi  link    SpMathMultiVars2 Constant
       syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do No no
+      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do No no Me me
       syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
       syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
 
-      hi  link    SpMathMultiVars3 Constant
-      syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
+      " hi  link    SpMathMultiVars3 Constant
+      " syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
 
       " Match imaginary i if contained in SpMathFunctions
       hi  link    Mathi Constant

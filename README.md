@@ -26,7 +26,7 @@ Contains all my vimrc settings.
 ```
 .vim/
 ├── colors/                     # Contains custom colorschemes
-├── lib/
+├── lib/                        # Contains generic functions, abbreviations, mappings, highlights, syntax and include files
 │   ├── abbrev.vim              # Common abbreviations and shortcuts
 │   ├── all_colors.vim          # Contains and highlights all the colored names available in Vim.
 │   ├── linux.vim               # Linux commands custom syntax highlighting
@@ -41,6 +41,7 @@ Contains all my vimrc settings.
 │   ├── colorschemes/start/ddd_colorschemes/    # Contains ddd_colorschemes
 │   ├── pasky/start/claude.vim/                 # Pasky's plugin for using Anthropic's Claude AI via an API
 │   └── plugins/start/vim-characterize/         # Pressing ga now gives additional Unicode information
+│   └── plugins/start/vim-autocorrect/          # Contains a list of autocorrections
 ├── plugin/
 │   └── matchparen.vim          # Matching parenthesis highlighting overrides
 ├── syntax/
@@ -98,7 +99,6 @@ ln -s ~/.vim/colors      ~/.config/nvim/colors
 ln -s ~/.vim/spell       ~/.config/nvim/spell
 ln -s ~/.vim/pack        ~/.config/nvim/pack
 ln -s ~/.vim/after       ~/.config/nvim/after
-ln -s ~/.vim/autocorrect ~/.config/nvim/autocorrect
 ln -s ~/.vim/syntax      ~/.config/nvim/syntax
 ```
 

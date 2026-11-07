@@ -7,3 +7,6 @@
 [submodule ".vim/pack/colorschemes/start/ddd_colorschemes/colors"]
 	path = .vim/pack/colorschemes/start/ddd_colorschemes/colors
 	url = https://github.com/dddansar/colorschemes
+[submodule ".vim/pack/plugins/start/vim-autocorrect"]
+	path = .vim/pack/plugins/start/vim-autocorrect
+	url = https://github.com/panozzaj/vim-autocorrect.git

@@ -806,13 +806,16 @@ function! DefaultSettings()
 
    "---------------------------------------------------------------------------
    " /d Load autocorrect files y/
+   " vim-autocorrect plugin: panozzaj/vim-autocorrect ships a pre-built list
+   " of corrections. Install or download, then enable with call AutoCorrect().
+   " NOTE: Vim auto-loads anything under .vim/pack/*/start/.
+   " To download you can use:
+   " git clone https://github.com/panozzaj/vim-autocorrect.git ~/.vim/pack/plugins/start/vim-autocorrect
+   " There are also many other autocorrect plugins.
    "---------------------------------------------------------------------------
    if !exists("g:AutocorrectLoaded") && g:use_autocorrect
-      if filereadable(expand($vim_folder_path . "/autocorrect/autocorrect3.vim"))
-         source $vim_folder_path/autocorrect/autocorrect3.vim
-      endif
-      if filereadable(expand($vim_folder_path . "/autocorrect/wordlist.vim"))
-         source $vim_folder_path/autocorrect/wordlist.vim
+      if exists('*AutoCorrect')
+         call AutoCorrect()
       endif
       let g:AutocorrectLoaded=1
    endif
