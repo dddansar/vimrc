@@ -72,7 +72,6 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       source $vim_folder_path/lib/math_mappings.vim
       source $vim_folder_path/lib/unicode.vim
       " setlocal nospell
-      call UnicodeNoSpell()
       call AllShiftOp()
    endif
    " if expand('%:p') =~# '/reference_files/'
@@ -163,6 +162,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " Highlight Math variables, numbers with x, numbered variables,
       " numbers starting with dot, derivatives, math functions...
       " call MathMatches()
+      " UnicodeNoSpell() needs to be after MathMatches(), so that SpMathForeignNameOrWord can be contained in SpUnicodeNoSpell
+      call UnicodeNoSpell()
    endif
    call AllLabel()
    " call AllMultiWordLabel(0)

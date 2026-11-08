@@ -40,7 +40,11 @@ let g:keyboard_layout = "qwerty"
 " let g:keyboard_layout = "colemak-dh"
 
 " Selects between windows and linux OS
-let g:using_windows = 0
+if has("win32") || has("win64")
+    let g:using_windows = 1
+else
+    let g:using_windows = 0
+endif
 
 " Select btw font styles
 let g:font_style = 0
@@ -356,12 +360,12 @@ function! CommonSettings()
       " NOTE: use ":set guifont=(tab)" to cycle through the list of fonts.
       if g:using_windows
          if !has('nvim')
-            set guifont=Consolas:h13.5:cANSI
+            set guifont=Consolas:h15:cANSI
          else " For NeoVim
-            set guifont=Consolas:h13.5:cANSI
+            set guifont=Consolas:h15:cANSI
          endif
-         set lines=46          " Height
-         set columns=140       " Width
+         set lines=46
+         set columns=140
 
       else " For Linux
          " Select btw font styles
@@ -372,8 +376,8 @@ function! CommonSettings()
             else " for NeoVim
                set guifont=Monospace:h15
             endif
-            set lines=39          " Height
-            set columns=120       " Width
+            set lines=39
+            set columns=120
          else
             if !has('nvim')
                set guifont=Monospace\ 20
@@ -381,8 +385,8 @@ function! CommonSettings()
             else " For NeoVim
                set guifont=Monospace:h20
             endif
-            set lines=30          " Height
-            set columns=115       " Width
+            set lines=30
+            set columns=115
          endif
       endif
    endif
@@ -817,7 +821,7 @@ function! DefaultSettings()
       if exists('*AutoCorrect')
          call AutoCorrect()
       endif
-      let g:AutocorrectLoaded=1
+      let g:AutocorrectLoaded = 1
    endif
 
 
@@ -1511,6 +1515,7 @@ function! LoadMappings()
    " Capitalize all words after every ending punctuation and every new line
    " in the file.
    nnoremap <leader>fc m':keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns %s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns %s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr><c-o><c-o><c-o>
+   nnoremap <leader>ff mz:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>`z
 
    " Capitalize first letter of every Word on the current line (Title Case).
    nnoremap <leader>fu :keeppatterns s/\<[a-z]/\u&/g<cr>
@@ -1610,14 +1615,14 @@ function! LoadMappings()
    "       it's default value! -> set spellcapcheck&
    nnoremap <leader>sn  :setlocal nospell<cr>
 
-   nnoremap <leader>sc :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>sd :source ~/.vim/after/syntax/shared/spell.vim<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>sc :source ~/.vim/lib/spell.vim<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sd :source ~/.vim/lib/spell.vim<cr>:syntax spell notoplevel<cr>
 
-   nnoremap <leader>sz :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>sx :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>sz :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sx :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell notoplevel<cr>
 
-   nnoremap <leader>ss :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>st :source ~/.vim/after/syntax/shared/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>ss :source ~/.vim/lib/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>st :source ~/.vim/lib/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell notoplevel<cr>
 
 
 
@@ -1900,4 +1905,7 @@ augroup MainFunction
    autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |
       \ call DefaultSettings() | endif
 augroup END
+
+
+" NOTE: Check out additional plugins from: https://vimawesome.com/
 

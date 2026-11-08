@@ -187,9 +187,11 @@ hi default HLSpecial1  gui=bold          guisp=red guifg=grey50
 hi default HLSpecial8  gui=italic        guisp=red guifg=grey50
 hi default HLSpecial2  gui=underline     guisp=red guifg=grey50
 hi default HLSpecial3  gui=undercurl     guisp=red guifg=grey50
+if !g:using_windows
 hi default HLSpecial4  gui=underdotted   guisp=red guifg=grey50
 hi default HLSpecial5  gui=underdouble   guisp=red guifg=grey50
 hi default HLSpecial6  gui=underdashed   guisp=red guifg=grey50
+endif
 hi default HLSpecial11 gui=strikethrough guisp=red guifg=grey50
 hi default HLSpecial7  gui=inverse       guisp=red guifg=grey50
 hi default HLSpecial9  gui=standout      guisp=red guifg=grey50
@@ -206,9 +208,11 @@ hi default HLBoldUnderline gui=bold,underline
 hi default HLItalUnderline gui=italic,underline
 hi default HLBoldItalUnder gui=bold,italic,underline
 hi default HLUndercurl     gui=undercurl
+if !g:using_windows
 hi default HLUnderdotted   gui=underdotted
 hi default HLUnderdouble   gui=underdouble
 hi default HLUnderdashed   gui=underdashed
+endif
 hi default HLStrikethrough gui=strikethrough
 hi default HLInverse       gui=inverse
 hi default HLStandout      gui=standout

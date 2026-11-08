@@ -72,11 +72,6 @@ let b:math_loaded = 1
 function! MathMatches()
    if g:performance_mode <= 0
 
-      " Disable syntax while holding pageup/pagedown, re-enable on CursorHold.
-      " Used to improve scrolling performance and speed.
-      " nnoremap <pageup>   :let g:syntax_disabled = 1<cr>:syntax clear<cr><pageup>
-      " nnoremap <pagedown> :let g:syntax_disabled = 1<cr>:syntax clear<cr><pagedown>
-
       " NOTE: \%#=N at the very start of a pattern forces which regex engine Vim uses for that pattern:
       "     \%#=0: automatic (the default; Vim picks)
       "     \%#=1: the old backtracking engine
@@ -86,7 +81,7 @@ function! MathMatches()
       " The global equivalent is :set regexpengine=1, but the per-pattern prefix lets you test one match at a time.
 
       " Match single chars.
-      "---------------------------------------------------------------------------
+      "------------------------------------------------------------------------
       " Match single character in its own word.
       " NOTE: Vim's word-boundary atoms `\<`/`\>` are not matching some Unicode
       " chars while it matches others... so `ˣ` is invisible to them as a boundary
@@ -115,7 +110,7 @@ function! MathMatches()
       hi  link    SpMathSingleCharIaA3 Constant
       syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
-      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"(][a-zA-Z'"(0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
@@ -178,7 +173,7 @@ function! MathMatches()
       hi  link    SpMathMultiVars2 Constant
       syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at to so be un up us Re re Ok ok On on Of of Or or He he Do do No no Me me
+      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of Or or He he Do do No no Me me
       syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
       syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
 
@@ -197,12 +192,24 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(mod\|lim\|log\|ln\)\w\@!" contains=@NoSpell
       syn match   SpMathFunctions  "\%#=1\w\@<![0-9]*i\?\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\w\@!" contains=@NoSpell,SpMathNumInVar
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
-      "---------------------------------------------------------------------------
+      "------------------------------------------------------------------------
+
+      " Ignore Foreign names where Vim does not properly apply word boundaries
+      " Basic Latin (U+0041-U+007A).
+      " Latin-1 Supplement (U+00C0-U+00FF): Covers French, Spanish, German,
+      " Portuguese, Italian, and Nordic.
+      " Latin Extended-A (U+0100-U+017F): Covers Central European, Eastern
+      " European, Baltic, and Turkish.
+      " Latin Extended-B (U+0180-U+024F): Covers specialized European
+      " characters and certain African or phonetic Latin characters.
+      " Latin Extended Additional (U+1E00-U+1EFF): Used for Vietnamese and
+      " scholarly transliterations of Arabic, Sanskrit, or Hebrew.
+      syn match   SpMathForeignNameOrWord  "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell contained
 
       " Clusters
-      "---------------------------------------------------------------------------
+      "------------------------------------------------------------------------
       syn cluster ClusterSpMath add=SpMath.*
-      "---------------------------------------------------------------------------
+      "------------------------------------------------------------------------
    endif
 endfunction
 

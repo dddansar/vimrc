@@ -218,8 +218,6 @@ inorea <buffer> _3doth     ⋮<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3dotdd    ⋱<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _3dotdu    ⋰<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _no        ø<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nO        Ø<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _inv&      ⅋<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> __:        ∶<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _inv!      ¡<left><right><c-r>=Eatchar('\s')<cr>
@@ -286,7 +284,7 @@ inorea <buffer> e_lightning   🗲<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> e_light       🗲<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeRandom SpecialChar
-syn match   UnicodeRandom "[✀-❧™©®‰⅌𝄉№øØ⅋⊺⋔†-‣♡-⚖☮-♂¢-¥₠-₿]" contains=@NoSpell contained containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
+syn match   UnicodeRandom "[✀-❧™©®‰⅌𝄉№⅋⊺⋔†-‣♡-⚖☮-♂¢-¥₠-₿]" contains=@NoSpell contained containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 syn match   UnicodeRandom "[𝄉]" contains=@NoSpell contained containedin=RegexRanges,@ClusterSpMath,vimMapRhs
 
 hi  link    UnicodeDelim Delimiter
