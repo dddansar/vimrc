@@ -194,18 +194,6 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
       "------------------------------------------------------------------------
 
-      " Ignore Foreign names where Vim does not properly apply word boundaries
-      " Basic Latin (U+0041-U+007A).
-      " Latin-1 Supplement (U+00C0-U+00FF): Covers French, Spanish, German,
-      " Portuguese, Italian, and Nordic.
-      " Latin Extended-A (U+0100-U+017F): Covers Central European, Eastern
-      " European, Baltic, and Turkish.
-      " Latin Extended-B (U+0180-U+024F): Covers specialized European
-      " characters and certain African or phonetic Latin characters.
-      " Latin Extended Additional (U+1E00-U+1EFF): Used for Vietnamese and
-      " scholarly transliterations of Arabic, Sanskrit, or Hebrew.
-      syn match   SpMathForeignNameOrWord  "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell contained
-
       " Clusters
       "------------------------------------------------------------------------
       syn cluster ClusterSpMath add=SpMath.*

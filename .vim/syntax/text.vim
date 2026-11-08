@@ -162,7 +162,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " Highlight Math variables, numbers with x, numbered variables,
       " numbers starting with dot, derivatives, math functions...
       " call MathMatches()
-      " UnicodeNoSpell() needs to be after MathMatches(), so that SpMathForeignNameOrWord can be contained in SpUnicodeNoSpell
+      call AllForeignNamesOrWords()
+      " UnicodeNoSpell() needs to be after MathMatches(), so that AllForeignNameOrWord can be contained in SpUnicodeNoSpell
       call UnicodeNoSpell()
    endif
    call AllLabel()

@@ -1515,6 +1515,7 @@ function! LoadMappings()
    " Capitalize all words after every ending punctuation and every new line
    " in the file.
    nnoremap <leader>fc m':keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns %s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns %s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr><c-o><c-o><c-o>
+   " Capitalize all words after every ending punctuation on the current line.
    nnoremap <leader>ff mz:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>`z
 
    " Capitalize first letter of every Word on the current line (Title Case).
