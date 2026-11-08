@@ -108,7 +108,7 @@ function! MathMatches()
       hi  link    SpMathSingleCharIaA1 Constant
       hi  link    SpMathSingleCharIaA2 Constant
       hi  link    SpMathSingleCharIaA3 Constant
-      syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,)]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
       syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
@@ -193,6 +193,22 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<![0-9]*i\?\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\w\@!" contains=@NoSpell,SpMathNumInVar
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
       "------------------------------------------------------------------------
+
+
+      hi  link    SpMathProofs   Statement
+      syn keyword SpMathProofs   proof Proof proofs Proofs prove Prove proves Proves proven Proven disprove Disprove Prover prover
+
+      syn keyword SpMathProofs   axiom axioms Axiom Axioms postulate postulates Postulate Postulates theorem theorems theory theories theoretical theoretically Theorem Theorems Theory Theories Theoretical Theoretically corollary corollaries Corollary Corollaries lemma lemmas Lemma Lemmas rule rules Rule Rules law laws Law Laws
+      syn match   SpMathProofs    "\<[Cc]ommon [Nn]otions\?\>"
+
+      syn keyword SpMathProofs property properties Property Properties identities Identities predicate predicates Predicate Predicates attribute attributes Attribute Attributes quality qualities Quality Qualities characteristic characteristics Characteristic Characteristics
+
+      syn keyword SpMathProofs   define defines defined definition definitions Define Defines Defined Definition Definitions declare declares declared declaration declarations Declare Declares Declared Declaration Declarations
+
+      " syn keyword SpMathProofs   language languages Language Languages grammar grammars grammatical grammatically Grammar Grammars Grammatical Grammatically dictionary dictionaries Dictionary Dictionaries alphabet alphabets alphabetical alphabetically Alphabet Alphabets Alphabetical Alphabetically
+
+      " syn keyword SpMathProofs   math Math mathematics Mathematics mathematical Mathematical
+
 
       " Clusters
       "------------------------------------------------------------------------

@@ -271,8 +271,14 @@ inorea <buffer> _smiley    ☺<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _fsmiley   ☻<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _frowny    ☹<left><right><c-r>=Eatchar('\s')<cr>
 
-inorea <buffer> _tbullet   ‣<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _bullet    •<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _tbullet   ‣<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _hbullet   ⁃<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _lbullet   ⁌<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _rbullet   ⁍<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _obullet   ∙<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _ibullet   ◘<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _wbullet   ◦<left><right><c-r>=Eatchar('\s')<cr>
 
 " Emoji
 " 🇨🈴🌈🌀🌋🌊🌍🌎🌏🌐🌕🌒🌩🏛🏹🐬🔔🔬🔭🔹🕹😌🚀🛠🟡🟤🟥🥗🧭🐆
@@ -4598,11 +4604,11 @@ syn cluster ClusterUnicode add=Unicode.*
 function! UnicodeNoSpell()
    if g:performance_mode <= 0
       " Don't spell check any Unicode chars
-      " syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
-      " syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode
+      " syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,@ClusterUnicode
+      " syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,@ClusterUnicode
 
-      syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode,AllForeignNamesOrWords
-      syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,@ClusterUnicode,AllForeignNamesOrWords
+      syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,@ClusterUnicode,AllForeignNamesOrWords
+      syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,@ClusterUnicode,AllForeignNamesOrWords
 
       " Don't spell check any Unicode chars in comments or quotes
       " syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent

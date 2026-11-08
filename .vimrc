@@ -1492,19 +1492,13 @@ function! LoadMappings()
    " g means substitute all matches.
    " % matches entire file.
    " \< matches start of a word.
-   " . matches the first char of a word (replaced with [a-z]).
-   " \u tells Vim to uppercase the following character in the substitution
+   " \U tells Vim to uppercase the following character in the substitution
    "    string (&).
    " & means substitute whatever was matched on the left hand side.
    " \(A\|B\) means match a group of alternatives, aka match A or B.
-   " ^ after a newline.
-   " [-"' ]* means 0 or more minus signs or spaces after the new line.
-   " /\\ means 0 or more \ after the new line.
+   " ^ matches after a newline.
    " [.?!] \+ means after a terminal punctuation and one or more spaces.
-   " [a-z]\ze[a-z]   \ze means lookahead.
-   " \U uppercase following string.
-   " & with sed means use the match found.
-   " <cr> just means press enter, aka execute previous command.
+   " <cr> means enter, aka execute previous command.
    " keeppatterns prevents the search history from being updated
    " <c-o> will jump back through the jump list. The first jump will jump
    "       to the current line where we set the last jump list. The last 2
@@ -1512,11 +1506,17 @@ function! LoadMappings()
    "       the first jump list that we set, aka will jump back to the
    "       initial line.
 
-   " Capitalize all words after every ending punctuation and every new line
-   " in the file.
-   nnoremap <leader>fc m':keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns %s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns %s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns %s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr><c-o><c-o><c-o>
-   " Capitalize all words after every ending punctuation on the current line.
-   nnoremap <leader>ff mz:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)[a-z]/\U&/ge<cr>:keeppatterns s/\(^[-"' /\\]*\\|[.?!] \+\)a\ze [a-z][a-z]/\U&/ge<cr>:keeppatterns s/^[ (-]*[a-z]\ze[a-z]/\U&/ge<cr>:keeppatterns s/^\s*[0123456789]*)\s*[a-z]\ze[a-z]/\U&/ge<cr>`z
+   " Capitalize all words after every punctuation and new line in the file.
+   " 1st line matches lowercase after a new line or punctuations
+   " 2nd line matches lowercase after bullet point style lines like  - abc
+   " 3rd line matches lowercase after labels like (a), A), (-), and 1)
+   nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
+   " Capitalize all words after every punctuation on the current line.
+   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
 
    " Capitalize first letter of every Word on the current line (Title Case).
    nnoremap <leader>fu :keeppatterns s/\<[a-z]/\u&/g<cr>

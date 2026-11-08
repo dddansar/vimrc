@@ -161,11 +161,12 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    if expand('%:t') =~# '\.uni\.txt$'
       " Highlight Math variables, numbers with x, numbered variables,
       " numbers starting with dot, derivatives, math functions...
-      " call MathMatches()
+      call MathMatches()
       call AllForeignNamesOrWords()
       " UnicodeNoSpell() needs to be after MathMatches(), so that AllForeignNameOrWord can be contained in SpUnicodeNoSpell
       call UnicodeNoSpell()
    endif
+   call AllNumbersUnicode()
    call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()
