@@ -166,7 +166,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " UnicodeNoSpell() needs to be after MathMatches(), so that AllForeignNameOrWord can be contained in SpUnicodeNoSpell
       call UnicodeNoSpell()
    endif
-   call AllNumbersUnicode()
+   call AllNumbersUnicode(0)
    call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()

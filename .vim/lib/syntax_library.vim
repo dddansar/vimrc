@@ -140,7 +140,7 @@ endfunction
 function! AllUnwantedCharacters()
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      syn match    AllUnwantedCharacters  '\%#=1[‘-‟−—–∣ﬀ-ﬆĲĳŒœӔӕ]' containedin=ALL,AllIgnoreUnwantedChar
+      syn match    AllUnwantedCharacters  '\%#=1[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]' containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat
       hi  link     AllIgnoreUnwantedChar  HLYellow
       syn match    AllIgnoreUnwantedChar  '\%#=1[−—–][−—–]\+' contained containedin=AllUnwantedCharacters
 
@@ -157,16 +157,20 @@ function! AllIgnoreSpellings()
    if g:performance_mode <= 0
       " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
       hi  link     AllSpellCommColor1  Comment
-      syn match    AllSpellCommColor1  "\%#=1\%(\<[a-zA-Z]\+\)\?[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTitleColor1 "\%#=1\%(\<[a-zA-Z]\+\)\?[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor1    "\%#=1\%(\<[a-zA-Z]\+\)\?[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
 
       " Ignore spell on words with uppercase letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
       syn match    AllSpellCommColor2  "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTiTleColor2 "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor2    "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=TOP
+   endif
+endfunction
 
+function! AllIgnoreSpellingsFunc()
+   if g:performance_mode <= 0
       " Ignore spell on functions () followed by () or arrays [] followed by [].
       " No need to match dashes or numbers or uppercase as that is covered above...
       hi  link     AllSpellCommColor3  Comment
@@ -356,22 +360,32 @@ function! AllCaps()
 
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant
-      syn match    AllCaps "\%#=1\<[A-Z][A-Z_]\+\%('[DSTM]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell,TextAloneQuotes containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps "\%#=1\<[A-Z]'[DSTM]\>" contains=@NoSpell,TextAloneQuotes containedin=@ClusterAllCapsContainedin
+      syn match    AllCaps "\%#=1\<[A-Z][A-Z_]\+\%('[DSTM]\|s\)\?\%(\>\|\W\)\@=" contains=@NoSpell,TextAloneQuotes containedin=@ClusterAllCapsContainedin keepend
+      syn match    AllCaps "\%#=1\<[A-Z]'[DSTM]\>" contains=@NoSpell,TextAloneQuotes containedin=@ClusterAllCapsContainedin keepend
 
       " Match single CAPS like A or B or C or D...
       " Need to ignore A if not preceded by words. A here is not matched.
       " A ACRONYM is also not matched if not preceded by a word.
       " Need to ignore I in phrases but match I BEFORE or after CAPS I
+      " Match A/I if surrounded by punctuations.
       hi  link     AllCaps1 Constant
-      syn match    AllCaps1 "\%#=1\<[B-HJ-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps1 "\%#=1\%([a-zA-Z0-9]\)\@<= \<[A]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps1 "\%#=1\<[I]\>\%( [A-Z]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin
-      syn match    AllCaps1 "\%#=1\%([A-Z]\)\@<= \<[I]\>"  contains=@NoSpell containedin=@ClusterAllCapsContainedin
+      " syn match    AllCaps1 "\%#=1\<[B-HJ-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      " syn match    AllCaps1 "\%#=1\%([a-zA-Z0-9]\)\@<= \<[A]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      " syn match    AllCaps1 "\%#=1\<[I]\>\%( [A-Z]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      " syn match    AllCaps1 "\%#=1\<[A]\>\%( [A-Z]\+\> [A-Z]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      " syn match    AllCaps1 "\%#=1\%([A-Z]\)\@<= \<[I]\>"  contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      " syn match    AllCaps1 "\%#=1\%([[:punct:]]\s\?\)\@<=\<[AI]\>\%(\s\?[[:punct:]]\)\@="  contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+
+      " Match single CAPS like A B C D only if surrounded by other CAPS
+      " A and I need to be treated separately as these are common words
+      syn match    AllCaps1 "\%#=1\%([A-Z]\)\@<= \<[A-HJ-Z]\>" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      syn match    AllCaps1 "\%#=1\<[B-HJ-Z]\>\%( [A-Z]\)\@=" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      syn match    AllCaps1 "\%#=1\%([A-Z]\)\@<= \<[AI]\>\%( [A-Z]\)\@=" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
+      syn match    AllCaps1 "\%#=1\<[AI]\>\%( [A-Z']\+\> [A-Z]\)\@=" contains=@NoSpell containedin=@ClusterAllCapsContainedin keepend
 
       " Match words with CAPS and numbers like in CA012PS3920, 12SUN34, CA01
       hi  link     AllCapsAndNumbers Constant
-      syn match    AllCapsAndNumbers "\%#=1\<\%([0-9]\+[A-Z]\|[A-Z]\+[0-9]\)[A-Z0-9]*\>"  contains=@NoSpell contained containedin=@ClusterAllCapsContainedin,AllSpellNoColor1,AllSpellNoColor2
+      syn match    AllCapsAndNumbers "\%#=1\<\%([0-9]\+[A-Z]\|[A-Z]\+[0-9]\)[A-Z0-9]*\>"  contains=@NoSpell contained containedin=@ClusterAllCapsContainedin,AllSpellNoColor1,AllSpellNoColor2 keepend
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -435,6 +449,10 @@ function! AllLabel()
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
    syn match   AllLabel2  "\%#=1^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
+   " Matches Word1 Word2 ... WordN: if every word is capitalized.
+   " Replaced by AllMultiWordLabel
+   " hi  link    AllLabel3  PreProc
+   " syn match   AllLabel3  "\%#=1^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,@ClusterHLWords
 endfunction
 
 " Titles/Labels
@@ -727,9 +745,10 @@ function! AllNumbersHex()
    syn match AllNumbersTick "\%#=1\%(\<\d\+\|\)'\%([bB][0-1_?]\+\|[oO][0-7_?]\+\|[dD][0-9_?]\+\|[hH][0-9a-fA-F_?]\+\)\%(?\|\>\)" contains=@NoSpell
 endfunction
 
-function! AllNumbersUnicode()
+function! AllNumbersUnicode(contained_en)
+   " Match Unicode numbers (U+0041-U+007A), U+00C0, U+00FF, U+EE00, U+1CDEF
    hi  link  AllNumbersUnicode Number
-   syn match AllNumbersUnicode "\%#=1\<U+[a-fA-F0-9_]\+\>" contains=@NoSpell
+   execute 'syn match AllNumbersUnicode "\%#=1\<U+[a-fA-F0-9_]\+\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained' : '') ' containedin=@ClusterCommentsPlusComScope'
 endfunction
 "------------------------------------------------------------------------------
 

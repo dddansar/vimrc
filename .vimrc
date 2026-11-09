@@ -997,7 +997,7 @@ function! LoadMappings()
    "---------------------------------------------------------------------------
 
    " Insert newline with enter without entering insert mode.
-   nnoremap <expr> <cr> index(['quickfix','help','terminal'], &buftype) >= 0 ? "\<cr>" : "o\<esc>"
+   nnoremap <expr> <cr> (index(['quickfix','help','terminal'], &buftype) >= 0 \|\| !empty(getcmdwintype())) ? "\<cr>" : "o\<esc>"
    nnoremap <s-cr> O<esc>
    inoremap <s-cr> <cr><esc>i
    inoremap <c-cr> <esc>o
@@ -1187,7 +1187,6 @@ function! LoadMappings()
       noremap zl [sEa<c-x>s
       noremap zh ]sEa<c-x>s
    endif
-
    " Autocorrect word to first match.
    nnoremap gz z=1<cr><cr>
 
@@ -1510,11 +1509,11 @@ function! LoadMappings()
    " 1st line matches lowercase after a new line or punctuations
    " 2nd line matches lowercase after bullet point style lines like  - abc
    " 3rd line matches lowercase after labels like (a), A), (-), and 1)
-   nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+   nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
    " Capitalize all words after every punctuation on the current line.
-   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
 

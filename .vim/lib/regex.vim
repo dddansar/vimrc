@@ -36,7 +36,7 @@ if !exists("g:syntax_on")
 endif
 
 " ,shDblBrace -> breaks bash
-syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote
+syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4
 syn cluster RegexContainedinPerl contains=AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote
 
 " Exit if the file was already loaded

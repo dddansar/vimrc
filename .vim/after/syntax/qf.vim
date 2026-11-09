@@ -61,7 +61,7 @@ if exists("b:current_syntax") && b:current_syntax == "qf"
    call AllHLWords()
    call AllNumbers()
    call AllNumbersHex()
-   call AllNumbersUnicode()
+   call AllNumbersUnicode(0)
 
    syn clear qfText
    syn match qfText ".*" contained contains=AllCaps,AllCaps1,AllNumbersSci,AllNumbersUnd,AllNumbersHex1,AllNumbersHex2,AllNumbersTick,AllNumbersUnicode,@ClusterUnicode

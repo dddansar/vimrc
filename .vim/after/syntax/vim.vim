@@ -81,6 +81,7 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
 
 
    call AllFilesDefaultSyntax()
+   call AllNumbersUnicode(1)
 
    call AllDefineAt()
    call RegexMatches(1)
