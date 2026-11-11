@@ -107,7 +107,7 @@ hi  link    VimEquality  Operator
 syn match   VimEquality  "==#\?"                  contained containedin=vimMapRhs
 
 hi  link    VimQuestion  Question
-syn match   VimQuestion  "\s[?!:]\(\s\|$\)\@=" contained containedin=vimMapRhs
+syn match   VimQuestion  "\s[?!:]\(\s\|\n\)\@=" contained containedin=vimMapRhs
 
 hi  link    VimVariable  Identifier
 syn match   VimVariable  "\<[bwglstav]:[a-zA-Z0-9_]\+" contained containedin=vimMapRhs

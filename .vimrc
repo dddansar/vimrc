@@ -1010,18 +1010,15 @@ function! LoadMappings()
 
    " NOTE: Make tab and space work the same for visual and block visual
    "       mode, let it shift all lines equally.
-   " Inserts spaces/tabs on empyt lines
-   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_<c-v><s-i><tab>" : "<s-i><tab>"
-   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_<c-v><s-i><tab><esc>:'<,'>s/^\s\+$//e<cr>gv" : "<s-i><tab>"
-   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_\<c-v>\<s-i>\<tab>\<esc>:'<,'>s/^\\s\\+$//e\<cr>gv_o_" : "\<s-i>\<tab>\<esc>:'<,'>s/^\\s\\+$//e\<cr>gv_o_"
-   " vnoremap <tab> >gv
-   vnoremap <expr> <tab> mode() ==# "v" ? "<c-v>>gvlllolllo" : ">gvlllolllo"
-   vnoremap <s-tab> <gv
+   " Inserts spaces/tabs on empty lines
+   " NOTE: shiftround only rounds indentation in "v" mode not "V" mode...
+   " > and < lose the visual selection once applied, reapply with gv.
+   vnoremap <expr>   <tab> mode() ==# "v" ? ">gv<c-v>_o_o" : ">gv_o_o"
+   vnoremap <expr> <s-tab> mode() ==# "v" ? "<gv<c-v>_o_o" : "v<gv<c-v>_o_o"
    vnoremap <expr> <leader><space> mode() ==# "v" ? "<c-v><s-i><space>" : "<s-i><space>"
-
    " Update > < in visual mode to reselect last selection after shifting.
-   vnoremap > >gv
-   vnoremap < <gv
+   vnoremap <expr> > mode() ==# "v" ? ">gv" : "v>gv<c-v>_o_o"
+   vnoremap <expr> < mode() ==# "v" ? "<gv" : "v<gv<c-v>_o_o"
 
    " <c-g>u updates the last undo checkpoint, so that a long block of text
    " gets split up into smaller undo pieces.

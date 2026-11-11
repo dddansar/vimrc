@@ -137,15 +137,15 @@ function! AllTabsAndSpaces()
    endif
 endfunction
 
-function! AllUnwantedCharacters()
+function! AllUnwantedCharacters(contained_en)
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      syn match    AllUnwantedCharacters  '\%#=1[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]' containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat
+      execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]\+" ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
       hi  link     AllIgnoreUnwantedChar  HLYellow
-      syn match    AllIgnoreUnwantedChar  '\%#=1[−—–][−—–]\+' contained containedin=AllUnwantedCharacters
+      syn match    AllIgnoreUnwantedChar  '[−—–][−—–]\+' contained containedin=AllUnwantedCharacters
 
       hi  link     AllNonBreakingSpace  HLGrey30BgB
-      syn match    AllNonBreakingSpace  '\%#=1 ' containedin=ALL
+      syn match    AllNonBreakingSpace  '\%#=1[\ua0]' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -163,9 +163,9 @@ function! AllIgnoreSpellings()
 
       " Ignore spell on words with uppercase letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
-      syn match    AllSpellCommColor2  "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTiTleColor2 "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor2    "\%#=1\<[A-Z]\?[a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor2  "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTiTleColor2 "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=TOP
    endif
 endfunction
 
@@ -185,7 +185,7 @@ function! AllIgnoreSpellingsFunc()
    endif
 endfunction
 
-function! AllForeignNamesOrWords()
+function! AllIgnoreSpellForeignNamesOrWords(contained_en)
    if g:performance_mode <= 0
       " Ignore Foreign names where Vim does not properly apply word boundaries
       " Basic Latin (U+0041-U+007A).
@@ -197,7 +197,7 @@ function! AllForeignNamesOrWords()
       " characters and certain African or phonetic Latin characters.
       " Latin Extended Additional (U+1E00-U+1EFF): Used for Vietnamese and
       " scholarly transliterations of Arabic, Sanskrit, or Hebrew.
-      syn match   AllForeignNamesOrWords "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell contained
+      execute 'syn match  AllIgnoreSpellForeignNamesOrWords "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained ' : '')
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -445,14 +445,14 @@ endfunction
 function! AllLabel()
    " Matches word: if first word on line
    hi  link    AllLabel   PreProc
-   syn match   AllLabel   "\%#=1^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
+   syn match   AllLabel   "\%#=1^\s*\<[a-zA-Z][a-zA-Z0-9_-]\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
    " Matches "word": if first word on line
    hi  link    AllLabel2  PreProc
-   syn match   AllLabel2  "\%#=1^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
+   syn match   AllLabel2  "\%#=1^\s*\"[a-zA-Z][a-zA-Z0-9_-]\+\":\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,AllOperators,@ClusterHLWords
    " Matches Word1 Word2 ... WordN: if every word is capitalized.
    " Replaced by AllMultiWordLabel
    " hi  link    AllLabel3  PreProc
-   " syn match   AllLabel3  "\%#=1^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,@ClusterHLWords
+   " syn match   AllLabel3  "\%#=1^\%(\s*\<[A-Z][a-zA-Z0-9_-]*\>\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!" contains=@NoSpell,@ClusterHLWords
 endfunction
 
 " Titles/Labels
@@ -465,9 +465,9 @@ function! AllMultiWordLabel(contained_en)
       "       not match a word ending if it's followed by :!
       hi  link    AllMultiWordLabel  PreProc
       execute 'syn match   AllMultiWordLabel  +\%#=1' . (a:contained_en ? b:comment_leader : '^') .
-         \ '\%(\s*\<\%([A-ZÀ-ß][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)' .
-         \         '\%(\>\|:\@=\)[+-]*\%( & \@=\|, \@=\|[./][A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
-         \ '\)\+:\%(\s\|$\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
+         \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
+         \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
+         \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
          \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : '') .
          \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
@@ -496,28 +496,35 @@ function! AllMultiWordLabel(contained_en)
       " Über Cool:
       " Naïve Bayes:
       " Doctor's Note:
-
-      " Does not currently match:
-      " Pros and Cons:
-      " (Draft) Notes:
-      " (1) Intro:
+      " - Item:
+      " - Option 1 / Option 2:
       " A) Intro:
       " Adults (60+):
-      " "Quoted Title":
-      " - Item:
-      " 1st Place:
-      " 3DS Max:
       " Q&A:
       " Dr. Smith:
-      " Hello!:
-      " Hello World :
-      " Hello World:text
+      " 1st Place:
+      " 3DS Max:
+      " "Quoted Titles":
+      " Titles With "Quotes":
+      " 'Single Quoted Titles':
+      " Titles With 'Single Quotes':
+      " (Draft) Notes:
+      " (1) Intro:
+
+      " Does Not Currently Match:
+      " Upper and lowercase:
+      " Pros and Cons:
+      " lowercase:
+      " Some long sentence with periods. followed by a colon: don't match
+      " Exclamation!:
+      " Question?:
+      " Space Before Colon :
+      " No Space After:Colon
       " & Title:
-      " Hello,World:
+      " No Space After,Comma:
       " A.B.C.:
-      " ( Draft):
-      " été:
-      " Upper And lowercase:
+      " ( Space After) Parenthesis:
+      " (Space Before ) Parenthesis:
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -800,16 +807,16 @@ endfunction
 function! AllQuotes(contained_en)
    " Match quotes with region (region is non-greedy by default).
    hi link    AllQuotes String
-   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)"+ms=e skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)''+ms=e skip=+\%#=1''''+ end=+\%#=1''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)"+ms=e skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotes start=+\%#=1\%(\s\|^\)''+ms=e skip=+\%#=1''''+ end=+\%#=1''\%(\W\|\n\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 
 " Can't match ='quote' or other characters with AllQuotes() if the '=' is
 " already matched from elsewhere -> Need to use lookbehind to match instead.
 function! AllQuotesLookbehind(contained_en)
    hi link    AllQuotesLookbehind String
-   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
-   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+\%#=1''''+ end=+\%#=1''\%(\W\|$\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
+   execute 'syn region AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)''+ms=s skip=+\%#=1''''+ end=+\%#=1''\%(\W\|\n\)\@=+ oneline ' . (a:contained_en ? 'contained ' : '') . 'containedin=@ClusterCommentsPlusScope keepend'
 endfunction
 "------------------------------------------------------------------------------
 
@@ -1303,7 +1310,9 @@ function! AllFilesDefaultSyntax()
    call AllTitles()
    call AllSudo()
    call AllCopyright()
-   " call AllUnwantedCharacters()
+   if (&filetype != 'text')
+      " call AllUnwantedCharacters(0)
+   endif
    call AllFontStyles(1)
 endfunction
 

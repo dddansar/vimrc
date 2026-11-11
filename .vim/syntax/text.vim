@@ -162,9 +162,14 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " Highlight Math variables, numbers with x, numbered variables,
       " numbers starting with dot, derivatives, math functions...
       call MathMatches()
-      call AllForeignNamesOrWords()
-      " UnicodeNoSpell() needs to be after MathMatches(), so that AllForeignNameOrWord can be contained in SpUnicodeNoSpell
+      " AllIgnoreSpellForeignNamesOrWords() needs to be after MathMatches()
+      " and before UnicodeNoSpell()
+      call AllIgnoreSpellForeignNamesOrWords(1)
+      " call AllUnwantedCharacters(1)
       call UnicodeNoSpell()
+   else
+      call AllIgnoreSpellForeignNamesOrWords(0)
+      " call AllUnwantedCharacters(0)
    endif
    call AllNumbersUnicode(0)
    call AllLabel()
@@ -185,8 +190,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
       hi link    TextQuotesLookbehind TextNoColor
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|$\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
 
       call RegexMatches(0)
       call RegexMatchesVim(0)

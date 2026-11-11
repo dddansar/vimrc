@@ -4607,15 +4607,15 @@ function! UnicodeNoSpell()
       " syn match    SpUnicodeNoSpell     "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode
       " syn match SpUnicodeNoSpell "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode
 
-      syn match SpUnicodeNoSpell "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode,AllForeignNamesOrWords
-      syn match SpUnicodeNoSpell "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode,AllForeignNamesOrWords
+      syn match SpUnicodeNoSpell "\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode,AllIgnoreSpellForeignNamesOrWords,AllUnwantedCharacters,AllIgnoreUnwantedChar
+      syn match SpUnicodeNoSpell "[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllNumbersSci,@ClusterSpMath,AllCaps,AllCaps1,AllCapsAndNumbers,@ClusterUnicode,AllIgnoreSpellForeignNamesOrWords,AllUnwantedCharacters,AllIgnoreUnwantedChar
 
       " Don't spell check any Unicode chars in comments or quotes
       " syn match    SpUnicodeNoSpellCom  "[a-zA-Z0-9]*[\ua1-\U1ffff][a-zA-Z0-9\ua1-\U1ffff]*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
       " syn match SpUnicodeNoSpellCom "[a-zA-Z0-9]*[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
 
-      syn match SpUnicodeNoSpellCom "\%#=1\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
-      syn match SpUnicodeNoSpellCom "\%#=1[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind transparent
+      syn match SpUnicodeNoSpellCom "\<[a-zA-Z0-9]\+[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,AllUnwantedCharacters transparent
+      syn match SpUnicodeNoSpellCom "[^\x00-\xa0]\%([a-zA-Z0-9]\|[^\x00-\xa0]\)*" contains=@NoSpell,AllCaps,AllCaps1,AllCapsAndNumbers contained containedin=.*Comment.*,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,AllUnwantedCharacters transparent
    endif
 endfunction
 "------------------------------------------------------------------------------

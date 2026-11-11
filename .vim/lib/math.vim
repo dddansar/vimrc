@@ -102,7 +102,7 @@ function! MathMatches()
 
       " NOTE: using \zs to unmatch (s) if previous characters belong to any other syntax group
       syn match   SpMathNotSingleChar "\%#=1\%([a-z][a-z]\)\zs(s)\@=" contains=@NoSpell,AllParen
-      syn match   SpMathNotSingleChar "\%#=1'[dstm]\%([ :;,?!.>)\]]\|$\)\@=" contains=@NoSpell
+      syn match   SpMathNotSingleChar "\%#=1'[dstm]\%([ :;,?!.>)\]]\|\n\)\@=" contains=@NoSpell
 
       " Match I a A under certain conditions
       hi  link    SpMathSingleCharIaA1 Constant
@@ -287,7 +287,7 @@ function! MathFundamentalKeywords()
       syn match   MathProofsSystems   "\<[dD]eduction [rR]ules\>"
 
       syn match   MathProofsSystems   "\<[nN]atural [dD]eduction\>"
-      syn match   MathProofsSystems   "\<Hilbert\%(-[sS]tyle\)\?\>"
+      syn match   MathProofsSystems   "\<Hilbert[ -][sS]tyles\?\>"
       syn match   MathProofsSystems   "\<[sS]equent [cC]alculus\>"
 
 
