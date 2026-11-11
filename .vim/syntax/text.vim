@@ -109,7 +109,7 @@ syn match   TextSlash      "\%#=1\/"
 " Match alone quotes. Quote pairs are matched elsewhere
 hi  link    TextAloneQuotes Function
 syn match   TextAloneQuotes "\%#=1["]"
-syn match   TextAloneQuotes "\%#=1\%(s\)\@<!'"
+syn match   TextAloneQuotes "\%#=1\%(\ws\)\@<!'"
 syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
 
 
@@ -266,4 +266,8 @@ syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=
 
 if exists("b:current_syntax") && b:current_syntax == "text"
    call AllMultiWordLabel(0)
+   if expand('%:t') =~# '\.uni\.txt$'
+      call MathFundamentalKeywords()
+   endi
 endif
+

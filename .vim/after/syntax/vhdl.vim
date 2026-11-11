@@ -89,4 +89,3 @@ if exists("b:current_syntax") && b:current_syntax == "vhdl"
    call AllLabel()
 endif
 
-

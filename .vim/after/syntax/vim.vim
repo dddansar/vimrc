@@ -401,4 +401,3 @@ syn keyword HLStandout             HLStandout              contained containedin
 syn keyword HLNocombine            HLNocombine             contained containedin=@ClusterColorCSG
 "------------------------------------------------------------------------------
 
-

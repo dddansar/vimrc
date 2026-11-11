@@ -1010,17 +1010,18 @@ function! LoadMappings()
 
    " NOTE: Make tab and space work the same for visual and block visual
    "       mode, let it shift all lines equally.
-   if g:using_windows
-      vnoremap <expr> <tab> mode() ==# "v" ? "<c-v><s-i><tab>" : "<s-i><tab>"
-   else " For Linux
-      vnoremap <expr> <tab> mode() ==# "v" ? "<c-v><s-i><tab>" : "<s-i><tab>"
-   endif
-   " vnoremap <expr> <leader><tab> mode() ==# "v" ? "<c-v><s-i><tab>" : "<s-i><tab>"
+   " Inserts spaces/tabs on empyt lines
+   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_<c-v><s-i><tab>" : "<s-i><tab>"
+   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_<c-v><s-i><tab><esc>:'<,'>s/^\s\+$//e<cr>gv" : "<s-i><tab>"
+   " vnoremap <expr> <tab> mode() ==# "v" ? "_o_\<c-v>\<s-i>\<tab>\<esc>:'<,'>s/^\\s\\+$//e\<cr>gv_o_" : "\<s-i>\<tab>\<esc>:'<,'>s/^\\s\\+$//e\<cr>gv_o_"
+   " vnoremap <tab> >gv
+   vnoremap <expr> <tab> mode() ==# "v" ? "<c-v>>gvlllolllo" : ">gvlllolllo"
+   vnoremap <s-tab> <gv
    vnoremap <expr> <leader><space> mode() ==# "v" ? "<c-v><s-i><space>" : "<s-i><space>"
 
-   " Update >> << in visual mode to reselect last selection after shifting.
-   vnoremap >> >><esc>gv
-   vnoremap << <<<esc>gv
+   " Update > < in visual mode to reselect last selection after shifting.
+   vnoremap > >gv
+   vnoremap < <gv
 
    " <c-g>u updates the last undo checkpoint, so that a long block of text
    " gets split up into smaller undo pieces.
@@ -1028,9 +1029,6 @@ function! LoadMappings()
    inoremap . .<c-g>u
    inoremap ! !<c-g>u
    inoremap ? ?<c-g>u
-
-   " disable #count undo because I keep using it by accident!!!
-   " nnoremap <expr> u (v:count > 0 ? "<esc>" : "u")
 
 
    "---------------------------------------------------------------------------
@@ -1103,11 +1101,11 @@ function! LoadMappings()
    endif
 
    " Add insert mode A I movements
-   inoremap <c-1> <esc><s-a>
+   inoremap <c-4> <esc><s-a>
    " WARNING: "inoremap <c-i>" Messes up tabs as <c-i> is mapped to tab!!!
    " inoremap <c-i> <esc><s-i>
    inoremap <c-0> <esc>0i
-   inoremap <c-9> <esc>_i
+   inoremap <c-1> <esc>_i
 
    if g:keyboard_layout == "colemak-dh"
       " Center cursor after pg up/dn/pageup/pagedown/pagedn.
@@ -1505,22 +1503,24 @@ function! LoadMappings()
    "       the first jump list that we set, aka will jump back to the
    "       initial line.
 
-   " Capitalize all words after every punctuation and new line in the file.
+   " Capitalize all words after punctuations and newlines in the entire file.
    " 1st line matches lowercase after a new line or punctuations
    " 2nd line matches lowercase after bullet point style lines like  - abc
    " 3rd line matches lowercase after labels like (a), A), (-), and 1)
-   nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+   nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
-   " Capitalize all words after every punctuation on the current line.
-   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+   " Capitalize all words after punctuations and newlines on the current line.
+   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
 
-   " Capitalize first letter of every Word on the current line (Title Case).
+   " Capitalize first letter of every word on the current line (Title Case).
    nnoremap <leader>fu :keeppatterns s/\<[a-z]/\u&/g<cr>
-   " Capitalize first letter of every Word on every line in the file.
+   " Capitalize first letter of every word on every line in the file.
    nnoremap <leader>fU m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
+   " Capitalize first letter of every word before a : on the current line
+   nnoremap <leader>f: mz:keeppatterns s/\v^[^:]*:/\=substitute(submatch(0), '\<\w', '\u&', 'g')/<cr>`z
 
 
    " Remove extra spacing - Remove unwanted trailing white space.

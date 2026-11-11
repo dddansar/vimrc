@@ -987,7 +987,3 @@ syn match AsmLabel "\.\w\+\>" contains=@NoSpell
 hi  link    AsmMain NonText
 syn keyword AsmMain main Main
 
-" Highlight Note keyword
-hi  link    AsmNote  AllHLNote
-syn keyword AsmNote  NOTE Note containedin=.*Comment.*
-

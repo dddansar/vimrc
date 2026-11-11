@@ -1117,4 +1117,3 @@ inorea <buffer> _posifelifel if [ ${V} == a ]; then<cr>
             \fi<up><esc>$a<left><right><c-r>=Eatchar('\s')<cr>
 "------------------------------------------------------------------------------
 
-

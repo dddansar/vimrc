@@ -110,7 +110,7 @@ function! MathMatches()
       hi  link    SpMathSingleCharIaA3 Constant
       syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,)]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
-      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
@@ -194,28 +194,126 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
       "------------------------------------------------------------------------
 
-
-      hi  link    SpMathProofs   Statement
-      syn keyword SpMathProofs   proof Proof proofs Proofs prove Prove proves Proves proven Proven disprove Disprove Prover prover
-
-      syn keyword SpMathProofs   axiom axioms Axiom Axioms postulate postulates Postulate Postulates theorem theorems theory theories theoretical theoretically Theorem Theorems Theory Theories Theoretical Theoretically corollary corollaries Corollary Corollaries lemma lemmas Lemma Lemmas rule rules Rule Rules law laws Law Laws
-      syn match   SpMathProofs    "\<[Cc]ommon [Nn]otions\?\>"
-
-      syn keyword SpMathProofs property properties Property Properties identities Identities predicate predicates Predicate Predicates attribute attributes Attribute Attributes quality qualities Quality Qualities characteristic characteristics Characteristic Characteristics
-
-      syn keyword SpMathProofs   define defines defined definition definitions Define Defines Defined Definition Definitions declare declares declared declaration declarations Declare Declares Declared Declaration Declarations
-
-      " syn keyword SpMathProofs   language languages Language Languages grammar grammars grammatical grammatically Grammar Grammars Grammatical Grammatically dictionary dictionaries Dictionary Dictionaries alphabet alphabets alphabetical alphabetically Alphabet Alphabets Alphabetical Alphabetically
-
-      " syn keyword SpMathProofs   math Math mathematics Mathematics mathematical Mathematical
-
-
       " Clusters
       "------------------------------------------------------------------------
       syn cluster ClusterSpMath add=SpMath.*
       "------------------------------------------------------------------------
+
    endif
 endfunction
+
+function! MathFundamentalKeywords()
+   if g:performance_mode <= 0
+
+      " Math is built around a /d language, axioms, and rules of deduction o/
+      " - Language decides what counts as well-formed statements (syntax only).
+      " - Rules of deduction decide which statements can derive from others.
+      " - Axioms are the starting statements assumed true without proof.
+
+
+      " /d Language o/ in math means the /d vocabulary y/ and /d grammar y/
+      " you're allowed to write math in.
+      "    aka the /d symbols y/ (like ∀, ∃, =, +, ∈, ∧, →)
+      "    plus the /d syntax rules y/ for combining them into valid statements
+      " /d Definitions y/ are abbreviations (new names) for things you could
+      " already express with the existing language.
+      " /d Numbers, constants and variables b/ are language items
+      hi  link    MathLanguage    Define
+      syn keyword MathLanguage    language languages Language Languages
+
+      hi  link    MathVocabulary  Define
+      syn keyword MathVocabulary  symbol Symbol symbols Symbols alphabet alphabets Alphabet Alphabets vocabulary Vocabulary dictionary dictionaries Dictionary Dictionaries
+
+      hi  link    MathGrammar     Define
+      syn keyword MathGrammar     grammar grammars grammatical grammatically Grammar Grammars Grammatical Grammatically syntax Syntax
+
+      hi  link    MathDefinitions Define
+      syn keyword MathDefinitions define defines defined definition definitions Define Defines Defined Definition Definitions declare declares declared declaration declarations Declare Declares Declared Declaration Declarations
+
+      " Functions and procedures
+      hi  link    MathFunctions  Define
+      syn keyword MathFunctions  function functions Function Functions subfunction subfunctions Subfunction Subfunctions operator operators operation operations Operator Operators Operation Operations algorithm algorithms Algorithm Algorithms
+
+      " Written language items
+      hi  link    MathExpressions Statement
+      syn keyword MathExpressions formula formulas Formula Formulas equation equations Equation Equations expression expressions Expression Expressions term terms Term Terms
+
+      hi  link    MathNumVar  Constant
+      syn keyword MathNumVar  Number Numbers number numbers numeral numerals Numeral Numerals Constant Constants constant constants variable Variable variables Variables
+
+      " Sets
+      " /d Sets p/ are part of the language
+      hi  link    MathSets       Question
+      syn keyword MathSets       set sets Set Sets subset subsets Subset Subsets superset supersets Superset Supersets collection collections Collection Collections class classes Class Classes
+      " Ordered collections
+      hi  link    MathSequences  Question
+      syn keyword MathSequences  sequence sequences Sequence Sequences tuple tuples Tuple Tuples list lists List Lists array Array arrays Arrays
+      " Set operations
+      " hi  link    MathSetOps     Question
+      " syn keyword MathSetOps     union unions Union Unions intersection intersections Intersection Intersections complement complements Complement Complements
+      " Membership
+      " hi  link    MathMembers    Question
+      " syn keyword MathMembers    member members Member Members element elements Element Elements item items Item Items include includes included including Include Includes Included Including universe universes Universe Universes empty Empty null Null
+      " Ranges and positions
+      " hi  link    MathRanges     Question
+      " syn keyword MathRanges     interval intervals Interval Intervals range ranges Range Ranges index indices Index Indices
+      " Algebraic structures
+      " In abstract algebra, a magma consists of a set equipped with a single
+      " binary operation that must be closed by definition.
+      " A Semigroup is a magma where the operation is associative.
+      " A Monoid is a semigroup with an identity element.
+      " A Group is a monoid where every element has an inverse.
+      hi  link    MathAlgebra    Question
+      syn keyword MathAlgebra    magma magmas Magma Magmas semigroup semigroups Semigroup Semigroups monoid monoids Monoid Monoids group groups Group Groups
+      " Types
+      " Type is type theory, not set theory.
+      hi  link    MathTypes      Question
+      syn keyword MathTypes      type types Type Types
+      " Data structures (CS)
+      " hi  link    MathDataStruct Structure
+      " syn keyword MathDataStruct array Array arrays Arrays stack Stack stacks Stacks queue Queue queues Queues tree Tree trees Trees branch Branch branches Branches graph graphs graphical Graph Graphs Graphical web Web webs Webs network Network networks Networks FIFO FILO LILO LIFO structure Structure structures Structures
+
+      " Math objects include numbers, expressions, shapes, functions, sets...
+      hi  link    MathObjects  Debug
+      syn keyword MathObjects  object objects Object Objects
+
+
+      " /d Rules of deduction o/ are a set of rules to derive new statements
+      hi  link    MathProofsSystems   Structure
+      syn keyword MathProofsSystems   rule rules Rule Rules
+      syn match   MathProofsSystems   " \<[rR]ules [oO]f [dD]eduction\>"
+      syn match   MathProofsSystems   " \<[rR]ules [oO]f [iI]nference\>"
+      syn match   MathProofsSystems   "\<[iI]nference [rR]ules\>"
+      syn match   MathProofsSystems   "\<[dD]eduction [rR]ules\>"
+
+      syn match   MathProofsSystems   "\<[nN]atural [dD]eduction\>"
+      syn match   MathProofsSystems   "\<Hilbert\%(-[sS]tyle\)\?\>"
+      syn match   MathProofsSystems   "\<[sS]equent [cC]alculus\>"
+
+
+      " /d Axioms o/ are the starting statements you accept without proof.
+      " A /d proof y/ is a finite sequence of statements from axioms or assumed
+      " premises to the theorem being proved following the rules of deduction.
+      hi  link    MathAxioms   Statement
+      syn keyword MathAxioms   axiom axioms Axiom Axioms axiomatic Axiomatic postulate postulates Postulate Postulates theorem theorems theory theories Theorem Theorems Theory Theories corollary corollaries Corollary Corollaries lemma lemmas Lemma Lemmas law laws Law Laws statement statements Statement Statements
+      syn keyword MathAxioms   ZFC  
+      syn match   MathAxioms   "\<Zermelo-Fraenkel\>" contains=@NoSpell
+      syn match   MathAxioms   "\<Peano\%('s\)\? \%([Aa]rithmetic\|[Aa]xioms\|[Pp]ostulates\)\>" contains=@NoSpell
+
+      syn keyword MathAxioms property properties Property Properties identities Identities predicate predicates Predicate Predicates attribute attributes Attribute Attributes quality qualities Quality Qualities characteristic characteristics Characteristic Characteristics
+
+      hi  link    MathProofs   Statement
+      syn keyword MathProofs   proof Proof proofs Proofs prove Prove proves Proves proven Proven disprove Disprove Prover prover
+
+      " syn keyword MathProofs   math Math mathematics Mathematics mathematical Mathematical
+
+      " Change the colors of labels to be different from the keywords above...
+      hi  link    AllLabel   HLKhaki4B
+      hi  link    AllLabel2  HLKhaki4B
+      hi  link    AllMultiWordLabel  HLKhaki4B
+   endif
+endfunction
+
 
 
 "---------------------------
@@ -1074,5 +1172,4 @@ inorea <buffer> _lnxa      ln\|(x+a)/(x-a)\|<left><right><c-r>=Eatchar('\s')<cr>
 " Alligation is a method of calculating weighted averages
 inorea <buffer> _allig     w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _weight    w₁/w₂=(x₂-x)/(x-x₁)<left><right><c-r>=Eatchar('\s')<cr>
-
 
