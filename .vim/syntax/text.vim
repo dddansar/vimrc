@@ -162,13 +162,13 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " Highlight Math variables, numbers with x, numbered variables,
       " numbers starting with dot, derivatives, math functions...
       call MathMatches()
-      " AllIgnoreSpellForeignNamesOrWords() needs to be after MathMatches()
+      " AllIgnoreSpellExtendedLatin() needs to be after MathMatches()
       " and before UnicodeNoSpell()
-      call AllIgnoreSpellForeignNamesOrWords(1)
+      call AllIgnoreSpellExtendedLatin(1)
       " call AllUnwantedCharacters(1)
       call UnicodeNoSpell()
    else
-      call AllIgnoreSpellForeignNamesOrWords(0)
+      call AllIgnoreSpellExtendedLatin(0)
       " call AllUnwantedCharacters(0)
    endif
    call AllNumbersUnicode(0)

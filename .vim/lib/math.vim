@@ -110,7 +110,9 @@ function! MathMatches()
       hi  link    SpMathSingleCharIaA3 Constant
       syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,)]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
-      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IaA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
+      " \/\w\> is to not match a /d highlight o/
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![a]\%(\w\| [a-zA-Z'"]\| \/\w\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
@@ -119,6 +121,8 @@ function! MathMatches()
       syn match   SpMathSingleCharIaA4 "\%#=1\<[Tt]he [IaA]\>" contains=@NoSpell
       " Ignore spell check on "the" followed by "a" like in "the a variable".
       syn match   SpMathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
+
+      syn match   SpMathNotSingleCharIaA "\%#=1\%(^\s*-\s*\)\@<=[AI]" contains=@NoSpell
 
       hi  link    SpMathNumberedVar Constant
       syn match   SpMathNumberedVar "\%#=1\w\@<![a-z][0-9]\+\w\@!" contains=@NoSpell

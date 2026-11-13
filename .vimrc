@@ -552,6 +552,10 @@ function! DefaultSettings()
    set statusline+=\ \ \ %{SynStackCached()}
    " set statusline+=%=%p%%\ %l/%L:%v\ %t
    set statusline+=%=\ %l/%L:%v\ %p%%
+   augroup SynStackIdle
+      autocmd!
+      autocmd CursorHold  * let g:syn_stack = SynStackGroup()
+   augroup END
 
    " The update time for cursor hold
    " set updatetime=500
@@ -616,6 +620,8 @@ function! DefaultSettings()
    set shiftwidth=3
    " How many spaces a tab is worth.
    set tabstop=3
+   " With shiftround, > and < rounds indentation to the next/previous multiple
+   set shiftround
 
    " Indents word-wrapped lines as much as the 'parent' line.
    set breakindent
@@ -872,13 +878,23 @@ function! DefaultSettings()
    " augroup END
 
    "---------------------------------------------------------------------------
-   " Automatically Resize splits whenever a new split is opened.
+   " Automatically Resize splits whenever a new split is opened or closed.
    "---------------------------------------------------------------------------
-   augroup AutoResizeSplits
+   " Whenever a window is open in multi-splits, maximize the active window.
+   augroup MaximizeAfterOpen
       autocmd!
       " WinEnter will prevent keeping 2 splits equal length for comparison.
       " autocmd WinEnter * wincmd _ | exe "wincmd |"
       autocmd WinNew * if &buftype == '' | wincmd _ | exe "wincmd |" | endif
+   augroup END
+
+   " Whenever a window is closed in multi-splits, maximize the active window.
+   augroup MaximizeAfterClose
+      autocmd!
+      " WinClosed fires just before the window is removed, so wincmd _
+      " maximizes the window that's about to disappear -> need timer_start()
+      " autocmd WinClosed * wincmd _ | wincmd |
+      autocmd WinClosed * call timer_start(0, {-> execute('wincmd _ | wincmd |')})
    augroup END
 
    "---------------------------------------------------------------------------
@@ -888,6 +904,20 @@ function! DefaultSettings()
       autocmd!
       autocmd VimEnter * call IfDiff()
    augroup END
+
+   "---------------------------------------------------------------------------
+   " Hack fix for Vim/NeoVim on my linux not copying selections to the linux
+   " selection buffer.
+   "---------------------------------------------------------------------------
+   let g:hack_copy_selection=1
+   if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
+      let g:visual_copied = 0
+      let g:visual_timer = -1
+      augroup CopyOnVisualHold
+         autocmd!
+         autocmd CursorMoved * call s:visual_hold_reset()
+      augroup END
+   endif
 
 endfunction
 
@@ -1013,12 +1043,29 @@ function! LoadMappings()
    " Inserts spaces/tabs on empty lines
    " NOTE: shiftround only rounds indentation in "v" mode not "V" mode...
    " > and < lose the visual selection once applied, reapply with gv.
-   vnoremap <expr>   <tab> mode() ==# "v" ? ">gv<c-v>_o_o" : ">gv_o_o"
-   vnoremap <expr> <s-tab> mode() ==# "v" ? "<gv<c-v>_o_o" : "v<gv<c-v>_o_o"
+
+   " Make tabs and spaces shift all lines equally in visual mode.
+   " NOTE: > and < lose the visual selection once applied, reapply with gv.
+   " NOTE: "<c-v>>" does not round indentation with shiftround...
+   " NOTE: v> does not tab in the middle of text based on selection...
+   " NOTE: <c-v><s-i><tab> adds spaces in empty lines...
+   " vnoremap <expr>   <tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v><s-i><tab>" : "<s-i><tab>"
+   " vnoremap <expr>   <tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v>>gv" : ">gv"
+   " NOTE: col('.') is the cursor's column, > 1 means not at column 1.
+   " vnoremap <expr> <tab> col('.') > 1
+   "                    \ ? (mode() =~# '[vV]' ? "<c-v><s-i><tab>" : "<s-i><tab>")
+   "                    \ : (mode() =~# '[vV]' ? ">gv" : ">gv")
+   "                    " \ : (mode() =~# '[vV]' ? ">gv_o_o" : ">gv_o_o")
+   " NOTE: getpos('v') is the selection's start and getpos('.') is the cursor:
+   " NOTE: Check if either the selection's start or the cursor is at column 1
+   vnoremap <expr> <tab> getpos('v')[2] > 1 && getpos('.')[2] > 1
+         \ ? (mode() =~# '[vV]' ? "<c-v><s-i><tab>" : "<s-i><tab>")
+         \ : (mode() =~# '[vV]' ? ">gv" : ">gv")
+   vnoremap <expr> <s-tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v><gv" : "<gv"
+   vnoremap > >gv
+   vnoremap < <gv
    vnoremap <expr> <leader><space> mode() ==# "v" ? "<c-v><s-i><space>" : "<s-i><space>"
-   " Update > < in visual mode to reselect last selection after shifting.
-   vnoremap <expr> > mode() ==# "v" ? ">gv" : "v>gv<c-v>_o_o"
-   vnoremap <expr> < mode() ==# "v" ? "<gv" : "v<gv<c-v>_o_o"
+
 
    " <c-g>u updates the last undo checkpoint, so that a long block of text
    " gets split up into smaller undo pieces.
@@ -1217,49 +1264,33 @@ function! LoadMappings()
    nnoremap <leader>@ :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
    nnoremap <leader>2 :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
 
-   " `< will go to the start of the previous visual selection.
-   " /<up> will start search then pick previous search.
-   " <a-backspace> will go to previous char even if on previous line.
-   if g:using_windows
-      " Search for characters being selected (same as <c-/>).
-      vnoremap / "+y`<<a-backspace>/\V\c<middlemouse><cr>
 
-      " Search for characters being selected.
-      vnoremap <c-/> "+y`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-8> "+y`<<a-backspace>/\V\c\<<middlemouse>\><cr>
+   " Using escape({string}, {chars}) to escape the yanked text @", this
+   " allows the search to also work on / and \ characters.
+   " <a-backspace> moves the cursor left even if on the previous line.
+   " substitute({string},'\n','\\n','g') allows searches over multiple lines
+   " substitute({string}, {pattern}, {replacement}, {flags})
+   "    {string}: the text to operate on.
+   "    '\n': matches a newline character (the ^@ you see in the command line).
+   "    '\\n': the replacement is the two characters \n.
+   "    'g': replace all matches, not just the first.
+   " /<up> starts a search then uses the previous search patern.
+   " vnoremap /     y<a-backspace>/\V\c<c-r>=escape(@",'/\')<cr><cr>
+   " Search for characters being selected.
+   vnoremap /     y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap <c-/> y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap <c-8> y<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   " Add another word to the existing search!
+   vnoremap ?     y<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap *     y<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   " Search for word under the cursor.
+   nnoremap <c-/> yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <c-8> yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   " Add another word to the existing search!
+   " NOTE: "?" was used to search backwards but I can just use <s-n>.
+   nnoremap ?     yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap *     yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
 
-      " Add another word to the existing search!
-      vnoremap ? "+y`<<a-backspace>/<up>\\|<middlemouse><cr>
-      vnoremap * "+y`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
-
-      " Search for word under the cursor.
-      nnoremap <c-/> viw"+y<a-backspace>/\V\c<middlemouse><cr>
-      nnoremap <c-8> viw"+y<a-backspace>/\V\c\<<middlemouse>\><cr>
-
-      " Add another word to the existing search!
-      " NOTE: "?" was used to search backwards but I can just use <s-n>.
-      nnoremap ? viw"+y`<<a-backspace>/<up>\\|<middlemouse><cr>
-      nnoremap * viw"+y`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
-
-   else " For Linux
-      " Search for characters being selected.
-      vnoremap /     <esc>`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-/> <esc>`<<a-backspace>/\V\c<middlemouse><cr>
-      vnoremap <c-8> <esc>`<<a-backspace>/\V\c\<<middlemouse>\><cr>
-
-      " Add another word to the existing search!
-      vnoremap ? <esc>`<<a-backspace>/<up>\\|<middlemouse><cr>
-      vnoremap * <esc>`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
-
-      " Search for word under the cursor.
-      nnoremap <c-/> viw"*y<a-backspace>/\V\c<middlemouse><cr>
-      nnoremap <c-8> viw"*y<a-backspace>/\V\c\<<middlemouse>\><cr>
-
-      " Add another word to the existing search!
-      " NOTE: "?" was used to search backwards but I can just use <s-n>.
-      nnoremap ? viw"*y`<<a-backspace>/<up>\\|<middlemouse><cr>
-      nnoremap * viw"*y`<<a-backspace>/<up>\\|\<<middlemouse>\><cr>
-   endif
 
    " Search in multiple split-windows. Type m to continue the search in
    " next file. NOTE" \<lt> maps to <
@@ -1725,10 +1756,6 @@ let g:syn_stack = ''
 function! SynStackCached()
    return g:syn_stack
 endfunction
-augroup SynStackIdle
-   autocmd!
-   autocmd CursorHold  * let g:syn_stack = SynStackGroup()
-augroup END
 
 "------------------------------------------------------------------------------
 " Function: s:visual_hold_reset()
@@ -1761,16 +1788,6 @@ function! s:visual_hold_reset()
       let g:visual_copied = 0
    endif
 endfunction
-
-let g:hack_copy_selection=1
-if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
-   let g:visual_copied = 0
-   let g:visual_timer = -1
-   augroup CopyOnVisualHold
-      autocmd!
-      autocmd CursorMoved * call s:visual_hold_reset()
-   augroup END
-endif
 
 
 "------------------------------------------------------------------------------
@@ -1879,15 +1896,14 @@ endfunction
 "              then checks the file size, and if less than g:LargeFile, load
 "              DefaultSettings() otherwise load LargeFileSettings().
 "------------------------------------------------------------------------------
+" Set common setings for Large and Default files. Set the font, the
+" colorscheme and the dimensions of the Vim window.
+if !exists("g:EnteredCommonSetting")
+   call CommonSettings()
+endif
 augroup MainFunction
 
    autocmd!
-
-   " Set common setings for Large and Default files. Set the font, the
-   " colorscheme and the dimensions of the Vim window.
-   if !exists("g:EnteredCommonSetting")
-      call CommonSettings()
-   endif
 
    " Set max file size for AI API
    " autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f >= g:MaxAIAPIFile | let g:claude_disable = 1 | endif

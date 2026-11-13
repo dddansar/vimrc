@@ -140,7 +140,7 @@ endfunction
 function! AllUnwantedCharacters(contained_en)
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]\+" ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
+      execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]\+" keepend ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
       hi  link     AllIgnoreUnwantedChar  HLYellow
       syn match    AllIgnoreUnwantedChar  '[−—–][−—–]\+' contained containedin=AllUnwantedCharacters
 
@@ -185,19 +185,20 @@ function! AllIgnoreSpellingsFunc()
    endif
 endfunction
 
-function! AllIgnoreSpellForeignNamesOrWords(contained_en)
+function! AllIgnoreSpellExtendedLatin(contained_en)
    if g:performance_mode <= 0
       " Ignore Foreign names where Vim does not properly apply word boundaries
-      " Basic Latin (U+0041-U+007A).
-      " Latin-1 Supplement (U+00C0-U+00FF): Covers French, Spanish, German,
-      " Portuguese, Italian, and Nordic.
-      " Latin Extended-A (U+0100-U+017F): Covers Central European, Eastern
-      " European, Baltic, and Turkish.
-      " Latin Extended-B (U+0180-U+024F): Covers specialized European
-      " characters and certain African or phonetic Latin characters.
-      " Latin Extended Additional (U+1E00-U+1EFF): Used for Vietnamese and
-      " scholarly transliterations of Arabic, Sanskrit, or Hebrew.
-      execute 'syn match  AllIgnoreSpellForeignNamesOrWords "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained ' : '')
+      " Basic Latin (U+0041-U+007A): Covers the standard 26-letter alphabet
+      " used by English, Indonesian, Malay, Swahili...
+      " Latin-1 Supplement (U+00C0-U+00FF): Covers most Western Europe
+      " including French, Spanish, German, Portuguese, Italian, Nordic...
+      " Latin Extended-A (U+0100-U+017F): Covers Central/Eastern European,
+      " Baltic, Turkish, Polish, Czech, Hungarian...
+      " Latin Extended-B (U+0180-U+024F): Covers Romanian, Azerbaijani, Pinyin,
+      " and African languages like Hausa, Yoruba, Igbo...
+      " Latin Extended Additional (U+1E00-U+1EFF): Covers Vietnamese, Welsh,
+      " and scholarly transliterations of Arabic, Sanskrit, Hebrew...
+      execute 'syn match  AllIgnoreSpellExtendedLatin "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained ' : '')
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -515,7 +516,6 @@ function! AllMultiWordLabel(contained_en)
       " Upper and lowercase:
       " Pros and Cons:
       " lowercase:
-      " Some long sentence with periods. followed by a colon: don't match
       " Exclamation!:
       " Question?:
       " Space Before Colon :

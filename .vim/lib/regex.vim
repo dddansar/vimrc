@@ -145,6 +145,10 @@ function! RegexMatchesVim(contained_en)
    hi  link    RegexEngineVim   SpecialKey
    execute 'syn match   RegexEngineVim   "\\%#=[0-2]"           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
 
+   " In Vim, | inside mappings needs to be escaped as \| and \| as \\|
+   hi  link    RegexPatSepOrVim  Delimiter
+   execute 'syn match   RegexPatSepOrVim  "\\\\|"             ' . l:contained . 'contains=@NoSpell contained containedin=vimFunctionBody,vimMapRhs'
+
    " Lookahead/Lookbehind
    hi  link    RegexPosLookVim   Question
    execute 'syn match   RegexPosLookVim   "\\@<="           ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'

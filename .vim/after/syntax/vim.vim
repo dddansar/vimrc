@@ -119,6 +119,9 @@ syn match   VimEnvVar   "\${\I\i\+}" contained containedin=vimMapRhs
 hi  link    VimStatement  Statement
 syn match   VimStatement  ":[a-zA-Z][a-zA-Z0-9]\+\>" contained containedin=vimMapRhs
 
+hi  link    VimFunctions  Statement
+syn match   VimFunctions   "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,SpRegexSearchesSlash
+
 hi  link    VimEatChar  Type
 syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
 
