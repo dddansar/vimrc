@@ -655,8 +655,6 @@ _3dot
 _3doth
 _3dotdd
 _3dotdu
-_no
-_nO
 _inv&
 __:
 _inv!
@@ -694,8 +692,14 @@ _scissors
 _smiley
 _fsmiley
 _frowny
+_bullet 
 _tbullet
-_bullet
+_hbullet
+_lbullet
+_rbullet
+_obullet
+_ibullet
+_wbullet
 e_earth
 e_dna
 e_star

@@ -970,10 +970,6 @@ function! LoadMappings()
       nnoremap <c-y> viw"+y
       " Paste over entire word.
       nnoremap <c-p> viw"+gpgv"+y
-      if g:ctrl_shift_enabled
-         " Paste after last char in line.
-         nnoremap <c-s-p> $pm'
-      endif
    else " For Linux
       nnoremap y m'y
       vnoremap y ym'
@@ -986,18 +982,22 @@ function! LoadMappings()
       nnoremap <c-y> viwy
       " Paste over entire word.
       nnoremap <c-p> viwpgvy
-      if g:ctrl_shift_enabled
-         " Paste after last char in line.
-         nnoremap <c-s-p> $pm'
-      endif
    endif
 
    " diff obtain entire file
    nnoremap dO :%diffget<cr>
 
    " Paste last selected without using mouse.
-   cnoremap <a-p>   <middlemouse>
-   nnoremap <a-p>   a<middlemouse><esc>
+   " cnoremap <a-p>   <middlemouse>
+   " nnoremap <a-p>   a<middlemouse><esc>
+   " <c-r>* inserts the * register  (primary selection on Linux, the clipboard
+   " on Windows) on the command line without the need for <middlemouse>.
+   cnoremap <a-p> <c-r>*
+   nnoremap <a-p> a<c-r><c-r>*<esc>
+   if g:ctrl_shift_enabled
+      " Paste after last char in line.
+      nnoremap <c-s-p> $pm'
+   endif
 
    " Select all in file.
    nnoremap <a-a> ggVG
@@ -1249,23 +1249,13 @@ function! LoadMappings()
    " /d Search related mappings g/
    "---------------------------------------------------------------------------
 
-   " Search for item under cursor with mouse.
-   " "*y will add selection to the linux selection buffer (needed here
-   "     because I have lazyredraw set).
-   " NOTE: On Linux, the "*y command yanks text to the selection register
-   "       (for middle-click paste), while the "+y command yanks text to the
-   "       clipboard register (for standard CTRL+V paste).
-   nnoremap <c-leftmouse>  <leftmouse>viw"*yk$/\V\c<middlemouse><cr>
-   nnoremap <c-rightmouse> <leftmouse>viw"*yk$/\V\c\<<middlemouse>\><cr>
-   nnoremap <s-leftmouse>  <leftmouse>viw"*yk$/<up>\\|<middlemouse><cr>
-   nnoremap <s-rightmouse> <leftmouse>viw"*yk$/<up>\\|\<<middlemouse>\><cr>
-
    " Invert the lazyredraw setting.
    nnoremap <leader>@ :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
    nnoremap <leader>2 :set invlazyredraw<cr>:echo "lazyredraw ="&lazyredraw<cr>
 
 
-   " Using escape({string}, {chars}) to escape the yanked text @", this
+   " Search for characters selected.
+   " Using escape({string}, {chars}) to escape the yanked text inside @", this
    " allows the search to also work on / and \ characters.
    " <a-backspace> moves the cursor left even if on the previous line.
    " substitute({string},'\n','\\n','g') allows searches over multiple lines
@@ -1276,20 +1266,26 @@ function! LoadMappings()
    "    'g': replace all matches, not just the first.
    " /<up> starts a search then uses the previous search patern.
    " vnoremap /     y<a-backspace>/\V\c<c-r>=escape(@",'/\')<cr><cr>
-   " Search for characters being selected.
+
+   " Search for characters selected.
    vnoremap /     y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    vnoremap <c-/> y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    vnoremap <c-8> y<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Add another word to the existing search!
+   " Add another word to the existing search.
    vnoremap ?     y<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    vnoremap *     y<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Search for word under the cursor.
+   " Search for word under the cursor in normal mode.
    nnoremap <c-/> yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    nnoremap <c-8> yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Add another word to the existing search!
-   " NOTE: "?" was used to search backwards but I can just use <s-n>.
+   " Add another word to the existing search in normal mode.
    nnoremap ?     yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    nnoremap *     yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+
+   " Search for item under cursor with a mouse.
+   nnoremap <c-leftmouse>  <leftmouse>yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <c-rightmouse> <leftmouse>yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   nnoremap <s-leftmouse>  <leftmouse>yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <s-rightmouse> <leftmouse>yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
 
 
    " Search in multiple split-windows. Type m to continue the search in
@@ -1303,22 +1299,23 @@ function! LoadMappings()
    " Search and replace.
    " NOTE: gc will ask for confirmation after each replace.
    "       % starts from top of the file.
-   "       c.,$ to start from current line to end of file.
+   "       .,$ to start from current line to end of file.
    "       |1,''-&& to repeat from first line to cursor line minus one.
-   " NOTE: <c-r><c-w> can be used in the command-line mode to insert the
-   "       word currently under the cursor.
+   " Using escape({string}, {chars}) to escape the yanked text inside @", this
+   " allows the search to also work on / and \ characters in the search
+   " side and on &, ~, / and \ in replacement side.
    " Replace next word.
-   nnoremap <leader>rn viw"*y:.,$s/\C<middlemouse>/<middlemouse><space><bs>/gc\|1,''-&&
-   vnoremap <leader>rn :<bs><bs><bs><bs><bs>.,$s/\C<middlemouse>/<middlemouse>/gc\|1,''-&&
+   nnoremap <leader>rn yiw:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>rn y:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    " Replace next word exact match.
-   nnoremap <leader>re viw"*y:.,$s/\C\<<middlemouse>\>/<middlemouse><space><bs>/gc\|1,''-&&
-   vnoremap <leader>re :<bs><bs><bs><bs><bs>.,$s/\C\<<middlemouse>\>/<middlemouse>/gc\|1,''-&&
+   nnoremap <leader>re yiw:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>re y:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    " Replace ALL words.
-   nnoremap <leader>ra m'viw"*y:%s/\C<middlemouse>/<middlemouse>/g<left><left><space><bs>
-   vnoremap <leader>ra <esc>m'gv:<bs><bs><bs><bs><bs>%s/\C<middlemouse>/<middlemouse>/g<left><left><space><bs>
+   nnoremap <leader>ra m'yiw:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   vnoremap <leader>ra <esc>m'gvy:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
    " Replace ALL words exact match.
-   nnoremap <leader>rr m'viw"*y:%s/\C\<<middlemouse>\>/<middlemouse>/g<left><left><space><bs>
-   vnoremap <leader>rr <esc>m'gv:<bs><bs><bs><bs><bs>%s/\C\<<middlemouse>\>/<middlemouse>/g<left><left><space><bs>
+   nnoremap <leader>rr m'yiw:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   vnoremap <leader>rr <esc>m'gvy:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
 
 
    " Replace all c style /*multi-line*/ comments with single-line //comments.
