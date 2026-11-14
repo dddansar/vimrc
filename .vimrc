@@ -340,6 +340,15 @@ function! CommonSettings()
    if g:select_custom_syntax <= 3
       " syntax on
       syntax enable
+   elseif g:select_custom_syntax >= 4 && g:select_custom_syntax < 5
+      " If syntax is off, Vim's default syntax files will not be loaded.
+      "      :syntax list   Lists the syntax groups loaded.
+      "      :syntax off    Completely disables the syntax highlighting for
+      "                     all current and future buffers.
+      "      :syntax clear  Clears syntax highlighting only for the current
+      "                     buffer.
+      syntax off
+      " syntax clear
    endif
 
 
@@ -938,15 +947,25 @@ endfunction
 "
 " :map and :noremap are recursive and non-recursive versions of the various
 " mapping commands. What that means is that if you do:
-" :map j gg
-" :map Q j
-" :noremap W j
+"     :map j gg
+"     :map Q j
+"     :noremap W j
 "
 " j will be mapped to gg. Q will also be mapped to gg, because j will be
 " expanded for the recursive mapping. W will be mapped to j (and not to gg)
 " because j will not be expanded for the non-recursive mapping.
+" WARNING: You can create infinite recursive mappings if you map the same key!
 "
-" You can even create infinite recursive mapping if you map to the same key!
+" Other variations include:
+"     :map/noremap: Normal, Visual, Select, Operator-pending modes.
+"     :map!/noremap!: Insert and Command-line modes.
+"     :nmap/nnoremap: Normal mode only.
+"     :vmap/vnoremap: Visual and Select modes only.
+"        :xmap/xnoremap: Visual mode only (not Select mode).
+"        :smap/snoremap: Select mode only (not Visual mode).
+"     :omap/onoremap: Operator-pending mode only.
+"     :imap/inoremap: Insert mode only.
+"     :cmap/cnoremap: Command-line mode only.
 "------------------------------------------------------------------------------
 function! LoadMappings()
 
@@ -1027,7 +1046,7 @@ function! LoadMappings()
    "---------------------------------------------------------------------------
 
    " Insert newline with enter without entering insert mode.
-   nnoremap <expr> <cr> (index(['quickfix','help','terminal'], &buftype) >= 0 \|\| !empty(getcmdwintype())) ? "\<cr>" : "o\<esc>"
+   nnoremap <expr> <cr> (index(['quickfix','help','terminal'], &buftype) >= 0 \|\| !empty(getcmdwintype())) ? "<cr>" : "o<esc>"
    nnoremap <s-cr> O<esc>
    inoremap <s-cr> <cr><esc>i
    inoremap <c-cr> <esc>o
@@ -1097,11 +1116,12 @@ function! LoadMappings()
       noremap <s-b> <s-f>
       noremap <s-f> <s-e>
       noremap <s-l> g<s-e>
+      " NOTE: s-k loads manual --> can use terminal man command instead.
+      " noremap <s-e> <s-k>
 
       " gj and gk are used to not skip over wrapped lines.
       noremap g, gj
       noremap ge gk
-
    else " For qwerty
 
       " noremap l ge
@@ -1150,6 +1170,31 @@ function! LoadMappings()
    " inoremap <c-i> <esc><s-i>
    inoremap <c-0> <esc>0i
    inoremap <c-1> <esc>_i
+
+   " Use <s-e> to enter insert after comment as it is next to <s-i>.
+   nnoremap <expr> <a-i> b:comment_leader == "//" ? "$?\/\/?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == "--" ? "$?--?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == "\"" ? "$?\"?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == "#"  ? "$?#?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == "%"  ? "$?%?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == ">"  ? "$?>?e<cr>:noh<cr>wi" :
+                       \ b:comment_leader == ";"  ? "$?;?e<cr>:noh<cr>wi" : "<s-k>"
+   " Map to tab after comment.
+   nnoremap <expr> <a-.> b:comment_leader == "//" ? "$?\/\/?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == "--" ? "$?--?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == "\"" ? "$?\"?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == "#"  ? "$?#?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == "%"  ? "$?%?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == ">"  ? "$?>?e<cr>:noh<cr>wi   <esc><c-o>lll" :
+                       \ b:comment_leader == ";"  ? "$?;?e<cr>:noh<cr>wi   <esc><c-o>lll" : "<s-k>"
+   " Map to remove tab after comment.
+   nnoremap <expr> <a-h> b:comment_leader == "//" ? "$?\/\/?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == "--" ? "$?--?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == "\"" ? "$?\"?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == "#"  ? "$?#?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == "%"  ? "$?%?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == ">"  ? "$?>?e<cr>:noh<cr>wXXX<c-o>" :
+                       \ b:comment_leader == ";"  ? "$?;?e<cr>:noh<cr>wXXX<c-o>" : "<s-k>"
 
    if g:keyboard_layout == "colemak-dh"
       " Center cursor after pg up/dn/pageup/pagedown/pagedn.
@@ -1361,11 +1406,16 @@ function! LoadMappings()
       tnoremap <silent> <c-.> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
       tnoremap <silent> <c-h> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
 
-      " move to another split but don't resize
-      nnoremap <a-,>    $<c-w>j
-      nnoremap <a-e>    $<c-w>k
-      nnoremap <silent> <a-.> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
-      nnoremap <silent> <a-h> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
+      " Move to another split but don't resize
+      if g:ctrl_shift_enabled
+         " NOTE: Can't <c-s-non letter>!
+         " <c-s-u> is Unicode..
+         " <a-.> and <a-,> are used elsewhere...
+         nnoremap <c-s-l>    $<c-w>k
+         nnoremap <c-s-e>    $<c-w>j
+         nnoremap <silent> <c-s-i> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
+         nnoremap <silent> <c-s-n> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
+      endif
    else " For qwerty
       " Move btw split screens.
       nnoremap <c-j> $<c-w>j<c-w><bar><c-w>_0zz
@@ -1380,11 +1430,13 @@ function! LoadMappings()
       tnoremap <silent> <c-l> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>c-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
       tnoremap <silent> <c-h> <c-\><c-n>:exe "normal! \<lt>c-w>\<lt>s-w>\<lt>c-w>\<lt>bar>\<lt>c-w>_"<cr>
 
-      " move to another split but don't resize
-      nnoremap <a-j> $<c-w>j
-      nnoremap <a-k> $<c-w>k
-      nnoremap <silent> <a-l> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
-      nnoremap <silent> <a-h> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
+      " Move to another split but don't resize
+      if g:ctrl_shift_enabled
+         nnoremap <c-s-j> $<c-w>j
+         nnoremap <c-s-k> $<c-w>k
+         nnoremap <silent> <c-s-l> :exe "normal! \<lt>c-w>\<lt>c-w>"<cr>
+         nnoremap <silent> <c-s-h> :exe "normal! \<lt>c-w>\<lt>s-w>"<cr>
+      endif
    endif
    " Same "move btw split screens" as above but using the arrow keys.
    nnoremap <c-down> $<c-w>j<c-w><bar><c-w>_0zz
@@ -1460,17 +1512,45 @@ function! LoadMappings()
    " =     This specifies the expression register.
    " _o_   in visual mode will start from first non white space on first and
    "       last line.
-   vnoremap <silent> <expr> gc mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> <esc>"
-   vnoremap <silent> <expr> gs mode() ==# "v" ? "<c-v>_o_f <del>" : mode() ==# "V" ? "<c-v>_o_f <del>" : "_o_f <del>"
-   " Puts comment just before first non-whitespace.
+   " NOTE: Inconsistently applies on empty lines and adds a white space.
+   " vnoremap <silent> <expr> gc mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> <esc>"
+   " vnoremap <silent> <expr> gp mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> NOTE: <esc>"
+   " vnoremap <silent> <expr> gt mode() ==# "v" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>" : mode() ==# "V" ? "<c-v>_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>" : "_o_<s-i><c-r>=b:comment_leader<cr> TODO: <esc>"
+   " NOTE: Align at the block's minimum indent and skip empty lines.
+   function! s:CommentBlock(text) range
+      let l:lines = filter(range(a:firstline, a:lastline), 'getline(v:val) =~ "\\S"')
+      let l:col = min(map(copy(l:lines), 'indent(v:val)'))
+      for l:n in l:lines
+         let l:line = getline(l:n)
+         call setline(l:n, strpart(l:line, 0, l:col) . b:comment_leader . ' ' . a:text . strpart(l:line, l:col))
+      endfor
+   endfunction
+   vnoremap <silent> gc :call <SID>CommentBlock('')<cr>
+   vnoremap <silent> gp :call <SID>CommentBlock('NOTE: ')<cr>
+   vnoremap <silent> gt :call <SID>CommentBlock('TODO: ')<cr>
+   " Commenting in normal mode.
    nnoremap <silent> <expr> gc "_i<c-r>=b:comment_leader<cr> <esc>"
+   nnoremap <silent> <expr> gp "_i<c-r>=b:comment_leader<cr> NOTE: <esc>"
+   nnoremap <silent> <expr> gt "_i<c-r>=b:comment_leader<cr> TODO: <esc>"
+   " Comment all lines including empty lines starting from the first column.
+   " vnoremap <silent> g1 0<c-v><s-i><c-r>=b:comment_leader<cr><space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr> " NOTE: this version does not work in all visual modes... either need to split with mode or do as below
+   " vnoremap <silent> g2 0<c-v><s-i><c-r>=b:comment_leader<cr><space>TODO:<space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr>
+   " vnoremap <silent> g3 0<c-v><s-i><c-r>=b:comment_leader<cr><space>NOTE:<space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr>
+   vnoremap <silent> g1 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
+   vnoremap <silent> g2 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " TODO: "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
+   vnoremap <silent> g3 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " NOTE: "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
+   " Remove comments and extra space.
+   vnoremap <silent> <expr> gs mode() ==# "v" ? "<c-v>_o_f <del>" : mode() ==# "V" ? "<c-v>_o_f <del>" : "_o_f <del>"
+   vnoremap <silent> <expr> gb mode() ==# "v" ? "<c-v>_o_f f <del>" : mode() ==# "V" ? "<c-v>_o_f f <del>" : "_o_f f <del>"
    nnoremap <silent> <expr> gs "_vf <del>"
+   nnoremap <silent> <expr> gb "_vf f <del>"
+
 
    " Adds the comment ~~~ (similar to //) that will apply a gray strikethrough
    " highlight if AllFontStyles() is loaded. Also works on ranges in the same
    " line by adding a second pair of ~~.
    nnoremap gr _i~~~<esc>
-   vnoremap <silent> <expr> gr mode() ==# "v" && line("v") == line(".") ? "\<esc>`<i~~\<esc>`>lla~~\<esc>" : ":\<c-u>keeppatterns '<,'>s/^\\s*\\zs\\S\\@=/\\~\\~\\~/e\<cr>"
+   vnoremap <silent> <expr> gr mode() ==# "v" && line("v") == line(".") ? "<esc>`<i~~<esc>`>lla~~<esc>" : ":<c-u>keeppatterns '<,'>s/^\\s*\\zs\\S\\@=/\\~\\~\\~/e<cr>"
    " Remove ~~~ starting from current line.
    vnoremap <silent> ga :<c-u>keeppatterns '<,'>s/^\s*\zs\~\~\~//e<cr>
 
@@ -1478,6 +1558,10 @@ function! LoadMappings()
    " Load help for word under cursor.
    " <c-r><c-w> pastes word under cursor into command line!
    nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
+
+   " Enable math and Unicode mappings (<leader>sc enables spell checking).
+   nnoremap <leader>fm :source $vim_folder_path/lib/math_mappings.vim<cr>:source $vim_folder_path/lib/math.vim<cr>:source $vim_folder_path/lib/unicode.vim<cr>
+   nnoremap <leader>sm :source $vim_folder_path/lib/math_mappings.vim<cr>:source $vim_folder_path/lib/math.vim<cr>:source $vim_folder_path/lib/unicode.vim<cr>
 
    " Seach for keywords in Unicode names in the tpope/vim-characterize plugin
    nnoremap <leader>su :UnicodeSearch<space>
@@ -1674,6 +1758,23 @@ function! LoadMappings()
    nnoremap <leader>bl :blast<cr>
 
 
+   " grep the word or WORD under the cursor.
+   " First we set the operatorfunc option to our function then we run g@
+   " which calls this function as an operator.
+   nnoremap <leader>gw viW:<c-u>call GrepOperator(visualmode())<cr>
+   nnoremap <leader>gg viw:<c-u>call GrepOperator(visualmode())<cr>
+   " When you type : in visual mode, Vim inserts '<,'> automatically but we
+   " don't want that here, so we use <c-u> to say delete from the cursor to
+   " the beginning of the line.
+   " visualmode() returns a one character string representing the last type
+   " of visual mode used. v for characterwise, V for linewise, c-v for
+   " blockwise grep the selected text.
+   vnoremap <leader>gw :<c-u>call GrepOperator(visualmode())<cr>
+   vnoremap <leader>gg :<c-u>call GrepOperator(visualmode())<cr>
+
+   " Toggle the quickfix window when grep is used.
+   nnoremap <leader>gq :call QuickFixToggle()<cr><c-w>_
+
 endfunction
 
 
@@ -1704,6 +1805,81 @@ function! SmallerFont()
    call AdjustFontSize(-1)
 endfunction
 command! SmallerFont call SmallerFont()
+
+
+"------------------------------------------------------------------------------
+" Function: GrepOperator()
+" Description: Grep the word under the cursor. Asks for the path to grep in.
+" From https://learnvimscriptthehardway.stevelosh.com/chapters/34.html
+"------------------------------------------------------------------------------
+function! GrepOperator(type)
+
+   let saved_unnamed_reg = @@
+   let saved_clipboard_reg = @+
+
+   " echom a:type
+   if a:type ==# 'v'
+      " Copy the visually selected text.
+      " Moving to mark at beginning of the range, entering characterwise
+      " visual mode, moving to mark at the end of the range, yanking the
+      " visually selected text.
+      normal! `<v`>y
+   elseif a:type ==# 'char'
+      " If the operator was called from normal mode using a characterwise
+      " motion.
+      " Moving to mark at beginning of the range, entering characterwise
+      " visual mode, moving to mark at the end of the range, yanking the
+      " visually selected text.
+      " normal! `[v`]y
+      " Apply yank with a motion instead of a visual selection to not
+      " destroy the record of the most recent visual selection.
+      normal! `[y`]
+   else
+      " Ignore case of linewise/blockwise visual mode as grep doesn't
+      " search across lines.
+      return
+   endif
+
+   let g:quickfix_return = winnr()
+
+   let grep_path = input("Please input relative path to grep in: ")
+
+   " Variables starting with @ are registers. The @@ is the unnamed
+   " register. The one Vim places text when you yank or delete without
+   " specifying a register.
+   silent execute "grep! --exclude-dir=\".svn\" -R " . shellescape(@@) . " " . grep_path
+   botright copen
+   let g:quickfixisopen = 1
+
+   silent exe "normal! \<c-w>_"
+
+   setlocal nospell
+
+   " The yank register.
+   let @@ = saved_unnamed_reg
+   " The copy clipboard register.
+   let @+ = saved_clipboard_reg
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: QuickFixToggle()
+" Description: Toggle the quickfix window.
+" From https://learnvimscriptthehardway.stevelosh.com/chapters/34.html
+"------------------------------------------------------------------------------
+function! QuickFixToggle()
+   if exists("g:quickfixisopen") && g:quickfixisopen
+      cclose
+      let g:quickfixisopen = 0
+      if exists("g:quickfix_return")
+         execute g:quickfix_return . "wincmd w"
+      endif
+   else
+      let g:quickfix_return = winnr()
+      botright copen
+      let g:quickfixisopen = 1
+   endif
+endfunction
 
 
 "------------------------------------------------------------------------------
