@@ -465,7 +465,7 @@ function! AllMultiWordLabel(contained_en)
       " NOTE: need to add :\@= because bash adds : as a iskeyword, so \> will
       "       not match a word ending if it's followed by :!
       hi  link    AllMultiWordLabel  PreProc
-      execute 'syn match   AllMultiWordLabel  +\%#=1' . (a:contained_en ? b:comment_leader : '^') .
+      execute 'syn match   AllMultiWordLabel  +\%#=2' . (a:contained_en ? b:comment_leader : '^') .
          \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
          \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
@@ -1100,7 +1100,8 @@ function! AllFontStyles(contained_en)
    " pattern once.
    " NOTE: using \n insead of $ fixes an issue of matches extending comments
    hi  link    AllFontPatCom Comment
-   execute 'syn match AllFontPat' . (a:contained_en == 1 ? 'Com' : '') . ' "\%#=1\%( \|^\)\@<=\/[a-z] .\{-1,} [a-z]\/\%([ .:;,!?)\]}''"]\|\n\)\@=" keepend ' . (a:contained_en == 1 ? 'contained containedin=@ClusterCommentsPlusScope' : '')
+   " Don't match the 1st /c tag because /c it's missing it's closing b/ tag.
+   execute 'syn match AllFontPat' . (a:contained_en == 1 ? 'Com' : '') . ' "\%#=1\%( \|^\)\@<=\/[a-z] \%(\%(\/[a-z] \)\@!.\)\{-1,} [a-z]\/\%([ .:;,!?)\]}''"]\|\n\)\@=" keepend ' . (a:contained_en == 1 ? 'contained containedin=@ClusterCommentsPlusScope' : '')
 
    " NOTE: Using the following notation for alphabetical font matching:
    " normal         + color /c col/

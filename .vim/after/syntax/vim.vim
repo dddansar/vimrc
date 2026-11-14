@@ -116,11 +116,16 @@ hi  link    VimEnvVar   PreProc
 syn match   VimEnvVar   "\$\I\i\+"   contained containedin=vimMapRhs
 syn match   VimEnvVar   "\${\I\i\+}" contained containedin=vimMapRhs
 
-hi  link    VimStatement  Statement
-syn match   VimStatement  ":[a-zA-Z][a-zA-Z0-9]\+\>" contained containedin=vimMapRhs
+hi  link    VimCommands  Statement
+syn match   VimCommands  ":\%(<c-u>\)\?[%.]\?!\?[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
+syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
 
 hi  link    VimFunctions  Statement
 syn match   VimFunctions   "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,SpRegexSearchesSlash
+
+hi  link    VimVisualSel  SpecialKey
+syn match   VimVisualSel  "'<,'>" contained containedin=vimMapRhs
+
 
 hi  link    VimEatChar  Type
 syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs

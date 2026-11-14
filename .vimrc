@@ -1143,12 +1143,6 @@ function! LoadMappings()
       inoremap <c-e> <esc>gka
       inoremap <c-,> <esc>gja
       inoremap <c-.> <esc>la
-
-      if g:ctrl_shift_enabled
-         " Move page up by 1 line.
-         noremap <c-s-l> <c-e>
-         " <c-s-y> moves page dn by 1 line.
-      endif
    else " For qwerty
 
       " Add insert mode word jumps.
@@ -1162,6 +1156,13 @@ function! LoadMappings()
       inoremap <c-k> <esc>gka
       inoremap <c-j> <esc>gja
       inoremap <c-l> <esc>la
+   endif
+
+   " Move page up/down by 1 line.
+   if g:ctrl_shift_enabled
+      " Previously mapped to <c-e> and <c-y>
+      noremap <c-s-o> <c-e>
+      noremap <c-s-y> <c-y>
    endif
 
    " Add insert mode A I movements
