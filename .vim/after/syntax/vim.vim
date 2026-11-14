@@ -117,8 +117,8 @@ syn match   VimEnvVar   "\$\I\i\+"   contained containedin=vimMapRhs
 syn match   VimEnvVar   "\${\I\i\+}" contained containedin=vimMapRhs
 
 hi  link    VimCommands  Statement
-syn match   VimCommands  ":\%(<c-u>\)\?[%.]\?!\?[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
-syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
+syn match   VimCommands  ":\%(<c-u>\)\?[%.]\?!\?[a-zA-Z]\%([a-zA-Z]\+\>\| \)" contained containedin=vimMapRhs contains=vimNotation
+syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\%([a-zA-Z]\+\>\| \)" contained containedin=vimMapRhs contains=vimNotation
 
 syn match   VimCommands  "\<normal\>" contained containedin=vimMapRhs
 
