@@ -292,6 +292,8 @@ function! SpRegexSearches(contained_en)
          execute 'syn match SpRegexSearchesSep' . l:name . ' "\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s' . l:sep . '\|' . l:sep . '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!\%(' . l:sep . '.\{-}' . l:sep . '.\{-}' . l:sep . '.\{-}\)\@<=\|' . l:sep . '" contained contains=@NoSpell'
       endfor
 
+      syn cluster ClusterSpRegexSearches contains=SpRegexSearchesSlash,SpRegexSearchesHash,SpRegexSearchesPercent,SpRegexSearchesAt,SpRegexSearchesBang,SpRegexSearchesComma,SpRegexSearchesBar,SpRegexSearchesSemi
+
    endif
 endfunction
 

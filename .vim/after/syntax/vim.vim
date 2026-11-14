@@ -120,8 +120,10 @@ hi  link    VimCommands  Statement
 syn match   VimCommands  ":\%(<c-u>\)\?[%.]\?!\?[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
 syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\+\>" contained containedin=vimMapRhs contains=vimNotation
 
+syn match   VimCommands  "\<normal\>" contained containedin=vimMapRhs
+
 hi  link    VimFunctions  Statement
-syn match   VimFunctions   "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,SpRegexSearchesSlash
+syn match   VimFunctions   "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,@ClusterSpRegexSearches
 
 hi  link    VimVisualSel  SpecialKey
 syn match   VimVisualSel  "'<,'>" contained containedin=vimMapRhs
