@@ -132,6 +132,17 @@ syn match   VimVisualSel  "'<,'>" contained containedin=vimMapRhs
 hi  link    VimEatChar  Type
 syn match   VimEatChar  "\<Eatchar\>" contained containedin=vimMapRhs
 
+hi  link    VimContainedInExe  Special
+syn match   VimContainedInExe  "\<contain\%(s\|ed\|edin\)\>" contained containedin=vimString,vimContinueString
+hi  link    VimContainedInExe2 Identifier
+syn match   VimContainedInExe2 "\<\%(start\|skip\|end\)\>" contained containedin=vimString,vimContinueString
+hi  link    VimContainedInExe3 Statement
+syn match   VimContainedInExe3 "\<\%(syn\%[tax]\)\>" contained containedin=vimString,vimContinueString
+hi  link    VimContainedInExe4 Type
+syn match   VimContainedInExe4 "\<\%(keyword\|match\|region\)\>" contained containedin=vimString,vimContinueString
+hi  link    VimContainedInExe5 Number
+syn match   VimContainedInExe5 "@[a-zA-Z]\+\>" contained containedin=vimString,vimContinueString
+
 hi  link    VimLtCSA  Constant
 syn match   VimLtCSA  "\\<lt>[^>]*>"hs=s+2,he=e-1 contained containedin=vimMapRhs
 

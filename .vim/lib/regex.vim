@@ -36,7 +36,7 @@ if !exists("g:syntax_on")
 endif
 
 " ,shDblBrace -> breaks bash
-syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4
+syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4,vimContinueString
 syn cluster RegexContainedinPerl contains=AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote
 
 " Exit if the file was already loaded
@@ -56,7 +56,7 @@ function! RegexMatches(contained_en)
    " execute 'syn match   RegexSpChars   "-"               ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
 
    " \n newline, \e escape character, \r carriage return, \f form feed, \v vertical tab
-   execute 'syn match   RegexSpChars   "\\[nerfv]"             ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
+   execute 'syn match   RegexSpChars   "\\[neErfv]"             ' . l:contained . 'contains=@NoSpell containedin=@RegexContainedin'
 
    " Keep regex dot the same color as the color I use in text files.
    hi  link    RegexSpDot     Delimiter
@@ -282,25 +282,22 @@ function! SpRegexSearches(contained_en)
          execute 'hi link SpRegexSearchesSep' . l:name . ' Operator'
 
          " Matches entire search and replace line.
-         " WARNING: \%(\[.\{-}[^\\]\(\(\\\\\)\+\)\?\]\|.\)\{-} . l:sep non greedy fails to match first part...
-         " execute 'syn match SpRegexSearches' . l:name . ' "\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s' . l:sep . '\%(\[.\{-}[^\\]\(\(\\\\\)\+\)\?\]\|.\)\{-}' . l:sep . '.\{-}' . l:sep . '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!" contains=SpRegexSearchesSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
-
-         " Matches entire search and replace line.
          " \%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)* matches slashes
          " in regex ranges [...], doesn't end on \], otherwise does not match
          " the separator (NOTE: fixes issue with the non greedy version not
          " matching escaped pattern or pattern inside regex ranges)...
-         execute 'syn match SpRegexSearches' . l:name . ' "\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s' . l:sep . '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)*' . l:sep . '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)*' . l:sep . '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!" contains=SpRegexSearchesSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
+         let l:pre  = '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
+         let l:post = '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)*'
+         let l:end  = '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
+         execute 'syn match SpRegexSearches' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSearchesSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
 
          " Matches search and replace commands/separators in SpRegexSearches.
-         " Has some corner case issues but overall works pretty well.
-         " May incorrectly match if another separators comes after the end.
-         " May incorrectly match if s/ occurs again in other separators.
-         execute 'syn match SpRegexSearchesSep' . l:name . ' "\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s' . l:sep . '\|' . l:sep . '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!\%(' . l:sep . '.\{-}' . l:sep . '.\{-}' . l:sep . '.\{-}\)\@<=\|' . l:sep . '" contained contains=@NoSpell'
+         execute 'syn match SpRegexSearchesSep' . l:name
+               \ . ' "' . l:pre . l:sep . '\|\%(' . l:pre . l:sep . l:post . l:sep . l:post . '\)\@<=' . l:sep
+               \ . l:end . '\|' . l:sep . '" contained contains=@NoSpell'
       endfor
 
       syn cluster ClusterSpRegexSearches contains=SpRegexSearchesSlash,SpRegexSearchesHash,SpRegexSearchesPercent,SpRegexSearchesAt,SpRegexSearchesBang,SpRegexSearchesComma,SpRegexSearchesBar,SpRegexSearchesSemi
-
    endif
 endfunction
 
