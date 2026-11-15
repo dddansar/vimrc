@@ -1770,13 +1770,17 @@ function! LoadMappings()
    " "zy yanks selection into register z
    " Single-line selection repeated on 3 lines
    nnoremap <leader>vh :call VSearch('output', 0, 3)
-   vnoremap <leader>vh "zy:call VSearch(@z, 0, 3)
+   " vnoremap <leader>vh "zy:call VSearch(@z, 0, 3)
    " Selection down a single column in a multi-line selection
    nnoremap <leader>vv :call VSearch('1234', 1, 0)
-   vnoremap <leader>vv "zy:call VSearch(join(split(@z, '\n'), ''), 1, 0)
+   " vnoremap <leader>vv "zy:call VSearch(join(split(@z, '\n'), ''), 1, 0)
    " A multi-line, multi-column selection is joined with commas
    nnoremap <leader>vm :call VSearch('in,mid,out', 2, 0)
-   vnoremap <leader>vm "zy:call VSearch(join(split(@z, '\n'), ','), 2, 0)
+   " vnoremap <leader>vm "zy:call VSearch(join(split(@z, '\n'), ','), 2, 0)
+   " Merge the 3 vnoremap above into 1
+   vnoremap <expr> <leader>vv mode() =~# '[vV]' ?
+         \ "\"zy:call VSearch(@z, 0, 3)" :
+         \ "\"zy:call VSearch(join(split(@z, '\\n'), ','), 2, 0)"
 
 
    " grep the word or WORD under the cursor.
@@ -1985,7 +1989,7 @@ function! VSearch(str, v, n)
             endif
          endfor
          if ok
-            call add(out, {'bufnr': buf, 'lnum': i+1, 'col': c+1, 'text': lines[i]})
+            call add(out, {'bufnr': buf, 'lnum': i+1, 'col': byteidx(lines[i], c) + 1, 'text': lines[i]})
          endif
       endfor
    endfor
