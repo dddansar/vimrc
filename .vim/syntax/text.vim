@@ -200,7 +200,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       call AllDefineDollar()
       call AllDefineAt()
       " Needs to be after AllDefineDollar as $s/// is a valid substitution
-      call SpRegexSearches(0)
+      call SpRegexSubstitution(0)
 
       " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
       hi  link  TextRegexQuant RegexQuant

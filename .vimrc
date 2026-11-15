@@ -1351,21 +1351,21 @@ function! LoadMappings()
    " allows the search to also work on / and \ characters in the search
    " side and on &, ~, / and \ in replacement side.
    " Replace next word.
-   nnoremap <leader>rn yiw:.,$s#\V\C<c-r>=escape(@",'/\')<cr>#<c-r>=escape(@",'/\&~')<cr>#gc\|1,''-&&
-   vnoremap <leader>rn y:.,$s#\V\C<c-r>=escape(@",'/\')<cr>#<c-r>=escape(@",'/\&~')<cr>#gc\|1,''-&&
+   nnoremap <leader>rn yiw:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>rn y:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    " Replace next word exact match.
-   nnoremap <leader>re yiw:.,$s#\V\C\<<c-r>=escape(@",'/\')<cr>\>#<c-r>=escape(@",'/\&~')<cr>#gc\|1,''-&&
-   vnoremap <leader>re y:.,$s#\V\C\<<c-r>=escape(@",'/\')<cr>\>#<c-r>=escape(@",'/\&~')<cr>#gc\|1,''-&&
+   nnoremap <leader>re yiw:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>re y:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    " Replace ALL words.
-   nnoremap <leader>ra m'yiw:%s#\V\C<c-r>=escape(@",'/\')<cr>#<c-r>=escape(@",'/\&~')<cr>#g<left><left>
-   vnoremap <leader>ra <esc>m'gvy:%s#\V\C<c-r>=escape(@",'/\')<cr>#<c-r>=escape(@",'/\&~')<cr>#g<left><left>
+   nnoremap <leader>ra m'yiw:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   vnoremap <leader>ra <esc>m'gvy:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
    " Replace ALL words exact match.
-   nnoremap <leader>rr m'yiw:%s#\V\C\<<c-r>=escape(@",'/\')<cr>\>#<c-r>=escape(@",'/\&~')<cr>#g<left><left>
-   vnoremap <leader>rr <esc>m'gvy:%s#\V\C\<<c-r>=escape(@",'/\')<cr>\>#<c-r>=escape(@",'/\&~')<cr>#g<left><left>
+   nnoremap <leader>rr m'yiw:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   vnoremap <leader>rr <esc>m'gvy:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
 
 
    " Replace all c style /*multi-line*/ comments with single-line //comments.
-   noremap <leader>r/ m':keeppatterns %s#\/\*#\/\/#g<cr>:keeppatterns %s# *\*\/##g<cr><c-o><c-o>
+   noremap <leader>r/ m':keeppatterns %s/\/\*/\/\//g<cr>:keeppatterns %s/ *\*\///g<cr><c-o><c-o>
 
 
    " Search for CamelCase.
@@ -1622,9 +1622,9 @@ function! LoadMappings()
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
    " Capitalize all words after punctuations and newlines on the current line.
-   nnoremap <leader>ff mz:keeppatterns  s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
-                        \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
-                        \:keeppatterns  s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
+   nnoremap <leader>ff mz:keeppatterns s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
    " Capitalize all words after punctuation and newlines in visual selection.
    " NOTE: :<c-u> clears the auto-inserted '<,'>.
    vnoremap <leader>ff :<c-u>keeppatterns '<,'>s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>

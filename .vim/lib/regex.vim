@@ -247,7 +247,7 @@ endfunction
 
 
 " Search and Replace
-function! SpRegexSearches(contained_en)
+function! SpRegexSubstitution(contained_en)
    let l:contained = (a:contained_en ? 'contained ' : '')
 
    if g:performance_mode <= 0
@@ -256,8 +256,8 @@ function! SpRegexSearches(contained_en)
       " which separator was matched. Assigns no colors to the internals of the
       " search/replace but assigns the Function highlight group color to its
       " main command keywords and separators.
-      hi link SpRegexSearches    RegexNoColor
-      " NOTE: SpRegexSearchesSep needs a different name for each separator, or
+      hi link SpRegexSubstitution    RegexNoColor
+      " NOTE: SpRegexSubstitutionSep needs a different name for each separator, or
       " separators may incorrectly match in other search/replace separators.
       let l:sep_names = {
          \ '/': 'Slash',
@@ -279,25 +279,27 @@ function! SpRegexSearches(contained_en)
                  \ : l:s ==# '|' ? '|'
                  \ : ';'
          let l:name = l:sep_names[l:s]
-         execute 'hi link SpRegexSearchesSep' . l:name . ' Operator'
+         execute 'hi link SpRegexSubstitutionSep' . l:name . ' Operator'
+
+         " l:pre matches the s/ at the start and related commands.
+         " l:post matches separators in regex ranges [...] but not outside.
+         " l:end matches the what comes after the last (3rd) separator.
+         let l:pre  = '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
+         let l:post = '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|escape(.\{-})\|\\.\|[^' . l:s . ']\)*'
+         let l:end  = '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
 
          " Matches entire search and replace line.
-         " \%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)* matches slashes
-         " in regex ranges [...], doesn't end on \], otherwise does not match
-         " the separator (NOTE: fixes issue with the non greedy version not
-         " matching escaped pattern or pattern inside regex ranges)...
-         let l:pre  = '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
-         let l:post = '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|\\.\|[^' . l:s . ']\)*'
-         let l:end  = '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
-         execute 'syn match SpRegexSearches' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSearchesSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
+         execute 'syn match SpRegexSubstitution' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSubstitutionSep' . l:name . ',SpRegexSubstitutionNotSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
 
-         " Matches search and replace commands/separators in SpRegexSearches.
-         execute 'syn match SpRegexSearchesSep' . l:name
+         " Matches search and replace commands/separators in SpRegexSubstitution.
+         execute 'syn match SpRegexSubstitutionSep' . l:name
                \ . ' "' . l:pre . l:sep . '\|\%(' . l:pre . l:sep . l:post . l:sep . l:post . '\)\@<=' . l:sep
                \ . l:end . '\|' . l:sep . '" contained contains=@NoSpell'
+
+         execute 'syn match SpRegexSubstitutionNotSep' . l:name . ' "\%(escape(\)\@<=.\{-}\%()\)\@=" contained contains=@NoSpell'
       endfor
 
-      syn cluster ClusterSpRegexSearches contains=SpRegexSearchesSlash,SpRegexSearchesHash,SpRegexSearchesPercent,SpRegexSearchesAt,SpRegexSearchesBang,SpRegexSearchesComma,SpRegexSearchesBar,SpRegexSearchesSemi
+      syn cluster ClusterSpRegexSubstitution contains=SpRegexSubstitutionSlash,SpRegexSubstitutionHash,SpRegexSubstitutionPercent,SpRegexSubstitutionAt,SpRegexSubstitutionBang,SpRegexSubstitutionComma,SpRegexSubstitutionBar,SpRegexSubstitutionSemi
    endif
 endfunction
 
