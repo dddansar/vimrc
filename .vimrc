@@ -209,7 +209,7 @@ let g:openai_api_key=$GPT_API_KEY
 " Open a Chat to start chatting with AI
 let g:ai_map_open_chat = "<leader>cc"
 " Once you type your question or command in the chat window, you can use this
-" mapping to send the message. <C-]> only affects AI window, not tags jumping.
+" mapping to send the message. <c-]> only affects AI window, not tags jumping.
 let g:ai_map_send_chat_message = "<c-]>"
 " The implement key sends just the selection instead of the entire file. May
 " result in a vimdiff operation.
@@ -1350,16 +1350,16 @@ function! LoadMappings()
    " Using escape({string}, {chars}) to escape the yanked text inside @", this
    " allows the search to also work on / and \ characters in the search
    " side and on &, ~, / and \ in replacement side.
-   " Replace next word.
+   " Replace selected, asking for confirmation each match.
    nnoremap <leader>rn yiw:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    vnoremap <leader>rn y:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
-   " Replace next word exact match.
+   " Replace selected, \<exact match\>, asking for confirmation each match.
    nnoremap <leader>re yiw:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
    vnoremap <leader>re y:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
-   " Replace ALL words.
+   " Replace selected, ALL matches, no confirmation.
    nnoremap <leader>ra m'yiw:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
    vnoremap <leader>ra <esc>m'gvy:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
-   " Replace ALL words exact match.
+   " Replace selected, \<exact match\>, ALL matches, no confirmation.
    nnoremap <leader>rr m'yiw:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
    vnoremap <leader>rr <esc>m'gvy:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
 
@@ -1381,7 +1381,7 @@ function! LoadMappings()
 
 
    " Clear search highlighting.
-   nnoremap <silent> <c-n> :noh<cr>
+   nnoremap <c-n> :call QfMode(0)<cr>:noh<cr>
 
 
    "---------------------------------------------------------------------------
@@ -1486,7 +1486,7 @@ function! LoadMappings()
 
    " File tabs shortcuts.
    nnoremap <leader>t<cr>     :tabnew<cr>
-   nnoremap <leader>t<Space>  :tabnew
+   nnoremap <leader>t<space>  :tabnew
    nnoremap <leader>tf        :tabfirst<cr>
    nnoremap <leader>tn        :tabnext<cr>
    nnoremap <leader>tp        :tabprev<cr>
@@ -1585,7 +1585,7 @@ function! LoadMappings()
          execute '1,' . (l:start - 1) . 's/' . l:pat . '/\=l:map[submatch(0)]/gce'
       endif
    endfunction
-   nnoremap <leader>ru :call ReplaceUnwantedUnicode()<CR>
+   nnoremap <leader>ru :call ReplaceUnwantedUnicode()<cr>
 
 
    " NOTE: Execute commands on all selected lines in <c-v> visual mode.
@@ -1765,6 +1765,20 @@ function! LoadMappings()
    nnoremap <leader>bl :blast<cr>
 
 
+   " Searching vertically
+   " VSearch mappings
+   " "zy yanks selection into register z
+   " Single-line selection repeated on 3 lines
+   nnoremap <leader>vh :call VSearch('output', 0, 3)
+   vnoremap <leader>vh "zy:call VSearch(@z, 0, 3)
+   " Selection down a single column in a multi-line selection
+   nnoremap <leader>vv :call VSearch('1234', 1, 0)
+   vnoremap <leader>vv "zy:call VSearch(join(split(@z, '\n'), ''), 1, 0)
+   " A multi-line, multi-column selection is joined with commas
+   nnoremap <leader>vm :call VSearch('in,mid,out', 2, 0)
+   vnoremap <leader>vm "zy:call VSearch(join(split(@z, '\n'), ','), 2, 0)
+
+
    " grep the word or WORD under the cursor.
    " First we set the operatorfunc option to our function then we run g@
    " which calls this function as an operator.
@@ -1779,8 +1793,22 @@ function! LoadMappings()
    vnoremap <leader>gw :<c-u>call GrepOperator(visualmode())<cr>
    vnoremap <leader>gg :<c-u>call GrepOperator(visualmode())<cr>
 
+
+   " Quickfix abbreviations
+   " :cfirst first entry
+   " :clast last entry
+   " :cnext / :cprev next / previous (accept a count, e.g. :3cnext)
+   " :cnfile / :cpfile first entry in next / previous file (only useful with multiple files)
+   " :cc N entry number N
+   nnoremap <leader>qf :call QfMode(1)<cr>:cfirst<cr>
+   nnoremap <leader>ql :call QfMode(1)<cr>:clast<cr>
+   " nnoremap <leader>qn :call QfMode(1)<cr>:cnext<cr>
+   " nnoremap <leader>qp :call QfMode(1)<cr>:cprev<cr>
+   nnoremap <leader>qn :call QfMode(1)<cr>:try \| cnext \| catch \| cfirst \| endtry<cr>
+   nnoremap <leader>qp :call QfMode(1)<cr>:try \| cprev \| catch \| clast \| endtry<cr>
+   nnoremap <leader>qx :call QfMode(0)<cr>
    " Toggle the quickfix window when grep is used.
-   nnoremap <leader>gq :call QuickFixToggle()<cr><c-w>_
+   nnoremap <leader>qt :call QuickFixToggle()<cr><c-w>_
 
 endfunction
 
@@ -1881,11 +1909,90 @@ function! QuickFixToggle()
       if exists("g:quickfix_return")
          execute g:quickfix_return . "wincmd w"
       endif
+      call QfMode(0)
    else
       let g:quickfix_return = winnr()
       botright copen
       let g:quickfixisopen = 1
+      call QfMode(1)
    endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: QfMode()
+" Description: If I enter quickfix, use the quickfix next/prev until QfMode(0)
+"------------------------------------------------------------------------------
+function! QfMode(on)
+   if a:on
+      nnoremap n :try \| cnext \| catch \| cfirst \| endtry<cr>
+      nnoremap N :try \| cprev \| catch \| clast \| endtry<cr>
+   else
+      silent! nunmap n
+      silent! nunmap N
+   endif
+endfunction
+
+
+"------------------------------------------------------------------------------
+" Function: VSearch(str, v, n)
+"
+" Description: Search the current buffer for text aligned vertically and list
+" matches in the quickfix window.
+"
+" Arguments:
+"   str: String to search for (literal, case-sensitive, not a regex).
+"   v: 0 = Repeat mode: find "str" at the same column on "n" consecutive lines
+"      1 = Vertical mode: find "str" spelled down a column, one character per
+"          line. "n" is ignored.
+"      2 = Word-list mode: split "str" on commas and find the words stacked at
+"          the same column, one word per line, in order. "n" is ignored.
+"   n: Number of consecutive lines (repeat mode only).
+"
+" Examples:
+"   :call VSearch('word', 0, 2)            " word stacked on 2 lines
+"   :call VSearch('1', 0, 3)               " three 1s in a column
+"   :call VSearch('1234', 1, 0)            " 1,2,3,4 going down a column
+"   :call VSearch('in,mid,out', 2, 0)      " in/mid/out at same column level
+"------------------------------------------------------------------------------
+function! VSearch(str, v, n)
+   let buf = bufnr('%')                " buffer id, needed so <enter> can jump
+
+   " Build 'items': the list of strings, one per row of the match.
+   if a:v == 1
+      let items = split(a:str, '\zs')  " one character per row
+   elseif a:v == 2
+      let items = split(a:str, ',')    " one word per row
+   else
+      let items = repeat([a:str], a:n) " same string on every row
+   endif
+   let rows = len(items)               " how many lines a match spans
+   let lines = getline(1, '$')         " whole buffer as a list
+   let out = []                        " quickfix entries
+
+   " Try each line as the top row of a match (stop early so the
+   " match can't run past the end of the buffer).
+   for i in range(len(lines) - rows + 1)
+      " Try each column on that line as the match column.
+      for c in range(strchars(lines[i]))
+         let ok = 1
+         " Check every row of the candidate match.
+         for k in range(rows)
+            " Row k must hold items[k] starting at column c.
+            if strcharpart(lines[i+k], c, strchars(items[k])) !=# items[k]
+               let ok = 0
+               break                   " mismatch, skip to next column
+            endif
+         endfor
+         if ok
+            call add(out, {'bufnr': buf, 'lnum': i+1, 'col': c+1, 'text': lines[i]})
+         endif
+      endfor
+   endfor
+
+   call QfMode(1)                      " n/N now uses quickfix next/prev
+   call setqflist(out)                 " fill the quickfix list
+   copen                               " open the quickfix window
 endfunction
 
 
@@ -1960,7 +2067,7 @@ function! s:visual_hold_reset()
       let g:visual_timer = -1
    endif
    let l:mode = mode()
-   if (l:mode ==# 'v' || l:mode ==# 'V' || l:mode ==# "\<C-V>") && g:visual_copied == 0
+   if (l:mode ==# 'v' || l:mode ==# 'V' || l:mode ==# "\<c-v>") && g:visual_copied == 0
       let g:visual_timer = timer_start(50, {-> execute('normal! "*ygv')})
       let g:visual_copied = 1
    else

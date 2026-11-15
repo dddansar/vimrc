@@ -281,8 +281,10 @@ function! SpRegexSubstitution(contained_en)
          let l:name = l:sep_names[l:s]
          execute 'hi link SpRegexSubstitutionSep' . l:name . ' Operator'
 
+         " Substitution format is "lpre/l:post/l:post/l:end" where / is l:sep
          " l:pre matches the s/ at the start and related commands.
-         " l:post matches separators in regex ranges [...] but not outside.
+         " l:post matches separators in regex ranges, in the escape() function,
+         " and any character after an escape slash \ but not otherwise.
          " l:end matches the what comes after the last (3rd) separator.
          let l:pre  = '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
          let l:post = '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|escape(.\{-})\|\\.\|[^' . l:s . ']\)*'
