@@ -110,15 +110,22 @@ endif
 
 " Path to key Vim folders
 if g:using_windows
-   let $vim_folder_path  = '$HOME/vimfiles'
-   let $vim_spell_path   = '$HOME/vimfiles/spell'
-   let $nvim_folder_path = '$HOME/AppData/Local/nvim'
-   let $nvim_spell_path  = '$HOME/AppData/Local/nvim/spell'
+   if !has('nvim')
+      let $vim_folder_path  = '$HOME/vimfiles'
+      let $vim_spell_path   = '$HOME/vimfiles/spell'
+   else
+      let $vim_folder_path  = '$HOME/AppData/Local/nvim'
+      let $vim_spell_path   = '$HOME/AppData/Local/nvim/spell'
+   endif
 else " For Linux
-   let $vim_folder_path  = '$HOME/.vim'
-   let $vim_spell_path   = '$HOME/.vim/spell'
-   let $nvim_folder_path = '$HOME/.config/nvim'
-   let $nvim_spell_path  = '$HOME/.config/nvim/spell'
+   if !has('nvim')
+      let $vim_folder_path  = '$HOME/.vim'
+      let $vim_spell_path   = '$HOME/.vim/spell'
+   else
+      let $vim_folder_path  = '$HOME/.vim'
+    " let $nvim_folder_path = '$HOME/.config/nvim'
+      let $vim_spell_path   = '$HOME/.config/nvim/spell'
+   endif
 endif
 
 " NOTE: You can open multiple splits/tabs from terminal!!!
@@ -304,11 +311,10 @@ let g:ollama_num_ctx = 4096
 "------------------------------------------------------------------------------
 " /d Select the model to use y/. By default this is set to claude-sonnet-4-6
 "------------------------------------------------------------------------------
-" let g:ai_model = 'claude-sonnet-5'
-let g:ai_model = 'claude-sonnet-4-6'
-" let g:ai_model = 'claude-opus-4-8'
-" let g:ai_model = 'claude-haiku-4-5'
-" let g:ai_model = 'claude-fable-5'
+let g:ai_model = 'claude-sonnet-5-5'
+" let g:ai_model = 'claude-opus-5-5'
+" let g:ai_model = 'claude-haiku-5-5'
+" let g:ai_model = 'claude-fable-5.2'
 " let g:ai_model = 'gemini-2.5-flash-lite'
 " let g:ai_model = 'gemini-2.5-flash'
 " let g:ai_model = 'gemini-3.1-flash-lite-preview'
@@ -720,8 +726,8 @@ function! DefaultSettings()
 
    " Add the abbreviation list to the thesaurus to look them up as you type
    " with <c-x><c-t> or <c-n> or <c-p>.
-   if filereadable(expand($vim_folder_path . "/thesaurus/abbrevlist.vim"))
-      set thesaurus+=$vim_folder_path/thesaurus/abbrevlist.vim
+   if filereadable(expand($vim_folder_path . "/thesaurus/abbrevlist.txt"))
+      set thesaurus+=$vim_folder_path/thesaurus/abbrevlist.txt
    endif
 
    " When this option is set, the screen will not be redrawn while executing

@@ -36,7 +36,7 @@ if !exists("g:syntax_on")
 endif
 
 " ,shDblBrace -> breaks bash
-syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4,vimContinueString
+syn cluster RegexContainedin contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,vimString,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4
 syn cluster RegexContainedinPerl contains=AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote
 
 " Exit if the file was already loaded
@@ -286,9 +286,9 @@ function! SpRegexSubstitution(contained_en)
          " l:post matches separators in regex ranges, in the escape() function,
          " and any character after an escape slash \ but not otherwise.
          " l:end matches the what comes after the last (3rd) separator.
-         let l:pre  = '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
-         let l:post = '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|escape(.\{-})\|\\.\|[^' . l:s . ']\)*'
-         let l:end  = '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
+         let l:pre  = '' . '\%(\%(\%(\.\|\<\)[0-9,]*\)\?\$\|[%]\|\<[0-9,.]*\)s'
+         let l:post = '' . '\%(\[.\{-}[^\\]\%(\\\\\)*\]\|escape(.\{-})\|\\.\|[^' . l:s . ']\)*'
+         let l:end  = '' . '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
 
          " Matches entire search and replace line.
          execute 'syn match SpRegexSubstitution' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSubstitutionSep' . l:name . ',SpRegexSubstitutionNotSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'

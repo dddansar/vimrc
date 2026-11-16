@@ -40,8 +40,9 @@ Contains all my vimrc settings.
 ├── pack/
 │   ├── colorschemes/start/ddd_colorschemes/    # Contains my ddd_colorschemes
 │   ├── pasky/start/claude.vim/                 # Pasky's plugin for using Anthropic's Claude AI via an API
-│   └── plugins/start/vim-characterize/         # Pressing ga now gives additional Unicode information
-│   └── plugins/start/vim-autocorrect/          # Contains a list of autocorrections
+│   ├── plugins/start/vim-characterize/         # Pressing ga now gives additional Unicode information
+│   ├── plugins/start/vim-autocorrect/          # Contains a list of autocorrections abbreviations
+│   └── plugins/start/vim-you-autocorrect/      # Detects spell errors and corrects them automatically based on Vim's most likely correction.
 ├── plugin/
 │   └── matchparen.vim          # Matching parenthesis highlighting overrides
 ├── syntax/

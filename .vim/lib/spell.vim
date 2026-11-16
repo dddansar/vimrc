@@ -92,27 +92,31 @@ endfunction
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
    hi link SpellLineStartLower SpellRare
-   syntax match SpellLineStartLower "\%#=1^\s*\zs\<\l\w*\>"
-   inoremap <buffer> <expr> <space> LineStartCap("\<Space>")
-   inoremap <buffer> <expr> <cr>    LineStartCap("\<CR>")
+   syntax match SpellLineStartLower "\%#=1^\s*\zs\<[a-z]\+\>"
+   inoremap <buffer> <expr> <space> LineStartCap("\<space>")
+   inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
 endfunction
 
 " Fix capital spell errors on space or enter.
 function! LineStartCap(key) abort
-  if pumvisible() | return a:key | endif
-  let l = getline('.')
-  if col('.') == col('$') && l =~# '^\s*\l\w*$'
-    " Skip if the word is inside any syntax group except SpellLineStartLower
-    let start = match(l, '\l\w*$') + 1
-    for id in synstack(line('.'), start)
-      if synIDattr(id, 'name') !=# 'SpellLineStartLower'
-        return a:key
-      endif
-    endfor
-    let w = matchstr(l, '\l\w*$')
-    return repeat("\<BS>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
-  endif
-  return a:key
+   " The inoremap above in SpellCapCheckAdd() breaks abbreviations, if no
+   " spell correction occures, allow abbreviations to apply
+   let passthru = "\<c-]>" . a:key
+   " If popup menu is visible, don't autocorrect anything
+   if pumvisible() | return passthru | endif
+   let l = getline('.')
+   if col('.') == col('$') && l =~# '^\s*[a-z]\+$'
+      " Skip if the word is inside any syntax group except SpellLineStartLower
+      let start = match(l, '[a-z]\+$') + 1
+      for id in synstack(line('.'), start)
+         if synIDattr(id, 'name') !=# 'SpellLineStartLower'
+            return passthru
+         endif
+      endfor
+      let w = matchstr(l, '[a-z]\+$')
+      return repeat("\<bs>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
+   endif
+   return passthru
 endfunction
 
 
