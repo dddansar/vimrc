@@ -64,6 +64,9 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    source $vim_folder_path/lib/spell.vim
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
+   " Enable capital spell checking.
+   " call SpellCapCheckEn()
+   " call SpellCapCheckAdd()
    call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    " NOTE: Moving these here to re-source on file/syntax reload.
@@ -76,6 +79,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    endif
    " if expand('%:p') =~# '/reference_files/'
    "    source $vim_folder_path/lib/linux.vim
+   "    call LinuxCommandsMatch(0)
+   "    call LinuxCommandsMatch(1)
    " endif
 
    " NOTE: Need to move AllOperators before AllHLExclamations()

@@ -73,14 +73,8 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
 endif
 
 
-if !has('nvim')
-   if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
-      setlocal spelllang+=lean
-   endif
-else
-   if exists("b:spell_loaded") && filereadable(expand($nvim_spell_path . "/lean.utf-8.spl"))
-      setlocal spelllang+=lean
-   endif
+if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
+   setlocal spelllang+=lean
 endif
 
 

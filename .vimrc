@@ -832,12 +832,13 @@ function! DefaultSettings()
    " git clone https://github.com/panozzaj/vim-autocorrect.git ~/.vim/pack/plugins/start/vim-autocorrect
    " There are also many other autocorrect plugins.
    "---------------------------------------------------------------------------
-   if !exists("g:AutocorrectLoaded") && g:use_autocorrect
-      if exists('*AutoCorrect')
-         call AutoCorrect()
-      endif
-      let g:AutocorrectLoaded = 1
-   endif
+   " NOTE: Currently using vim-you-autocorrect
+   " if !exists("g:AutocorrectLoaded") && g:use_autocorrect
+   "    if exists('*AutoCorrect')
+   "       call AutoCorrect()
+   "    endif
+   "    let g:AutocorrectLoaded = 1
+   " endif
 
 
    "---------------------------------------------------------------------------
@@ -1291,6 +1292,15 @@ function! LoadMappings()
    inoremap <c-;> <c-e>
    inoremap <a-;> <c-e>
 
+   " Mappings for vim-you-autocorrect
+   " <silent> stops the command from flashing on the command line.
+   " silent! suppresses error messages.
+   " inoremap <silent> <a-u> <c-o>:silent! call vim_you_autocorrect#undo_last()<cr><c-o>$
+   inoremap <silent> <a-u> <cmd>silent! call vim_you_autocorrect#undo_last()<cr>
+   nnoremap <silent> <a-u> :silent! call vim_you_autocorrect#undo_last()<cr>
+   inoremap <silent> <a-r> <cmd>silent! call vim_you_autocorrect#redo_last()<cr>
+   nnoremap <silent> <a-r> :silent! call vim_you_autocorrect#redo_last()<cr>
+
    "---------------------------------------------------------------------------
    " /d Search related mappings g/
    "---------------------------------------------------------------------------
@@ -1562,7 +1572,6 @@ function! LoadMappings()
    nnoremap <leader>fh :help <c-r><c-w><cr><c-w>_:setlocal nospell<cr>
 
    " Enable math and Unicode mappings (<leader>sc enables spell checking).
-   nnoremap <leader>fm :source $vim_folder_path/lib/math_mappings.vim<cr>:source $vim_folder_path/lib/math.vim<cr>:source $vim_folder_path/lib/unicode.vim<cr>
    nnoremap <leader>sm :source $vim_folder_path/lib/math_mappings.vim<cr>:source $vim_folder_path/lib/math.vim<cr>:source $vim_folder_path/lib/unicode.vim<cr>
 
    " Seach for keywords in Unicode names in the tpope/vim-characterize plugin
@@ -1632,9 +1641,9 @@ function! LoadMappings()
                       \:<c-u>keeppatterns '<,'>s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>
 
    " Capitalize first letter of every word on the current line (Title Case).
-   nnoremap <leader>fu :keeppatterns s/\<[a-z]/\u&/g<cr>
+   nnoremap <leader>ft :keeppatterns s/\<[a-z]/\u&/g<cr>
    " Capitalize first letter of every word on every line in the file.
-   nnoremap <leader>fU m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
+   nnoremap <leader>fT m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
    " Capitalize first letter of every word before a : on the current line
    nnoremap <leader>f: mz:keeppatterns s/\v^[^:]*:/\=substitute(submatch(0), '\<\w', '\u&', 'g')/<cr>`z
 
@@ -1666,7 +1675,7 @@ function! LoadMappings()
    " Re-source .vimrc file without reloading file, then update all windows.
    nnoremap <silent> <leader>fg :let g:_w = winnr() \| unlet! g:EnteredDefaultSetting g:EnteredSmallFile g:AutocorrectLoaded g:EnteredCommonSetting g:EnteredLargeFile \| execute 'windo unlet! b:syntax_library_loaded b:current_syntax' \| syntax clear \| source $MYVIMRC \| execute 'windo e' \| execute g:_w . 'wincmd w' \| wincmd _ \| wincmd \|<cr>
    " Reload only syntax matching
-   nnoremap <silent>  <leader>ft :unlet! b:syntax_library_loaded b:regex_loaded b:current_syntax \| syntax clear \| let &l:syntax = &l:filetype<cr>
+   nnoremap <silent>  <leader>fm :unlet! b:syntax_library_loaded b:regex_loaded b:current_syntax \| syntax clear \| let &l:syntax = &l:filetype<cr>
 
 
    " NOTE: Execute shell script on current/selected line and print/replace
@@ -1737,14 +1746,14 @@ function! LoadMappings()
    nnoremap <leader>sz :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell toplevel<cr>
    nnoremap <leader>sx :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell notoplevel<cr>
 
-   nnoremap <leader>ss :source ~/.vim/lib/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>st :source ~/.vim/lib/spell.vim<cr>:setlocal spelllang+=linuxfull,math,programming<cr>:syntax spell notoplevel<cr>
-
+   " Enable/disable spellcapcheck
+   nnoremap <leader>se :call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
+   nnoremap <leader>sr :call SpellCapCheckDsb()<cr>
 
 
    " Fix window after opening a split screen.
-   nnoremap <leader>sp  :sp<cr><c-w><bar><c-w>_
-   nnoremap <leader>vsp :vsp<cr><c-w><bar><c-w>_
+   " nnoremap <leader>sp  :sp<cr><c-w><bar><c-w>_
+   " nnoremap <leader>vsp :vsp<cr><c-w><bar><c-w>_
    " Opposite of sp and vsp.
  " nnoremap <leader>sd  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
    nnoremap <leader>sb  :set<space>splitbelow<cr>:sp<cr><c-w><bar><c-w>_:set<space>nosplitbelow<cr>
@@ -1763,6 +1772,13 @@ function! LoadMappings()
    " First/last
    nnoremap <leader>bf :bfirst<cr>
    nnoremap <leader>bl :blast<cr>
+
+   " AI remappings
+   nnoremap <leader>cb :let g:claude_batch_api = 1<cr>
+   nnoremap <leader>cm :messages<cr>
+   nnoremap <leader>cd :let g:ai_model = 'claude-sonnet-5.5'<cr>
+   nnoremap <leader>co :let g:ai_model = 'claude-opus-5-5'<cr>
+   nnoremap <leader>cf :let g:ai_model = 'claude-fable-5-2'<cr>
 
 
    " Searching vertically
@@ -1925,16 +1941,30 @@ endfunction
 
 "------------------------------------------------------------------------------
 " Function: QfMode()
-" Description: If I enter quickfix, use the quickfix next/prev until QfMode(0)
+" Description: If using the quickfix menu, use n/N as the quickfix cnext/cprev
+" instead of for search until reset with QfMode(0). Automatically wraps around
+" on last/first quickfix match.
 "------------------------------------------------------------------------------
 function! QfMode(on)
    if a:on
-      nnoremap n :try \| cnext \| catch \| cfirst \| endtry<cr>
-      nnoremap N :try \| cprev \| catch \| clast \| endtry<cr>
+      nnoremap <silent> n :try \| cnext \| catch \| cfirst \| endtry \| call QfMsg()<cr>
+      nnoremap <silent> N :try \| cprev \| catch \| clast \| endtry \| call QfMsg()<cr>
    else
       silent! nunmap n
       silent! nunmap N
    endif
+endfunction
+" Print quickfix messages in the status line and truncate long messages.
+function! QfMsg()
+   let q = getqflist({'idx': 0, 'size': 0})
+   let msg = '(' . q.idx . ' of ' . q.size . '): ' . getqflist()[q.idx - 1].text
+   let msg = substitute(msg, '\s\+', ' ', 'g')
+   let max = &columns - 12
+   if strdisplaywidth(msg) > max
+      let msg = strcharpart(msg, 0, max - 3) . '...'
+   endif
+   redraw
+   echo msg
 endfunction
 
 

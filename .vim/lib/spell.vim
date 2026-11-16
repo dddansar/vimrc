@@ -54,9 +54,67 @@ let b:spell_loaded = 1
 "------------------------------------------------------------------------------
 setlocal spell
 setlocal spelllang=en,en_us
+if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
+   setlocal spelllang+=math
+endif
+if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/programming.utf-8.spl"))
+   setlocal spelllang+=programming
+endif
 " Ignore uppercase of first word.
+" Default: spellcapcheck=[.?!]\_[\])'"^I ]\+
+" Reset: setlocal spellcapcheck&
 setlocal spellcapcheck=
 "------------------------------------------------------------------------------
+
+if exists(':EnableAutocorrect') == 2 && g:use_autocorrect
+   " Need to call EnableAutocorrect first.
+   EnableAutocorrect
+   if exists('*vim_you_autocorrect#enable_autocorrect')
+      " Enable vim-you-autocorrect, auto-corrects if spell triggered
+      silent! call vim_you_autocorrect#enable_autocorrect()
+   endif
+endif
+
+
+function! SpellCapCheckEn()
+   setlocal spellcapcheck&
+endfunction
+
+function! SpellCapCheckDsb() abort
+   setlocal spellcapcheck=
+   silent! iunmap <buffer> <space>
+   silent! iunmap <buffer> <cr>
+   silent! syntax clear SpellLineStartLower
+   silent! highlight clear SpellLineStartLower
+endfunction
+
+" Match capital spell errors on new lines not matched by spellcapcheck.
+" LineStartCap() will then automatically fix them on space or enter.
+function! SpellCapCheckAdd() abort
+   hi link SpellLineStartLower SpellRare
+   syntax match SpellLineStartLower "\%#=1^\s*\zs\<\l\w*\>"
+   inoremap <buffer> <expr> <space> LineStartCap("\<Space>")
+   inoremap <buffer> <expr> <cr>    LineStartCap("\<CR>")
+endfunction
+
+" Fix capital spell errors on space or enter.
+function! LineStartCap(key) abort
+  if pumvisible() | return a:key | endif
+  let l = getline('.')
+  if col('.') == col('$') && l =~# '^\s*\l\w*$'
+    " Skip if the word is inside any syntax group except SpellLineStartLower
+    let start = match(l, '\l\w*$') + 1
+    for id in synstack(line('.'), start)
+      if synIDattr(id, 'name') !=# 'SpellLineStartLower'
+        return a:key
+      endif
+    endfor
+    let w = matchstr(l, '\l\w*$')
+    return repeat("\<BS>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
+  endif
+  return a:key
+endfunction
+
 
 " Needs to be outside spell.vim in case spell.vim gets sourced
 " multiple times and the syntax matching fails to apply

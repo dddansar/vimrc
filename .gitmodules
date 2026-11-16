@@ -10,3 +10,6 @@
 [submodule ".vim/pack/plugins/start/vim-autocorrect"]
 	path = .vim/pack/plugins/start/vim-autocorrect
 	url = https://github.com/panozzaj/vim-autocorrect.git
+[submodule ".vim/pack/plugins/start/vim-you-autocorrect"]
+	path = .vim/pack/plugins/start/vim-you-autocorrect
+	url = https://github.com/dddansar/vim-you-autocorrect

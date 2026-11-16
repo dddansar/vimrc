@@ -58,6 +58,7 @@ if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax =
    source $vim_folder_path/lib/abbrev.vim
    source $vim_folder_path/lib/linux.vim
 
+   call LinuxCommandsMatch(0)
    call AllFilesDefaultSyntax()
    call AllPathsSingleSlashStart(1)
    call RegexMatches(1)

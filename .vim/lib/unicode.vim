@@ -53,16 +53,6 @@ endif
 let b:unicode_loaded = 1
 
 
-if !has('nvim')
-   if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/math.utf-8.spl"))
-      setlocal spelllang+=math
-   endif
-else
-   if exists("b:spell_loaded") && filereadable(expand($nvim_spell_path . "/math.utf-8.spl"))
-      setlocal spelllang+=math
-   endif
-endif
-
 " By default iskeyword=@,48-57,_,192-255
 " @ means all alphabetic characters, ie every character for which isalpha()
 " is true. @ already includes many characters in 192-255, so we can remove
