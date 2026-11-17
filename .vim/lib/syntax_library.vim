@@ -157,15 +157,15 @@ function! AllIgnoreSpellings()
    if g:performance_mode <= 0
       " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
       hi  link     AllSpellCommColor1  Comment
-      syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=TOP
 
       " Ignore spell on words with uppercase letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
-      syn match    AllSpellCommColor2  "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellTiTleColor2 "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>\%('\)\@!" contains=TOP
+      syn match    AllSpellCommColor2  "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellTiTleColor2 "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
+      syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=TOP
    endif
 endfunction
 

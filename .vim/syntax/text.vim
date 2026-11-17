@@ -195,8 +195,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
       hi link    TextQuotesLookbehind TextNoColor
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,AllSpellNoColor1,AllSpellNoColor2,AllSpellNoColor3,AllSpellNoColor4,AllIgnoreSpellExtendedLatin
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,AllSpellNoColor1,AllSpellNoColor2,AllSpellNoColor3,AllSpellNoColor4,AllIgnoreSpellExtendedLatin
 
       call RegexMatches(0)
       call RegexMatchesVim(0)

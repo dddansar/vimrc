@@ -177,9 +177,11 @@ function! MathMatches()
       hi  link    SpMathMultiVars2 Constant
       syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-      syn keyword SpMathNotMultiVars2 Ie ie If if In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of Or or He he Do do No no Me me Go go
+      syn keyword SpMathNotMultiVars2 Ie ie In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of He he No no Me me Go go
       syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
       syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
+      " Keep in a separate group to not get autocorrected or spell checked.
+      syn match   SpMathNotMultiVars1 "\%#=1\<\%(If\|if\|Do\|do\|Or\|or\)\>" contains=@NoSpell
 
       " hi  link    SpMathMultiVars3 Constant
       " syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
@@ -197,6 +199,9 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<![0-9]*i\?\%(sinh\?\|cosh\?\|tanh\?\|sech\?\|coth\?\|csch\?\|arctanh\?\|cosech\?\)\w\@!" contains=@NoSpell,SpMathNumInVar
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
       "------------------------------------------------------------------------
+
+      let b:vim_you_autocorrect_exclude_groups = get(b:, 'vim_you_autocorrect_exclude_groups', [])
+      let b:vim_you_autocorrect_exclude_groups += ['vimString']
 
       " Clusters
       "------------------------------------------------------------------------

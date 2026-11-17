@@ -100,6 +100,7 @@ function! SpellCapCheckAdd() abort
    syn match   SpellLineStartLower "\%#=1\%(\<[A-Z]\+:\s*\)\@<=\<[a-z]\+\>"
    " Skip cap checking these words:
    " syn keyword SpellNoCapSpell      if else elif elseif end endif for while do and or not xor xnor nand nor not alias
+   " syn match   SpellNoCapSpell "\<\%(if\|else\|elif\|elseif\|end\|endif\|for\|while\|do\|and\|alias\|or\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
    inoremap <buffer> <expr> '       LineStartCap("'")
