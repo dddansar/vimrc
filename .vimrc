@@ -71,6 +71,13 @@ let g:netrw_dirhistmax = 0
 " In $VIMRUNTIME/syntax/vim.vim don't load python/perl/lua scripts if set to 0.
 let g:vimsyn_embed = 0
 
+" If set, enable a hack fix for Vim/NeoVim not copying selections to the
+" selection buffer or to the clipboard.
+let g:hack_copy_selection=0
+
+" Set gvimdiff to wrap text.
+let g:wrap_gvimdiff=0
+
 " /d Syntax highlightings controls y/
 " NOTE: Controls the syntax highlightings in all files.
 " If set to 0 will use the default Vim syntax with the pablo colorscheme in
@@ -914,18 +921,19 @@ function! DefaultSettings()
    augroup END
 
    "---------------------------------------------------------------------------
-   " Set VimDiff to wrap by default.
+   " Set gvimdiff to wrap by default.
    "---------------------------------------------------------------------------
-   augroup VimDiff
-      autocmd!
-      autocmd VimEnter * call IfDiff()
-   augroup END
+   if has("gui_running") && !has('nvim') && g:wrap_gvimdiff
+      augroup VimDiff
+         autocmd!
+         autocmd VimEnter * call IfDiff()
+      augroup END
+   endif
 
    "---------------------------------------------------------------------------
    " Hack fix for Vim/NeoVim on my linux not copying selections to the linux
    " selection buffer.
    "---------------------------------------------------------------------------
-   let g:hack_copy_selection=1
    if (!has("gui_running") || has('nvim') || g:using_windows) && g:hack_copy_selection
       let g:visual_copied = 0
       let g:visual_timer = -1

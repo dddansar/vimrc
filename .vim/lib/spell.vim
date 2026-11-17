@@ -77,22 +77,27 @@ endif
 
 
 function! SpellCapCheckEn()
+   " Reset spellcapcheck to default effectively enabling it
    setlocal spellcapcheck&
 endfunction
 
 function! SpellCapCheckDsb() abort
+   " Disable spellcapcheck and clear mappings and syntax
    setlocal spellcapcheck=
    silent! iunmap <buffer> <space>
    silent! iunmap <buffer> <cr>
-   silent! syntax clear SpellLineStartLower
-   silent! highlight clear SpellLineStartLower
+   silent! hi  clear SpellLineStartLower
+   silent! syn clear SpellLineStartLower
+   silent! syn clear SpellNoCapSpell
 endfunction
 
 " Match capital spell errors on new lines not matched by spellcapcheck.
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
-   hi link SpellLineStartLower SpellRare
-   syntax match SpellLineStartLower "\%#=1^\s*\zs\<[a-z]\+\>"
+   hi  link    SpellLineStartLower SpellRare
+   syn match   SpellLineStartLower "\%#=1^\s*\zs\<[a-z]\+\>"
+   " Skip cap checking these words:
+   " syn keyword SpellNoCapSpell      if else elif elseif end endif for while do and or not xor xnor nand nor not alias
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
 endfunction
