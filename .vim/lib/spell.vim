@@ -94,12 +94,15 @@ endfunction
 " Match capital spell errors on new lines not matched by spellcapcheck.
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
+   " hi SpellCapCheckAdd cterm=underline gui=undercurl ctermfg=166 guifg=NONE ctermbg=NONE guibg=NONE       guisp=darkorange3
    hi  link    SpellLineStartLower SpellRare
    syn match   SpellLineStartLower "\%#=1^\s*\zs\<[a-z]\+\>"
+   syn match   SpellLineStartLower "\%#=1\%(\<[A-Z]\+:\s*\)\@<=\<[a-z]\+\>"
    " Skip cap checking these words:
    " syn keyword SpellNoCapSpell      if else elif elseif end endif for while do and or not xor xnor nand nor not alias
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
+   inoremap <buffer> <expr> '       LineStartCap("'")
 endfunction
 
 " Fix capital spell errors on space or enter.
@@ -110,18 +113,29 @@ function! LineStartCap(key) abort
    " If popup menu is visible, don't autocorrect anything
    if pumvisible() | return passthru | endif
    let l = getline('.')
-   if col('.') == col('$') && l =~# '^\s*[a-z]\+$'
+   let c = col('.') - 1
+   " Only consider text before the cursor, so mid-line insertions work
+   let pre = strpart(l, 0, c)
+   if pre =~# '\%(^\s*\|\<[A-Z]\+:\s*\)[a-z]\+$'
       " Skip if the word is inside any syntax group except SpellLineStartLower
-      let start = match(l, '[a-z]\+$') + 1
+      let start = match(pre, '[a-z]\+$') + 1
       for id in synstack(line('.'), start)
-         if synIDattr(id, 'name') !=# 'SpellLineStartLower'
+         if synIDattr(id, 'name') !~# '^\%(SpellLineStartLower\|SpMathNotMultiVars2\)$'
             return passthru
          endif
       endfor
-      let w = matchstr(l, '[a-z]\+$')
+      let w = matchstr(pre, '[a-z]\+$')
+      call timer_start(0, {-> s:FlashWord(line('.'), start, strlen(w))})
       return repeat("\<bs>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
    endif
    return passthru
+endfunction
+
+" When a word is auto-corrected by LineStartCap(), flash it for 2 seconds.
+function! s:FlashWord(lnum, col, len) abort
+  let winid = win_getid()
+  let id = matchaddpos('DiffAdd', [[a:lnum, a:col, a:len]])
+  call timer_start(2000, {-> matchdelete(id, winid)})
 endfunction
 
 

@@ -98,7 +98,7 @@ function! MathMatches()
       " aᵐbᵐ
 
       hi  link    SpMathSingleChar    Constant
-      syn match   SpMathSingleChar    "\%#=1\w\@<![b-zB-HJ-Z]\w\@!" contains=@NoSpell
+      syn match   SpMathSingleChar    "\%#=1\w\@<![b-hj-zB-HJ-Z]\w\@!" contains=@NoSpell
 
       " NOTE: using \zs to unmatch (s) if previous characters belong to any other syntax group
       syn match   SpMathNotSingleChar "\%#=1\%([a-z][a-z]\)\zs(s)\@=" contains=@NoSpell,AllParen
@@ -111,7 +111,7 @@ function! MathMatches()
       syn match   SpMathSingleCharIaA1 "\%#=1\%(^ *\|\w\|\%([!.?:;,)]\|[a-zA-Z][a-z]\|'[dstm]\) \| (\)\@<![IaA]\w\@!" contains=@NoSpell
 
       " \/\w\> is to not match a /d highlight o/
-      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IiA]\%(\w\| \%([a-zA-Z'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![a]\%(\w\| [a-zA-Z'"]\| \/\w\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell

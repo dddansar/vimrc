@@ -1338,18 +1338,21 @@ function! LoadMappings()
    " vnoremap /     y<a-backspace>/\V\c<c-r>=escape(@",'/\')<cr><cr>
 
    " Search for characters selected.
-   vnoremap /     y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   vnoremap <c-/> y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   vnoremap <c-8> y<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Add another word to the existing search.
-   vnoremap ?     y<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   vnoremap *     y<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Search for word under the cursor in normal mode.
+   vnoremap /       y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    nnoremap <c-/> yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap <c-8>   y<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
    nnoremap <c-8> yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   " Add another word to the existing search in normal mode.
+   " Add another word to the existing search.
+   vnoremap ?       y<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
    nnoremap ?     yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap *       y<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
    nnoremap *     yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   " Search for selection yanked as is, useful for regex.
+   vnoremap <c-/>   y/<c-r>"<cr>
+   " Add another <c-/> to the existing search.
+   if g:ctrl_shift_enabled
+      vnoremap <c-s-?> y/<up><c-r>"<cr>
+   endif
 
    " Search for item under cursor with a mouse.
    nnoremap <c-leftmouse>  <leftmouse>yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
