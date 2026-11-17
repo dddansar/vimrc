@@ -177,7 +177,7 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " call AllUnwantedCharacters(0)
    endif
    call AllNumbersUnicode(0)
-   call AllLabel()
+   " call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()
    call AllFontStyles(0)

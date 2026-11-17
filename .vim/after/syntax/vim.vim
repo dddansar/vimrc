@@ -143,7 +143,7 @@ syn match   VimContainedInExe3 "\<\%(syn\%[tax]\)\>" contained containedin=vimSt
 hi  link    VimContainedInExe4 Type
 syn match   VimContainedInExe4 "\<\%(keyword\|match\|region\)\>" contained containedin=vimString,vimContinueString
 hi  link    VimContainedInExe5 Number
-syn match   VimContainedInExe5 "@[a-zA-Z]\+\>" contained containedin=vimString,vimContinueString
+syn match   VimContainedInExe5 "@[a-zA-Z][a-zA-Z0-9]*\>" contained containedin=vimString,vimContinueString
 
 hi  link    VimLtCSA  Constant
 syn match   VimLtCSA  "\\<lt>[^>]*>"hs=s+2,he=e-1 contained containedin=vimMapRhs

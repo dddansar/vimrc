@@ -142,7 +142,7 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    call AllDefineDollar()
    call AllDefineTick()
    call AllDefineAt()
-   call AllLabel()
+   " call AllLabel()
    call AllSpecifiersInQuotes()
    call AllNumbers()
    call AllNumbersHex()

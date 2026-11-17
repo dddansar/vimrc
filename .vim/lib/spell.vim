@@ -95,12 +95,12 @@ endfunction
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
    " hi SpellCapCheckAdd cterm=underline gui=undercurl ctermfg=166 guifg=NONE ctermbg=NONE guibg=NONE       guisp=darkorange3
-   hi  link    SpellLineStartLower SpellRare
-   syn match   SpellLineStartLower "\%#=1^\s*\zs\<[a-z]\+\>"
-   syn match   SpellLineStartLower "\%#=1\%(\<[A-Z]\+:\s*\)\@<=\<[a-z]\+\>"
+   hi  link    SpellLineStartLower  SpellRare
+   syn match   SpellLineStartLower  "\%#=1^\s*\zs\<[a-z]\+\>"
+   hi  link    SpellLineStartLower2 SpellRare
+   syn match   SpellLineStartLower2 "\<[a-z]\+\>" contained
    " Skip cap checking these words:
-   " syn keyword SpellNoCapSpell      if else elif elseif end endif for while do and or not xor xnor nand nor not alias
-   " syn match   SpellNoCapSpell "\<\%(if\|else\|elif\|elseif\|end\|endif\|for\|while\|do\|and\|alias\|or\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
+   syn match   SpellNoCapSpell "\%#=1^\s*\<\%(else\|elif\|elseif\|end\|endif\|for\|while\|and\|alias\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
    inoremap <buffer> <expr> '       LineStartCap("'")
@@ -117,18 +117,27 @@ function! LineStartCap(key) abort
    let c = col('.') - 1
    " Only consider text before the cursor, so mid-line insertions work
    let pre = strpart(l, 0, c)
-   if pre =~# '\%(^\s*\|\<[A-Z]\+:\s*\)[a-z]\+$'
-      " Skip if the word is inside any syntax group except SpellLineStartLower
-      let start = match(pre, '[a-z]\+$') + 1
+   " Skip if the word is inside any syntax group except SpellLineStartLower
+   let start = match(pre, '[a-z]\+$') + 1
+   let ok = 0
+   " Applies inside SpellLineStartLower
+   for id in synstack(line('.'), start)
+      if synIDattr(id, 'name') =~# '^\%(SpellLineStartLower\|SpellLineStartLower2\)$'
+         let ok = 1
+      endif
+   endfor
+   " Also applies on start of line and inside SpMathNotMultiVars2
+   if pre =~# '^\s*[a-z]\+$'
       for id in synstack(line('.'), start)
-         if synIDattr(id, 'name') !~# '^\%(SpellLineStartLower\|SpMathNotMultiVars2\)$'
-            return passthru
+         if synIDattr(id, 'name') =~# '^\%(SpMathNotMultiVars2\)$'
+            let ok = 1
          endif
       endfor
-      let w = matchstr(pre, '[a-z]\+$')
-      call timer_start(0, {-> s:FlashWord(line('.'), start, strlen(w))})
-      return repeat("\<bs>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
    endif
+   if !ok | return passthru | endif
+   let w = matchstr(pre, '[a-z]\+$')
+   call timer_start(0, {-> s:FlashWord(line('.'), start, strlen(w))})
+   return repeat("\<bs>", strchars(w)) . toupper(w[0]) . w[1:] . a:key
    return passthru
 endfunction
 
