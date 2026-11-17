@@ -177,10 +177,10 @@ function! MathMatches()
       hi  link    SpMathMultiVars2 Constant
       syn match   SpMathMultiVars2 "\%#=1\w\@<![a-zA-Z][a-zA-Z]\%( \?\w\)\@!" contains=@NoSpell
 
-      syn keyword SpMathNotMultiVars2 Ie ie In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of He he No no Me me Go go If Do Or
-      syn match   SpMathNotMultiVars2 "\%#=1\<by\>"
+      syn keyword MathNotMultiVars2 Ie ie In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of He he No no Me me Go go If Do Or
+      syn match   MathNotMultiVars2 "\%#=1\<by\>"
       syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
-      syn match   SpMathNotMultiVars3      "\<\%(if\|do\|or\)\>"
+      syn match   MathNotMultiVars3        "\<\%(if\|do\|or\)\>"
       syn match   SpellNoCapSpell "\%#=1^\s*\<\%(if\|do\|or\)\>" contains=@NoSpell
 
       " hi  link    SpMathMultiVars3 Constant
@@ -201,8 +201,8 @@ function! MathMatches()
       "------------------------------------------------------------------------
 
       let b:vim_you_autocorrect_exclude_groups = get(b:, 'vim_you_autocorrect_exclude_groups', [])
-      let b:vim_you_autocorrect_exclude_groups += ['SpMathNotMultiVars2']
-      let b:vim_you_autocorrect_exclude_groups += ['SpMathNotMultiVars3']
+      let b:vim_you_autocorrect_exclude_groups += ['MathNotMultiVars2']
+      let b:vim_you_autocorrect_exclude_groups += ['MathNotMultiVars3']
 
       " Clusters
       "------------------------------------------------------------------------

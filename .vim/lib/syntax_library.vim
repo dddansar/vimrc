@@ -305,7 +305,7 @@ function! AllSeparators2()
    syn match   AllSeparators2  "\%#=1[:;,.]"
 
    hi  link    AllHLColon Delimiter
-   syn match   AllHLColon ":" contained nextgroup=SpellLineStartLower2 skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+   syn match   AllHLColon ":" contained nextgroup=SpellLineStartLower2,@ClusterSpMath skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 endfunction
 
 " Match a . if surrounded by words like in word.word or item[i].value
@@ -472,7 +472,7 @@ function! AllMultiWordLabel(contained_en)
          \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
          \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
-         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellLineStartLower2 skipwhite') .
+         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellLineStartLower2,@ClusterSpMath skipwhite') .
          \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
       " Chapter 1:

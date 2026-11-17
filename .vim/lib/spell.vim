@@ -96,9 +96,9 @@ endfunction
 function! SpellCapCheckAdd() abort
    " hi SpellCapCheckAdd cterm=underline gui=undercurl ctermfg=166 guifg=NONE ctermbg=NONE guibg=NONE       guisp=darkorange3
    hi  link    SpellLineStartLower  SpellRare
-   syn match   SpellLineStartLower  "\%#=1^\s*\zs\<[a-z]\+\>"
+   syn match   SpellLineStartLower  "\%#=1^\s*\zs\<[a-z][a-z]\+\>"
    hi  link    SpellLineStartLower2 SpellRare
-   syn match   SpellLineStartLower2 "\<[a-z]\+\>" contained
+   syn match   SpellLineStartLower2 "\<[a-z][a-z]\+\>" contained
    " Skip cap checking these words:
    syn match   SpellNoCapSpell "\%#=1^\s*\<\%(else\|elif\|elseif\|end\|endif\|for\|while\|and\|alias\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
@@ -126,10 +126,10 @@ function! LineStartCap(key) abort
          let ok = 1
       endif
    endfor
-   " Also applies on start of line and inside SpMathNotMultiVars2
+   " Also applies on start of line and inside MathNotMultiVars2
    if pre =~# '^\s*[a-z]\+$'
       for id in synstack(line('.'), start)
-         if synIDattr(id, 'name') =~# '^\%(SpMathNotMultiVars2\)$'
+         if synIDattr(id, 'name') =~# '^\%(MathNotMultiVars2\)$'
             let ok = 1
          endif
       endfor
