@@ -66,13 +66,11 @@ endif
 setlocal spellcapcheck=
 "------------------------------------------------------------------------------
 
-if exists(':EnableAutocorrect') == 2 && g:use_autocorrect
-   " Need to call EnableAutocorrect first.
-   EnableAutocorrect
-   if exists('*vim_you_autocorrect#enable_autocorrect')
-      " Enable vim-you-autocorrect, auto-corrects if spell triggered
-      silent! call vim_you_autocorrect#enable_autocorrect()
-   endif
+
+" Enable vim-you-autocorrect, auto-corrects if spell triggered
+runtime autoload/vim_you_autocorrect.vim
+if exists('*vim_you_autocorrect#enable_autocorrect') && g:use_autocorrect
+   call vim_you_autocorrect#enable_autocorrect()
 endif
 
 
@@ -86,24 +84,50 @@ function! SpellCapCheckDsb() abort
    setlocal spellcapcheck=
    silent! iunmap <buffer> <space>
    silent! iunmap <buffer> <cr>
-   silent! hi  clear SpellLineStartLower
-   silent! syn clear SpellLineStartLower
+   silent! hi  clear SpellWordCapError
+   silent! syn clear SpellWordCapError
    silent! syn clear SpellNoCapSpell
 endfunction
 
+
+" NOTE: The functions SpellCapCheckAdd() and LineStartCap(key) below are
+" intended to complement vim_you_autocorrect and correct additional cases.
 " Match capital spell errors on new lines not matched by spellcapcheck.
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
-   " hi SpellCapCheckAdd cterm=underline gui=undercurl ctermfg=166 guifg=NONE ctermbg=NONE guibg=NONE       guisp=darkorange3
-   hi  link    SpellLineStartLower  SpellRare
-   syn match   SpellLineStartLower  "\%#=1^\s*\zs\<[a-z][a-z]\+\>"
-   hi  link    SpellLineStartLower2 SpellRare
-   syn match   SpellLineStartLower2 "\<[a-z][a-z]\+\>" contained
-   " Skip cap checking these words:
+   " Detect lower case at beginning of line
+   hi  link    SpellWordCapError  SpellRare
+   syn match   SpellWordCapError  "\%#=1^\s*\zs\<[a-z]\+\>"
+   " Also correct cap spell in comments
+   if exists("b:comment_leader")
+      " Use the same color as the comment highlight regardless of colorscheme.
+      let l:fg      = synIDattr(synIDtrans(hlID('Comment')), 'fg#')
+      let l:ctermfg = synIDattr(synIDtrans(hlID('Comment')), 'fg', 'cterm')
+      execute 'highlight SpellCapCheckCom'
+               \ . ' guifg=' . (empty(l:fg) ? 'NONE' : l:fg)
+               \ . ' ctermfg=' . (empty(l:ctermfg) ? 'NONE' : l:ctermfg)
+               \ . ' gui=undercurl cterm=underline'
+               \ . ' guisp=' . (empty(l:fg) ? 'NONE' : l:fg)
+      " Detect lower case at beginning of comments
+      hi  link    SpellWordCapErrorCom  SpellCapCheckCom
+      execute 'syn match   SpellWordCapErrorCom  "' . b:comment_leader . '\s*\zs\<[a-z]\+\>" containedin=.*Comment.*'
+   endif
+   " Detect lower case after a titled colon ":"
+   hi  link    SpellWordCapError2 SpellRare
+   syn match   SpellWordCapError2 "\<[a-z]\+\>" contained
+   " Allow these words to remain lowercase, skip cap checking them.
    syn match   SpellNoCapSpell "\%#=1^\s*\<\%(else\|elif\|elseif\|end\|endif\|for\|while\|and\|alias\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
+   " LineStartCap is applied after one of these characters is pressed.
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
    inoremap <buffer> <expr> '       LineStartCap("'")
+   " My edits to vim_you_autocorrect means it does not autocorrect words in
+   " syntax groups. Below are the syntax groups I want it to autocorrect in.
+   let b:vim_you_autocorrect_include_groups = get(b:, 'vim_you_autocorrect_include_groups', [])
+   let b:vim_you_autocorrect_include_groups += ['Comment']
+   let b:vim_you_autocorrect_include_groups += ['String']
+   let b:vim_you_autocorrect_include_groups += ['SpellWordCapError']
+   let b:vim_you_autocorrect_include_groups += ['SpellWordCapError2']
 endfunction
 
 " Fix capital spell errors on space or enter.
@@ -117,12 +141,12 @@ function! LineStartCap(key) abort
    let c = col('.') - 1
    " Only consider text before the cursor, so mid-line insertions work
    let pre = strpart(l, 0, c)
-   " Skip if the word is inside any syntax group except SpellLineStartLower
+   " Skip if the word is inside any syntax group except SpellWordCapError
    let start = match(pre, '[a-z]\+$') + 1
    let ok = 0
-   " Applies inside SpellLineStartLower
+   " Applies inside SpellWordCapError
    for id in synstack(line('.'), start)
-      if synIDattr(id, 'name') =~# '^\%(SpellLineStartLower\|SpellLineStartLower2\)$'
+      if synIDattr(id, 'name') =~# '^\%(SpellWordCapError\|SpellWordCapErrorCom\|SpellWordCapError2\)$'
          let ok = 1
       endif
    endfor

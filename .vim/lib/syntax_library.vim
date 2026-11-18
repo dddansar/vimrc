@@ -140,9 +140,9 @@ endfunction
 function! AllUnwantedCharacters(contained_en)
    if g:performance_mode <= 0
       hi  link     AllUnwantedCharacters  Error
-      execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]\+" keepend ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
+      execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]" keepend ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
       hi  link     AllIgnoreUnwantedChar  HLYellow
-      syn match    AllIgnoreUnwantedChar  '[−—–][−—–]\+' contained containedin=AllUnwantedCharacters
+      syn match    AllIgnoreUnwantedChar  '[—–][—–]\+' contained containedin=AllUnwantedCharacters
 
       hi  link     AllNonBreakingSpace  HLGrey30BgB
       syn match    AllNonBreakingSpace  '\%#=1[\ua0]' containedin=ALL
@@ -305,7 +305,7 @@ function! AllSeparators2()
    syn match   AllSeparators2  "\%#=1[:;,.]"
 
    hi  link    AllHLColon Delimiter
-   syn match   AllHLColon ":" contained nextgroup=SpellLineStartLower2,@ClusterSpMath skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+   syn match   AllHLColon ":" contained nextgroup=SpellWordCapError2,@ClusterSpMath skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
 endfunction
 
 " Match a . if surrounded by words like in word.word or item[i].value
@@ -472,7 +472,7 @@ function! AllMultiWordLabel(contained_en)
          \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
          \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
-         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellLineStartLower2,@ClusterSpMath skipwhite') .
+         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellWordCapError2,@ClusterSpMath skipwhite') .
          \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
       " Chapter 1:

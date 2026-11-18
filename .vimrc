@@ -1755,17 +1755,17 @@ function! LoadMappings()
    " Enable disable spell checking.
    " NOTE: adding & at the end of a set option in Vim, resets the setting to
    "       it's default value! -> set spellcapcheck&
-   nnoremap <leader>sn  :setlocal nospell<cr>
+   nnoremap <leader>sn :setlocal nospell<cr>
 
-   nnoremap <leader>sc :source ~/.vim/lib/spell.vim<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>sd :source ~/.vim/lib/spell.vim<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>sc :source $vim_folder_path/lib/spell.vim<cr>:syntax spell toplevel<cr>
+   nnoremap <leader>sd :source $vim_folder_path/lib/spell.vim<cr>:syntax spell notoplevel<cr>
 
-   nnoremap <leader>sz :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell toplevel<cr>
-   nnoremap <leader>sx :source ~/.vim/lib/spell.vim<cr>:setlocal spellcapcheck&<cr>:syntax spell notoplevel<cr>
+   nnoremap <leader>sa :source $vim_folder_path/lib/spell.vim<cr>:syntax spell toplevel<cr>:call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
+   nnoremap <leader>sr :source $vim_folder_path/lib/spell.vim<cr>:syntax spell notoplevel<cr>:call SpellCapCheckDsb()<cr>
 
    " Enable/disable spellcapcheck
-   nnoremap <leader>se :call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
-   nnoremap <leader>sr :call SpellCapCheckDsb()<cr>
+   " nnoremap <leader>se :call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
+   " nnoremap <leader>sr :call SpellCapCheckDsb()<cr>
 
 
    " Fix window after opening a split screen.

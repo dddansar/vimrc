@@ -181,7 +181,6 @@ function! MathMatches()
       syn match   MathNotMultiVars2 "\%#=1\<by\>"
       syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
       syn match   MathNotMultiVars3        "\<\%(if\|do\|or\)\>"
-      syn match   SpellNoCapSpell "\%#=1^\s*\<\%(if\|do\|or\)\>" contains=@NoSpell
 
       " hi  link    SpMathMultiVars3 Constant
       " syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
@@ -200,9 +199,14 @@ function! MathMatches()
       syn match   SpMathFunctions  "\%#=1\w\@<!\%(curl\|grad\|div\|rot\|proj\|det\)\w\@!" contains=@NoSpell,SpMathNumInVar
       "------------------------------------------------------------------------
 
-      let b:vim_you_autocorrect_exclude_groups = get(b:, 'vim_you_autocorrect_exclude_groups', [])
-      let b:vim_you_autocorrect_exclude_groups += ['MathNotMultiVars2']
-      let b:vim_you_autocorrect_exclude_groups += ['MathNotMultiVars3']
+      " Needed to not cap check
+      syn match   SpellNoCapSpell "\%#=1^\s*\<\%(if\|do\|or\)\>" contains=@NoSpell
+      " Needed to cap check after ":"
+      syn keyword SpellWordCapError2 ie in is it vs we an as at to so be un up us re ok on of he no me go contained
+
+      let b:vim_you_autocorrect_include_groups = get(b:, 'vim_you_autocorrect_include_groups', [])
+      let b:vim_you_autocorrect_include_groups += ['MathNotMultiVars2']
+      let b:vim_you_autocorrect_include_groups += ['MathNotMultiVars3']
 
       " Clusters
       "------------------------------------------------------------------------
