@@ -84,8 +84,13 @@ function! SpellCapCheckDsb() abort
    setlocal spellcapcheck=
    silent! iunmap <buffer> <space>
    silent! iunmap <buffer> <cr>
+   silent! iunmap <buffer> '
    silent! hi  clear SpellWordCapError
+   silent! hi  clear SpellWordCapError2
+   silent! syn clear SpellWordCapErrorCom
    silent! syn clear SpellWordCapError
+   silent! syn clear SpellWordCapError2
+   silent! syn clear SpellWordCapErrorCom
    silent! syn clear SpellNoCapSpell
 endfunction
 
@@ -103,11 +108,19 @@ function! SpellCapCheckAdd() abort
       " Use the same color as the comment highlight regardless of colorscheme.
       let l:fg      = synIDattr(synIDtrans(hlID('Comment')), 'fg#')
       let l:ctermfg = synIDattr(synIDtrans(hlID('Comment')), 'fg', 'cterm')
-      execute 'highlight SpellCapCheckCom'
-               \ . ' guifg=' . (empty(l:fg) ? 'NONE' : l:fg)
-               \ . ' ctermfg=' . (empty(l:ctermfg) ? 'NONE' : l:ctermfg)
-               \ . ' gui=undercurl cterm=underline'
-               \ . ' guisp=' . (empty(l:fg) ? 'NONE' : l:fg)
+
+      " WARNING: Can cause errors if the terminal can't provide the color.
+      "          E254: Cannot allocate colour 4
+      " Fix: Need to add a try/catch guard:
+      try
+         execute 'highlight SpellCapCheckCom'
+                  \ . ' guifg=' . (empty(l:fg) ? 'NONE' : l:fg)
+                  \ . ' ctermfg=' . (empty(l:ctermfg) ? 'NONE' : l:ctermfg)
+                  \ . ' gui=undercurl cterm=underline'
+                  \ . ' guisp=' . (empty(l:fg) ? 'NONE' : l:fg)
+      catch /E254/
+      endtry
+
       " Detect lower case at beginning of comments
       hi  link    SpellWordCapErrorCom  SpellCapCheckCom
       execute 'syn match   SpellWordCapErrorCom  "' . b:comment_leader . '\s*\zs\<[a-z]\+\>" containedin=.*Comment.*'
