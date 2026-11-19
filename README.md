@@ -1,6 +1,8 @@
 # vimrc
 
-Contains all my vimrc settings.
+Contains ALL my vimrc settings.
+
+See the vimrc_base repo instead if you want a simplified version of my vimrc repo without all the extra clutter that don't apply for most users.
 
 ## Features
 
@@ -22,8 +24,9 @@ Contains all my vimrc settings.
 - Contains autocorrect and spell checking support
 - Can emulate clipboard utility selections and copying if not supported or properly working such as in NeoVim or Windows
 
-## .vim/ Folder Contents
+## Vim Files and Folder Contents
 ```
+.vimrc                          # Main vimrc settings and mappings
 .vim/
 ├── colors/                     # Contains custom colorschemes
 ├── lib/                        # Contains generic functions, abbreviations, mappings, highlights, syntax and include files
@@ -96,11 +99,14 @@ Option 2) Linking NeoVim to Vim, can depend on the specific locations that NeoVi
 
 Link Vim's .vimrc and .vim/ subfolders in NeoVim.
 ```bash
-ln -s ~/.vim/colors      ~/.config/nvim/colors
-ln -s ~/.vim/spell       ~/.config/nvim/spell
-ln -s ~/.vim/pack        ~/.config/nvim/pack
-ln -s ~/.vim/after       ~/.config/nvim/after
-ln -s ~/.vim/syntax      ~/.config/nvim/syntax
+ln -s ~/.vim/after      ~/.config/nvim/after
+ln -s ~/.vim/colors     ~/.config/nvim/colors
+ln -s ~/.vim/lib        ~/.config/nvim/lib
+ln -s ~/.vim/pack       ~/.config/nvim/pack
+ln -s ~/.vim/plugin     ~/.config/nvim/plugin
+ln -s ~/.vim/spell      ~/.config/nvim/spell
+ln -s ~/.vim/syntax     ~/.config/nvim/syntax
+ln -s ~/.vim/thesaurus  ~/.config/nvim/thesaurus
 ```
 
 And add to ~/.config/nvim/init.lua
@@ -167,9 +173,6 @@ Make sure you don't have any other colorschemes enabled overriding the custom co
 ### Comparison with/without my custom syntax matching.
 
 Both images below use my ddd_black.vim file. The image on the left shows the default syntax matching and the image on the right adds my custom syntax matching on top.
-
-Left  image: With g:select_custom_syntax = 1
-Right image: With g:select_custom_syntax = 2
 
 For vim files:
 

@@ -34,8 +34,7 @@
 "------------------------------------------------------------------------------
 " Setting b:comment_leader based on Filetype. This can then be used to
 " syntax match comments or to create comments with remappings.
-" b:comment_leader is used to determine the comments when
-" g:select_custom_syntax >= 2.
+" b:comment_leader is used to determine the comments
 "------------------------------------------------------------------------------
 augroup SetFiletypeComment
 

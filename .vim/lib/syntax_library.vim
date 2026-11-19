@@ -1065,9 +1065,7 @@ function! AllFontStyles(contained_en)
       hi  link    AllMdFontStrikeLine HLStrikeThroughGrey
       syn match   AllMdFontStrikeLine "\%#=1\%( \|^\)\@<=\~\~\~\%([^~]\).*" contains=@NoSpell,AllMdFontHideST3
 
-      " Hides the pattern start/end in normal mode, to apply use:
-      "    set conceallevel=2
-      "    set concealcursor=n
+      " Hides the pattern start/end in normal mode.
       syn match AllMdFontHideSA1 "\%#=1\%( \|^\)\@<=\*\%(\S\&[^*]\)\@=" contained conceal
       syn match AllMdFontHideEA1 "\%#=1\%(\S\&[^*]\)\@<=\*\%([ .:;,!?)\]}'"]\|\n\)\@=" contained conceal
       syn match AllMdFontHideST1 "\%#=1\%( \|^\)\@<=\~\%(\S\&[^~]\)\@=" contained conceal
@@ -1238,9 +1236,7 @@ function! AllFontStyles(contained_en)
    hi  link    AllFontHighGreyB    HLGrey15BgB
    syn match   AllFontHighGreyB    "\%#=1\/h \%(\%( [a-z]\/\)\@!.\)\{-1,} e\/"   contains=@NoSpell,AllFontHideStart,AllFontHideEnd contained containedin=AllFontPat,AllFontPatCom
 
-   " Hides the pattern start/end in normal mode, to apply use:
-   "    set conceallevel=2
-   "    set concealcursor=n
+   " Hides the pattern start/end in normal mode.
    syn match AllFontHideStart "\%#=1\/[a-z] " contained conceal
    syn match AllFontHideEnd   "\%#=1 [a-z]\/" contained conceal
 
@@ -1310,12 +1306,12 @@ function! AllFilesDefaultSyntax()
       call AllEmails(1)
    endif
    call AllHLWords()
-   " call AllHLExclamations()
+   call AllHLExclamations()
    call AllTitles()
    call AllSudo()
    call AllCopyright()
    if (&filetype != 'text')
-      " call AllUnwantedCharacters(0)
+      call AllUnwantedCharacters(0)
    endif
    call AllFontStyles(1)
 endfunction

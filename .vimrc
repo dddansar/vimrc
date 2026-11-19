@@ -78,42 +78,17 @@ let g:hack_copy_selection=0
 " Set gvimdiff to wrap text.
 let g:wrap_gvimdiff=0
 
-" /d Syntax highlightings controls y/
-" NOTE: Controls the syntax highlightings in all files.
-" If set to 0 will use the default Vim syntax with the pablo colorscheme in
-"             addition to some of my custom syntax matching that adds
-"             additional syntax on top of the default Vim syntax matching.
-" if set to 1 will use the same settings as 0 but will turn on performance mode
-"             to disable the heavy custom syntax matchings that are known to
-"             slow down performance.
-" If set to 2 will use the default Vim syntax with my custom colorscheme in
-"             addition to some of my custom syntax matching that adds
-"             additional syntax on top of the default Vim syntax matching.
-" if set to 3 will use the same settings as 2 but will turn on performance mode
-"             to disable the heavy custom syntax matchings that are known to
-"             slow down performance.
-" If set to 4 will disable Vim's default syntax matching and will instead rely
-"             entirely on source $vim_folder_path/syntax/custom_syntax.vim
-" if set to 5 will turn syntax off entirely.
-let g:select_custom_syntax = 2
-
-
 " /d Performance mode y/
 " Will turn off additional settings and syntax matching if set to 1 or 2.
 " VINOTE: Vim provides the built-in command :syntime to profile and identify
-"         which syntax matches are consuming the most time.
+"         which syntax groups are consuming the most time.
 "         1) Start the profiling by running the command:
 "            :syntime on
 "         2) Perform actions that typically cause performance issues, such as
 "         scrolling through the file.
 "         3) Generate and view the report with:
 "            :syntime report
-if g:select_custom_syntax == 3 || g:select_custom_syntax == 1
-   let g:performance_mode = 1
-else
-   let g:performance_mode = 0
-endif
-
+let g:performance_mode = 0
 
 " Path to key Vim folders
 if g:using_windows
@@ -144,13 +119,14 @@ endif
 " Link the .vimrc file in NeoVim.
 " ln -s ~/.vimrc ~/.config/nvim/init.vim
 " Link various .vim/ subfolders in NeoVim.
-" ln -s ~/.vim/spell ~/.config/nvim/spell
-" ln -s ~/.vim/colors ~/.config/nvim/colors
 " ln -s ~/.vim/after ~/.config/nvim/after
-" ln -s ~/.vim/autocorrect ~/.config/nvim/autocorrect
-" ln -s ~/.vim/syntax ~/.config/nvim/syntax
-" Link the Pasky plugin to use Claude's API in NeoVim.
+" ln -s ~/.vim/colors ~/.config/nvim/colors
+" ln -s ~/.vim/lib ~/.config/nvim/lib
 " ln -s ~/.vim/pack ~/.config/nvim/pack
+" ln -s ~/.vim/plugin ~/.config/nvim/plugin
+" ln -s ~/.vim/spell ~/.config/nvim/spell
+" ln -s ~/.vim/syntax ~/.config/nvim/syntax
+" ln -s ~/.vim/thesaurus ~/.config/nvim/thesaurus
 
 " Set the max file size for AI API to 500KB
 " let g:MaxAIAPIFile = (1024 * 1024 * 1)/2
@@ -350,19 +326,7 @@ function! CommonSettings()
    "---------------------------------------------------------------------------
    " Enable syntax highlighting
    "---------------------------------------------------------------------------
-   if g:select_custom_syntax <= 3
-      " syntax on
-      syntax enable
-   elseif g:select_custom_syntax >= 4 && g:select_custom_syntax < 5
-      " If syntax is off, Vim's default syntax files will not be loaded.
-      "      :syntax list   Lists the syntax groups loaded.
-      "      :syntax off    Completely disables the syntax highlighting for
-      "                     all current and future buffers.
-      "      :syntax clear  Clears syntax highlighting only for the current
-      "                     buffer.
-      syntax off
-      " syntax clear
-   endif
+   syntax enable
 
 
    "---------------------------------------------------------------------------
@@ -429,29 +393,11 @@ endfunction
 " Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
-   if g:select_custom_syntax > 1 &&
-    \ (filereadable(expand($vim_folder_path . "/colors/ddd_black.vim")) ||
+   if (filereadable(expand($vim_folder_path . "/colors/ddd_black.vim")) ||
     \  filereadable(expand($vim_folder_path . "/pack/colorschemes/start/ddd_colorschemes/colors/ddd_black.vim")))
-      " The custom colorschemes are in .vim/colors/
+      " The custom colorschemes are in ~/.vim/colors/ or in
+      " ~/.vim/pack/colorschemes/start/ddd_colorschemes/colors/ddd_black.vim
       colorscheme ddd_black
-      " colorscheme ddd_darkgrey
-      " colorscheme ddd_darkgrey2
-      " colorscheme ddd_navy
-      " colorscheme ddd_darkgreen
-      " colorscheme ddd_black_grey
-      " colorscheme ddd_black_pink
-      " colorscheme ddd_black_fuchsia
-      " colorscheme ddd_black_navy
-      " colorscheme ddd_black_chocolate
-      " colorscheme ddd_black_darkgreen
-      " colorscheme ddd_black_teal
-
-      " colorscheme ddd_white
-      " colorscheme ddd_lightgrey
-      " colorscheme ddd_mocca
-      " colorscheme ddd_palegreen
-      " colorscheme ddd_aqua
-      " colorscheme ddd_lightpink
    else
       " Use one of the default colorschemes
       colorscheme pablo
@@ -855,20 +801,12 @@ function! DefaultSettings()
 
 
    "---------------------------------------------------------------------------
-   "---------------------------------------------------------------------------
-   "---------------------------------------------------------------------------
-   " Colors and Syntax Highlighting
-   "---------------------------------------------------------------------------
-   " NOTE: This file is responsible for /d loading additional custom syntax r/
-   " /d highlighting groups r/ based on the file extension/filetype whenever
-   " g:select_custom_syntax >= 2.
+   " NOTE: This file is responsible for /d loading additional options r/ based on
+   " the file extension/filetype
    "---------------------------------------------------------------------------
    if !exists("b:custom_syntax_loaded")
       source $vim_folder_path/syntax/custom_syntax.vim
    end
-   "---------------------------------------------------------------------------
-   "---------------------------------------------------------------------------
-   "---------------------------------------------------------------------------
 
 
    "---------------------------------------------------------------------------
@@ -890,15 +828,6 @@ function! DefaultSettings()
             \ | endif
       endif
    augroup END
-
-   "---------------------------------------------------------------------------
-   " Change cursor color in insert mode.
-   "---------------------------------------------------------------------------
-   " augroup CursorInsert
-   "    autocmd!
-   "    autocmd InsertEnter * highlight Cursor guibg=grey50
-   "    autocmd InsertLeave * highlight Cursor guibg=white
-   " augroup END
 
    "---------------------------------------------------------------------------
    " Automatically Resize splits whenever a new split is opened or closed.
@@ -1389,10 +1318,6 @@ function! LoadMappings()
    " Replace selected, \<exact match\>, ALL matches, no confirmation.
    nnoremap <leader>rr m'yiw:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
    vnoremap <leader>rr <esc>m'gvy:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
-
-
-   " Replace all c style /*multi-line*/ comments with single-line //comments.
-   noremap <leader>r/ m':keeppatterns %s/\/\*/\/\//g<cr>:keeppatterns %s/ *\*\///g<cr><c-o><c-o>
 
 
    " Search for CamelCase.

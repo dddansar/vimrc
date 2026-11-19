@@ -65,8 +65,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    " Apply spell checking everywhere in text files.
    syntax spell toplevel
    " Enable capital spell checking.
-   " call SpellCapCheckEn()
-   " call SpellCapCheckAdd()
+   call SpellCapCheckEn()
+   call SpellCapCheckAdd()
    call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    " NOTE: Moving these here to re-source on file/syntax reload.
@@ -131,26 +131,26 @@ syn match   TextTildaParen     "\%#=1(\~)"
 " Lowercase p1/p2/p3 (lower case could mean page numbers...).
 " P1/P2/P3 for Priorities
 " NOTE: need to be match not keyword to apply @NoSpell
-" hi  link  TextPriorities0  HLGrey80BgB
-" syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
-" hi  link  TextPriorities1  HLOrangered1BgB
-" syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
-" hi  link  TextPriorities2  HLOrangeBgB
-" syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
-" hi  link  TextPriorities3  HLYellowBgB
-" syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
-" hi  link  TextPriorities4  HLYellow3BgB
-" syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
-" hi  link  TextPriorities5  HLGreen1BgB
-" syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
-" hi  link  TextPriorities6  HLGreen3BgB
-" syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
-" hi  link  TextPriorities7  HLCyanBgB
-" syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
-" hi  link  TextPriorities8  HLDodgerBlueBgB
-" syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
-" hi  link  TextPriorities9  HLDeepPinkBgB
-" syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
+hi  link  TextPriorities0  HLGrey80BgB
+syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
+hi  link  TextPriorities1  HLOrangered1BgB
+syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
+hi  link  TextPriorities2  HLOrangeBgB
+syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
+hi  link  TextPriorities3  HLYellowBgB
+syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
+hi  link  TextPriorities4  HLYellow3BgB
+syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
+hi  link  TextPriorities5  HLGreen1BgB
+syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
+hi  link  TextPriorities6  HLGreen3BgB
+syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
+hi  link  TextPriorities7  HLCyanBgB
+syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
+hi  link  TextPriorities8  HLDodgerBlueBgB
+syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
+hi  link  TextPriorities9  HLDeepPinkBgB
+syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 " Call syntax functions
@@ -170,19 +170,17 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       " AllIgnoreSpellExtendedLatin() needs to be after MathMatches()
       " and before UnicodeNoSpell()
       call AllIgnoreSpellExtendedLatin(1)
-      " call AllUnwantedCharacters(1)
+      call AllUnwantedCharacters(1)
       call UnicodeNoSpell()
    else
       call AllIgnoreSpellExtendedLatin(0)
-      " call AllUnwantedCharacters(0)
+      call AllUnwantedCharacters(0)
    endif
    call AllNumbersUnicode(0)
    " call AllLabel()
    " call AllMultiWordLabel(0)
    call AllSlashes()
    call AllFontStyles(0)
-      " set conceallevel=2   " Used by AllFontStyles() to hide start/end of match
-      " set concealcursor=n  " Used by AllFontStyles() to hide start/end of match
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()
    " call AllHLWords()
