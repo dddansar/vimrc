@@ -79,8 +79,8 @@ let b:syntax_library_loaded = 1
 " Some of the functions in this file require comment_leader to be set and this
 " file may get loaded before the SetFiletypeComment filetype autocommands
 " triggers and after filetype already got defined!
-if !exists("b:custom_syntax_loaded")
-   source $vim_folder_path/syntax/custom_syntax.vim
+if !exists("b:filetype_settings_loaded")
+   source $vim_folder_path/lib/filetype_settings.vim
 end
 doautocmd SetFiletypeComment FileType
 

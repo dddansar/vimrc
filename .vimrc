@@ -804,8 +804,8 @@ function! DefaultSettings()
    " NOTE: This file is responsible for /d loading additional options r/ based on
    " the file extension/filetype
    "---------------------------------------------------------------------------
-   if !exists("b:custom_syntax_loaded")
-      source $vim_folder_path/syntax/custom_syntax.vim
+   if !exists("b:filetype_settings_loaded")
+      source $vim_folder_path/lib/filetype_settings.vim
    end
 
 

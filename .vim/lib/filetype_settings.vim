@@ -1,8 +1,7 @@
 "==============================================================================
-" File: custom_syntax.vim
+" File: filetype_settings.vim
 "------------------------------------------------------------------------------
-" Description: Loads the custom syntax highlighting groups based on the file
-"              extension.
+" Description: Loads additional settings based on the file extension/filetype.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -109,6 +108,5 @@ augroup SetFiletypeComment
 
 augroup END
 
-
-let b:custom_syntax_loaded = 1
+let b:filetype_settings_loaded = 1
 
