@@ -59,6 +59,9 @@ syn cluster ClusterCommentsPlusNoComScope contains=.*Comment.*,AllNoteScope,AllV
 
 syn cluster ClusterHLWords contains=AllHLAI,AllHLTodo,AllHLNote,AllHLViNote,AllHLViTodo,AllHLWarning,AllHLError,AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope,SpAllHLNote,SpAllHLViNote,SpAllHLTodo,SpAllHLViTodo,SpAllHLWarning
 
+syn cluster ClusterAllSpellNoCol contains=AllSpellNoColor1,AllSpellNoColor2,AllSpellNoColor3,AllSpellNoColor4,AllSpellNoColor5
+syn cluster ClusterAllSpellComCol contains=AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,AllSpellCommColor5
+
 
 " NOTE: Moved to the top. The guard was preventing the cluster from re-setting.
 " Common containedin cluster for all path matches
@@ -155,7 +158,8 @@ endfunction
 "------------------------------------------------------------------------------
 function! AllIgnoreSpellings()
    if g:performance_mode <= 0
-      " Ignore spell on words with 1 or more numbers or dashes or underscores or dots.
+      " Ignore spell on words with 1 or more numbers or dashes or underscores
+      " or dots.
       hi  link     AllSpellCommColor1  Comment
       syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
@@ -166,6 +170,11 @@ function! AllIgnoreSpellings()
       syn match    AllSpellCommColor2  "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTiTleColor2 "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
       syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=TOP
+
+      " Ignore spell on Capital words in the middle of a phrase such as names.
+      hi  link     AllSpellCommColor5  Comment
+      syn match    AllSpellCommColor5  "\%#=1\> \<[A-Z][a-z]\+\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
+      syn match    AllSpellNoColor5    "\%#=1\> \<[A-Z][a-z]\+\>" contains=TOP
    endif
 endfunction
 
@@ -360,7 +369,7 @@ endfunction
 function! AllCaps()
    if g:performance_mode <= 1
 
-      syn cluster ClusterAllCapsContainedin contains=@ClusterCommentsPlusScope,AllSpellCommColor1,AllSpellCommColor2,AllSpellCommColor3,AllSpellCommColor4,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
+      syn cluster ClusterAllCapsContainedin contains=@ClusterCommentsPlusScope,@ClusterAllSpellComCol,texChapterZone,@texFoldGroup,@texChapterGroup,jsonStringMatch,jsonString
 
       " Matches words like ABC, ABCs, DON'T and I'M
       hi  link     AllCaps Constant

@@ -193,8 +193,8 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
       hi link    TextQuotesLookbehind TextNoColor
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,AllSpellNoColor1,AllSpellNoColor2,AllSpellNoColor3,AllSpellNoColor4,AllIgnoreSpellExtendedLatin
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,AllSpellNoColor1,AllSpellNoColor2,AllSpellNoColor3,AllSpellNoColor4,AllIgnoreSpellExtendedLatin
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
+      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
 
       call RegexMatches(0)
       call RegexMatchesVim(0)
@@ -211,19 +211,19 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
       " Contain in TextQuotesLookbehind
       hi  link  TextLinuxCommands Statement
-      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<grep\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?"
-      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<echo\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<awk\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\%#=1\(\.\)\@<!\<perl\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<cat\%( -\w\+\)*\>"
-      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<print\>"
-      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<use\>"
-      syn match TextLinuxCommands "\%#=1\(^\||\)\s*\<time\>"
-      syn match TextLinuxCommands "\%#=1\(^\|[|(]\)\s*\<my\>"
+      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<grep\%( -\w\+\)*\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<echo\%( -\w\+\)*\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<awk\%( -\w\+\)*\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<perl\%( -\w\+\)*\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<cat\%( -\w\+\)*\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<print\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<use\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<time\>" contains=@NoSpell
+      syn match TextLinuxCommands "\%#=1\%(^\|[|(]\)\s*\<my\>" contains=@NoSpell
 
-      syn keyword TextLinuxCommands syntime timethis
-      syn keyword TextLinuxCommands print sub gsub contained
+      syn match TextLinuxCommands "\%(syntime\|timethis\)" contains=@NoSpell
+      syn match TextLinuxCommands "\%(print\|sub\|gsub\)" contained contains=@NoSpell
 
       " Add # comments as well
       hi  link  TextCommentLineStart AllCommentLineStart

@@ -32,6 +32,7 @@ See the vimrc_base repo instead if you want a simplified version of my vimrc rep
 ├── lib/                        # Contains generic functions, abbreviations, mappings, highlights, syntax and include files
 │   ├── abbrev.vim              # Common abbreviations and shortcuts
 │   ├── all_colors.vim          # Contains and highlights all the colored names available in Vim.
+│   ├── filetype_settings.vim   # Loads additional settings based on the file extension or filetype
 │   ├── linux.vim               # Linux commands custom syntax highlighting
 │   ├── math_mappings.vim       # Math/Unicode mappings from VSCode/Lean
 │   ├── math.vim                # Math custom syntax highlighting and abbreviations
@@ -49,7 +50,6 @@ See the vimrc_base repo instead if you want a simplified version of my vimrc rep
 ├── plugin/
 │   └── matchparen.vim          # Matching parenthesis highlighting overrides
 ├── syntax/
-│   ├── custom_syntax.vim       # Loads the custom syntax highlighting groups based on file extension
 │   ├── lean.vim                # Lean math prover custom syntax highlighting
 │   ├── rcf.vim                 # RCF custom syntax highlighting
 │   └── text.vim                # Plain text custom syntax highlighting
