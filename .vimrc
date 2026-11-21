@@ -323,6 +323,10 @@ let g:ai_model = 'claude-sonnet-5-5'
 function! CommonSettings()
    let g:EnteredCommonSetting = 1
 
+   if exists("g:debug_syntax")
+      echom "Entered CommonSettings()"
+   endif
+
    "---------------------------------------------------------------------------
    " Enable syntax highlighting
    "---------------------------------------------------------------------------
@@ -393,6 +397,9 @@ endfunction
 " Description: Loads the selected colorscheme.
 "------------------------------------------------------------------------------
 function! LoadColorscheme()
+   if exists("g:debug_syntax")
+      echom "Entered LoadColorscheme()"
+   endif
    if (filereadable(expand($vim_folder_path . "/colors/ddd_black.vim")) ||
     \  filereadable(expand($vim_folder_path . "/pack/colorschemes/start/ddd_colorschemes/colors/ddd_black.vim")))
       " The custom colorschemes are in ~/.vim/colors/ or in
@@ -410,6 +417,9 @@ endfunction
 " Description: Loads the default settings, mappings and syntax files
 "------------------------------------------------------------------------------
 function! DefaultSettings()
+   if exists("g:debug_syntax")
+      echom "Entered DefaultSettings()"
+   endif
    let g:EnteredDefaultSetting = 1
 
    "---------------------------------------------------------------------------
@@ -1781,7 +1791,6 @@ function! LoadMappings()
 endfunction
 
 
-
 "------------------------------------------------------------------------------
 " Function: AdjustFontSize(amount)
 " Description: /d Zooms in or zooms out y/ a specific amount.
@@ -2186,6 +2195,15 @@ augroup MainFunction
    " This gets called if the file is empty and loads DefaultSettings()
    autocmd VimEnter * if !exists("g:EnteredDefaultSetting") && !exists("g:EnteredLargeFile") |
       \ call DefaultSettings() | endif
+augroup END
+
+" Set custom syntax for empty files or files with no filetype
+augroup SetNoFiletype
+   autocmd!
+   " NOTE: Was not setting nofiletype when inside filetype_settings.vim with:
+   "       grep filetype .vim/ -r | gvim - (but was getting set when opening a
+   "       pre-existing file with no filetype). Now works for both cases.
+   autocmd BufWinEnter * if &filetype ==# '' | set filetype=nofiletype | endif
 augroup END
 
 

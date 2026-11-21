@@ -38,6 +38,9 @@
 " if exists("b:more_colors_loaded")
 "    finish
 " endif
+if exists("g:debug_syntax")
+   echom "more_colors.vim syntax file loaded"
+endif
 let b:more_colors_loaded = 1
 
 

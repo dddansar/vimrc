@@ -30,6 +30,10 @@
 " SOFTWARE.
 "==============================================================================
 
+if exists("g:debug_syntax")
+   echom "filetype_settings.vim file loaded"
+endif
+
 "------------------------------------------------------------------------------
 " Setting b:comment_leader based on Filetype. This can then be used to
 " syntax match comments or to create comments with remappings.
@@ -58,7 +62,11 @@ augroup SetFiletypeComment
    autocmd BufNewFile,BufRead *.objdump                 set filetype=asm
 
    " Set custom syntax for empty files or files with no filetype
-   if &filetype ==# '' | set filetype=nofiletype | endif
+   " Not working with: grep filetype .vim/ -r | gvim -
+   " NOTE: Moved into .vimrc, works there...
+   " autocmd BufWinEnter * if &filetype ==# '' | set filetype=nofiletype | endif
+   " autocmd VimEnter,BufRead,BufNewFile,StdinReadPost,BufWinEnter  * if &filetype ==# '' | set filetype=nofiletype | endif
+
 
    " NOTE: You can get the current file filetype with :set filetype?
    " Manually set the comment_leader for file types.

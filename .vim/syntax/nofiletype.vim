@@ -54,8 +54,6 @@ endif
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "nofiletype"
    let b:comment_leader = '//'
-   let b:multi_line_comment_start = '\(^\|\s\)\@<=/\*'
-   let b:multi_line_comment_end = '\*/'
    source $vim_folder_path/lib/more_colors.vim
    source $vim_folder_path/lib/syntax_library.vim
    source $vim_folder_path/lib/regex.vim
@@ -87,9 +85,9 @@ if exists("b:current_syntax") && b:current_syntax == "nofiletype"
    " call AllMultiLineCommentAnywhere()
    " call AllQuotes()
    call RegexMatches(0)
-   call RegexMatchesVim(0)
-   call RegexMatchesPerl(0)
-   call SpRegexSubstitution(0)
+   " call RegexMatchesVim(0)
+   " call RegexMatchesPerl(0)
+   " call SpRegexSubstitution(0)
    call AllDefineHash()
    call AllDefineTick()
    call AllDefineDollar()

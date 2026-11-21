@@ -257,6 +257,10 @@ if exists("b:current_syntax") && b:current_syntax == "text"
       if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
       " let b:current_syntax = "text"
       setlocal nospell
+      call SpellCapCheckDsb()
+      if hlexists('AllUnwantedCharacters')
+         syn clear AllUnwantedCharacters
+      endif
    endif
 endif
 

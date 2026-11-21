@@ -33,6 +33,9 @@
 if !exists("g:syntax_on")
   finish
 endif
+if exists("g:debug_syntax")
+   echom "syntax_library.vim file loaded"
+endif
 
 " NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
 " NOTE: These need to be above ClusterAllPathsCI or else they will not get
@@ -71,35 +74,26 @@ syn cluster ClusterAllPathsCI contains=@ClusterCommentsPlusScope,.*String.*,vimA
 syn case match
 
 
-" NOTE: had to remove otherwise syn cluster ClusterAllPathsCI was not working
+" Some of the functions in this file require comment_leader to be set and this
+" file may get loaded before the SetFiletypeComment filetype autocommands
+" triggers and after filetype already got defined!
+" NOTE: All function that depend on comment_leader need to get reloaded!!
+if !exists("b:filetype_settings_loaded")
+   source $vim_folder_path/lib/filetype_settings.vim
+end
+" NOTE: The SetFiletypeComment autocommands are not getting applied by
+"       themselves when sourcing filetype_settings.vim! Need to force the
+"       augroup to trigger so that functions and syntax that depend on
+"       comment_leader can apply.
+doautocmd SetFiletypeComment FileType
+
+
 " Exit if the file was already loaded
 if exists("b:syntax_library_loaded")
    finish
 endif
 let b:syntax_library_loaded = 1
-" echom "syntax library file loaded"
 
-" Some of the functions in this file require comment_leader to be set and this
-" file may get loaded before the SetFiletypeComment filetype autocommands
-" triggers and after filetype already got defined!
-if !exists("b:filetype_settings_loaded")
-   source $vim_folder_path/lib/filetype_settings.vim
-end
-doautocmd SetFiletypeComment FileType
-
-" NOTE:
-" \< means beginning of word.
-" \> means end of word.
-" \d means decimal.
-" \+ means one or more match.
-" \s means white space or tab.
-" \| means or.
-" \%( and \) lets you create a grouping.
-" \%( instead of \( means make group non capturing.
-" \? means match 0 or 1 times.
-" Inside a character class like [ ], the dot and $ loses its special
-" meaning and matches a literal dot and $. Otherwise . means any charater
-" and $ means end of line and ^ means start of file
 
 "------------------------------------------------------------------------------
 " https://vimdoc.sourceforge.net/htmldoc/syntax.html
@@ -126,11 +120,32 @@ doautocmd SetFiletypeComment FileType
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
+" NOTE:
+" \< means beginning of word.
+" \> means end of word.
+" \d means decimal.
+" \+ means one or more match.
+" \s means white space or tab.
+" \| means or.
+" \%( and \) lets you create a grouping.
+" \%( instead of \( means make group non capturing.
+" \? means match 0 or 1 times.
+" Inside a character class like [ ], the dot and $ loses its special
+" meaning and matches a literal dot and $. Otherwise . means any charater
+" and $ means end of line and ^ means start of file
+"------------------------------------------------------------------------------
+
+"------------------------------------------------------------------------------
 function! AllTabsAndSpaces()
    " Highlight chars that you don't want used such as tabs
    hi  link     AllTabs    HLBarelyVisible
    syn match    AllTabs    '\t' containedin=ALL
 
+   hi  link     AllNonBreakingSpace  HLGrey30BgB
+   syn match    AllNonBreakingSpace  '\%#=1[\ua0]' containedin=ALL
+endfunction
+
+function! AllTrailingSpaces()
    if g:performance_mode <= 0
       " Highlight trailing white spaces
       hi  link     AllTrailingSpaces    HLBarelyVisible
@@ -146,9 +161,6 @@ function! AllUnwantedCharacters(contained_en)
       execute 'syn match    AllUnwantedCharacters  "[−‘-‟—∣–ﬀ-ﬆĲĳŒœӔӕ]" keepend ' . (a:contained_en == 1 ? 'contained ' : 'containedin=ALL,AllIgnoreUnwantedChar,vimSubstPat')
       hi  link     AllIgnoreUnwantedChar  HLYellow
       syn match    AllIgnoreUnwantedChar  '[—–][—–]\+' contained containedin=AllUnwantedCharacters
-
-      hi  link     AllNonBreakingSpace  HLGrey30BgB
-      syn match    AllNonBreakingSpace  '\%#=1[\ua0]' containedin=ALL
    endif
 endfunction
 "------------------------------------------------------------------------------
@@ -567,7 +579,7 @@ function! AllPaths1(contained_en)
       hi  link     AllPaths1 Directory
       execute 'syn match AllPaths1 "' .
          \ '\%#=1\%(^\|\s\|["''(={[;<>,]\|:-\?\)\@<=' .
-         \ '\%(\~\|\.\.\?\)\?' .
+         \ '\%(\~\|\.\.\?\|\<file://\)\?' .
          \ '\%(\/[a-zA-Z0-9_.$-]\%([a-zA-Z0-9_.()[\]$-]\|\\ \)*\)\{2,}\/\?' .
          \ '\%([)}\]>]\)\@<!' .
          \ '\%(\s\|\n\|["''),}\]:;<>*]\)\@=" ' .
@@ -603,13 +615,13 @@ function! AllPaths2(contained_en)
 endfunction
 
 function! AllPathsWin(contained_en)
-   " Match simple Windows paths C:\Users\name\AppData\ or D:\Users or
-   " A:\path\file or ..\Users\file.ext
+   " Match simple Windows paths like C:\Users\name\AppData\ or D:\Users or
+   " G:\path\file or ..\Users\file.ext or even C:/Users/name/AppData/
    " Does not match paths like \Users\file without the C:\ or ..\
    if g:performance_mode <= 0
       hi  link     AllPathsWin Directory
       hi  link     AllPathsWin Directory
-      execute 'syn match AllPathsWin "\%#=1\%(\<[A-E]:\|\.\.\)\%(\\[a-zA-Z0-9_.-]\+\)\+\%(\\\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
+      execute 'syn match AllPathsWin "\%#=1\%(\<\%(file:///\)\?[C-H]:\|\.\.\)\%([\\/][a-zA-Z0-9_.-]\+\)\+\%([\\/]\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
    endif
 endfunction
 
@@ -682,13 +694,18 @@ function! AllWebsites(contained_en)
    " Websites Must Not End On These Special Character
    " .,)!?'"]#&=\@:;%$*         Punctuation followed by other text
 
-   " Match links that start with www like www.vim.org
+   " Match very simple links without www and ending with one of the major domains
+   " (.com,.org,.net,.gov,.edu) like in vim.org or example.com
+   hi  link     AllWebLinks0  Underlined
+   execute 'syn match    AllWebLinks0  "\%#=1\<[a-zA-Z][a-zA-Z0-9._-]\+\.\%(com\|org\|net\|gov\|edu\)\>"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+
+   " Match links that start with www like www.vim.org, www.vim.org/download.php
    hi  link     AllWebLinks1  Underlined
-   execute 'syn match    AllWebLinks1  "\%#=1\<www\.[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks1  "\%#=1\<www\.[a-zA-Z0-9][a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]"  contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 
    " Match links like https://www.vim.org/download.php or ftp://example.com
    hi  link     AllWebLinks2  Underlined
-   execute 'syn match    AllWebLinks2  "\%#=1\<\w\+:\/\/[a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
+   execute 'syn match    AllWebLinks2  "\%#=1\<\w\+:\/\/[a-zA-Z0-9[][a-zA-Z0-9._~:/?#\[\]@!$&''()*+,;=%-]\+[a-zA-Z0-9_/~-]" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterCommentsPlusScope,.*String.* keepend'
 endfunction
 
 " Match emails
@@ -1311,6 +1328,7 @@ function! AllFilesDefaultSyntax()
    let b:AllFilesDefaultSyntax_loaded = 1
    if &filetype !=# 'help'
       call AllTabsAndSpaces()
+      call AllTrailingSpaces()
    endif
    if (&filetype != 'csv')
       call AllCaps()

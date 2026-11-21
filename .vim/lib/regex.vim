@@ -34,6 +34,9 @@
 if !exists("g:syntax_on")
   finish
 endif
+if exists("g:debug_syntax")
+   echom "regex.vim file loaded"
+endif
 
 " ,shDblBrace -> breaks bash
 syn cluster RegexContainedin2 contains=vimSynRegPat,@vimSynRegPatGroup,vimGroupList,vimMapRhs,vimFunctionBody,vimFuncBody,vimExecute,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,shDoubleQuote,shSingleQuote,shHereDoc,perlMatch,perlSpecialMatch,perlSpecialString,perlQR,JavascriptRegex,RegexPatSepPerl,shNoQuote,vimSubstPat,vimSubstRep4

@@ -59,6 +59,7 @@ if exists("b:current_syntax") && b:current_syntax == "json"
 
    " call AllFilesDefaultSyntax()
    call AllTabsAndSpaces()
+   call AllTrailingSpaces()
    call AllCaps()
    call AllPaths1(1)
    call AllPathsWin(1)
