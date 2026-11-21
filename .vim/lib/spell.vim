@@ -124,6 +124,8 @@ function! SpellCapCheckAdd() abort
       " Detect lower case at beginning of comments
       hi  link    SpellWordCapErrorCom  SpellCapCheckCom
       execute 'syn match   SpellWordCapErrorCom  "' . b:comment_leader . '\s*\zs\<[a-z]\+\>" containedin=.*Comment.*'
+      hi  link    SpellWordCapErrorCom2 SpellCapCheckCom
+      syn match   SpellWordCapErrorCom2 "\<[a-z]\+\>" contained
    endif
    " Detect lower case after a titled colon ":"
    hi  link    SpellWordCapError2 SpellRare

@@ -1572,22 +1572,24 @@ function! LoadMappings()
    " 4rd line matches lowercase after labels like (a), A), (-), and 1)
    nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
-                        \:keeppatterns %s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
+                        \:keeppatterns %s/\(^\s*-\?\s*[A-Z][a-z-]\+\( [&/]\\|[ /-](\?[A-Z][a-z-]\+)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
    " Capitalize all words after punctuations and newlines on the current line.
    nnoremap <leader>ff mz:keeppatterns s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
-                        \:keeppatterns s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
+                        \:keeppatterns s/\(^\s*-\?\s*[A-Z][a-z-]\+\( [&/]\\|[ /-](\?[A-Z][a-z-]\+)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                         \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
    " Capitalize all words after punctuation and newlines in visual selection.
    " NOTE: :<c-u> clears the auto-inserted '<,'>.
    vnoremap <leader>ff :<c-u>keeppatterns '<,'>s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                       \:<c-u>keeppatterns '<,'>s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
-                      \:<c-u>keeppatterns '<,'>s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
+                      \:<c-u>keeppatterns '<,'>s/\(^\s*-\?\s*[A-Z][a-z-]\+\( [&/]\\|[ /-](\?[A-Z][a-z-]\+)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                       \:<c-u>keeppatterns '<,'>s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>
 
    " Capitalize first letter of every word on the current line (Title Case).
-   nnoremap <leader>ft :keeppatterns s/\<[a-z]/\u&/g<cr>
+   nnoremap <leader>ft :keeppatterns s/\(\w'\)\@<!\<[a-z]/\u&/g<cr>
+   " Capitalize first letter of every word on the selected lines (Title Case).
+   vnoremap <leader>ft :<c-u>keeppatterns '<,'>s/\(\w'\)\@<!\<[a-z]/\u&/g<cr>
    " Capitalize first letter of every word on every line in the file.
    nnoremap <leader>fT m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
    " Capitalize first letter of every word before a : on the current line

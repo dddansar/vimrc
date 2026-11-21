@@ -112,7 +112,7 @@ function! MathMatches()
 
       " \/\w\> is to not match a /d highlight o/
       syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![IA]\%(\w\| \%([a-zA-Z0-9'"][a-zA-Z'"0-9]\|[0-9]\)\|'\%([dm]\|ve\|ll\)\>\| \/\w\>\)\@!" contains=@NoSpell
-      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![a]\%(\w\| [a-zA-Z0-9'"]\| \/\w\>\)\@!" contains=@NoSpell
+      syn match   SpMathSingleCharIaA2 "\%#=1\w\@<![a]\%(\w\| [a-zA-Z0-9'"$]\| \/\w\>\)\@!" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![aA]\%( \%(was\|then\)\>\)\@=" contains=@NoSpell
       syn match   SpMathSingleCharIaA3 "\%#=1\w\@<![IaA]\%( \%(and\|o[rn]\|n\%(and\|o[rt]\|\)\|x\%(or\|nor\)\|exists\|with\|has\|but\|to\|i\%(mplies\|[ns]\)\|are\)\>\)\@=" contains=@NoSpell
 
@@ -120,7 +120,7 @@ function! MathMatches()
       syn match   SpMathSingleCharIaA4 "\%#=1\%(\w\)\@<= A\>" contains=@NoSpell
       syn match   SpMathSingleCharIaA4 "\%#=1\<[Tt]he [IaA]\>" contains=@NoSpell
       " Ignore spell check on "the" followed by "a" like in "the a variable".
-      syn match   SpMathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
+      syn match   MathSingleCharThe  "\%#=1\<[Tt]he\>" contains=@NoSpell contained containedin=SpMathSingleCharIaA4
 
       syn match   SpMathNotSingleCharIaA "\%#=1\%(^\s*-\s*\)\@<=[AI]" contains=@NoSpell
 
@@ -179,8 +179,8 @@ function! MathMatches()
 
       syn keyword MathNotMultiVars2 Ie ie In in Is is It it vs We we An an As as At at To to So so Be be Un un Up up Us us Re re Ok ok On on Of of He he No no Me me Go go If Do Or
       syn match   MathNotMultiVars2 "\%#=1\<by\>"
-      syn match   SpMathMultiVars2 "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
-      syn match   MathNotMultiVars3        "\<\%(if\|do\|or\)\>"
+      syn match   SpMathMultiVars2  "\%#=1\%(\w \?\)\@<!by\%( \?\w\)\@!" contains=@NoSpell
+      syn match   MathNotMultiVars3 "\<\%(if\|do\|or\)\>"
 
       " hi  link    SpMathMultiVars3 Constant
       " syn match   SpMathMultiVars3 "\%#=1\w\@<!\w\%(.⃗\)\@=" contains=@NoSpell  containedin=RegexRanges
@@ -203,10 +203,12 @@ function! MathMatches()
       syn match   SpellNoCapSpell "\%#=1^\s*\<\%(if\|do\|or\)\>" contains=@NoSpell
       " Needed to cap check after ":"
       syn keyword SpellWordCapError2 ie in is it vs we an as at to so be un up us re ok on of he no me go contained
+      syn match   SpellWordCapError2 "\%(:\s*\)\@<=\<\%(if\|do\|or\)\>" contained
 
       let b:vim_you_autocorrect_include_groups = get(b:, 'vim_you_autocorrect_include_groups', [])
       let b:vim_you_autocorrect_include_groups += ['MathNotMultiVars2']
       let b:vim_you_autocorrect_include_groups += ['MathNotMultiVars3']
+      let b:vim_you_autocorrect_include_groups += ['MathSingleCharThe']
 
       " Clusters
       "------------------------------------------------------------------------

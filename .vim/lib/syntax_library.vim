@@ -314,7 +314,11 @@ function! AllSeparators2()
    syn match   AllSeparators2  "\%#=1[:;,.]"
 
    hi  link    AllHLColon Delimiter
-   syn match   AllHLColon ":" contained nextgroup=SpellWordCapError2,@ClusterSpMath skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+   syn match   AllHLColon ":" contained nextgroup=SpellWordCapError2,@ClusterSpMath,MathNotMultiVars2,MathNotMultiVars3 skipwhite containedin=AllNoteScope,AllViNoteScope,AllTodoScope,AllViTodoScope,AllWarningScope,AllDoNotScope
+
+   " Need this to not match @ClusterSpMath,MathNotMultiVars2,MathNotMultiVars3
+   hi  link    AllHLColonCom Comment
+   syn match   AllHLColonCom ":" contained containedin=.*Comment.* nextgroup=SpellWordCapErrorCom2 skipwhite
 endfunction
 
 " Match a . if surrounded by words like in word.word or item[i].value
@@ -481,7 +485,7 @@ function! AllMultiWordLabel(contained_en)
          \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
          \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
-         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellWordCapError2,@ClusterSpMath skipwhite') .
+         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellWordCapError2,@ClusterSpMath,MathNotMultiVars2,MathNotMultiVars3 skipwhite') .
          \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
       " Chapter 1:
@@ -893,7 +897,21 @@ function! AllHLWords()
    syn match AllHLWarning "\%#=1\<DO NOT\%(\>\|:\@=\)"  contains=@NoSpell containedin=@ClusterCommentsPlusScope nextgroup=AllHLColon
    syn match AllHLTodo    "\%#=1\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell containedin=@ClusterCommentsPlusScope nextgroup=AllHLColon
    syn match AllHLTodo    "\%#=1\<HACK\%(\>\|:\@=\)"    contains=@NoSpell containedin=@ClusterCommentsPlusScope nextgroup=AllHLColon
-   syn match AllHLError   "\%#=1\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*                nextgroup=AllHLColon
+   syn match AllHLError   "\%#=1\<ERROR\%(\>\|:\@=\)"   contains=@NoSpell containedin=.*String.*
+
+   syn match AllHLAI      "\%#=1\<CLAUDE\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLAI      "\%#=1\<CHATGPT\%(\>\|:\@=\)" contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLAI      "\%#=1\<GEMINI\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLTodo    "\%#=1\<TODO\%(\>\|:\@=\)"    contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLNote    "\%#=1\<NOTE\%(\>\|:\@=\)"    contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLViNote  "\%#=1\<VINOTE\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLViTodo  "\%#=1\<VITODO\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLAiTodo  "\%#=1\<AITODO\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLWarning "\%#=1\<WARNING\%(\>\|:\@=\)" contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLWarning "\%#=1\<DO NOT\%(\>\|:\@=\)"  contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLTodo    "\%#=1\<FIXME\%(\>\|:\@=\)"   contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+   syn match AllHLTodo    "\%#=1\<HACK\%(\>\|:\@=\)"    contains=@NoSpell contained containedin=.*Comment.* nextgroup=AllHLColonCom
+
 endfunction
 
 " Highlights '!!!' and '???' if they follow one of the AllHLWords.
@@ -918,21 +936,21 @@ function! AllHLExclamations()
       " TODO: NOTE: WARNING: ... !!! The !!! should match the WARNING color !!! not TODO !!!    or NOTE !!!
       " WARNING: TODO: NOTE: ... !!! The !!! should match the NOTE    color !!! not WARNING !!! or TODO !!!
       " NOTE: WARNING: TODO: ... !!! The !!! should match the TODO    color !!! not NOTE !!!    or WARNING !!!
-      syn region AllComNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
-      syn region AllComDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom
+      syn region AllComNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
+      syn region AllComViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
+      syn region AllComTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
+      syn region AllComViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
+      syn region AllComWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
+      syn region AllComDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!"  end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contained containedin=.*Comment.* contains=vimCommentString,SpUnicodeNoSpellCom,AllHLColonCom
 
 
       " NOTE: When not contained in comment, need to contain TOP!!!
-      syn region AllNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
-      syn region AllViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
-      syn region AllTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
-      syn region AllViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
-      syn region AllWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
-      syn region AllDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP nextgroup=AllHLColon
+      syn region AllNoteScope    matchgroup=SpAllHLNote     start="\%#=1\<NOTE\%(:\|\>\)\@="      skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllViNoteScope  matchgroup=SpAllHLViNote   start="\%#=1\<VINOTE\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllTodoScope    matchgroup=SpAllHLTodo     start="\%#=1\<TODO\%(:\|\>\)\@="      skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllViTodoScope  matchgroup=SpAllHLViTodo   start="\%#=1\<VITODO\%(:\|\>\)\@="    skip="\%#=1[!?][!?]\+\ze.*[!?][!?]" end="\%#=1[!?][!?][!?]*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllWarningScope matchgroup=SpAllHLWarning  start="\%#=1\<WARNING\%(:\|\>\)\@="   skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
+      syn region AllDoNotScope   matchgroup=SpAllHLWarning  start="\%#=1\<DO NOT\%(:\|\>\)\@="    skip="\%#=1!!\+\ze.*!!" end="\%#=1!!!*" end="\%#=1\ze\<\%(TODO\|VINOTE\|VITODO\|WARNING\|DO NOT\|NOTE\)\>" keepend transparent oneline contains=TOP
 
 
 
