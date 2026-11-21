@@ -72,6 +72,7 @@ if exists("b:current_syntax") && b:current_syntax == "perl"
    " call AllDefineAt()
    call RegexMatches(1)
    call RegexMatchesPerl(1)
+   call SpRegexSubstitution(1)
 endif
 
 hi  link    PlEquality    Operator

@@ -280,7 +280,9 @@ function! SpRegexSubstitution(contained_en)
                  \ : l:s ==# '|' ? '|'
                  \ : ';'
          let l:name = l:sep_names[l:s]
-         execute 'hi link SpRegexSubstitutionSep' . l:name . ' Operator'
+         execute 'hi link SpRegexSubstitutionSep1' . l:name . ' Operator'
+         execute 'hi link SpRegexSubstitutionSep2' . l:name . ' Operator'
+         execute 'hi link SpRegexSubstitutionSep3' . l:name . ' Operator'
 
          " Substitution format is "lpre/l:post/l:post/l:end" where / is l:sep
          " l:pre matches the s/ at the start and related commands.
@@ -292,12 +294,19 @@ function! SpRegexSubstitution(contained_en)
          let l:end  = '\%([0-9giIceErnps&]\+\%(\>\|\%([&]\)\@<=\)\)\?\%(\w\|&\)\@!'
 
          " Matches entire search and replace line.
-         execute 'syn match SpRegexSubstitution' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSubstitutionSep' . l:name . ',SpRegexSubstitutionNotSep' . l:name . ',@ClusterRegex,vimNotation ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
+         execute 'syn match SpRegexSubstitution' . l:name . ' "' . l:pre . l:sep . l:post . l:sep . l:post . l:sep . l:end . '" contains=SpRegexSubstitutionSep1' . l:name . ' ' . l:contained . 'contains=@NoSpell containedin=vimMapRhs,SpVimRegexLine,AllQuotes,AllQuotesLookbehind,TextQuotesLookbehind,RegexPatSepPerl,shDoubleQuote,shSingleQuote,shHereDoc'
 
          " Matches search and replace commands/separators in SpRegexSubstitution.
-         execute 'syn match SpRegexSubstitutionSep' . l:name
-               \ . ' "' . l:pre . l:sep . '\|\%(' . l:pre . l:sep . l:post . l:sep . l:post . '\)\@<=' . l:sep
-               \ . l:end . '\|' . l:sep . '" contained contains=@NoSpell'
+         execute 'syn match SpRegexSubstitutionSep1' . l:name . ' "' . l:pre . l:sep
+               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionPost1' . l:name
+         execute 'syn match SpRegexSubstitutionPost1' . l:name . ' "' . l:post
+               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionSep2' . l:name
+         execute 'syn match SpRegexSubstitutionSep2' . l:name . ' "' . l:sep
+               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionPost2' . l:name
+         execute 'syn match SpRegexSubstitutionPost2' . l:name . ' "' . l:post
+               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionSep3' . l:name
+         execute 'syn match SpRegexSubstitutionSep3' . l:name . ' "' . l:sep . l:end
+               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation'
 
          execute 'syn match SpRegexSubstitutionNotSep' . l:name . ' "\%(escape(\)\@<=.\{-}\%()\)\@=" contained contains=@NoSpell'
       endfor

@@ -63,6 +63,7 @@ if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax =
    call AllPathsSingleSlashStart(1)
    call RegexMatches(1)
    call RegexMatchesPerl(1)
+   call SpRegexSubstitution(1)
    " AllPaths needs to be after regex/slashes/operators/separators...
    call AllPaths1(0)
    call AllPathsWin(0)

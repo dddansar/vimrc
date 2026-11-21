@@ -85,9 +85,8 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
 
    call AllDefineAt()
    call RegexMatches(1)
-   " WARNING: Can crash Vim as you edit in real time (Near the "Capitalize all words" inoremap)!!
-   " call SpRegexSubstitution(1)
-   call RegexMatchesVim(0)
+   call RegexMatchesVim(1)
+   call SpRegexSubstitution(1)
    call AllPathsSingleSlashStart(1)
 endif
 

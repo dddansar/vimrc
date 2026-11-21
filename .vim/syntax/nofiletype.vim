@@ -89,6 +89,7 @@ if exists("b:current_syntax") && b:current_syntax == "nofiletype"
    call RegexMatches(0)
    call RegexMatchesVim(0)
    call RegexMatchesPerl(0)
+   call SpRegexSubstitution(0)
    call AllDefineHash()
    call AllDefineTick()
    call AllDefineDollar()
