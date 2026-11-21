@@ -85,7 +85,8 @@ if exists("b:current_syntax") && b:current_syntax == "vim"
 
    call AllDefineAt()
    call RegexMatches(1)
-   call SpRegexSubstitution(1)
+   " WARNING: Can crash Vim as you edit in real time (Near the "Capitalize all words" inoremap)!!
+   " call SpRegexSubstitution(1)
    call RegexMatchesVim(0)
    call AllPathsSingleSlashStart(1)
 endif
@@ -119,7 +120,7 @@ syn match   VimEnvVar   "\${\I\i\+}" contained containedin=vimMapRhs
 
 hi  link    VimCommands  Statement
 syn match   VimCommands  "\%(:\|<cmd>\)\%(<c-u>\)\?[%.]\?!\?[a-zA-Z]\%([a-zA-Z]\+\>\| \)" contained containedin=vimMapRhs contains=vimNotation
-syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\%([a-zA-Z]\+\>\| \)" contained containedin=vimMapRhs contains=vimNotation
+" syn match   VimCommands  "\%(:.*\%(<bar>\)\)\@<=[a-zA-Z]\%([a-zA-Z]\+\>\| \)" contained containedin=vimMapRhs contains=vimNotation
 syn match   VimCommands  "\<call\>" contained containedin=vimMapRhs
 
 syn match   VimCommands  "\<normal\>" contained containedin=vimMapRhs

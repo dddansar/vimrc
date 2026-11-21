@@ -1568,18 +1568,22 @@ function! LoadMappings()
    " Capitalize all words after punctuations and newlines in the entire file.
    " 1st line matches lowercase after a new line or punctuations
    " 2nd line matches lowercase after bullet point style lines like  - abc
-   " 3rd line matches lowercase after labels like (a), A), (-), and 1)
+   " 3rd line matches lowercase after Titlecase labels like Title:
+   " 4rd line matches lowercase after labels like (a), A), (-), and 1)
    nnoremap <leader>fc m':keeppatterns %s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns %s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                         \:keeppatterns %s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr><c-o><c-o><c-o>
    " Capitalize all words after punctuations and newlines on the current line.
    nnoremap <leader>ff mz:keeppatterns s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                         \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                        \:keeppatterns s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                         \:keeppatterns s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>`z
    " Capitalize all words after punctuation and newlines in visual selection.
    " NOTE: :<c-u> clears the auto-inserted '<,'>.
    vnoremap <leader>ff :<c-u>keeppatterns '<,'>s/\(^\s*["']\?\s*\\|[A-Z]:\s*\\|[.?!]\s\+\\|[/][/]\s*\)[a-z]\%()\)\@!/\U&/ge<cr>
                       \:<c-u>keeppatterns '<,'>s/\(^\s*\([/][/]\s*\)\?[*+-]\s\+\)[a-z]\%()\)\@!/\U&/ge<cr>
+                      \:<c-u>keeppatterns '<,'>s/\(^\s*[A-Z][a-z]\+\( (\?[A-Z][a-z]\+\|&)\?\)*:\s*\)\@<=[a-z]/\U&/ge<cr>
                       \:<c-u>keeppatterns '<,'>s/\(^\s*\([/][/]\s*\)\?[(]\?\([0-9]\+\\|[a-zA-Z*+-]\)[)]\s*\)\@<=[a-z]/\U&/ge<cr>
 
    " Capitalize first letter of every word on the current line (Title Case).

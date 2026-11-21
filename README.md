@@ -51,6 +51,7 @@ See the vimrc_base repo instead if you want a simplified version of my vimrc rep
 │   └── matchparen.vim          # Matching parenthesis highlighting overrides
 ├── syntax/
 │   ├── lean.vim                # Lean math prover custom syntax highlighting
+│   ├── nofiletype.vim          # Custom syntax highlighting for files with no filetype
 │   ├── rcf.vim                 # RCF custom syntax highlighting
 │   └── text.vim                # Plain text custom syntax highlighting
 ├── thesaurus/

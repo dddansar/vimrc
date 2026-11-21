@@ -57,6 +57,9 @@ augroup SetFiletypeComment
    autocmd BufNewFile,BufRead *.rcf                     set filetype=rcf
    autocmd BufNewFile,BufRead *.objdump                 set filetype=asm
 
+   " Set custom syntax for empty files or files with no filetype
+   if &filetype ==# '' | set filetype=nofiletype | endif
+
    " NOTE: You can get the current file filetype with :set filetype?
    " Manually set the comment_leader for file types.
    " Used AI to generate this list...
