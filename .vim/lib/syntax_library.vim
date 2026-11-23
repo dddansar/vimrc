@@ -497,7 +497,7 @@ function! AllMultiWordLabel(contained_en)
          \ '\%(\s*\%(["''(]\|-\s\)\?\<\%([A-ZÀ-ß0-9][a-zA-ZÀ-ÿ0-9_-]*\|[0-9]\+[a-zA-Z]\?\)\%(\>\|:\@=\)' .
          \         '[''")+-]*\%( [&/] \@=\|[,.] \@=\|\%( [(]\|[.&/]\)[A-ZÀ-ß0-9]\@=\|''[a-z]\>\)*' .
          \ '\)\+:\%(\s\|\n\)\@=\%(NOTE\?:\|TODO:\|WARNING:\)\@<!+' .
-         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.*' : ' nextgroup=SpellWordCapError2,@ClusterSpMath,MathNotMultiVars2,MathNotMultiVars3 skipwhite') .
+         \ (a:contained_en ? 'hs=s+' . len(b:comment_leader) . ' contained containedin=.*Comment.* nextgroup=SpellWordCapErrorCom2 skipwhite' : ' nextgroup=SpellWordCapError2,@ClusterSpMath,MathNotMultiVars2,MathNotMultiVars3 skipwhite') .
          \ ' contains=@NoSpell,@ClusterHLWords keepend'
       " Matching Examples:
       " Chapter 1:
@@ -621,7 +621,7 @@ function! AllPathsWin(contained_en)
    if g:performance_mode <= 0
       hi  link     AllPathsWin Directory
       hi  link     AllPathsWin Directory
-      execute 'syn match AllPathsWin "\%#=1\%(\<\%(file:///\)\?[C-H]:\|\.\.\)\%([\\/][a-zA-Z0-9_.-]\+\)\+\%([\\/]\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
+      execute 'syn match AllPathsWin "\%#=1\%(\<\%(file:///\)\?[A-Z]:\|\.\.\)\%([\\/][a-zA-Z0-9_.-]\+\)\+\%([\\/]\?\|\>\)" contains=@NoSpell' . (a:contained_en ? ' contained' : '') . ' containedin=@ClusterAllPathsCI keepend'
    endif
 endfunction
 

@@ -124,8 +124,20 @@ syn match   VimCommands  "\<call\>" contained containedin=vimMapRhs
 
 syn match   VimCommands  "\<normal\>" contained containedin=vimMapRhs
 
-hi  link    VimFunctions  Statement
-syn match   VimFunctions   "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,@ClusterSpRegexSubstitution
+
+hi  link    VimFunctions Statement
+syn match   VimFunctions "\<[a-zA-Z]\+\>\%((\)\@=" contained containedin=vimMapRhs,@ClusterSpRegexSubstitution nextgroup=VimFunctionsParen
+hi link     VimFunctionsParenDelim  Delimiter
+syn region  VimFunctionsParen matchgroup=VimFunctionsParenDelim start="(" end=")" contained transparent oneline contains=VimFunctionsParen,VimFunctions,VimFunctionsParenQuotes
+hi  link    VimFunctionsSeparators  Delimiter
+syn match   VimFunctionsSeparators  "[,]"    contained containedin=VimFunctionsParen
+hi link     VimFunctionsQuotes String
+syn match   VimFunctionsQuotes "'.\{-}'"     contained containedin=VimFunctionsParen
+hi link     VimFunctionsRegisters Identifier
+syn match   VimFunctionsRegisters "@[a-z"/]"  contained containedin=VimFunctionsParen
+hi link     VimFunctionsNumbers Number
+syn match   VimFunctionsNumbers "\<[0-9]\+\>"  contained containedin=VimFunctionsParen
+
 
 hi  link    VimVisualSel  SpecialKey
 syn match   VimVisualSel  "'<,'>" contained containedin=vimMapRhs

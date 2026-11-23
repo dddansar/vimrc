@@ -1264,7 +1264,8 @@ function! LoadMappings()
 
 
    " Search for characters selected.
-   " Using escape({string}, {chars}) to escape the yanked text inside @", this
+   " "zy yanks into register z, which leaves any previous yank intact.
+   " Using escape({string}, {chars}) to escape the yanked text inside @z, this
    " allows the search to also work on / and \ characters.
    " <a-backspace> moves the cursor left even if on the previous line.
    " substitute({string},'\n','\\n','g') allows searches over multiple lines
@@ -1274,30 +1275,30 @@ function! LoadMappings()
    "    '\\n': the replacement is the two characters \n.
    "    'g': replace all matches, not just the first.
    " /<up> starts a search then uses the previous search patern.
-   " vnoremap /     y<a-backspace>/\V\c<c-r>=escape(@",'/\')<cr><cr>
+   " vnoremap /     y<a-backspace>/\V\c<c-r>=escape(@z,'/\')<cr><cr>
 
    " Search for characters selected.
-   vnoremap /       y<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   nnoremap <c-/> yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   vnoremap <c-8>   y<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   nnoremap <c-8> yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   vnoremap /       "zy<a-backspace>/\V\c<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <c-/> "zyiw<a-backspace>/\V\c<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap <c-8>   "zy<a-backspace>/\V\c\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
+   nnoremap <c-8> "zyiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
    " Add another word to the existing search.
-   vnoremap ?       y<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   nnoremap ?     yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   vnoremap *       y<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   nnoremap *     yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   vnoremap ?       "zy<a-backspace>/<up>\\|<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap ?     "zyiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   vnoremap *       "zy<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
+   nnoremap *     "zyiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
    " Search for selection yanked as is, useful for regex.
-   vnoremap <c-/>   y/<c-r>"<cr>
+   vnoremap <c-/>   "zy/<c-r>"<cr>
    " Add another <c-/> to the existing search.
    if g:ctrl_shift_enabled
-      vnoremap <c-s-?> y/<up><c-r>"<cr>
+      vnoremap <c-s-?> "zy/<up><c-r>"<cr>
    endif
 
    " Search for item under cursor with a mouse.
-   nnoremap <c-leftmouse>  <leftmouse>yiw<a-backspace>/\V\c<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   nnoremap <c-rightmouse> <leftmouse>yiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
-   nnoremap <s-leftmouse>  <leftmouse>yiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr><cr>
-   nnoremap <s-rightmouse> <leftmouse>yiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@",'/\'),'\n','\\n','g')<cr>\><cr>
+   nnoremap <c-leftmouse>  <leftmouse>"zyiw<a-backspace>/\V\c<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <c-rightmouse> <leftmouse>"zyiw<a-backspace>/\V\c\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
+   nnoremap <s-leftmouse>  <leftmouse>"zyiw<a-backspace>/<up>\\|<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr><cr>
+   nnoremap <s-rightmouse> <leftmouse>"zyiw<a-backspace>/<up>\\|\<<c-r>=substitute(escape(@z,'/\'),'\n','\\n','g')<cr>\><cr>
 
 
    " Search in multiple split-windows. Type m to continue the search in
@@ -1313,21 +1314,22 @@ function! LoadMappings()
    "       % starts from top of the file.
    "       .,$ to start from current line to end of file.
    "       |1,''-&& to repeat from first line to cursor line minus one.
-   " Using escape({string}, {chars}) to escape the yanked text inside @", this
+   " "zy yanks into register z, which leaves any previous yank intact.
+   " Using escape({string}, {chars}) to escape the yanked text inside @z, this
    " allows the search to also work on / and \ characters in the search
    " side and on &, ~, / and \ in replacement side.
    " Replace selected, asking for confirmation each match.
-   nnoremap <leader>rn yiw:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
-   vnoremap <leader>rn y:.,$s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   nnoremap <leader>rn "zyiw:.,$s/\V\C<c-r>=escape(@z,'/\')<cr>/<c-r>=escape(@z,'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>rn "zy:.,$s/\V\C<c-r>=escape(@z,'/\')<cr>/<c-r>=escape(@z,'/\&~')<cr>/gc\|1,''-&&
    " Replace selected, \<exact match\>, asking for confirmation each match.
-   nnoremap <leader>re yiw:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
-   vnoremap <leader>re y:.,$s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/gc\|1,''-&&
+   nnoremap <leader>re "zyiw:.,$s/\V\C\<<c-r>=escape(@z,'/\')<cr>\>/<c-r>=escape(@z,'/\&~')<cr>/gc\|1,''-&&
+   vnoremap <leader>re "zy:.,$s/\V\C\<<c-r>=escape(@z,'/\')<cr>\>/<c-r>=escape(@z,'/\&~')<cr>/gc\|1,''-&&
    " Replace selected, ALL matches, no confirmation.
-   nnoremap <leader>ra m'yiw:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
-   vnoremap <leader>ra <esc>m'gvy:%s/\V\C<c-r>=escape(@",'/\')<cr>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   nnoremap <leader>ra m'"zyiw:%s/\V\C<c-r>=escape(@z,'/\')<cr>/<c-r>=escape(@z,'/\&~')<cr>/g<left><left>
+   vnoremap <leader>ra <esc>m'gv"zy:%s/\V\C<c-r>=escape(@z,'/\')<cr>/<c-r>=escape(@z,'/\&~')<cr>/g<left><left>
    " Replace selected, \<exact match\>, ALL matches, no confirmation.
-   nnoremap <leader>rr m'yiw:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
-   vnoremap <leader>rr <esc>m'gvy:%s/\V\C\<<c-r>=escape(@",'/\')<cr>\>/<c-r>=escape(@",'/\&~')<cr>/g<left><left>
+   nnoremap <leader>rr m'"zyiw:%s/\V\C\<<c-r>=escape(@z,'/\')<cr>\>/<c-r>=escape(@z,'/\&~')<cr>/g<left><left>
+   vnoremap <leader>rr <esc>m'gv"zy:%s/\V\C\<<c-r>=escape(@z,'/\')<cr>\>/<c-r>=escape(@z,'/\&~')<cr>/g<left><left>
 
 
    " Search for CamelCase.
@@ -1693,16 +1695,14 @@ function! LoadMappings()
    nnoremap <leader>j4 67%
    nnoremap <leader>j5 83%
 
-   " Enable disable spell checking.
-   " NOTE: adding & at the end of a set option in Vim, resets the setting to
-   "       it's default value! -> set spellcapcheck&
-   nnoremap <leader>sn :setlocal nospell<cr>
+   " Enable/disable spell checking.
+   nnoremap <leader>sn :setlocal nospell<cr>:call SpellCapCheckDsb()<cr>
 
    nnoremap <leader>sc :source $vim_folder_path/lib/spell.vim<cr>:syntax spell toplevel<cr>
    nnoremap <leader>sd :source $vim_folder_path/lib/spell.vim<cr>:syntax spell notoplevel<cr>
 
-   nnoremap <leader>sa :source $vim_folder_path/lib/spell.vim<cr>:syntax spell toplevel<cr>:call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
-   nnoremap <leader>sr :source $vim_folder_path/lib/spell.vim<cr>:syntax spell notoplevel<cr>:call SpellCapCheckDsb()<cr>
+   nnoremap <leader>sa :source $vim_folder_path/lib/spell.vim<cr>:syntax spell toplevel<cr>:call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>:call AllSeparators2()<cr>
+   nnoremap <leader>sr :source $vim_folder_path/lib/spell.vim<cr>:syntax spell notoplevel<cr>:call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>:call AllSeparators2()<cr>
 
    " Enable/disable spellcapcheck
    " nnoremap <leader>se :call SpellCapCheckEn()<cr>:call SpellCapCheckAdd()<cr>
@@ -1741,7 +1741,7 @@ function! LoadMappings()
 
    " Searching vertically
    " VSearch mappings
-   " "zy yanks selection into register z
+   " "zy yanks into register z, which leaves any previous yank intact.
    " Single-line selection repeated on 3 lines
    nnoremap <leader>vh :call VSearch('output', 0, 3)
    " vnoremap <leader>vh "zy:call VSearch(@z, 0, 3)

@@ -75,7 +75,7 @@ endif
 
 
 function! SpellCapCheckEn()
-   " Reset spellcapcheck to default effectively enabling it
+   " Reset spellcapcheck to default effectively re-enabling it
    setlocal spellcapcheck&
 endfunction
 
@@ -88,9 +88,11 @@ function! SpellCapCheckDsb() abort
    silent! hi  clear SpellWordCapError
    silent! hi  clear SpellWordCapError2
    silent! syn clear SpellWordCapErrorCom
+   silent! syn clear SpellWordCapErrorCom2
    silent! syn clear SpellWordCapError
    silent! syn clear SpellWordCapError2
    silent! syn clear SpellWordCapErrorCom
+   silent! syn clear SpellWordCapErrorCom2
    silent! syn clear SpellNoCapSpell
 endfunction
 
@@ -125,7 +127,7 @@ function! SpellCapCheckAdd() abort
       hi  link    SpellWordCapErrorCom  SpellCapCheckCom
       execute 'syn match   SpellWordCapErrorCom  "' . b:comment_leader . '\s*\zs\<[a-z]\+\>" containedin=.*Comment.*'
       hi  link    SpellWordCapErrorCom2 SpellCapCheckCom
-      syn match   SpellWordCapErrorCom2 "\<[a-z]\+\>" contained
+      syn match   SpellWordCapErrorCom2 "\<[a-z]\+\>\%([ \t]\|\n\)\@=" contained
    endif
    " Detect lower case after a titled colon ":"
    hi  link    SpellWordCapError2 SpellRare
@@ -161,7 +163,7 @@ function! LineStartCap(key) abort
    let ok = 0
    " Applies inside SpellWordCapError
    for id in synstack(line('.'), start)
-      if synIDattr(id, 'name') =~# '^\%(SpellWordCapError\|SpellWordCapErrorCom\|SpellWordCapError2\)$'
+      if synIDattr(id, 'name') =~# '^\%(SpellWordCapError\|SpellWordCapErrorCom\|SpellWordCapErrorCom2\|SpellWordCapError2\)$'
          let ok = 1
       endif
    endfor

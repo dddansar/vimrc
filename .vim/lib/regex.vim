@@ -314,7 +314,7 @@ function! SpRegexSubstitution(contained_en)
          execute 'syn match SpRegexSubstitutionNotSep' . l:name . ' "\%(escape(\)\@<=.\{-}\%()\)\@=" contained contains=@NoSpell'
       endfor
 
-      syn cluster ClusterSpRegexSubstitution contains=SpRegexSubstitutionSlash,SpRegexSubstitutionHash,SpRegexSubstitutionPercent,SpRegexSubstitutionAt,SpRegexSubstitutionBang,SpRegexSubstitutionComma,SpRegexSubstitutionBar,SpRegexSubstitutionSemi
+      syn cluster ClusterSpRegexSubstitution contains=SpRegexSubstitution.*
    endif
 endfunction
 
