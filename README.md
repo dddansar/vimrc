@@ -62,6 +62,7 @@ See the vimrc_base repo instead if you want a simplified version of my vimrc rep
     └── syntax/
         ├── asm.vim             # Assembly custom syntax highlighting
         ├── c.vim               # C/C++ custom syntax highlighting
+        ├── conf.vim            # Configuration custom syntax highlighting
         ├── csh.vim             # C shell custom syntax highlighting
         ├── java.vim            # Java custom syntax highlighting
         ├── javascript.vim      # JavaScript custom syntax highlighting

@@ -301,15 +301,15 @@ function! SpRegexSubstitution(contained_en)
 
          " Matches search and replace commands/separators in SpRegexSubstitution.
          execute 'syn match SpRegexSubstitutionSep1' . l:name . ' "' . l:pre . l:sep
-               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionPost1' . l:name
+               \ . '" contained contains=@NoSpell nextgroup=SpRegexSubstitutionPost1' . l:name
          execute 'syn match SpRegexSubstitutionPost1' . l:name . ' "' . l:post
                \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionSep2' . l:name
          execute 'syn match SpRegexSubstitutionSep2' . l:name . ' "' . l:sep
-               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionPost2' . l:name
+               \ . '" contained contains=@NoSpell nextgroup=SpRegexSubstitutionPost2' . l:name
          execute 'syn match SpRegexSubstitutionPost2' . l:name . ' "' . l:post
                \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation nextgroup=SpRegexSubstitutionSep3' . l:name
          execute 'syn match SpRegexSubstitutionSep3' . l:name . ' "' . l:sep . l:end
-               \ . '" contained contains=@NoSpell,@ClusterRegex,vimNotation'
+               \ . '" contained contains=@NoSpell'
 
          execute 'syn match SpRegexSubstitutionNotSep' . l:name . ' "\%(escape(\)\@<=.\{-}\%()\)\@=" contained contains=@NoSpell'
       endfor

@@ -1,7 +1,9 @@
 "==============================================================================
 " File: nofiletype.vim
 "------------------------------------------------------------------------------
-" Description: This file adds custom syntax highlighting for nofiletype files.
+" Description: This file adds custom syntax highlighting for files that don't
+"              have a filetype assigned to them by Vim. I then manually assign
+"              them the "nofiletype" filetype.
 "------------------------------------------------------------------------------
 " Authors: Danny Sarraf
 "------------------------------------------------------------------------------
@@ -53,7 +55,6 @@ endif
 
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
 if exists("b:current_syntax") && b:current_syntax == "nofiletype"
-   let b:comment_leader = '//'
    source $vim_folder_path/lib/more_colors.vim
    source $vim_folder_path/lib/syntax_library.vim
    source $vim_folder_path/lib/regex.vim
@@ -96,7 +97,7 @@ if exists("b:current_syntax") && b:current_syntax == "nofiletype"
    call AllDefineAnd()
 endif
 
-" Matches word: if first word on line
+" Matches label: if first word on line
 hi  link    NoFiletypeLabel   PreProc
 syn match   NoFiletypeLabel   "\%#=1^\s*[a-zA-Z0-9_./-]\+:"
 

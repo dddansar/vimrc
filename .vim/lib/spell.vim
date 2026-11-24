@@ -102,9 +102,16 @@ endfunction
 " Match capital spell errors on new lines not matched by spellcapcheck.
 " LineStartCap() will then automatically fix them on space or enter.
 function! SpellCapCheckAdd() abort
-   " Detect lower case at beginning of line
-   hi  link    SpellWordCapError  SpellRare
-   syn match   SpellWordCapError  "\%#=1^\s*\zs\<[a-z]\+\>"
+   if execute('syntax spell') =~# '\<toplevel\>'
+      " Detect lower case at beginning of line
+      hi  link    SpellWordCapError  SpellRare
+      syn match   SpellWordCapError  "\%#=1^\s*\zs\<[a-z]\+\>"
+      " Detect lower case after a titled colon ":"
+      hi  link    SpellWordCapError2 SpellRare
+      syn match   SpellWordCapError2 "\<[a-z]\+\>" contained
+      " Allow these words to remain lowercase, skip cap checking them.
+      syn match   SpellNoCapSpell "\%#=1^\s*\<\%(else\|elif\|elseif\|end\|endif\|for\|while\|and\|alias\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
+   endif
    " Also correct cap spell in comments
    if exists("b:comment_leader")
       " Use the same color as the comment highlight regardless of colorscheme.
@@ -129,11 +136,6 @@ function! SpellCapCheckAdd() abort
       hi  link    SpellWordCapErrorCom2 SpellCapCheckCom
       syn match   SpellWordCapErrorCom2 "\<[a-z]\+\>\%([ \t]\|\n\)\@=" contained
    endif
-   " Detect lower case after a titled colon ":"
-   hi  link    SpellWordCapError2 SpellRare
-   syn match   SpellWordCapError2 "\<[a-z]\+\>" contained
-   " Allow these words to remain lowercase, skip cap checking them.
-   syn match   SpellNoCapSpell "\%#=1^\s*\<\%(else\|elif\|elseif\|end\|endif\|for\|while\|and\|alias\|xor\|xnor\|not\|nand\|nor\)\>" contains=@NoSpell
    " LineStartCap is applied after one of these characters is pressed.
    inoremap <buffer> <expr> <space> LineStartCap("\<space>")
    inoremap <buffer> <expr> <cr>    LineStartCap("\<cr>")
@@ -143,8 +145,10 @@ function! SpellCapCheckAdd() abort
    let b:vim_you_autocorrect_include_groups = get(b:, 'vim_you_autocorrect_include_groups', [])
    let b:vim_you_autocorrect_include_groups += ['Comment']
    let b:vim_you_autocorrect_include_groups += ['String']
-   let b:vim_you_autocorrect_include_groups += ['SpellWordCapError']
-   let b:vim_you_autocorrect_include_groups += ['SpellWordCapError2']
+   if execute('syntax spell') =~# '\<toplevel\>'
+      let b:vim_you_autocorrect_include_groups += ['SpellWordCapError']
+      let b:vim_you_autocorrect_include_groups += ['SpellWordCapError2']
+   endif
 endfunction
 
 " Fix capital spell errors on space or enter.

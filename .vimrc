@@ -1502,9 +1502,15 @@ function! LoadMappings()
    " vnoremap <silent> g1 0<c-v><s-i><c-r>=b:comment_leader<cr><space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr> " NOTE: this version does not work in all visual modes... either need to split with mode or do as below
    " vnoremap <silent> g2 0<c-v><s-i><c-r>=b:comment_leader<cr><space>TODO:<space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr>
    " vnoremap <silent> g3 0<c-v><s-i><c-r>=b:comment_leader<cr><space>NOTE:<space><esc>gv:<c-u>keeppatterns '<,'>s/\s\+$//e<cr>
+   vnoremap <silent> g0 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . ""<bar>keeppatterns '<,'>s/\s\+$//e<cr>
    vnoremap <silent> g1 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
    vnoremap <silent> g2 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " TODO: "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
    vnoremap <silent> g3 :<c-u>execute "'<,'>normal! 0i" . b:comment_leader . " NOTE: "<bar>keeppatterns '<,'>s/\s\+$//e<cr>
+   " Commenting in normal mode starting from the first column.
+   nnoremap <silent> <expr> g0 "0i<c-r>=b:comment_leader<cr><esc>"
+   nnoremap <silent> <expr> g1 "0i<c-r>=b:comment_leader<cr> <esc>"
+   nnoremap <silent> <expr> g2 "0i<c-r>=b:comment_leader<cr> NOTE: <esc>"
+   nnoremap <silent> <expr> g3 "0i<c-r>=b:comment_leader<cr> TODO: <esc>"
    " Remove comments and extra space.
    vnoremap <silent> <expr> gs mode() ==# "v" ? "<c-v>_o_f <del>" : mode() ==# "V" ? "<c-v>_o_f <del>" : "_o_f <del>"
    vnoremap <silent> <expr> gb mode() ==# "v" ? "<c-v>_o_f f <del>" : mode() ==# "V" ? "<c-v>_o_f f <del>" : "_o_f f <del>"
