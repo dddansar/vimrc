@@ -40,7 +40,7 @@ if exists("g:debug_syntax")
    echom "rcf.vim syntax file loaded"
 endif
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
@@ -61,9 +61,8 @@ if exists("b:current_syntax") && b:current_syntax == "rcf"
 
    call AllFilesDefaultSyntax()
    call AllDefineAt()
+
+   hi  link  AllPreNumbers1   Number
+   syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
 endif
-
-
-hi  link  AllPreNumbers1   Number
-syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
 

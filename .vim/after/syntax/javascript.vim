@@ -32,22 +32,11 @@
 "==============================================================================
 
 
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" Exit if the file was already loaded
-" if exists("b:javascript_loaded")
-"    finish
-" endif
-" if exists("b:disable_after_syntax")
-"    finish
-" endif
 if !exists("g:syntax_on")
    finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
-endif
-if exists("g:debug_syntax")
-   echom "javascript.vim syntax file loaded"
 endif
 let b:javascript_loaded = 1
 
@@ -71,8 +60,8 @@ if exists("b:current_syntax") && b:current_syntax == "javascript"
    call RegexMatches(1)
    call RegexMatchesPerl(1)
    call SpRegexSubstitution(1)
-endif
 
-hi  link    JavascriptRegexEnds Statement
-syn region  JavascriptRegex matchgroup=JavascriptRegexEnds start="/\ze[^/]" end="/gm\?\>" oneline
+   hi  link    JavascriptRegexEnds Statement
+   syn region  JavascriptRegex matchgroup=JavascriptRegexEnds start="/\ze[^/]" end="/gm\?\>" oneline
+endif
 

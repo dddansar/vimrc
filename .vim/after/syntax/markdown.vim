@@ -32,22 +32,11 @@
 "==============================================================================
 
 
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" Exit if the file was already loaded
-" if exists("b:markdown_loaded")
-"    finish
-" endif
-" if exists("b:disable_after_syntax")
-"    finish
-" endif
 if !exists("g:syntax_on")
    finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
-endif
-if exists("g:debug_syntax")
-   echom "markdown.vim syntax file loaded"
 endif
 let b:markdown_loaded = 1
 
@@ -63,18 +52,15 @@ if exists("b:current_syntax") && b:current_syntax == "markdown"
    call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
    call AllFilesDefaultSyntax()
-endif
 
 
-hi! link markdownCodeBlock StorageClass
-hi! link markdownItalic LineNr
+   hi! link markdownCodeBlock StorageClass
+   hi! link markdownItalic LineNr
 
-if hlexists('markdownError')
-   syn clear markdownError
-endif
+   if hlexists('markdownError')
+      syn clear markdownError
+   endif
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "markdown"
    " call AllOperators()
    call AllEqualities()
    call AllArrows()

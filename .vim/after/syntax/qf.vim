@@ -31,19 +31,10 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
-endif
-
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" Exit if the file was already loaded
-" if exists("b:qf_loaded")
-"    finish
-" endif
-if exists("g:debug_syntax")
-   echom "qf.vim syntax file loaded"
 endif
 let b:qf_loaded = 1
 
@@ -65,6 +56,5 @@ if exists("b:current_syntax") && b:current_syntax == "qf"
 
    syn clear qfText
    syn match qfText ".*" contained contains=AllCaps,AllCaps1,AllNumbersSci,AllNumbersUnd,AllNumbersHex1,AllNumbersHex2,AllNumbersTick,AllNumbersUnicode,@ClusterUnicode
-
 endif
 

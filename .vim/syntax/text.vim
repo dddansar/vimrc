@@ -31,7 +31,7 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
@@ -86,75 +86,71 @@ if exists("b:current_syntax") && b:current_syntax == "text"
    " NOTE: Need to move AllOperators before AllHLExclamations()
    call AllOperators()
    call AllFilesDefaultSyntax()
-endif
 
-" smartindent in Vim is an indentation option that provides automatic
-" indentation when starting a new line.
-" Keep autoindent, but remove cindent/smartindent
-setlocal nosmartindent
-setlocal nocindent
+   " smartindent in Vim is an indentation option that provides automatic
+   " indentation when starting a new line.
+   " Keep autoindent, but remove cindent/smartindent
+   setlocal nosmartindent
+   setlocal nocindent
 
+   " Match parenthesis
+   " hi  link    TextParen     Function
+   " syn match   TextParen     "\%#=1[)(]"
 
-" Match parenthesis
-" hi  link    TextParen     Function
-" syn match   TextParen     "\%#=1[)(]"
+   " hi  link    TextSBr       StorageClass
+   " syn match   TextSBr       "\%#=1[[\]]"
 
-" hi  link    TextSBr       StorageClass
-" syn match   TextSBr       "\%#=1[[\]]"
+   " hi  link    TextCBr       Define
+   " syn match   TextCBr       "\%#=1[}{]"
 
-" hi  link    TextCBr       Define
-" syn match   TextCBr       "\%#=1[}{]"
+   " hi  link    TextOperators  Operator
+   " syn match   TextOperators  "\%#=1[$]"
 
-" hi  link    TextOperators  Operator
-" syn match   TextOperators  "\%#=1[$]"
+   hi  link    TextSlash      Function
+   syn match   TextSlash      "\%#=1\/"
 
-hi  link    TextSlash      Function
-syn match   TextSlash      "\%#=1\/"
-
-" Match alone quotes. Quote pairs are matched elsewhere
-hi  link    TextAloneQuotes Function
-syn match   TextAloneQuotes "\%#=1["]"
-syn match   TextAloneQuotes "\%#=1\%(\ws\)\@<!'"
-syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
+   " Match alone quotes. Quote pairs are matched elsewhere
+   hi  link    TextAloneQuotes Function
+   syn match   TextAloneQuotes "\%#=1["]"
+   syn match   TextAloneQuotes "\%#=1\%(\ws\)\@<!'"
+   syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
 
 
-" Match (+) (-) (~)
-"------------------------------------------------------------------------------
-hi  link    TextPlusParen      StorageClass
-syn match   TextPlusParen      "\%#=1(+)"
-hi  link    TextMinusParen     Function
-syn match   TextMinusParen     "\%#=1(-)"
-hi  link    TextTildaParen     Define
-syn match   TextTildaParen     "\%#=1(\~)"
-"------------------------------------------------------------------------------
+   " Match (+) (-) (~)
+   "------------------------------------------------------------------------------
+   hi  link    TextPlusParen      StorageClass
+   syn match   TextPlusParen      "\%#=1(+)"
+   hi  link    TextMinusParen     Function
+   syn match   TextMinusParen     "\%#=1(-)"
+   hi  link    TextTildaParen     Define
+   syn match   TextTildaParen     "\%#=1(\~)"
+   "------------------------------------------------------------------------------
 
-" Lowercase p1/p2/p3 (lower case could mean page numbers...).
-" P1/P2/P3 for Priorities
-" NOTE: need to be match not keyword to apply @NoSpell
-hi  link  TextPriorities0  HLGrey80BgB
-syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
-hi  link  TextPriorities1  HLOrangered1BgB
-syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
-hi  link  TextPriorities2  HLOrangeBgB
-syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
-hi  link  TextPriorities3  HLYellowBgB
-syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
-hi  link  TextPriorities4  HLYellow3BgB
-syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
-hi  link  TextPriorities5  HLGreen1BgB
-syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
-hi  link  TextPriorities6  HLGreen3BgB
-syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
-hi  link  TextPriorities7  HLCyanBgB
-syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
-hi  link  TextPriorities8  HLDodgerBlueBgB
-syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
-hi  link  TextPriorities9  HLDeepPinkBgB
-syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
+   " Lowercase p1/p2/p3 (lower case could mean page numbers...).
+   " P1/P2/P3 for Priorities
+   " NOTE: need to be match not keyword to apply @NoSpell
+   hi  link  TextPriorities0  HLGrey80BgB
+   syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
+   hi  link  TextPriorities1  HLOrangered1BgB
+   syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
+   hi  link  TextPriorities2  HLOrangeBgB
+   syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
+   hi  link  TextPriorities3  HLYellowBgB
+   syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
+   hi  link  TextPriorities4  HLYellow3BgB
+   syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
+   hi  link  TextPriorities5  HLGreen1BgB
+   syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
+   hi  link  TextPriorities6  HLGreen3BgB
+   syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
+   hi  link  TextPriorities7  HLCyanBgB
+   syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
+   hi  link  TextPriorities8  HLDodgerBlueBgB
+   syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
+   hi  link  TextPriorities9  HLDeepPinkBgB
+   syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-" Call syntax functions
-if exists("b:current_syntax") && b:current_syntax == "text"
+
    call AllSpecial()
    call AllEqualities()
    call AllArrows()
@@ -255,28 +251,24 @@ if exists("b:current_syntax") && b:current_syntax == "text"
 
    if expand('%:t') =~# '^claude_history.*\.txt$'
       if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
-      " let b:current_syntax = "text"
       setlocal nospell
       call SpellCapCheckDsb()
       if hlexists('AllUnwantedCharacters')
          syn clear AllUnwantedCharacters
       endif
    endif
-endif
 
-" Match 1) A) (2) (B)...
-"------------------------------------------------------------------------------
-" Start of line, one or more spaces followed by 0 or 1 "(" followed by
-" number/letter and ")".
-hi  link    TextNumberParen    Function
-hi  link    TextLetterParen    Question
-syn match   TextNumberParen    "\%#=1^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
-syn match   TextLetterParen    "\%#=1^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
-syn match   TextNumberParen    "\%#=1\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
-syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
-"------------------------------------------------------------------------------
+   " Match 1) A) (2) (B)...
+   " Start of line, one or more spaces followed by 0 or 1 "(" followed by
+   " number/letter and ")".
+   hi  link    TextNumberParen    Function
+   hi  link    TextLetterParen    Question
+   syn match   TextNumberParen    "\%#=1^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
+   syn match   TextLetterParen    "\%#=1^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
+   syn match   TextNumberParen    "\%#=1\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
+   syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
 
-if exists("b:current_syntax") && b:current_syntax == "text"
+
    call AllMultiWordLabel(0)
    if expand('%:t') =~# '\.uni\.txt$'
       call MathFundamentalKeywords()

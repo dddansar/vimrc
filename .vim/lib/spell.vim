@@ -32,22 +32,11 @@
 "==============================================================================
 
 
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" Exit if the file was already loaded
-" if exists("b:spell_loaded")
-"    finish
-" endif
-" if exists("b:disable_after_syntax")
-"    finish
-" endif
 if !exists("g:syntax_on")
    finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
-endif
-if exists("g:debug_syntax")
-   echom "spell.vim syntax file loaded"
 endif
 let b:spell_loaded = 1
 
@@ -70,6 +59,7 @@ setlocal spellcapcheck=
 " Enable vim-you-autocorrect, auto-corrects if spell triggered
 runtime autoload/vim_you_autocorrect.vim
 if exists('*vim_you_autocorrect#enable_autocorrect') && g:use_autocorrect
+   let g:vim_you_autocorrect_skip_on_esc = 1
    call vim_you_autocorrect#enable_autocorrect()
 endif
 

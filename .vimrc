@@ -1610,9 +1610,10 @@ function! LoadMappings()
    vnoremap <leader>ft :<c-u>keeppatterns '<,'>s/\(\w'\)\@<!\<[a-z]/\u&/g<cr>
    " Capitalize first letter of every word on every line in the file.
    nnoremap <leader>fT m':keeppatterns %s/\<[a-z]/\u&/g<cr><c-o>
-   " Capitalize first letter of every word before a : on the current line
+   " Capitalize first letter of every word before a : on the current line.
    nnoremap <leader>f: mz:keeppatterns s/\v^[^:]*:/\=substitute(submatch(0), '\<\w', '\u&', 'g')/<cr>`z
-
+   " Capitalize first letter of every word before a : on the selected lines.
+   vnoremap <leader>f: :<c-u>keeppatterns '<,'>s/\v^[^:]*:/\=substitute(submatch(0), '\<\w', '\u&', 'g')/e<cr>
 
    " Remove extra spacing - Remove unwanted trailing white space.
    nnoremap <leader>f<space> m':keeppatterns %s/\%(\s\\| \)\+$//e<cr><c-o>

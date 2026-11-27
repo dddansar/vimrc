@@ -33,7 +33,7 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
@@ -95,9 +95,9 @@ if exists("b:current_syntax") && b:current_syntax == "nofiletype"
    call AllDefineAt()
    call AllDefinePercent()
    call AllDefineAnd()
-endif
 
-" Matches label: if first word on line
-hi  link    NoFiletypeLabel   PreProc
-syn match   NoFiletypeLabel   "\%#=1^\s*[a-zA-Z0-9_./-]\+:"
+   " Matches label: if first word on line
+   hi  link    NoFiletypeLabel   PreProc
+   syn match   NoFiletypeLabel   "\%#=1^\s*[a-zA-Z0-9_./-]\+:"
+endif
 

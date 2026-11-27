@@ -31,10 +31,7 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
-endif
-if exists("g:debug_syntax")
-   echom "syntax_library.vim file loaded"
+   finish
 endif
 
 " NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
@@ -815,12 +812,12 @@ endfunction
 function! AllCopyright()
    " Common Keywords
    hi  link    AllCopyright Statement
-   syn match   AllCopyright "\%#=1Copyright"         containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "\%#=1Copyright\s*(c).*" containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "\%#=1MIT LICENSE"       containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "\%#=1MIT License"       containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "\%#=1Apache License"    containedin=@ClusterCommentsPlusComScope
-   syn match   AllCopyright "\%#=1Creative Commons"  containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<Copyright\>"         containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<Copyright\s*(c).*" containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<MIT LICENSE\>"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<MIT License\>"       containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<Apache License\>"    containedin=@ClusterCommentsPlusComScope
+   syn match   AllCopyright "\%#=1\<Creative Commons\>"  containedin=@ClusterCommentsPlusComScope
    syn match   AllCopyright "\%#=1©"                 containedin=@ClusterCommentsPlusComScope
 endfunction
 

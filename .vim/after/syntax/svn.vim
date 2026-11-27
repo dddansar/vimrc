@@ -31,44 +31,35 @@
 "==============================================================================
 
 
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" WARNING: Having this guard will cause the colors to not update...
-" Exit if the file was already loaded
-" if exists("b:svn_loaded")
-"    finish
-" endif
-" if exists("b:disable_after_syntax")
-"    finish
-" endif
 if !exists("g:syntax_on")
    finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
 endif
-if exists("g:debug_syntax")
-   echom "svn.vim syntax file loaded"
-endif
 let b:svn_loaded = 1
 
-" source $vim_folder_path/lib/more_colors.vim
-" source $vim_folder_path/lib/syntax_library.vim
-" source $vim_folder_path/lib/regex.vim
-" source $vim_folder_path/lib/abbrev.vim
+if exists("b:current_syntax") && b:current_syntax == "svn"
 
-" call AllFilesDefaultSyntax()
+   " source $vim_folder_path/lib/more_colors.vim
+   " source $vim_folder_path/lib/syntax_library.vim
+   " source $vim_folder_path/lib/regex.vim
+   " source $vim_folder_path/lib/abbrev.vim
 
-" Prevent these files from getting loaded as they are not needed
-let b:more_colors_loaded=1
-let b:syntax_library_loaded=1
-let b:regex_loaded=1
-let b:AllFilesDefaultSyntax_loaded=1
-let b:abbrev_loaded=1
+   " call AllFilesDefaultSyntax()
 
-hi! link svnDelimiter   Comment
-hi! link svnModified    Function
-hi! link svnAdded       Operator
-hi! link svnRemoved     Constant
-hi! link svnRenamed     Conditional
-hi! link svnSummary     Normal
+   " Prevent these files from getting loaded as they are not needed
+   let b:more_colors_loaded=1
+   let b:syntax_library_loaded=1
+   let b:regex_loaded=1
+   let b:AllFilesDefaultSyntax_loaded=1
+   let b:abbrev_loaded=1
+
+   hi! link svnDelimiter   Comment
+   hi! link svnModified    Function
+   hi! link svnAdded       Operator
+   hi! link svnRemoved     Constant
+   hi! link svnRenamed     Conditional
+   hi! link svnSummary     Normal
+endif
 

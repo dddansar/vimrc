@@ -40,7 +40,7 @@ if exists("g:debug_syntax")
    echom "lean.vim syntax file loaded"
 endif
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
@@ -70,66 +70,63 @@ if exists("b:current_syntax") && b:current_syntax == "lean"
    call AllCommentAnywhere()
    call AllMultiLineCommentAnywhere()
    call AllFilesDefaultSyntax()
-endif
 
 
-if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
-   setlocal spelllang+=lean
-endif
+   if exists("b:spell_loaded") && filereadable(expand($vim_spell_path . "/lean.utf-8.spl"))
+      setlocal spelllang+=lean
+   endif
 
 
-hi  link    LeanKeywords1     Statement
-syn keyword LeanKeywords1     true false variables
-syn keyword LeanKeywords1     True False
-syn keyword LeanKeywords1     with induction
+   hi  link    LeanKeywords1     Statement
+   syn keyword LeanKeywords1     true false variables
+   syn keyword LeanKeywords1     True False
+   syn keyword LeanKeywords1     with induction
 
-hi  link    LeanKeywords2     Function
-syn keyword LeanKeywords2     function endfunction instance
+   hi  link    LeanKeywords2     Function
+   syn keyword LeanKeywords2     function endfunction instance
 
-hi  link    LeanKeywords3     Number
-syn keyword LeanKeywords3     inputs outputs inouts input output inout ports
+   hi  link    LeanKeywords3     Number
+   syn keyword LeanKeywords3     inputs outputs inouts input output inout ports
 
-syn keyword LeanKeywords4     Type type Set set Prop Nat inductive
-syn keyword LeanKeywords4     _ Proof axiom theorem proof lemma
+   syn keyword LeanKeywords4     Type type Set set Prop Nat inductive
+   syn keyword LeanKeywords4     _ Proof axiom theorem proof lemma
 
-hi  link    LeanKeywords5     Conditional
-syn keyword LeanKeywords5     If Then Else if then else iff case elseif endif
-syn keyword LeanKeywords5     for loop while loops repeat endfor endwhile
-syn keyword LeanKeywords5     section begin end namespace open close import
-syn keyword LeanKeywords5     set_option open_locale
+   hi  link    LeanKeywords5     Conditional
+   syn keyword LeanKeywords5     If Then Else if then else iff case elseif endif
+   syn keyword LeanKeywords5     for loop while loops repeat endfor endwhile
+   syn keyword LeanKeywords5     section begin end namespace open close import
+   syn keyword LeanKeywords5     set_option open_locale
 
-hi  link    LeanKeywords6     Function
-syn keyword LeanKeywords6     or and not xor xnor nor nand non fun
-syn keyword LeanKeywords6     Or And Not Xor Xnor Nor Nand Non Bool String
+   hi  link    LeanKeywords6     Function
+   syn keyword LeanKeywords6     or and not xor xnor nor nand non fun
+   syn keyword LeanKeywords6     Or And Not Xor Xnor Nor Nand Non Bool String
 
-hi  link    LeanKeywords7     Type
-syn keyword LeanKeywords7     example done
+   hi  link    LeanKeywords7     Type
+   syn keyword LeanKeywords7     example done
 
-hi  link    LeanKeywords8     NonText
-syn keyword LeanKeywords8     sorry
+   hi  link    LeanKeywords8     NonText
+   syn keyword LeanKeywords8     sorry
 
-hi  link    LeanKeywords9     Number
-syn keyword LeanKeywords9     def variable universe structure
+   hi  link    LeanKeywords9     Number
+   syn keyword LeanKeywords9     def variable universe structure
 
-hi  link    LeanKeywords10    Conditional
-syn keyword LeanKeywords10    show from where
+   hi  link    LeanKeywords10    Conditional
+   syn keyword LeanKeywords10    show from where
 
-hi  link    LeanKeywords11    Conditional
-syn keyword LeanKeywords11    linter id List Vector
+   hi  link    LeanKeywords11    Conditional
+   syn keyword LeanKeywords11    linter id List Vector
 
-" Lean tactics
-hi  link    LeanKeywords12    Debug
-syn keyword LeanKeywords12    apply assumption by_cases by_contra cases change
-syn keyword LeanKeywords12    constructor exact exfalso ext have intro intros
-syn keyword LeanKeywords12    left linarith nlinarith norm_num nth_rewrite
-syn keyword LeanKeywords12    obtain rcases refine refl right ring rintro rw
-syn keyword LeanKeywords12    simp simpa specialize split triv trivial use
-syn keyword LeanKeywords12    contradiction rfl let tauto simp_rw rwa
-syn keyword LeanKeywords12    squeeze_simp calc by
+   " Lean tactics
+   hi  link    LeanKeywords12    Debug
+   syn keyword LeanKeywords12    apply assumption by_cases by_contra cases change
+   syn keyword LeanKeywords12    constructor exact exfalso ext have intro intros
+   syn keyword LeanKeywords12    left linarith nlinarith norm_num nth_rewrite
+   syn keyword LeanKeywords12    obtain rcases refine refl right ring rintro rw
+   syn keyword LeanKeywords12    simp simpa specialize split triv trivial use
+   syn keyword LeanKeywords12    contradiction rfl let tauto simp_rw rwa
+   syn keyword LeanKeywords12    squeeze_simp calc by
 
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "lean"
    call AllOperators()
    call AllEqualities()
    call AllArrows()

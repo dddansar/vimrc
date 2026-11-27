@@ -32,10 +32,7 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
-endif
-if exists("g:debug_syntax")
-   echom "regex.vim file loaded"
+   finish
 endif
 
 " ,shDblBrace -> breaks bash

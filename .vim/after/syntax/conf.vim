@@ -31,19 +31,10 @@
 "==============================================================================
 
 if !exists("g:syntax_on")
-  finish
+   finish
 endif
 if !isdirectory(expand($vim_folder_path))
    finish
-endif
-
-" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
-" Exit if the file was already loaded
-" if exists("b:conf_loaded")
-"    finish
-" endif
-if exists("g:debug_syntax")
-   echom "conf.vim syntax file loaded"
 endif
 let b:conf_loaded = 1
 
@@ -72,5 +63,4 @@ if exists("b:current_syntax") && b:current_syntax == "conf"
    call AllMultiWordLabel(0)
    call AllSlashes()
 endif
-
 
