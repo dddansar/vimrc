@@ -32,13 +32,22 @@
 "==============================================================================
 
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:spell_loaded")
+"    finish
+" endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
-   finish
+if exists("g:debug_syntax")
+   echom "spell.vim syntax file loaded"
 endif
 let b:spell_loaded = 1
+
 
 "------------------------------------------------------------------------------
 setlocal spell
@@ -139,6 +148,7 @@ function! SpellCapCheckAdd() abort
       let b:vim_you_autocorrect_include_groups += ['SpellWordCapError']
       let b:vim_you_autocorrect_include_groups += ['SpellWordCapError2']
    endif
+   syn cluster ClusterSpellWordCapError contains=SpellWordCapError,SpellWordCapError2,SpellWordCapErrorCom,SpellWordCapErrorCom2
 endfunction
 
 " Fix capital spell errors on space or enter.

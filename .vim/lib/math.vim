@@ -32,11 +32,19 @@
 "==============================================================================
 
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:math_loaded")
+"    finish
+" endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
-   finish
+if exists("g:debug_syntax")
+   echom "math.vim syntax file loaded"
 endif
 let b:math_loaded = 1
 

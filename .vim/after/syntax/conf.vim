@@ -30,37 +30,40 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:conf_loaded")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || b:current_syntax != "conf"
    finish
+endif
+if exists("g:debug_syntax")
+   echom "conf.vim syntax file loaded"
 endif
 let b:conf_loaded = 1
 
-if !exists("b:current_syntax") || b:current_syntax == ""
-   let b:current_syntax = "conf"
-endif
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "conf"
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
 
-   call AllFilesDefaultSyntax()
+call AllFilesDefaultSyntax()
 
-   call AllOperators()
-   call AllSpecial()
-   call AllEqualities()
-   " call AllArrows()
-   call AllParenBr()
-   call AllSeparators2() " needs to be before AllNumbers()
-   call AllNumbers()
-   call AllNumbersHex()
-   call AllNumbersUnicode(0)
-   call AllMultiWordLabel(0)
-   call AllSlashes()
-endif
+call AllOperators()
+call AllSpecial()
+call AllEqualities()
+" call AllArrows()
+call AllParenBr()
+call AllSeparators2() " needs to be before AllNumbers()
+call AllNumbers()
+call AllNumbersHex()
+call AllNumbersUnicode(0)
+call AllMultiWordLabel(0)
+call AllSlashes()
 

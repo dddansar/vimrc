@@ -30,8 +30,11 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
+endif
+if exists("g:debug_syntax")
+   echom "syntax_library.vim file loaded"
 endif
 
 " NOTE: Moved to the top. The guard was preventing the hi link from re-setting.
@@ -172,18 +175,18 @@ function! AllIgnoreSpellings()
       hi  link     AllSpellCommColor1  Comment
       syn match    AllSpellCommColor1  "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTitleColor1 "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=TOP
+      syn match    AllSpellNoColor1    "\%#=1\<[a-zA-Z]*[0-9._-][a-zA-Z0-9._-]*\>" contains=TOP,@ClusterSpellWordCapError
 
       " Ignore spell on words with uppercase letters not in the first character.
       hi  link     AllSpellCommColor2  Comment
       syn match    AllSpellCommColor2  "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
       syn match    AllSpellTiTleColor2 "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=@NoSpell contained containedin=AllTitles1,AllTitles2,AllTitles3,AllTitles4,AllTitles5,AllTitles6,AllTitles7,AllTitles8,AllTitles9,AllTitles0 transparent
-      syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=TOP
+      syn match    AllSpellNoColor2    "\%#=1\<[A-Za-z0-9_][a-z0-9_]*[A-Z][a-zA-Z0-9_]*\>" contains=TOP,@ClusterSpellWordCapError
 
       " Ignore spell on Capital words in the middle of a phrase such as names.
       hi  link     AllSpellCommColor5  Comment
       syn match    AllSpellCommColor5  "\%#=1\> \<[A-Z][a-z]\+\>" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellNoColor5    "\%#=1\> \<[A-Z][a-z]\+\>" contains=TOP
+      syn match    AllSpellNoColor5    "\%#=1\> \<[A-Z][a-z]\+\>" contains=TOP,@ClusterSpellWordCapError
    endif
 endfunction
 
@@ -193,30 +196,30 @@ function! AllIgnoreSpellingsFunc()
       " No need to match dashes or numbers or uppercase as that is covered above...
       hi  link     AllSpellCommColor3  Comment
       syn match    AllSpellCommColor3  "\%#=1\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellNoColor3    "\%#=1\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=TOP
+      syn match    AllSpellNoColor3    "\%#=1\<[a-z][a-z]\+\>\%(\s*\%(()\|\[\]\)\)\@=" contains=TOP,@ClusterSpellWordCapError
 
       " Ignore spell on functions( immediately followed by ( with no spaces.
       " No need to match dashes or numbers or uppercase as that is covered above...
       hi  link     AllSpellCommColor4  Comment
       syn match    AllSpellCommColor4  "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=@NoSpell,@ClusterHLWords contained containedin=@ClusterCommentsPlusComScope
-      syn match    AllSpellNoColor4    "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP
+      syn match    AllSpellNoColor4    "\%#=1\<[a-z][a-z]\+\>\%((\)\@=\%((\%(\%(ie\)\?s\))\)\@!" contains=TOP,@ClusterSpellWordCapError
    endif
 endfunction
 
 function! AllIgnoreSpellExtendedLatin(contained_en)
    if g:performance_mode <= 0
       " Ignore Foreign names where Vim does not properly apply word boundaries
-      " Basic Latin (U+0041-U+007A): Covers the standard 26-letter alphabet
-      " used by English, Indonesian, Malay, Swahili...
-      " Latin-1 Supplement (U+00C0-U+00FF): Covers most Western Europe
+      " Basic Latin (U+0041-U+007A): (A-Z) Covers the standard 26-letter
+      " alphabet used by English, Indonesian, Malay, Swahili...
+      " Latin-1 Supplement (U+00C0-U+00FF): (À-ÿ) Covers most Western Europe
       " including French, Spanish, German, Portuguese, Italian, Nordic...
-      " Latin Extended-A (U+0100-U+017F): Covers Central/Eastern European,
+      " Latin Extended-A (U+0100-U+017F): (Ā-ſ) Covers Central/Eastern Europe,
       " Baltic, Turkish, Polish, Czech, Hungarian...
-      " Latin Extended-B (U+0180-U+024F): Covers Romanian, Azerbaijani, Pinyin,
-      " and African languages like Hausa, Yoruba, Igbo...
-      " Latin Extended Additional (U+1E00-U+1EFF): Covers Vietnamese, Welsh,
-      " and scholarly transliterations of Arabic, Sanskrit, Hebrew...
-      execute 'syn match  AllIgnoreSpellExtendedLatin "\<[a-zA-Z]*[À-ÖØ-öø-ɏḀ-ỿ]\+[a-zA-ZÀ-ÖØ-öø-ɏḀ-ỿ]*\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained ' : '')
+      " Latin Extended-B (U+0180-U+024F): (ƀ-ɏ) Covers Romanian, Azerbaijani,
+      " Pinyin, and African languages like Hausa, Yoruba, Igbo...
+      " Latin Extended Additional (U+1E00-U+1EFF): (Ḁ-ỿ) Covers Vietnamese,
+      " Welsh, and scholarly transliterations of Arabic, Sanskrit, Hebrew...
+      execute 'syn match  AllIgnoreSpellExtendedLatin "\<[a-zA-Z]*[À-ɏḀ-ỿ]\+[a-zA-ZÀ-ɏḀ-ỿ]*\>" contains=@NoSpell ' . (a:contained_en == 1 ? 'contained ' : '')
    endif
 endfunction
 "------------------------------------------------------------------------------

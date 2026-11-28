@@ -30,248 +30,242 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
-   finish
-endif
-if !isdirectory(expand($vim_folder_path))
-   finish
-endif
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
 " if exists("b:text_loaded")
 "    finish
 " endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
+   finish
+endif
+if !exists("b:current_syntax") || b:current_syntax == ""
+   let b:current_syntax = "text"
+endif
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || b:current_syntax != "text"
+   finish
+endif
 if exists("g:debug_syntax")
    echom "text.vim syntax file loaded"
 endif
 let b:text_loaded = 1
 
-if !exists("b:current_syntax") || b:current_syntax == ""
-   let b:current_syntax = "text"
+
+let b:comment_leader = '//'
+let b:multi_line_comment_start = '\(^\|\s\)\@<=/\*'
+let b:multi_line_comment_end = '\*/'
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
+
+source $vim_folder_path/lib/spell.vim
+" Apply spell checking everywhere in text files.
+syntax spell toplevel
+" Enable capital spell checking.
+call SpellCapCheckEn()
+call SpellCapCheckAdd()
+call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
+
+" NOTE: Moving these here to re-source on file/syntax reload.
+if expand('%:t') =~# '\.uni\.txt$'
+   source $vim_folder_path/lib/math.vim
+   source $vim_folder_path/lib/math_mappings.vim
+   source $vim_folder_path/lib/unicode.vim
+   " setlocal nospell
+   call AllShiftOp()
 endif
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "text"
-   let b:comment_leader = '//'
-   let b:multi_line_comment_start = '\(^\|\s\)\@<=/\*'
-   let b:multi_line_comment_end = '\*/'
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
+" NOTE: Need to move AllOperators before AllHLExclamations()
+call AllOperators()
+call AllFilesDefaultSyntax()
 
-   source $vim_folder_path/lib/spell.vim
-   " Apply spell checking everywhere in text files.
-   syntax spell toplevel
-   " Enable capital spell checking.
-   call SpellCapCheckEn()
-   call SpellCapCheckAdd()
-   call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
+" smartindent in Vim is an indentation option that provides automatic
+" indentation when starting a new line.
+" Keep autoindent, but remove cindent/smartindent
+setlocal nosmartindent
+setlocal nocindent
 
-   " NOTE: Moving these here to re-source on file/syntax reload.
-   if expand('%:t') =~# '\.uni\.txt$'
-      source $vim_folder_path/lib/math.vim
-      source $vim_folder_path/lib/math_mappings.vim
-      source $vim_folder_path/lib/unicode.vim
-      " setlocal nospell
-      call AllShiftOp()
+" Match parenthesis
+" hi  link    TextParen     Function
+" syn match   TextParen     "\%#=1[)(]"
+
+" hi  link    TextSBr       StorageClass
+" syn match   TextSBr       "\%#=1[[\]]"
+
+" hi  link    TextCBr       Define
+" syn match   TextCBr       "\%#=1[}{]"
+
+" hi  link    TextOperators  Operator
+" syn match   TextOperators  "\%#=1[$]"
+
+hi  link    TextSlash      Function
+syn match   TextSlash      "\%#=1\/"
+
+" Match alone quotes. Quote pairs are matched elsewhere
+hi  link    TextAloneQuotes Function
+syn match   TextAloneQuotes "\%#=1["]"
+syn match   TextAloneQuotes "\%#=1\%(\ws\)\@<!'"
+syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
+
+
+" Match (+) (-) (~)
+"------------------------------------------------------------------------------
+hi  link    TextPlusParen      StorageClass
+syn match   TextPlusParen      "\%#=1(+)"
+hi  link    TextMinusParen     Function
+syn match   TextMinusParen     "\%#=1(-)"
+hi  link    TextTildaParen     Define
+syn match   TextTildaParen     "\%#=1(\~)"
+"------------------------------------------------------------------------------
+
+" Lowercase p1/p2/p3 (lower case could mean page numbers...).
+" P1/P2/P3 for Priorities
+" NOTE: need to be match not keyword to apply @NoSpell
+hi  link  TextPriorities0  HLGrey80BgB
+syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
+hi  link  TextPriorities1  HLOrangered1BgB
+syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
+hi  link  TextPriorities2  HLOrangeBgB
+syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
+hi  link  TextPriorities3  HLYellowBgB
+syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
+hi  link  TextPriorities4  HLYellow3BgB
+syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
+hi  link  TextPriorities5  HLGreen1BgB
+syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
+hi  link  TextPriorities6  HLGreen3BgB
+syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
+hi  link  TextPriorities7  HLCyanBgB
+syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
+hi  link  TextPriorities8  HLDodgerBlueBgB
+syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
+hi  link  TextPriorities9  HLDeepPinkBgB
+syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
+
+
+call AllSpecial()
+call AllEqualities()
+call AllArrows()
+call AllParenBr()
+" call AllWebsites(0)
+call AllSeparators2() " needs to be before AllNumbers()
+call AllNumbers()
+call AllNumbersHex()
+if expand('%:t') =~# '\.uni\.txt$'
+   " Highlight Math variables, numbers with x, numbered variables,
+   " numbers starting with dot, derivatives, math functions...
+   call MathMatches()
+   " AllIgnoreSpellExtendedLatin() needs to be after MathMatches()
+   " and before UnicodeNoSpell()
+   call AllIgnoreSpellExtendedLatin(1)
+   call AllUnwantedCharacters(1)
+   call UnicodeNoSpell()
+   call AllIgnoreSpellingsFunc()
+else
+   call AllIgnoreSpellExtendedLatin(0)
+   call AllUnwantedCharacters(0)
+endif
+call AllNumbersUnicode(0)
+" call AllLabel()
+" call AllMultiWordLabel(0)
+call AllSlashes()
+call AllFontStyles(0)
+call AllCommentAnywhere()
+call AllMultiLineCommentAnywhere()
+" call AllHLWords()
+" call AllHLExclamations()
+call AllTitlesMarkdown()
+call AllTitlesNotContained()
+
+if expand('%:t') =~# '.*regex.*\.txt$' || expand('%:t') =~# '.*substitution_tutorial\.txt$'
+   call AllQuotesLookbehind(1)
+
+   " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
+   hi link    TextQuotesLookbehind TextNoColor
+   syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
+   syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
+
+   call RegexMatches(0)
+   call RegexMatchesVim(0)
+   call RegexMatchesPerl(0)
+   " Needs to be after $ is matched from regex
+   call AllDefineDollar()
+   call AllDefineAt()
+   " Needs to be after AllDefineDollar as $s/// is a valid substitution
+   call SpRegexSubstitution(0)
+
+   " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
+   hi  link  TextRegexQuant RegexQuant
+   syn match TextRegexQuant  "\%#=1\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
+
+   " Contain in TextQuotesLookbehind
+   hi  link  TextLinuxCommands Statement
+   syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<grep\%( -\w\+\)*\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<echo\%( -\w\+\)*\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<awk\%( -\w\+\)*\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<perl\%( -\w\+\)*\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<cat\%( -\w\+\)*\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<print\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<use\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<time\>" contains=@NoSpell
+   syn match TextLinuxCommands "\%#=1\%(^\|[|(]\)\s*\<my\>" contains=@NoSpell
+
+   syn match TextLinuxCommands "\%(syntime\|timethis\)" contains=@NoSpell
+   syn match TextLinuxCommands "\%(print\|sub\|gsub\)" contained contains=@NoSpell
+
+   " Add # comments as well
+   hi  link  TextCommentLineStart AllCommentLineStart
+   syn match TextCommentLineStart +\%#=1^\s*#.*+
+
+   hi  link  TextCommentAnywhere AllCommentAnywhere
+   syn match TextCommentAnywhere +\%#=1\(\s\)\@<=#\s[a-zA-Z0-9].*+
+
+   " Match a hashbang
+   hi  link  TextHashBang Define
+   syn match TextHashBang +\%#=1^#!.*+
+
+   " Match programming conditionals and loops
+   hi  link  TextPrgmConditionals Conditional
+   syn match TextPrgmConditionals +\%#=1^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
+   syn match TextPrgmConditionals +\%#=1^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
+
+   hi  link  TextEquality AllEquality
+   syn match TextEquality    "\%#=1=\~" containedin=RegexPatSepPerl
+
+   call AllHLExclamations() " Need to recall otherwise not all ? in TODOs will be highlighted
+else
+   call AllQuotesLookbehind(0)
+endif
+" AllPaths needs to be after regex/slashes/operators/separators...
+call AllPaths1(0)
+call AllPathsWin(0)
+call AllPathsDollar(0)
+
+if expand('%:t') =~# '^claude_history.*\.txt$'
+   if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
+   setlocal nospell
+   call SpellCapCheckDsb()
+   if hlexists('AllUnwantedCharacters')
+      syn clear AllUnwantedCharacters
    endif
-   " if expand('%:p') =~# '/reference_files/'
-   "    source $vim_folder_path/lib/linux.vim
-   "    call LinuxCommandsMatch(0)
-   "    call LinuxCommandsMatch(1)
-   " endif
+endif
 
-   " NOTE: Need to move AllOperators before AllHLExclamations()
-   call AllOperators()
-   call AllFilesDefaultSyntax()
-
-   " smartindent in Vim is an indentation option that provides automatic
-   " indentation when starting a new line.
-   " Keep autoindent, but remove cindent/smartindent
-   setlocal nosmartindent
-   setlocal nocindent
-
-   " Match parenthesis
-   " hi  link    TextParen     Function
-   " syn match   TextParen     "\%#=1[)(]"
-
-   " hi  link    TextSBr       StorageClass
-   " syn match   TextSBr       "\%#=1[[\]]"
-
-   " hi  link    TextCBr       Define
-   " syn match   TextCBr       "\%#=1[}{]"
-
-   " hi  link    TextOperators  Operator
-   " syn match   TextOperators  "\%#=1[$]"
-
-   hi  link    TextSlash      Function
-   syn match   TextSlash      "\%#=1\/"
-
-   " Match alone quotes. Quote pairs are matched elsewhere
-   hi  link    TextAloneQuotes Function
-   syn match   TextAloneQuotes "\%#=1["]"
-   syn match   TextAloneQuotes "\%#=1\%(\ws\)\@<!'"
-   syn match   TextUnmatchQuotes "\%#=1\%(\w\)\@<='\%([dstm]\|ve\|ll\|re\)\>"
+" Match 1) A) (2) (B)...
+" Start of line, one or more spaces followed by 0 or 1 "(" followed by
+" number/letter and ")".
+hi  link    TextNumberParen    Function
+hi  link    TextLetterParen    Question
+syn match   TextNumberParen    "\%#=1^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "\%#=1^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
+syn match   TextNumberParen    "\%#=1\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
+syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
 
 
-   " Match (+) (-) (~)
-   "------------------------------------------------------------------------------
-   hi  link    TextPlusParen      StorageClass
-   syn match   TextPlusParen      "\%#=1(+)"
-   hi  link    TextMinusParen     Function
-   syn match   TextMinusParen     "\%#=1(-)"
-   hi  link    TextTildaParen     Define
-   syn match   TextTildaParen     "\%#=1(\~)"
-   "------------------------------------------------------------------------------
-
-   " Lowercase p1/p2/p3 (lower case could mean page numbers...).
-   " P1/P2/P3 for Priorities
-   " NOTE: need to be match not keyword to apply @NoSpell
-   hi  link  TextPriorities0  HLGrey80BgB
-   syn match TextPriorities0  "\%#=1\<P0\>" contains=@NoSpell
-   hi  link  TextPriorities1  HLOrangered1BgB
-   syn match TextPriorities1  "\%#=1\<P1\>" contains=@NoSpell
-   hi  link  TextPriorities2  HLOrangeBgB
-   syn match TextPriorities2  "\%#=1\<P2\>" contains=@NoSpell
-   hi  link  TextPriorities3  HLYellowBgB
-   syn match TextPriorities3  "\%#=1\<P3\>" contains=@NoSpell
-   hi  link  TextPriorities4  HLYellow3BgB
-   syn match TextPriorities4  "\%#=1\<P4\>" contains=@NoSpell
-   hi  link  TextPriorities5  HLGreen1BgB
-   syn match TextPriorities5  "\%#=1\<P5\>" contains=@NoSpell
-   hi  link  TextPriorities6  HLGreen3BgB
-   syn match TextPriorities6  "\%#=1\<P6\>" contains=@NoSpell
-   hi  link  TextPriorities7  HLCyanBgB
-   syn match TextPriorities7  "\%#=1\<P7\>" contains=@NoSpell
-   hi  link  TextPriorities8  HLDodgerBlueBgB
-   syn match TextPriorities8  "\%#=1\<P8\>" contains=@NoSpell
-   hi  link  TextPriorities9  HLDeepPinkBgB
-   syn match TextPriorities9  "\%#=1\<P9\>" contains=@NoSpell
-
-
-   call AllSpecial()
-   call AllEqualities()
-   call AllArrows()
-   call AllParenBr()
-   " call AllWebsites(0)
-   call AllSeparators2() " needs to be before AllNumbers()
-   call AllNumbers()
-   call AllNumbersHex()
-   if expand('%:t') =~# '\.uni\.txt$'
-      " Highlight Math variables, numbers with x, numbered variables,
-      " numbers starting with dot, derivatives, math functions...
-      call MathMatches()
-      " AllIgnoreSpellExtendedLatin() needs to be after MathMatches()
-      " and before UnicodeNoSpell()
-      call AllIgnoreSpellExtendedLatin(1)
-      call AllUnwantedCharacters(1)
-      call UnicodeNoSpell()
-   else
-      call AllIgnoreSpellExtendedLatin(0)
-      call AllUnwantedCharacters(0)
-   endif
-   call AllNumbersUnicode(0)
-   " call AllLabel()
-   " call AllMultiWordLabel(0)
-   call AllSlashes()
-   call AllFontStyles(0)
-   call AllCommentAnywhere()
-   call AllMultiLineCommentAnywhere()
-   " call AllHLWords()
-   " call AllHLExclamations()
-   call AllTitlesMarkdown()
-   call AllTitlesNotContained()
-
-   if expand('%:t') =~# '.*regex.*\.txt$' || expand('%:t') =~# '.*substitution_tutorial\.txt$'
-      call AllQuotesLookbehind(1)
-
-      " This helps prevent runaway \* if they are in quotes, and keeps the quotes colorless for regex
-      hi link    TextQuotesLookbehind TextNoColor
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)"+ms=s skip=+\%#=1""+ end=+\%#=1"\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
-      syn region TextQuotesLookbehind matchgroup=AllQuotesLookbehind start=+\%#=1\%(\%(\s\|^\|[([{,=]\)\@<=\)'+ms=s skip=+\%#=1''+ end=+\%#=1'\%(\W\|\n\)\@=+ oneline keepend contains=AllNumbers1,TextLinuxCommands,AllDefineDollar,@ClusterAllSpellNoCol,AllIgnoreSpellExtendedLatin
-
-      call RegexMatches(0)
-      call RegexMatchesVim(0)
-      call RegexMatchesPerl(0)
-      " Needs to be after $ is matched from regex
-      call AllDefineDollar()
-      call AllDefineAt()
-      " Needs to be after AllDefineDollar as $s/// is a valid substitution
-      call SpRegexSubstitution(0)
-
-      " Match \{n}, \{n,}, \{,m}, \{n,m}, \{-}, \{-n,}, \{-,m}, \{-n,m}
-      hi  link  TextRegexQuant RegexQuant
-      syn match TextRegexQuant  "\%#=1\\\?{-\?n\?\%(,m\?\\\?\)\?}"  contains=@NoSpell containedin=@RegexContainedin
-
-      " Contain in TextQuotesLookbehind
-      hi  link  TextLinuxCommands Statement
-      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<grep\%( -\w\+\)*\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<sed\%( -\w\+\)*\>\%(.bak\>\)\?" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<echo\%( -\w\+\)*\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<awk\%( -\w\+\)*\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(\.\)\@<!\<perl\%( -\w\+\)*\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<cat\%( -\w\+\)*\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<print\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<use\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(^\||\)\s*\<time\>" contains=@NoSpell
-      syn match TextLinuxCommands "\%#=1\%(^\|[|(]\)\s*\<my\>" contains=@NoSpell
-
-      syn match TextLinuxCommands "\%(syntime\|timethis\)" contains=@NoSpell
-      syn match TextLinuxCommands "\%(print\|sub\|gsub\)" contained contains=@NoSpell
-
-      " Add # comments as well
-      hi  link  TextCommentLineStart AllCommentLineStart
-      syn match TextCommentLineStart +\%#=1^\s*#.*+
-
-      hi  link  TextCommentAnywhere AllCommentAnywhere
-      syn match TextCommentAnywhere +\%#=1\(\s\)\@<=#\s[a-zA-Z0-9].*+
-
-      " Match a hashbang
-      hi  link  TextHashBang Define
-      syn match TextHashBang +\%#=1^#!.*+
-
-      " Match programming conditionals and loops
-      hi  link  TextPrgmConditionals Conditional
-      syn match TextPrgmConditionals +\%#=1^\s*\%(while\|if\|else\|for\)\%(\s*(\)\@=+
-      syn match TextPrgmConditionals +\%#=1^\s*for\%(\s\+\w\+\s\+in\>\)\@=+
-
-      hi  link  TextEquality AllEquality
-      syn match TextEquality    "\%#=1=\~" containedin=RegexPatSepPerl
-
-      call AllHLExclamations() " Need to recall otherwise not all ? in TODOs will be highlighted
-   else
-      call AllQuotesLookbehind(0)
-   endif
-   " AllPaths needs to be after regex/slashes/operators/separators...
-   call AllPaths1(0)
-   call AllPathsWin(0)
-   call AllPathsDollar(0)
-
-   if expand('%:t') =~# '^claude_history.*\.txt$'
-      if exists('*SetupClaudeChatSyntax') | call g:SetupClaudeChatSyntax() | endif
-      setlocal nospell
-      call SpellCapCheckDsb()
-      if hlexists('AllUnwantedCharacters')
-         syn clear AllUnwantedCharacters
-      endif
-   endif
-
-   " Match 1) A) (2) (B)...
-   " Start of line, one or more spaces followed by 0 or 1 "(" followed by
-   " number/letter and ")".
-   hi  link    TextNumberParen    Function
-   hi  link    TextLetterParen    Question
-   syn match   TextNumberParen    "\%#=1^\s*-\?\s*(\?[0-9]\+)" contains=@NoSpell containedin=AllLabel3
-   syn match   TextLetterParen    "\%#=1^\s*-\?\s*(\?[A-Z])" contains=@NoSpell containedin=AllLabel3
-   syn match   TextNumberParen    "\%#=1\s\+([0-9]\+)" contains=@NoSpell containedin=AllLabel3
-   syn match   TextLetterParen    "\%#=1\s\+([A-Z])" contains=@NoSpell containedin=AllLabel3
-
-
-   call AllMultiWordLabel(0)
-   if expand('%:t') =~# '\.uni\.txt$'
-      call MathFundamentalKeywords()
-   endi
+call AllMultiWordLabel(0)
+if expand('%:t') =~# '\.uni\.txt$'
+   call MathFundamentalKeywords()
 endif
 

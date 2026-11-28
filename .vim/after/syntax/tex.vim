@@ -31,33 +31,43 @@
 "==============================================================================
 
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:tex_loaded")
+"    finish
+" endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || (b:current_syntax != "tex" && b:current_syntax != "plaintex")
    finish
+endif
+if exists("g:debug_syntax")
+   echom "tex.vim syntax file loaded"
 endif
 let b:tex_loaded = 1
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && (b:current_syntax == "tex" || b:current_syntax == "plaintex")
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
-   source $vim_folder_path/lib/spell.vim
-   " Apply spell checking everywhere in text files.
-   syntax spell toplevel
-   call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
-   " I use my own TODO/NOTE matching
-   if hlexists('initexTodo')
-      syn clear initexTodo
-   endif
-   if hlexists('texTodo')
-      syn clear texTodo
-   endif
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
+source $vim_folder_path/lib/spell.vim
+" Apply spell checking everywhere in text files.
+syntax spell toplevel
+call AllIgnoreSpellings() " Needs to be outside spell.vim in case spell.vim gets sourced again and fails to apply
 
-   call AllFilesDefaultSyntax()
+" I use my own TODO/NOTE matching
+if hlexists('initexTodo')
+   syn clear initexTodo
 endif
+if hlexists('texTodo')
+   syn clear texTodo
+endif
+
+call AllFilesDefaultSyntax()
 

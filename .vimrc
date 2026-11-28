@@ -617,9 +617,9 @@ function! DefaultSettings()
    " In GVim, 'guioptions' controls whether various GUI widgets are shown.
    " Below means left/bottom scroll bar disabled, right scroll bar enabled.
    " Default: aegimrLtT
-   if !has('nvim')
-      set guioptions=aegimrt
-   endif
+   " if !has('nvim')
+   "    set guioptions=aegimrt
+   " endif
    " Remove the toolbar menu (icon bar) in GVim.
    " set guioptions-=T
 
@@ -1019,21 +1019,8 @@ function! LoadMappings()
 
    " Make tabs and spaces shift all lines equally in visual mode.
    " NOTE: > and < lose the visual selection once applied, reapply with gv.
-   " NOTE: "<c-v>>" does not round indentation with shiftround...
-   " NOTE: v> does not tab in the middle of text based on selection...
-   " NOTE: <c-v><s-i><tab> adds spaces in empty lines...
-   " vnoremap <expr>   <tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v><s-i><tab>" : "<s-i><tab>"
-   " vnoremap <expr>   <tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v>>gv" : ">gv"
-   " NOTE: col('.') is the cursor's column, > 1 means not at column 1.
-   " vnoremap <expr> <tab> col('.') > 1
-   "                    \ ? (mode() =~# '[vV]' ? "<c-v><s-i><tab>" : "<s-i><tab>")
-   "                    \ : (mode() =~# '[vV]' ? ">gv" : ">gv")
-   "                    " \ : (mode() =~# '[vV]' ? ">gv_o_o" : ">gv_o_o")
-   " NOTE: getpos('v') is the selection's start and getpos('.') is the cursor:
-   " NOTE: Check if either the selection's start or the cursor is at column 1
-   vnoremap <expr> <tab> getpos('v')[2] > 1 && getpos('.')[2] > 1
-         \ ? (mode() =~# '[vV]' ? "<c-v><s-i><tab>" : "<s-i><tab>")
-         \ : (mode() =~# '[vV]' ? ">gv" : ">gv")
+   " NOTE: <c-v><s-i><tab> adds spaces on empty lines... Use > on empty lines!
+   vnoremap <expr>   <tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v><s-i><tab>" : "<s-i><tab>"
    vnoremap <expr> <s-tab> mode() ==# "v" \|\| mode() ==# 'V' ? "<c-v><gv" : "<gv"
    vnoremap > >gv
    vnoremap < <gv

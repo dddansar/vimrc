@@ -30,31 +30,39 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
-   finish
-endif
-if !isdirectory(expand($vim_folder_path))
-   finish
-endif
-let b:qf_loaded = 1
 
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:qf_loaded")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
+   finish
+endif
 if !exists("b:current_syntax") || b:current_syntax == ""
    let b:current_syntax = "qf"
 endif
-
-if exists("b:current_syntax") && b:current_syntax == "qf"
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/unicode.vim
-   " echom "qf.vim source files loaded"
-
-   call AllCaps()
-   call AllHLWords()
-   call AllNumbers()
-   call AllNumbersHex()
-   call AllNumbersUnicode(0)
-
-   syn clear qfText
-   syn match qfText ".*" contained contains=AllCaps,AllCaps1,AllNumbersSci,AllNumbersUnd,AllNumbersHex1,AllNumbersHex2,AllNumbersTick,AllNumbersUnicode,@ClusterUnicode
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || b:current_syntax != "qf"
+   finish
 endif
+if exists("g:debug_syntax")
+   echom "qf.vim syntax file loaded"
+endif
+let b:qf_loaded = 1
+
+
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/unicode.vim
+" echom "qf.vim source files loaded"
+
+call AllCaps()
+call AllHLWords()
+call AllNumbers()
+call AllNumbersHex()
+call AllNumbersUnicode(0)
+
+syn clear qfText
+syn match qfText ".*" contained contains=AllCaps,AllCaps1,AllNumbersSci,AllNumbersUnd,AllNumbersHex1,AllNumbersHex2,AllNumbersTick,AllNumbersUnicode,@ClusterUnicode
 

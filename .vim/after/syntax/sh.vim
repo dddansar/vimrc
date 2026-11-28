@@ -31,56 +31,66 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:sh_loaded")
+"    finish
+" endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || (b:current_syntax != "sh" && b:current_syntax != "csh" && b:current_syntax != "bash" && b:current_syntax != "posix")
    finish
+endif
+if exists("g:debug_syntax")
+   echom "sh.vim syntax file loaded"
 endif
 let b:sh_loaded = 1
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && (b:current_syntax == "sh" || b:current_syntax == "csh" || b:current_syntax == "bash" || b:current_syntax == "posix")
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
-   source $vim_folder_path/lib/linux.vim
 
-   call LinuxCommandsMatch(0)
-   call AllFilesDefaultSyntax()
-   call AllPathsSingleSlashStart(1)
-   call RegexMatches(1)
-   call RegexMatchesPerl(1)
-   call SpRegexSubstitution(1)
-   " AllPaths needs to be after regex/slashes/operators/separators...
-   call AllPaths1(0)
-   call AllPathsWin(0)
-   call AllPathsDollar(0)
-   call AllDefineDollar()
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
+source $vim_folder_path/lib/linux.vim
 
-   hi! link shVarAssign    Operator
-   " hi! link shAlias        Number
-   hi! link shAlias        Define
-   hi! link shLoop         Repeat
+call LinuxCommandsMatch(0)
+call AllFilesDefaultSyntax()
+call AllPathsSingleSlashStart(1)
+call RegexMatches(1)
+call RegexMatchesPerl(1)
+call SpRegexSubstitution(1)
+" AllPaths needs to be after regex/slashes/operators/separators...
+call AllPaths1(0)
+call AllPathsWin(0)
+call AllPathsDollar(0)
+call AllDefineDollar()
 
-   " hi  link    ShDollarBracket   Define
-   " syn match   ShDollarBracket   "\%(\${\|}\)" contained containedin=shDoubleQuote,shSingleQuote
+hi! link shVarAssign    Operator
+" hi! link shAlias        Number
+hi! link shAlias        Define
+hi! link shLoop         Repeat
 
-   hi  link    ShDelimiters   Delimiter
-   syn match   ShDelimiters   "[:;|]" contained containedin=shDoubleQuote,shSingleQuote
+" hi  link    ShDollarBracket   Define
+" syn match   ShDollarBracket   "\%(\${\|}\)" contained containedin=shDoubleQuote,shSingleQuote
 
-   hi  link    ShOptions   shOption
-   syn match   ShOptions   "--\w\+\>" contained containedin=shDoubleQuote,shSingleQuote
-   syn match   ShOptions   "\s-[a-zA-Z]\+\s" contained containedin=shDoubleQuote,shSingleQuote
+hi  link    ShDelimiters   Delimiter
+syn match   ShDelimiters   "[:;|]" contained containedin=shDoubleQuote,shSingleQuote
 
-   hi  link    ShOperators   Operator
-   syn match   ShOperators   "[=]" contained containedin=shDoubleQuote,shSingleQuote
+hi  link    ShOptions   shOption
+syn match   ShOptions   "--\w\+\>" contained containedin=shDoubleQuote,shSingleQuote
+syn match   ShOptions   "\s-[a-zA-Z]\+\s" contained containedin=shDoubleQuote,shSingleQuote
 
-   hi  link    LinuxCommands2 Identifier
-   syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
+hi  link    ShOperators   Operator
+syn match   ShOperators   "[=]" contained containedin=shDoubleQuote,shSingleQuote
 
-   " invisible/transparent group...
-   syn keyword LinuxCommands tmux containedin=shIf
-endif
+hi  link    LinuxCommands2 Identifier
+syn keyword LinuxCommands2 vsp split wincmd contained containedin=shSingleQuote
+
+" invisible/transparent group...
+syn keyword LinuxCommands tmux containedin=shIf
 

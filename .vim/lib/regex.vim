@@ -31,8 +31,11 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
+endif
+if exists("g:debug_syntax")
+   echom "regex.vim file loaded"
 endif
 
 " ,shDblBrace -> breaks bash

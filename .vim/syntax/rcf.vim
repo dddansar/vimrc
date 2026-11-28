@@ -36,33 +36,30 @@
 " if exists("b:rcf_loaded")
 "    finish
 " endif
-if exists("g:debug_syntax")
-   echom "rcf.vim syntax file loaded"
-endif
-if !exists("g:syntax_on")
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
-   finish
-endif
-let b:rcf_loaded = 1
-
 if !exists("b:current_syntax") || b:current_syntax == ""
    let b:current_syntax = "rcf"
 endif
-
-
 " NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "rcf"
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
-
-   call AllFilesDefaultSyntax()
-   call AllDefineAt()
-
-   hi  link  AllPreNumbers1   Number
-   syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
+if !exists("b:current_syntax") || b:current_syntax != "rcf"
+   finish
 endif
+if exists("g:debug_syntax")
+   echom "rcf.vim syntax file loaded"
+endif
+let b:rcf_loaded = 1
+
+
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
+
+call AllFilesDefaultSyntax()
+call AllDefineAt()
+
+hi  link  AllPreNumbers1   Number
+syn match AllPreNumbers1   "\<[0-9a-fA-F]\+\>"             contains=@NoSpell
 

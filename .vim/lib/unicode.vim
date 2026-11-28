@@ -33,11 +33,19 @@
 "==============================================================================
 
 
-if !exists("g:syntax_on")
+" NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
+" Exit if the file was already loaded
+" if exists("b:unicode_loaded")
+"    finish
+" endif
+" if exists("b:disable_after_syntax")
+"    finish
+" endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
    finish
 endif
-if !isdirectory(expand($vim_folder_path))
-   finish
+if exists("g:debug_syntax")
+   echom "unicode.vim syntax file loaded"
 endif
 let b:unicode_loaded = 1
 
@@ -1201,7 +1209,6 @@ inorea <buffer> _brt     ├<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _blf     ┤<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _box     ┌───┬───┐<cr>│   │   │<cr>├───┼───┤<cr>│   │   │<cr>└───┴───┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _boxs    ┌───┐<cr>│   │<cr>└───┘<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _boxr    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _boxl    ┌──────┐<cr>│      │<cr>└──────┘<left><right><c-r>=Eatchar('\s')<cr>
 
 " Truth tables
@@ -1223,7 +1230,6 @@ inorea <buffer> b_brt     ┣<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_blf     ┫<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_box    ┏━━━┳━━━┓<cr>┃   ┃   ┃<cr>┣━━━╋━━━┫<cr>┃   ┃   ┃<cr>┗━━━┻━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_boxs   ┏━━━┓<cr>┃   ┃<cr>┗━━━┛<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> b_boxr   ┏━━━━━━┓<cr>┃      ┃<cr>┗━━━━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> b_boxl   ┏━━━━━━┓<cr>┃      ┃<cr>┗━━━━━━┛<left><right><c-r>=Eatchar('\s')<cr>
 
 inorea <buffer> d_btl     ╔<left><right><c-r>=Eatchar('\s')<cr>
@@ -1239,21 +1245,20 @@ inorea <buffer> d_brt     ╠<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_blf     ╣<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_box    ╔═══╦═══╗<cr>║   ║   ║<cr>╠═══╬═══╣<cr>║   ║   ║<cr>╚═══╩═══╝<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_boxs   ╔═══╗<cr>║   ║<cr>╚═══╝<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> d_boxr   ╔══════╗<cr>║      ║<cr>╚══════╝<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> d_boxl   ╔══════╗<cr>║      ║<cr>╚══════╝<left><right><c-r>=Eatchar('\s')<cr>
 
 hi  link    UnicodeBoxDrawings  Delimiter
 syn match   UnicodeBoxDrawings  "[─-╿]" contains=@NoSpell contained containedin=RegexRanges,@ClusterSpMath,vimMapRhs,SpUnicodeNoSpell
 
 " Multi-line parenthesis, square/curly brackets
-inorea <buffer> _npa          ⎛⎞<cr>⎜⎟<cr>⎝⎠<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nparen       ⎛⎞<cr>⎜⎟<cr>⎝⎠<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nsb          ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nsbrack      ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _nsbracket    ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _ncb          ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _ncbrack      ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
-inorea <buffer> _ncbracket    ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mpa          ⎛⎞<cr>⎜⎟<cr>⎝⎠<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mparen       ⎛⎞<cr>⎜⎟<cr>⎝⎠<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _msb          ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _msbrack      ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _msbracket    ⎡⎤<cr>⎢⎥<cr>⎣⎦<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mcb          ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mcbrack      ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
+inorea <buffer> _mcbracket    ⎧⎫<cr>⎪⎪<cr>⎨⎬<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2cb          ⎧⎫<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2cbrack      ⎧⎫<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>
 inorea <buffer> _2cbracket    ⎧⎫<cr>⎩⎭<left><right><c-r>=Eatchar('\s')<cr>

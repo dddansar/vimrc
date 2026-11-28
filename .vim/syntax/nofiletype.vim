@@ -32,72 +32,70 @@
 " SOFTWARE.
 "==============================================================================
 
-if !exists("g:syntax_on")
-   finish
-endif
-if !isdirectory(expand($vim_folder_path))
-   finish
-endif
 
 " NOTE: Removed guard so that syntax gets reloaded if file was reloaded.
 " Exit if the file was already loaded
 " if exists("b:nofiletype_loaded")
 "    finish
 " endif
+if !exists("g:syntax_on") || !isdirectory(expand($vim_folder_path))
+   finish
+endif
+if !exists("b:current_syntax") || b:current_syntax == ""
+   let b:current_syntax = "nofiletype"
+endif
+" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
+if !exists("b:current_syntax") || b:current_syntax != "nofiletype"
+   finish
+endif
 if exists("g:debug_syntax")
    echom "nofiletype.vim syntax file loaded"
 endif
 let b:nofiletype_loaded = 1
 
-if !exists("b:current_syntax") || b:current_syntax == ""
-   let b:current_syntax = "nofiletype"
-endif
 
-" NOTE: Guards against double loading if syntax filetype1 loads filetype2.
-if exists("b:current_syntax") && b:current_syntax == "nofiletype"
-   source $vim_folder_path/lib/more_colors.vim
-   source $vim_folder_path/lib/syntax_library.vim
-   source $vim_folder_path/lib/regex.vim
-   source $vim_folder_path/lib/abbrev.vim
+source $vim_folder_path/lib/more_colors.vim
+source $vim_folder_path/lib/syntax_library.vim
+source $vim_folder_path/lib/regex.vim
+source $vim_folder_path/lib/abbrev.vim
 
-   source $vim_folder_path/lib/linux.vim
-   call LinuxCommandsMatch(0)
-   call LinuxCommandsMatch(1)
+source $vim_folder_path/lib/linux.vim
+call LinuxCommandsMatch(0)
+call LinuxCommandsMatch(1)
 
-   call AllTabsAndSpaces()
-   call AllCaps()
-   call AllPaths1(0)
-   call AllPathsWin(0)
-   call AllPathsDollar(0)
-   call AllWebsites(0)
-   call AllEmails(0)
-   call AllUnwantedCharacters(0)
-   call AllOperators()
-   call AllSpecial()
-   call AllEqualities()
-   call AllArrows()
-   call AllParenBr()
-   call AllSeparators2() " needs to be before AllNumbers()
-   call AllNumbers()
-   call AllNumbersHex()
-   call AllNumbersUnicode(0)
-   call AllSlashes()
-   " call AllCommentAnywhere()
-   " call AllMultiLineCommentAnywhere()
-   " call AllQuotes()
-   call RegexMatches(0)
-   " call RegexMatchesVim(0)
-   " call RegexMatchesPerl(0)
-   " call SpRegexSubstitution(0)
-   call AllDefineHash()
-   call AllDefineTick()
-   call AllDefineDollar()
-   call AllDefineAt()
-   call AllDefinePercent()
-   call AllDefineAnd()
+call AllTabsAndSpaces()
+call AllCaps()
+call AllPaths1(0)
+call AllPathsWin(0)
+call AllPathsDollar(0)
+call AllWebsites(0)
+call AllEmails(0)
+call AllUnwantedCharacters(0)
+call AllOperators()
+call AllSpecial()
+call AllEqualities()
+call AllArrows()
+call AllParenBr()
+call AllSeparators2() " needs to be before AllNumbers()
+call AllNumbers()
+call AllNumbersHex()
+call AllNumbersUnicode(0)
+call AllSlashes()
+" call AllCommentAnywhere()
+" call AllMultiLineCommentAnywhere()
+" call AllQuotes()
+call RegexMatches(0)
+" call RegexMatchesVim(0)
+" call RegexMatchesPerl(0)
+" call SpRegexSubstitution(0)
+call AllDefineHash()
+call AllDefineTick()
+call AllDefineDollar()
+call AllDefineAt()
+call AllDefinePercent()
+call AllDefineAnd()
 
-   " Matches label: if first word on line
-   hi  link    NoFiletypeLabel   PreProc
-   syn match   NoFiletypeLabel   "\%#=1^\s*[a-zA-Z0-9_./-]\+:"
-endif
+" Matches label: if first word on line
+hi  link    NoFiletypeLabel   PreProc
+syn match   NoFiletypeLabel   "\%#=1^\s*[a-zA-Z0-9_./-]\+:"
 
